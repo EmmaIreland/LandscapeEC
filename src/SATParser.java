@@ -2,6 +2,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import sat.CNF;
+import sat.Clause;
+import sat.Literal;
+
 public class SATParser {
     private static CNF cnf;
     private static Scanner scanner;
