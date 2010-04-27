@@ -1,4 +1,5 @@
 package sat;
+import java.io.IOException;
 import java.io.StringReader;
 
 import static junit.framework.Assert.*;
@@ -22,7 +23,7 @@ public class Parse3SatSteps extends Steps {
     }
     
     @When("I parse this 3-SAT instance $instance")
-    public void parseInstance(String instance) {
+    public void parseInstance(String instance) throws IOException {
         StringReader reader = new StringReader(instance);
         satInstance = satParser.parseInstance(reader);
     }
@@ -30,5 +31,15 @@ public class Parse3SatSteps extends Steps {
     @Then("the number of variables is $numVariables")
     public void confirmNumberOfVariables(int numVariables) {
         assertEquals(numVariables, satInstance.getNumVariables());
+    }
+    
+    @Then("the number of clauses is $numClauses")
+    public void confirmNumberOfClauses(int numClauses) {
+        assertEquals(numClauses, satInstance.getNumClauses());
+    }
+
+    @Then("the instance contains these clauses")
+    public void confirmCNFInstance(String clauses) {
+        
     }
 }
