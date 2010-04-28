@@ -16,5 +16,23 @@ public class Literal {
             return false;
         }
     }
+    @Override
+    public int hashCode() {
+        if (negated) {
+            return -variable;
+        } else {
+            return variable;
+        }
+    }
+    public String toString(){
+        String string="";
+        if(this.negated){
+            string=string+"-";
+        }
+        string = string + (variable+1);
+        return string;
+        
+        
+    }
 
 }

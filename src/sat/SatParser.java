@@ -39,10 +39,10 @@ public class SatParser {
         for(int i =0; i<clausesArray.length; i++){
             String[] clause = clausesArray[i].split(" ");
             for(int j=0;j<clause.length;j++){
-                if(clause[j]=="0"){}
+                if(clause[j].equals("0")){}
                 else{
                     int variable = Integer.parseInt(clause[j]);
-                    newClause.addLiteral(new Literal(Math.abs(variable), Math.signum(variable)==-1));    
+                    newClause.addLiteral(new Literal(Math.abs(variable)-1, Math.signum(variable)==-1));    
                 }
             }
             newSatInstance.addClause(newClause);

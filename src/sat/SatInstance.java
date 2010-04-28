@@ -10,6 +10,7 @@ public class SatInstance {
     }
 
     public int getNumClauses() {
+        //TODO Fix this to actually count
         return numClauses;
     }
 

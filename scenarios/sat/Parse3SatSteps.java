@@ -50,21 +50,23 @@ public class Parse3SatSteps extends Steps {
             String[] clause = clausesArray[i].split(" ");
             for(int j=0;j<clause.length;j++){
                 int variable = Integer.parseInt(clause[j]);
-                newClause.addLiteral(new Literal(Math.abs(variable), Math.signum(variable)==-1));
+                newClause.addLiteral(new Literal(Math.abs(variable)-1, Math.signum(variable)==-1));
             }
             clauseSet.add(newClause);
             newClause = new Clause();
-        }  
-        
+        }
+
         ClauseList clauseList = satInstance.getClauseList();
-          
+
         //There is the correct number of clauses in the clauseSet
         assertEquals(clauseList.size(), clauseSet.size());
         
         //AND each clause in the satInstance are in the clauseSet
         boolean allInSet= true;
         for(int i=0; i<clauseList.size();i++){
-            if(!clauseSet.contains(clauseList.getClause(i))){  //I don't think this is comparing correctly
+            if(!clauseSet.contains(clauseList.getClause(i))){
+                System.out.println("not " + clauseList.getClause(i));
+                System.out.println("Clause set = " + clauseSet);
                 allInSet=false;
             }       
         }
