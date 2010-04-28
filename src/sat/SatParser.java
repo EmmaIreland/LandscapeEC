@@ -12,8 +12,9 @@ public class SatParser {
         BufferedReader bufferedReader = new BufferedReader(reader);
         
         String line;
+        String clauses="";
         while((line = bufferedReader.readLine()) != null) {
-            if(line.startsWith("c")) continue;
+            if(ignoreLine(line)) continue;
             if(line.startsWith("p")) {
                 String[] tokens = line.split(" +");
                 int numVariables = Integer.parseInt(tokens[2]);
@@ -21,11 +22,36 @@ public class SatParser {
                 int numClauses = Integer.parseInt(tokens[3]);
                 newSatInstance.setNumClauses(numClauses);
             }
+            else{
+                clauses = clauses.concat(line);
+                clauses = clauses.concat("\n");
+            }
         }
         
-        
+        parseClauses(newSatInstance, clauses);        
         
         return newSatInstance;
+    }
+
+    private void parseClauses(SatInstance newSatInstance, String clauses) {
+        Clause newClause = new Clause();
+        String[] clausesArray = clauses.trim().split("\n");
+        for(int i =0; i<clausesArray.length; i++){
+            String[] clause = clausesArray[i].split(" ");
+            for(int j=0;j<clause.length;j++){
+                if(clause[j]=="0"){}
+                else{
+                    int variable = Integer.parseInt(clause[j]);
+                    newClause.addLiteral(new Literal(Math.abs(variable), Math.signum(variable)==-1));    
+                }
+            }
+            newSatInstance.addClause(newClause);
+            newClause = new Clause();
+        }
+    }
+
+    private boolean ignoreLine(String line) {
+        return line.startsWith("c")||line.startsWith("%")||line.startsWith("0");
     }
 
 }

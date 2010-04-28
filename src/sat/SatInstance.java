@@ -3,7 +3,7 @@ package sat;
 public class SatInstance {
     private int numVariables;
     private int numClauses;
-    private CNF cnf;
+    private ClauseList cnf = new ClauseList();
 
     public int getNumVariables() {
         return numVariables;
@@ -21,4 +21,11 @@ public class SatInstance {
         this.numClauses = numClauses;
     }
 
+    public ClauseList getClauseList(){
+        return cnf;
+    }
+    
+    public void addClause(Clause newClause){
+        cnf.addClause(newClause);
+    }
 }

@@ -2,18 +2,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import sat.CNF;
+import sat.ClauseList;
 import sat.Clause;
 import sat.Literal;
 
 public class SATParser {
-    private static CNF cnf;
+    private static ClauseList cnf;
     private static Scanner scanner;
     
-    public static CNF parseMethod(File inputFile) throws FileNotFoundException {
+    public static ClauseList parseMethod(File inputFile) throws FileNotFoundException {
         scanner = new Scanner(inputFile);
         
-        cnf = new CNF();
+        cnf = new ClauseList();
         
         while(scanner.hasNext()) {
             String next = scanner.next();

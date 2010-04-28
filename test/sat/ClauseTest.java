@@ -17,7 +17,7 @@ public class ClauseTest {
         
         int[][] variable = {{3, 6, 13}, {8, 6, 13}, {3, 6, 13}, {1, 2, 3}};
         boolean[][] negation = {{F, F, T}, {F, F, T}, {F, T, F}, {T, T, F}};
-        boolean[] expectedEqual = {T, F, F};
+        boolean[] expectedEqual = {T, F, F, F};
 
         int numClauses = variable.length;
         int numLiterals = variable[0].length;
@@ -33,6 +33,7 @@ public class ClauseTest {
         
         for(int clause=0; clause<numClauses; clause++) {
             assertEquals("", expectedEqual[clause], testClause.equals(comparisonClause[clause]));
+
         }
     }
 }
