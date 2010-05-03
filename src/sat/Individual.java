@@ -22,4 +22,16 @@ public class Individual {
     boolean valueIsFalse(Literal literal) {
         return getValueAt(literal.variable) == 0;
     }
+    
+    @Override
+    public boolean equals(Object other) {
+        if(!(other instanceof Individual)) return false;
+        Individual individual = (Individual)other;
+        return bitString.equals(individual.bitString);
+    }
+    
+    @Override
+    public String toString() {
+        return bitString;
+    }
 }

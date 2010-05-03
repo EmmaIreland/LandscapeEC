@@ -30,6 +30,7 @@ public class ParametersSteps extends Steps {
         File paramsFile = new File("testing.properties");
         FileUtils.writeStringToFile(paramsFile, sampleProps);
         GlobalParameters.setParameters(paramsFile);
+        paramsFile.delete();
     }
 
     

@@ -32,7 +32,7 @@ public class ClauseTest {
         }
         
         for(int clause=0; clause<numClauses; clause++) {
-            assertEquals("", expectedEqual[clause], testClause.equals(comparisonClause[clause]));
+            assertEquals(expectedEqual[clause], testClause.equals(comparisonClause[clause]));
 
         }
     }
