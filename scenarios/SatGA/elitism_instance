@@ -17,13 +17,10 @@ When I have a population of
 0001
 And I have an elite proportion of 0.25
 And I have this clauseList
-p cnf 4 4 
 1
 2
 3
 4
-%
-0
 Then the elite set should be
 1011
 1111
