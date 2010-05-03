@@ -19,8 +19,6 @@ public class SatParser {
                 String[] tokens = line.split(" +");
                 int numVariables = Integer.parseInt(tokens[2]);
                 newSatInstance.setNumVariables(numVariables);
-                int numClauses = Integer.parseInt(tokens[3]);
-                newSatInstance.setNumClauses(numClauses);
             }
             else{
                 clauses = clauses.concat(line);

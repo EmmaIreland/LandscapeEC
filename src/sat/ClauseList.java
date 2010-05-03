@@ -23,4 +23,8 @@ public class ClauseList implements Iterable<Clause> {
     public Iterator<Clause> iterator() {
         return clauses.iterator();
     }
+
+    public int getNumClauses() {
+        return clauses.size();
+    }
 }
