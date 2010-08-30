@@ -23,9 +23,8 @@ public class IndividualFactory {
     private String makeBit() {
         if (SharedPRNG.instance().nextBoolean()) {
             return "1";
-        } else {
-            return "0";
         }
+        return "0";
     }
 
 }

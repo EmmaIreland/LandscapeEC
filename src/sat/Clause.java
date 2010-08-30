@@ -3,27 +3,26 @@ package sat;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class Clause{
+public class Clause {
     private List<Literal> literals = new ArrayList<Literal>();
 
-
     public void addLiteral(Literal literal) {
-        literals.add(literal);    
+        literals.add(literal);
     }
-    
-    public boolean equals(Object object){
-        if(!(object instanceof Clause)){
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Clause)) {
             return false;
         }
-        
-        Clause clause = (Clause)object;
-        boolean equalClauses=true;
-        for(int i =0;i<literals.size();i++){
-            if(!clause.literals.get(i).equals(this.literals.get(i))){
-                equalClauses=false;
+
+        Clause clause = (Clause) object;
+        boolean equalClauses = true;
+        for (int i = 0; i < literals.size(); i++) {
+            if (!clause.literals.get(i).equals(this.literals.get(i))) {
+                equalClauses = false;
             }
-        }       
+        }
         return equalClauses;
     }
 
@@ -35,18 +34,19 @@ public class Clause{
         }
         return result;
     }
-    
-    public String toString(){
-        String string="";
-        for(int i =0;i<literals.size();i++){
-           string= string +literals.get(i)+ " ";           
-        } 
+
+    @Override
+    public String toString() {
+        String string = "";
+        for (int i = 0; i < literals.size(); i++) {
+            string = string + literals.get(i) + " ";
+        }
         return string;
     }
 
     public boolean satisfiedBy(Individual individual) {
-        for(Literal literal:literals) {
-            if(satisfiesLiteral(individual, literal)) {
+        for (Literal literal : literals) {
+            if (satisfiesLiteral(individual, literal)) {
                 return true;
             }
         }

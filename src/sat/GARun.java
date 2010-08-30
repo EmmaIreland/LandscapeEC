@@ -10,22 +10,32 @@ import java.util.List;
 import parameters.DoubleParameter;
 import parameters.IntParameter;
 import parameters.StringParameter;
-import util.SharedPRNG;
 
 public class GARun {
 
-    private MutationOperator mutationOperator = new MutationOperator();
-    private SelectionOperator selectionOperator = new SelectionOperator();
-    private CrossoverOperator crossoverOperator = new CrossoverOperator();
+    private MutationOperator mutationOperator = new PointMutation();
+    private SelectionOperator selectionOperator = new RandomSelection();
+    private CrossoverOperator crossoverOperator = new UniformCrossover();
+    
+    private PopulationManager popManager;
+    private SatInstance satInstance;
+    private SatEvaluator satEvaluator;
     
     public void run() throws FileNotFoundException, IOException {
-        PopulationManager popManager = new PopulationManager();
+        popManager = new PopulationManager();
        
         SatParser satParser = new SatParser();
-        SatInstance satInstance = 
+        satInstance = 
             satParser.parseInstance(new FileReader(new File(StringParameter.PROBLEM_FILE.getValue())));
-        SatEvaluator satEvaluator =  new SatEvaluator();
+        satEvaluator =  new SatEvaluator();
         
+        for(int i=0; i<IntParameter.NUM_RUNS.getValue(); i++) {
+            System.out.println("\nRUN " + (i+1) + "\n");
+            runGeneration();
+        }        
+    }
+
+    private void runGeneration() {
         List<Individual> population = popManager.generatePopulation();
         
         for(int i=0; i<IntParameter.NUM_GENERATIONS.getValue(); i++) {
@@ -42,11 +52,17 @@ public class GARun {
             population = newPopulation;
             
             Individual bestIndividual = elite.get(elite.size()-1);
-            System.out.println("Some individual: " + bestIndividual);
-            System.out.println("   Fitness: " + satEvaluator.evaluate(satInstance, bestIndividual));
-            
+            System.out.println("Generation " + (i+1));
+            System.out.println("   Best individual: " + bestIndividual);
+            double bestFitness = satEvaluator.evaluate(satInstance, bestIndividual);
+            System.out.println("   Best fitness: " + bestFitness);
+            if(bestFitness == 1.0) {
+                System.out.println("SUCCESS");
+                return;
+            }
         }
         
+        System.out.println("FAILURE");
     }
 
 }

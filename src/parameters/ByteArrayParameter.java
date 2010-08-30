@@ -6,6 +6,7 @@ import util.SharedPRNG;
 public enum ByteArrayParameter
 {
     SEED {
+        @Override
         public byte[] getValue() {
             if (!GlobalParameters.isSet(toString())) {
                 String seed = SharedPRNG.printSeedInfo();

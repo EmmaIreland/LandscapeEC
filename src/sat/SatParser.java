@@ -37,8 +37,7 @@ public class SatParser {
         for(int i =0; i<clausesArray.length; i++){
             String[] clause = clausesArray[i].split(" ");
             for(int j=0;j<clause.length;j++){
-                if(clause[j].equals("0")){}
-                else{
+                if(!clause[j].equals("0")) {
                     int variable = Integer.parseInt(clause[j]);
                     newClause.addLiteral(new Literal(Math.abs(variable)-1, Math.signum(variable)==-1));    
                 }

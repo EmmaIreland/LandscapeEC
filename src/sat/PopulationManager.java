@@ -2,11 +2,9 @@ package sat;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import parameters.DoubleParameter;
-import parameters.GlobalParameters;
 import parameters.IntParameter;
 
 
@@ -37,7 +35,7 @@ public class PopulationManager {
     }
 
     public List<Individual> mutatePopulation(List<Individual> population, MutationOperator mutationOperator) {
-        List<Individual> newPopulation = new ArrayList<Individual>();               
+        List<Individual> newPopulation = new ArrayList<Individual>();
         
         for(Individual ind:population){
             Individual newIndividual = mutationOperator.mutate(ind);

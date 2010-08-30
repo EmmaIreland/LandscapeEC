@@ -3,36 +3,36 @@ package sat;
 public class Literal {
     public int variable;
     public boolean negated;
-    
-    public Literal(int variable, boolean negated){
+
+    public Literal(int variable, boolean negated) {
         this.variable = variable;
         this.negated = negated;
     }
-    public boolean equals(Literal literal){
-        if(this.negated==literal.negated&&this.variable==literal.variable){
+
+    public boolean equals(Literal literal) {
+        if (this.negated == literal.negated
+                && this.variable == literal.variable) {
             return true;
         }
-        else{
-            return false;
-        }
+        return false;
     }
+
     @Override
     public int hashCode() {
         if (negated) {
             return -variable;
-        } else {
-            return variable;
         }
+        return variable;
     }
-    public String toString(){
-        String string="";
-        if(this.negated){
-            string=string+"-";
+
+    @Override
+    public String toString() {
+        String string = "";
+        if (this.negated) {
+            string = string + "-";
         }
-        string = string + (variable+1);
+        string = string + (variable + 1);
         return string;
-        
-        
     }
 
 }
