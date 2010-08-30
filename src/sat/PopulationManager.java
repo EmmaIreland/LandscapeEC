@@ -6,6 +6,9 @@ import java.util.List;
 
 import parameters.DoubleParameter;
 import parameters.IntParameter;
+import sat.operators.CrossoverOperator;
+import sat.operators.MutationOperator;
+import sat.operators.SelectionOperator;
 
 
 public class PopulationManager {

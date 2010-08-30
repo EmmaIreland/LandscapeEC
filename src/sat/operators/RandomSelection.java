@@ -1,8 +1,9 @@
-package sat;
+package sat.operators;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import sat.Individual;
 import util.SharedPRNG;
 
 public class RandomSelection implements SelectionOperator {

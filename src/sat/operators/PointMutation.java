@@ -1,6 +1,7 @@
-package sat;
+package sat.operators;
 
 import parameters.DoubleParameter;
+import sat.Individual;
 import util.SharedPRNG;
 
 public class PointMutation implements MutationOperator {

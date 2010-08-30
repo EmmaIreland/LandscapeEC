@@ -1,7 +1,8 @@
-package sat;
+package sat.operators;
 
 import java.util.List;
 
+import sat.Individual;
 import util.SharedPRNG;
 
 public class UniformCrossover implements CrossoverOperator {
