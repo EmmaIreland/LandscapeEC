@@ -46,7 +46,7 @@ public class ParametersSteps extends Steps {
     
     @Then("the mutation rate is $mutationRate")
     public void confirmMutationRate(double mutationRate) {
-        assertEquals(mutationRate, DoubleParameter.MUTATION_RATE.getValue());
+        assertEquals(mutationRate, DoubleParameter.AVERAGE_MUTATIONS.getValue());
     }
 
 }

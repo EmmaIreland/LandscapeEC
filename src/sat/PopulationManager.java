@@ -16,9 +16,7 @@ public class PopulationManager {
     private IndividualFactory factory = new IndividualFactory();
     
 
-    public List<Individual> getElite(List<Individual> individuals, double eliteProportion,
-            SatInstance satInstance, SatEvaluator satEvaluator) {
-        IndividualComparator comparator = new IndividualComparator(satInstance, satEvaluator);
+    public List<Individual> getElite(List<Individual> individuals, double eliteProportion, IndividualComparator comparator) {
         Collections.sort(individuals, comparator);
         
         List<Individual> result = new ArrayList<Individual>();
@@ -50,11 +48,11 @@ public class PopulationManager {
     }
 
     public List<Individual> crossover(List<Individual> population,
-            SelectionOperator selectionOperator, CrossoverOperator crossoverOperator) {
+            SelectionOperator selectionOperator, CrossoverOperator crossoverOperator, IndividualComparator comparator) {
         List<Individual> newPopulation = new ArrayList<Individual>();
         
         for(int i=0; i<getNumberOfNeededChildren(); i++) {
-            List<Individual> parents = selectionOperator.selectParents(population);
+            List<Individual> parents = selectionOperator.selectParents(population, comparator);
             Individual individual = crossoverOperator.crossover(parents);
             newPopulation.add(individual);
         }

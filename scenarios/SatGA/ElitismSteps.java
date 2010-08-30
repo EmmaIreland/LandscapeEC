@@ -12,9 +12,9 @@ import org.jbehave.scenario.steps.Steps;
 import org.jbehave.scenario.annotations.Given;
 import org.jbehave.scenario.annotations.When;
 import org.jbehave.scenario.annotations.Then;
-import org.jbehave.scenario.annotations.Named;
 
 import sat.Individual;
+import sat.IndividualComparator;
 import sat.PopulationManager;
 import sat.SatEvaluator;
 import sat.SatInstance;
@@ -68,7 +68,8 @@ public class ElitismSteps extends Steps {
             expectedElite.add(individual);
         }
         
-        List<Individual> actualElite = populationManager.getElite(individuals, eliteProportion, satInstance, satEvaluator);
+        IndividualComparator comparator = new IndividualComparator(satInstance, satEvaluator);
+        List<Individual> actualElite = populationManager.getElite(individuals, eliteProportion, comparator);
 
         assertEquals("Expected elite and actual elite are different sizes", expectedElite.size(), actualElite.size());
         

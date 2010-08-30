@@ -5,13 +5,13 @@ public class SatEvaluator {
     public double evaluate(SatInstance satInstance, Individual individual) {
         ClauseList clauseList = satInstance.getClauseList();
         
-        double fitness = 0;
+        int clausesSolved = 0;
         
         for(Clause clause:clauseList) {
-            if(clause.satisfiedBy(individual)) fitness++;
+            if(clause.satisfiedBy(individual)) clausesSolved++;
         }
         
-        return fitness/satInstance.getNumClauses();
+        return (double)clausesSolved/satInstance.getNumClauses();
     }
 
 }

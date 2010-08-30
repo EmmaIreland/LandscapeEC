@@ -22,6 +22,8 @@ public class GARun {
     private SelectionOperator selectionOperator;
     private CrossoverOperator crossoverOperator;
     
+    private IndividualComparator comparator;
+    
     private PopulationManager popManager;
     private SatInstance satInstance;
     private SatEvaluator satEvaluator;
@@ -31,13 +33,15 @@ public class GARun {
         mutationOperator = getMutationOperator();
         selectionOperator = getSelectionOperator();
         crossoverOperator = getCrossoverOperator();
-        
-        popManager = new PopulationManager();
        
         SatParser satParser = new SatParser();
         satInstance = 
             satParser.parseInstance(new FileReader(new File(StringParameter.PROBLEM_FILE.getValue())));
         satEvaluator =  new SatEvaluator();
+        
+        comparator = new IndividualComparator(satInstance, satEvaluator);
+        
+        popManager = new PopulationManager();
         
         for(int i=0; i<IntParameter.NUM_RUNS.getValue(); i++) {
             System.out.println("\nRUN " + (i+1) + "\n");
@@ -51,11 +55,11 @@ public class GARun {
         for(int i=0; i<IntParameter.NUM_GENERATIONS.getValue(); i++) {
             List<Individual> newPopulation = new ArrayList<Individual>();
             
-            List<Individual> elite = popManager.getElite(population, DoubleParameter.ELITE_PROPORTION.getValue(), satInstance, satEvaluator);
+            List<Individual> elite = popManager.getElite(population, DoubleParameter.ELITE_PROPORTION.getValue(), comparator);
             
             newPopulation.addAll(elite);
             
-            List<Individual> crossoverPop = popManager.crossover(population, selectionOperator, crossoverOperator);
+            List<Individual> crossoverPop = popManager.crossover(population, selectionOperator, crossoverOperator, comparator);
             
             newPopulation.addAll(popManager.mutatePopulation(crossoverPop, mutationOperator));
             

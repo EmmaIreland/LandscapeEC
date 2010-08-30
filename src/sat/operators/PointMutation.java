@@ -11,10 +11,11 @@ public class PointMutation implements MutationOperator {
         String bitString = ind.getBitString();
         StringBuilder newBitString = new StringBuilder();
 
+        double mutationRate = DoubleParameter.AVERAGE_MUTATIONS.getValue()/bitString.length();
+        
         for (int i = 0; i < bitString.length(); i++) {
             char character = bitString.charAt(i);
-            if (SharedPRNG.instance().nextDouble() < DoubleParameter.MUTATION_RATE
-                    .getValue()) {
+            if (SharedPRNG.instance().nextDouble() < mutationRate) {
                 newBitString.append(flipBit(character));
             } else {
                 newBitString.append(character);

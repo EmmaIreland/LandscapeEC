@@ -31,6 +31,11 @@ public class Individual {
     }
     
     @Override
+    public int hashCode() {
+        return bitString.hashCode();
+    }
+    
+    @Override
     public String toString() {
         return bitString;
     }

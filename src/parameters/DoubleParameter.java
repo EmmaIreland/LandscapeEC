@@ -4,7 +4,7 @@ package parameters;
 public enum DoubleParameter
 {
 
-    MUTATION_RATE, ELITE_PROPORTION;
+    AVERAGE_MUTATIONS, ELITE_PROPORTION;
     
     /**
      * Returns the (double) value of this parameter.
