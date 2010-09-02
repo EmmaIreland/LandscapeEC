@@ -17,18 +17,23 @@ public class InstantiationTests {
     private int individualLength;
     private int poolSize;
     
+    SatInstance satInstance;
+    
     @Before
     public void setupParameters() throws IOException{
-        GlobalParameters.setParameters(new File("properties/test.properties"));   
-        individualLength = IntParameter.INDIVIDUAL_LENGTH.getValue();
+        GlobalParameters.setParameters(new File("properties/test.properties"));
         poolSize = IntParameter.POOL_SIZE.getValue();
+        
+        satInstance = new SatInstance();
+        individualLength = 20;
+        satInstance.setNumVariables(individualLength);
     }
     
     @Test
     public void individualFactoryTest(){
         IndividualFactory factory =  new IndividualFactory();
                 
-        Individual individual = factory.getInstance();
+        Individual individual = factory.getInstance(satInstance);
         
         assertEquals("Individuals are not the same length", individualLength, individual.getBitString().length());
     }
@@ -37,7 +42,7 @@ public class InstantiationTests {
     public void populationManagerTest() throws IOException{
         PopulationManager manager =  new PopulationManager();  
                 
-        List<Individual> pop =manager.generatePopulation();
+        List<Individual> pop =manager.generatePopulation(satInstance);
         
         assertEquals("Pools are different sizes", poolSize, pop.size());
     }

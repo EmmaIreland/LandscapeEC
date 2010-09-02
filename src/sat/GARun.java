@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import parameters.DoubleParameter;
@@ -50,7 +51,7 @@ public class GARun {
     }
 
     private void runGeneration() {
-        List<Individual> population = popManager.generatePopulation();
+        List<Individual> population = popManager.generatePopulation(satInstance);
         
         for(int i=0; i<IntParameter.NUM_GENERATIONS.getValue(); i++) {
             List<Individual> newPopulation = new ArrayList<Individual>();
@@ -65,7 +66,7 @@ public class GARun {
             
             population = newPopulation;
             
-            Individual bestIndividual = elite.get(elite.size()-1);
+            Individual bestIndividual = Collections.max(population, comparator);
             System.out.println("Generation " + (i+1));
             System.out.println("   Best individual: " + bestIndividual);
             double bestFitness = satEvaluator.evaluate(satInstance, bestIndividual);

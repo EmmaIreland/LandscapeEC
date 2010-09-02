@@ -1,13 +1,11 @@
 package sat;
 
-import parameters.IntParameter;
 import util.SharedPRNG;
 
 public class IndividualFactory {
 
-    public Individual getInstance() {
-       int length = IntParameter.INDIVIDUAL_LENGTH.getValue();
-       
+    public Individual getInstance(SatInstance satInstance) {
+       int length = satInstance.getNumVariables();
        
        StringBuilder bitString = new StringBuilder();
        

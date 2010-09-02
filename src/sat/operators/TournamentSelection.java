@@ -21,7 +21,8 @@ public class TournamentSelection implements SelectionOperator {
         for(int i=0; i<2; i++) {
             Set<Individual> set = new LinkedHashSet<Individual>();
             while(set.size() < IntParameter.TOURNAMENT_SIZE.getValue()) {
-                set.add(population.get(SharedPRNG.instance().nextInt(population.size())));
+                Individual individual = population.get(SharedPRNG.instance().nextInt(population.size()));
+                set.add(individual);
             }
             
             Individual winner = Collections.max(set, comparator);

@@ -27,10 +27,10 @@ public class PopulationManager {
         return result;
     }
 
-    public List<Individual> generatePopulation() {
+    public List<Individual> generatePopulation(SatInstance satInstance) {
         List<Individual> population = new ArrayList<Individual>();
         for(int i=0;i<IntParameter.POOL_SIZE.getValue();i++){
-            population.add(factory.getInstance());
+            population.add(factory.getInstance(satInstance));
         }
         return population;
     }
