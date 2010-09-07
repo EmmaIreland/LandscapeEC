@@ -22,7 +22,7 @@ public class PopulationManager {
         List<Individual> result = new ArrayList<Individual>();
         int eliteSize = (int)Math.ceil(individuals.size()*eliteProportion);
         for(int i=0; i<eliteSize; i++) {
-            result.add(individuals.get(i));
+            result.add(individuals.get(individuals.size()-1-i));
         }
         return result;
     }
@@ -51,12 +51,14 @@ public class PopulationManager {
             SelectionOperator selectionOperator, CrossoverOperator crossoverOperator, IndividualComparator comparator) {
         List<Individual> newPopulation = new ArrayList<Individual>();
         
-        for(int i=0; i<getNumberOfNeededChildren(); i++) {
+        int numChildren = getNumberOfNeededChildren();
+        
+        for(int i=0; i<numChildren; i++) {
             List<Individual> parents = selectionOperator.selectParents(population, comparator);
             Individual individual = crossoverOperator.crossover(parents);
             newPopulation.add(individual);
         }
-        
+                
         return newPopulation;
     }
     

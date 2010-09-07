@@ -39,7 +39,7 @@ public class InstantiationTests {
     }
     
     @Test
-    public void populationManagerTest() throws IOException{
+    public void populationManagerTest() {
         PopulationManager manager =  new PopulationManager();  
                 
         List<Individual> pop =manager.generatePopulation(satInstance);

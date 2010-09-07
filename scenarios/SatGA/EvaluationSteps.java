@@ -1,8 +1,6 @@
 package SatGA;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.HashSet;
-import java.util.Set;
 
 import static junit.framework.Assert.*;
 
@@ -13,7 +11,6 @@ import org.jbehave.scenario.annotations.When;
 import org.jbehave.scenario.annotations.Then;
 import org.jbehave.scenario.annotations.Named;
 
-import sat.ClauseList;
 import sat.Individual;
 import sat.SatEvaluator;
 import sat.SatInstance;
@@ -30,8 +27,8 @@ public class EvaluationSteps extends Steps {
     }
     
     @When("I have a bitstring of <bitstring>")
-    public void getBitString(@Named("bitstring") String bitString) {
-        this.bitString=bitString;
+    public void getBitString(@Named("bitstring") String string) {
+        bitString=string;
     }
     
     @When("I have this clauseList $clauseList")

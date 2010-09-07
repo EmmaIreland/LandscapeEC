@@ -44,13 +44,20 @@ public class GARun {
         
         popManager = new PopulationManager();
         
-        for(int i=0; i<IntParameter.NUM_RUNS.getValue(); i++) {
+        int numRuns = IntParameter.NUM_RUNS.getValue();
+        
+        int successes = 0;
+        for(int i=0; i<numRuns; i++) {
             System.out.println("\nRUN " + (i+1) + "\n");
-            runGeneration();
-        }        
+            if(runGeneration()) {
+                successes++;
+            }
+        }
+        
+        System.out.println(successes + "/" + numRuns + " runs successful");
     }
 
-    private void runGeneration() {
+    private boolean runGeneration() {
         List<Individual> population = popManager.generatePopulation(satInstance);
         
         for(int i=0; i<IntParameter.NUM_GENERATIONS.getValue(); i++) {
@@ -73,11 +80,12 @@ public class GARun {
             System.out.println("   Best fitness: " + bestFitness);
             if(bestFitness == 1.0) {
                 System.out.println("SUCCESS");
-                return;
+                return true;
             }
         }
         
         System.out.println("FAILURE");
+        return false;
     }
     
     private MutationOperator getMutationOperator() throws ClassNotFoundException, SecurityException, NoSuchMethodException,

@@ -47,8 +47,8 @@ public class ElitismSteps extends Steps {
     }
     
     @When("I have an elite proportion of $eliteProportion")
-    public void getEliteProportion(double eliteProportion) {
-        this.eliteProportion = eliteProportion;
+    public void getEliteProportion(double proportion) {
+        eliteProportion = proportion;
     }
     
     @When("I have this clauseList $clauseList")
@@ -72,9 +72,6 @@ public class ElitismSteps extends Steps {
         List<Individual> actualElite = populationManager.getElite(individuals, eliteProportion, comparator);
 
         assertEquals("Expected elite and actual elite are different sizes", expectedElite.size(), actualElite.size());
-        
-        System.out.println("Expected elite: \n" + expectedElite);
-        System.out.println("Actual elite: \n" + actualElite);
         
         for(Individual individual:expectedElite) {
             assertTrue("Expected elite has an element not in actual elite", actualElite.contains(individual));

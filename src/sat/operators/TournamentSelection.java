@@ -18,9 +18,11 @@ public class TournamentSelection implements SelectionOperator {
     public List<Individual> selectParents(List<Individual> population, IndividualComparator comparator) {
         List<Individual> parents = new ArrayList<Individual>();
         
+        int tournamentSize = IntParameter.TOURNAMENT_SIZE.getValue();
+        
         for(int i=0; i<2; i++) {
             Set<Individual> set = new LinkedHashSet<Individual>();
-            while(set.size() < IntParameter.TOURNAMENT_SIZE.getValue()) {
+            while(set.size() < tournamentSize) {
                 Individual individual = population.get(SharedPRNG.instance().nextInt(population.size()));
                 set.add(individual);
             }
