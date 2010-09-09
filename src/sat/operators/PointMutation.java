@@ -22,7 +22,7 @@ public class PointMutation implements MutationOperator {
             }
         }
 
-        return new Individual(bitString.toString());
+        return new Individual(newBitString.toString());
     }
 
     private String flipBit(char character) {

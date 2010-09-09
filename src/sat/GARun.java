@@ -60,7 +60,7 @@ public class GARun {
     private boolean runGeneration() {
         List<Individual> population = popManager.generatePopulation(satInstance);
         
-        for(int i=0; i<IntParameter.NUM_GENERATIONS.getValue(); i++) {
+        for(int i=0; i<IntParameter.NUM_GENERATIONS.getValue(); i++) {        	
             List<Individual> newPopulation = new ArrayList<Individual>();
             
             List<Individual> elite = popManager.getElite(population, DoubleParameter.ELITE_PROPORTION.getValue(), comparator);
