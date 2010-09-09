@@ -24,18 +24,6 @@ public class Individual {
     }
     
     @Override
-    public boolean equals(Object other) {
-        if(!(other instanceof Individual)) return false;
-        Individual individual = (Individual)other;
-        return bitString.equals(individual.bitString);
-    }
-    
-    @Override
-    public int hashCode() {
-        return bitString.hashCode();
-    }
-    
-    @Override
     public String toString() {
         return bitString;
     }

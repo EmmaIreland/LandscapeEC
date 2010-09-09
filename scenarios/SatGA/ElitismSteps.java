@@ -74,11 +74,22 @@ public class ElitismSteps extends Steps {
         assertEquals("Expected elite and actual elite are different sizes", expectedElite.size(), actualElite.size());
         
         for(Individual individual:expectedElite) {
-            assertTrue("Expected elite has an element not in actual elite", actualElite.contains(individual));
+            assertTrue("Expected elite has an element not in actual elite", contains(individual, actualElite));
         }
         for(Individual individual:actualElite) {
-            assertTrue("Actual elite has an element not in expected elite", expectedElite.contains(individual));
+            assertTrue("Actual elite has an element not in expected elite", contains(individual, actualElite));
         }
     }
 
+	private boolean contains(Individual target, List<Individual> actualElite) {
+		for(Individual individual : actualElite) {
+			if (individual.getBitString().equals(target.getBitString())) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }
+
+
