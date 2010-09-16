@@ -23,9 +23,6 @@ public class PointMutationTest {
         MockParameters mockParams = new MockParameters();
         mockParams.put("AVERAGE_MUTATIONS", ""+AVERAGE_MUTATIONS);
         GlobalParameters.setParameters(mockParams);
-        
-        SatInstance satInstance = new SatInstance();
-        satInstance.setNumVariables(NUM_BITS);
 
         FrequencyCounter<Integer> counter = new FrequencyCounter<Integer>();
         
