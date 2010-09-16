@@ -1,6 +1,6 @@
 Scenario: Evaluate a Sat Solution
 
-As an machine learning researcher
+As a machine learning researcher
 I want to be able to correctly determine
 the elite individuals from a population
 
