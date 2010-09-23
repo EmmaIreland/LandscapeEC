@@ -22,6 +22,11 @@ public class LocationIterator implements Iterator<List<Integer>> {
 		this.numDimensions = start.size();
 	}
 	
+	public LocationIterator(List<Integer> position, int radius) {
+//	    startPos = 
+//	    this(startPos, endPos);
+	}
+	
 	@Override
 	public boolean hasNext() {
 		if (current.get(numDimensions-1) >= end.get(numDimensions-1)) {

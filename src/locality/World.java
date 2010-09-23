@@ -45,4 +45,8 @@ public class World {
 	public int getNumLocations() {
 		return worldMap.size();
 	}
+
+    public List<Location> getNeighborhood(List<Integer> position, int radius) {
+        throw new UnsupportedOperationException();
+    }
 }
