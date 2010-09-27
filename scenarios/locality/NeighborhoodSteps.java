@@ -37,7 +37,7 @@ public class NeighborhoodSteps extends Steps {
         neighborhood = world.getNeighborhood(position, radius);
     }
 
-    @Then("The neighborhood contains: $locations")
+    @Then("the neighborhood contains: $locations")
     public void testNeighborhoodCorrect(String locations) {
         String[] locationStrings = locations.split("\n");
 
@@ -57,6 +57,7 @@ public class NeighborhoodSteps extends Steps {
             expectedNeighborhood.add(position);
         }
 
-        assertEquals(expectedNeighborhood, neighborhood);
+        assertTrue("Actual neighborhood = " + neighborhood, expectedNeighborhood.containsAll(neighborhood));
+        assertEquals(expectedNeighborhood.size(), neighborhood.size());
     }
 }

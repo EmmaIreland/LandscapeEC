@@ -6,23 +6,31 @@ public class LocationIterator implements Iterator<Position> {
 
     private Position start, end, current;
     private int numDimensions;
+    private World world;
 
-    public LocationIterator(Position start, Position end) {
-        for (int i = 0; i < start.size(); i++) {
-            if (start.get(i) > end.get(i)) {
+    public LocationIterator(Position uncheckedStart, Position uncheckedEnd, World world) {
+        for (int i = 0; i < uncheckedStart.size(); i++) {
+            if (uncheckedStart.get(i) > uncheckedEnd.get(i)) {
                 throw new IllegalArgumentException(
                         "Bad range for Location Iterator");
             }
         }
+        
+        this.world = world;
 
-        this.start = start;
-        this.end = end;
+        if (world.isToroidal()) {
+        	start = uncheckedStart;
+        	end = uncheckedStart.plus(uncheckedEnd.minus(uncheckedStart).pairwiseMin(world.getDimensions()));
+        } else {
+        	start = uncheckedStart.maxWithZero();
+        	end = uncheckedEnd.pairwiseMin(world.getDimensions());
+        }
         this.current = new Position(start);
         this.numDimensions = start.size();
     }
 
-    public LocationIterator(Position position, int radius) {
-        this(position.minus(radius), position.plus(radius));
+    public LocationIterator(Position position, int radius, World world) {
+        this(position.minusToAll(radius), position.plusToAll(radius+1), world);
     }
 
     @Override
@@ -35,6 +43,9 @@ public class LocationIterator implements Iterator<Position> {
 
     @Override
     public Position next() {
+    	//We want to return the first position before we increment it, so
+    	//result will always be the previous iteration. This way we don't have to initialize
+    	//'start' to be start-1.
         Position result = new Position(current);
 
         current.set(0, current.get(0) + 1);
@@ -45,8 +56,8 @@ public class LocationIterator implements Iterator<Position> {
                 current.set(i + 1, current.get(i + 1) + 1);
             }
         }
-
-        return result;
+        
+        return result.pairwiseMod(world.getDimensions());
     }
 
     @Override
