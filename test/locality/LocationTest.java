@@ -2,9 +2,6 @@ package locality;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Test;
 
 public class LocationTest {
@@ -13,14 +10,12 @@ public class LocationTest {
 
 	@Test
 	public void positionTest() {
-		int[] dimensions = new int[] { SIZE, SIZE };
+		Integer[] dimensions = new Integer[] { SIZE, SIZE };
 		World world = new World(dimensions, true);
 		
 		for (int i=0; i<SIZE; ++i) {
 			for (int j=0; j<SIZE; ++j) {
-				List<Integer> position = new ArrayList<Integer>();
-				position.add(i);
-				position.add(j);
+				Position position = new Position(new Integer[] {i, j});
 				Location location = world.getLocation(position);
 				assertNotNull("Location " + position + " is null", location);
 				assertEquals(0, location.getNumIndividuals());

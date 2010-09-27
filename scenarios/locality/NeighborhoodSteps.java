@@ -11,52 +11,52 @@ import org.jbehave.scenario.annotations.When;
 import org.jbehave.scenario.steps.Steps;
 
 public class NeighborhoodSteps extends Steps {
-	private World world;
-	private List<Location> neighborhood;
+    private World world;
+    private List<Position> neighborhood;
 
-	@Given("a $toroid world of size [$size]")
-	public void setupWorld(String toroidalFlag, String sizes) {
-		String[] dimensionStrings = sizes.split(", *");
-		int[] dimensions = new int[dimensionStrings.length];
-		for(int i = 0; i < dimensionStrings.length; i++) {
-			dimensions[i] = Integer.parseInt(dimensionStrings[i]);
-		}
-		boolean isToroidal = "toroidal".equals(toroidalFlag);
-		world = new World(dimensions, isToroidal);
-	}
-	
-	@When("I compute the neighborhood of [$location] with radius $radius")
-	public void getNeighborhood(String locationString, int radius) {
-	    String[] positionStrings = locationString.split(", *");
-	    
-	    List<Integer> position = new ArrayList<Integer>();
-	    for (String s : positionStrings) {
-	        position.add(Integer.parseInt(s));
-	    }
-	    
-	    neighborhood = world.getNeighborhood(position, radius);
-	}
-	
-	@Then("The neighborhood contains: $locations")
-	public void testNeighborhoodCorrect(String locations) {
-	    String[] locationStrings = locations.split("\n");
-	    
-	    List<Location> expectedNeighborhood = new ArrayList<Location>();
-	    
-	    String positionString;
-	    String[] positionStrings;
-	    for(String locationString : locationStrings) {
-	        positionString = locationString.replaceAll("\\[|\\]", "");
-	        positionStrings = positionString.split(", *");
+    @Given("a $toroid world of size [$size]")
+    public void setupWorld(String toroidalFlag, String sizes) {
+        String[] dimensionStrings = sizes.split(", *");
+        Integer[] dimensions = new Integer[dimensionStrings.length];
+        for (int i = 0; i < dimensionStrings.length; i++) {
+            dimensions[i] = Integer.parseInt(dimensionStrings[i]);
+        }
+        boolean isToroidal = toroidalFlag.equals("toroidal");
+        world = new World(dimensions, isToroidal);
+    }
 
-	        List<Integer> position = new ArrayList<Integer>();
-	        for (String s : positionStrings) {
-	            position.add(Integer.parseInt(s));
-	        }
-	        
-	        expectedNeighborhood.add(world.getLocation(position));
-	    }
-	    
-	    assertEquals(expectedNeighborhood, neighborhood);
-	}
+    @When("I compute the neighborhood of [$location] with radius $radius")
+    public void getNeighborhood(String locationString, int radius) {
+        String[] positionStrings = locationString.split(", *");
+
+        Position position = new Position();
+        for (String s : positionStrings) {
+            position.add(Integer.parseInt(s));
+        }
+
+        neighborhood = world.getNeighborhood(position, radius);
+    }
+
+    @Then("The neighborhood contains: $locations")
+    public void testNeighborhoodCorrect(String locations) {
+        String[] locationStrings = locations.split("\n");
+
+        List<Position> expectedNeighborhood = new ArrayList<Position>();
+
+        String positionString;
+        String[] positionStrings;
+        for (String locationString : locationStrings) {
+            positionString = locationString.replaceAll("\\[|\\]", "");
+            positionStrings = positionString.split(", *");
+
+            Position position = new Position();
+            for (String s : positionStrings) {
+                position.add(Integer.parseInt(s));
+            }
+
+            expectedNeighborhood.add(position);
+        }
+
+        assertEquals(expectedNeighborhood, neighborhood);
+    }
 }

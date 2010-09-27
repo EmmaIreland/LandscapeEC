@@ -40,29 +40,30 @@ import java.util.Iterator;
 import java.util.TreeMap;
 
 /**
- * A simple class for keeping track of frequency counts on some collection of <CODE>Objects</CODE>.
+ * A simple class for keeping track of frequency counts on some collection of
+ * <CODE>Objects</CODE>.
  * 
  * @author Nic McPhee
  * @version $Revision: 1.3 $
  */
-public class FrequencyCounter<T> implements Iterable<T>
-{
-    private HashMap<T, Integer> _map = new HashMap<T, Integer>();
+public class FrequencyCounter<T> implements Iterable<T> {
+    private HashMap<T,Integer> _map = new HashMap<T,Integer>();
 
     /**
      * Add a single instance of this <CODE>item</CODE> to the count.
      * 
      * <P>
-     * This is final to prevent it being changed in subclasses. If you want to change the behavior of <CODE>addItem</CODE>
-     * you should override the other <CODE>addItem</CODE> method (<CODE>addItem(Object item, int count)</CODE>).
-     * This method calls that method with a value of 1 for the <CODE>count</CODE>, so changes made to the other
-     * method will be reflected here.
+     * This is final to prevent it being changed in subclasses. If you want to
+     * change the behavior of <CODE>addItem</CODE> you should override the other
+     * <CODE>addItem</CODE> method (<CODE>addItem(Object item, int count)</CODE>
+     * ). This method calls that method with a value of 1 for the
+     * <CODE>count</CODE>, so changes made to the other method will be reflected
+     * here.
      * 
      * @param item
      *            the item to increment the count for
      */
-    public final void addItem(T item)
-    {
+    public final void addItem(T item) {
         addItem(item, 1);
     }
 
@@ -74,8 +75,7 @@ public class FrequencyCounter<T> implements Iterable<T>
      * @param count
      *            the amount to increment the count for this itme by
      */
-    public void addItem(T item, int count)
-    {
+    public void addItem(T item, int count) {
         _map.put(item, getCount(item) + count);
     }
 
@@ -86,42 +86,35 @@ public class FrequencyCounter<T> implements Iterable<T>
      *            the item to get the count for
      * @return the number of times we've counted <CODE>item</CODE>
      */
-    public int getCount(T item)
-    {
+    public int getCount(T item) {
         Integer count = _map.get(item);
-        if (count == null)
-        {
+        if (count == null) {
             return 0;
         }
-        else
-        {
-            return count;
-        }
+        return count;
     }
 
     /**
-     * Return the total count for this counter, i.e., the sum of the count of all of its entries.
+     * Return the total count for this counter, i.e., the sum of the count of
+     * all of its entries.
      * 
      * @return the total count for this counter
      */
-    public int totalCount()
-    {
+    public int totalCount() {
         int result = 0;
-        for (T key : this)
-        {
+        for (T key : this) {
             result += getCount(key);
         }
         return result;
     }
 
     /**
-     * Return the iterator over the set of all the keys in the count, i.e., all the objects that we've seen and thus
-     * have positive counts.
+     * Return the iterator over the set of all the keys in the count, i.e., all
+     * the objects that we've seen and thus have positive counts.
      * 
      * @return an iterator over the set of keys.
      */
-    public Iterator<T> keys()
-    {
+    public Iterator<T> keys() {
         return (_map.keySet().iterator());
     }
 
@@ -130,29 +123,26 @@ public class FrequencyCounter<T> implements Iterable<T>
      * 
      * @return the number of keys (entries) in this counter
      */
-    public int numKeys()
-    {
+    public int numKeys() {
         return _map.size();
     }
 
     /**
      * @return a string listing all the items and their counts.
      */
-    public String toString()
-    {
-        TreeMap<T, Integer> orderedMap = new TreeMap<T, Integer>(new Comparator<T>()
-        {
-            public int compare(T a, T b)
-            {
-                return (a.toString().compareTo(b.toString()));
-            }
-        });
+    @Override
+    public String toString() {
+        TreeMap<T,Integer> orderedMap = new TreeMap<T,Integer>(
+                new Comparator<T>() {
+                    public int compare(T a, T b) {
+                        return (a.toString().compareTo(b.toString()));
+                    }
+                });
         orderedMap.putAll(_map);
         return (orderedMap.toString());
     }
 
-    public Iterator<T> iterator()
-    {
+    public Iterator<T> iterator() {
         return keys();
     }
 

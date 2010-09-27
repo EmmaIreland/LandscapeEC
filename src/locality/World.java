@@ -6,47 +6,44 @@ import java.util.List;
 import java.util.Map;
 
 public class World {
-	private boolean toroidal = false;
-	private Map<List<Integer>, Location> worldMap; 
-	
-	public World(int[] dimensions, boolean isToroidal) {
-		toroidal = isToroidal;
-		
-		worldMap = new HashMap<List<Integer>, Location>();
-		
-		int numDimensions = dimensions.length;
-		List<Integer> end = makePosition(dimensions);
-		
-		List<Integer> start = new ArrayList<Integer>();
-		for(int i = 0; i < numDimensions; i++) {
-			start.add(0);
-		}
-		
-		List<Integer> position;
-		LocationIterator iter = new LocationIterator(start, end);
-		while(iter.hasNext()) {
-			position = iter.next();
-			worldMap.put(position, new Location(position));
-		}
-	}
+    private boolean toroidal = false;
+    private Map<Position,Location> worldMap;
 
-	private List<Integer> makePosition(int[] dimensionIters) {
-		List<Integer> result = new ArrayList<Integer>();
-		for (Integer v : dimensionIters) {
-			result.add(v);
-		}
-		return result;
-	}
+    public World(Integer[] dimensions, boolean isToroidal) {
+        toroidal = isToroidal;
 
-	public Location getLocation(List<Integer> position) {
-		return worldMap.get(position);
-	}
+        worldMap = new HashMap<Position,Location>();
 
-	public int getNumLocations() {
-		return worldMap.size();
-	}
+        int numDimensions = dimensions.length;
+        Position end = new Position(dimensions);
 
-    public List<Location> getNeighborhood(List<Integer> position, int radius) {
-        throw new UnsupportedOperationException();
+        Position start = new Position();
+        for (int i = 0; i < numDimensions; i++) {
+            start.add(0);
+        }
+
+        Position position;
+        LocationIterator iter = new LocationIterator(start, end);
+        while (iter.hasNext()) {
+            position = iter.next();
+            worldMap.put(position, new Location(position));
+        }
+    }
+
+    public Location getLocation(Position position) {
+        return worldMap.get(position);
+    }
+
+    public int getNumLocations() {
+        return worldMap.size();
+    }
+
+    public List<Position> getNeighborhood(Position position, int radius) {
+        List<Position> positions = new ArrayList<Position>();
+        LocationIterator iter = new LocationIterator(position, radius);
+        while (iter.hasNext()) {
+            positions.add(iter.next());
+        }
+        return positions;
     }
 }
