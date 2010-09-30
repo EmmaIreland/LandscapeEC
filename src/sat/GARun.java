@@ -10,7 +10,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import locality.World;
+
+import parameters.BooleanParameter;
 import parameters.DoubleParameter;
+import parameters.IntArrayParameter;
 import parameters.IntParameter;
 import parameters.StringParameter;
 import sat.operators.CrossoverOperator;
@@ -29,6 +33,8 @@ public class GARun {
     private SatInstance satInstance;
     private SatEvaluator satEvaluator;
     
+    private World world;
+    
     public void run() throws FileNotFoundException, IOException, SecurityException, IllegalArgumentException,
         ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         mutationOperator = getMutationOperator();
@@ -43,6 +49,8 @@ public class GARun {
         comparator = new IndividualComparator(satInstance, satEvaluator);
         
         popManager = new PopulationManager();
+        
+        world = new World(IntArrayParameter.WORLD_DIMENSIONS.getValue(), BooleanParameter.TOROIDAL.getValue());
         
         int numRuns = IntParameter.NUM_RUNS.getValue();
         

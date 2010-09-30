@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class World {
+public class World implements Iterable<Position> {
     private boolean toroidal = false;
     private Map<Position,Location> worldMap;
     private Integer[] dimensions;
@@ -55,5 +55,10 @@ public class World {
 
 	public Integer[] getDimensions() {
 		return dimensions;
+	}
+
+	@Override
+	public LocationIterator iterator() {
+		return new LocationIterator(this);
 	}
 }

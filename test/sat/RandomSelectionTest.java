@@ -28,7 +28,7 @@ public class RandomSelectionTest {
         List<Individual> population = new ArrayList<Individual>();
         
         for(int i=0; i<NUM_INDIVIDUALS; i++) {
-            population.add(IndividualFactory.getInstance(satInstance));
+            population.add(IndividualFactory.getInstance(satInstance.getNumVariables()));
         }
         
         FrequencyCounter<Individual> counter = new FrequencyCounter<Individual>();

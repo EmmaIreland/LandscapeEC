@@ -33,7 +33,11 @@ public class LocationIterator implements Iterator<Position> {
         this(position.minusToAll(radius), position.plusToAll(radius+1), world);
     }
 
-    @Override
+    public LocationIterator(World world) {
+		this(Position.origin(world.getDimensions().length), new Position(world.getDimensions()), world);
+	}
+
+	@Override
     public boolean hasNext() {
         if (current.get(numDimensions - 1) >= end.get(numDimensions - 1)) {
             return false;

@@ -13,8 +13,6 @@ import sat.operators.SelectionOperator;
 
 public class PopulationManager {
     
-    private IndividualFactory factory = new IndividualFactory();
-    
 
     public List<Individual> getElite(List<Individual> individuals, double eliteProportion, IndividualComparator comparator) {
         Collections.sort(individuals, comparator);
@@ -29,8 +27,8 @@ public class PopulationManager {
 
     public List<Individual> generatePopulation(SatInstance satInstance) {
         List<Individual> population = new ArrayList<Individual>();
-        for(int i=0;i<IntParameter.POOL_SIZE.getValue();i++){
-            population.add(factory.getInstance(satInstance));
+        for(int i=0;i<IntParameter.CARRYING_CAPACITY.getValue();i++){
+            population.add(IndividualFactory.getInstance(satInstance.getNumVariables()));
         }
         return population;
     }
@@ -63,10 +61,10 @@ public class PopulationManager {
     }
     
     public int getNumberOfNeededChildren() {
-        int poolSize = IntParameter.POOL_SIZE.getValue();
+        int carryingCapacity = IntParameter.CARRYING_CAPACITY.getValue();
         double eliteProportion = DoubleParameter.ELITE_PROPORTION.getValue();
-        int eliteSize = (int)Math.ceil(poolSize*eliteProportion);
-        return poolSize-eliteSize;
+        int eliteSize = (int)Math.ceil(carryingCapacity*eliteProportion);
+        return carryingCapacity-eliteSize;
     }
 
 }

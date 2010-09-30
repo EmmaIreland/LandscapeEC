@@ -3,7 +3,7 @@ package parameters;
 
 public enum IntParameter
 {
-    POOL_SIZE, NUM_RUNS, NUM_GENERATIONS, TOURNAMENT_SIZE;
+    NUM_RUNS, NUM_GENERATIONS, TOURNAMENT_SIZE, CARRYING_CAPACITY;
 
     /**
      * Return the (integer) value of this parameter.

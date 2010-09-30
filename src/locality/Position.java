@@ -3,8 +3,6 @@ package locality;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hamcrest.CoreMatchers;
-
 public class Position {
     public List<Integer> coordinates;
 
@@ -25,6 +23,14 @@ public class Position {
 
     public Position(Position start) {
         coordinates = new ArrayList<Integer>(start.coordinates);
+    }
+    
+    public static Position origin(int numDimensions) {
+    	List<Integer> zeros = new ArrayList<Integer>();
+    	for (int i=0; i<numDimensions; ++i) {
+    		zeros.add(0);
+    	}
+    	return new Position(zeros);
     }
 
     public Position minusToAll(int a) {

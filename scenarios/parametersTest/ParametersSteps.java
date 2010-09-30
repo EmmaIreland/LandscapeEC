@@ -27,9 +27,9 @@ public class ParametersSteps extends Steps {
     }
 
     
-    @Then("the pool size is $poolSize")
+    @Then("the carrying capacity is $poolSize")
     public void confirmPoolSize(int poolSize) {
-        assertEquals(poolSize, IntParameter.POOL_SIZE.getValue());
+        assertEquals(poolSize, IntParameter.CARRYING_CAPACITY.getValue());
     }
     
     @Then("the number of runs is $numRuns")
