@@ -5,9 +5,9 @@ I want to be able test that the right
 parameters are being used.
 
 When I set these properties
-POOL_SIZE:100
+CARRYING_CAPACITY:100
 NUM_RUNS:10
 AVERAGE_MUTATIONS:1.0
-Then the pool size is 100
+Then the carrying capacity is 100
 And the number of runs is 10
 And the mutation rate is 1.0

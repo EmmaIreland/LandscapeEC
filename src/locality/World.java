@@ -35,6 +35,16 @@ public class World implements Iterable<Position> {
     public Location getLocation(Position position) {
         return worldMap.get(position);
     }
+    
+    public Location getStartingLocation() {
+    	ArrayList<Integer> coordinates = new ArrayList<Integer>();
+    	for (int i = 0; i < dimensions.length; i++) {
+    		coordinates.add((int) Math.floor(((double)dimensions[i])/2.0));
+    	}
+    	Position position = new Position(coordinates);
+    	
+    	return worldMap.get(position);
+    }
 
     public int getNumLocations() {
         return worldMap.size();

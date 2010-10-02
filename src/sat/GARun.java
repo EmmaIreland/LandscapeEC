@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import locality.Position;
 import locality.World;
 
 import parameters.BooleanParameter;
@@ -67,20 +68,14 @@ public class GARun {
 
     private boolean runGeneration() {
         List<Individual> population = popManager.generatePopulation(satInstance);
+        world.getStartingLocation().setIndividuals(population);
         
-        for(int i=0; i<IntParameter.NUM_GENERATIONS.getValue(); i++) {        	
-            List<Individual> newPopulation = new ArrayList<Individual>();
-            
-            List<Individual> elite = popManager.getElite(population, DoubleParameter.ELITE_PROPORTION.getValue(), comparator);
-            
-            newPopulation.addAll(elite);
-            
-            List<Individual> crossoverPop = popManager.crossover(population, selectionOperator, crossoverOperator, comparator);
-            
-            newPopulation.addAll(popManager.mutatePopulation(crossoverPop, mutationOperator));
-            
-            population = newPopulation;
-            
+        for(int i=0; i<IntParameter.NUM_GENERATIONS.getValue(); i++) {
+        	
+        	population = new ArrayList<Individual>();
+        	
+        	processAllLocations(population);
+        	
             Individual bestIndividual = Collections.max(population, comparator);
             System.out.println("Generation " + (i+1));
             System.out.println("   Best individual: " + bestIndividual);
@@ -95,6 +90,37 @@ public class GARun {
         System.out.println("FAILURE");
         return false;
     }
+
+	private void processAllLocations(List<Individual> population) {
+		/*TODO  There is a potential problem with this code:
+		 * If we add in new children individuals as we iterate through all the locations in the world,
+		 * there is a possibility that we will run the process on the children of the current
+		 * generation, instead of processing them when we are suppoed to.
+		 * 
+		 * Perhaps we will want to add the children to the world AFTER the current generation has
+		 * finished processing?
+		 */
+		
+		for(Position position: world) {
+			List<Individual> locationIndividuals = world.getLocation(position).getIndividuals();
+			
+			if(!locationIndividuals.isEmpty()) {
+				List<Individual> newPopulation = new ArrayList<Individual>();
+
+				List<Individual> elite = popManager.getElite(locationIndividuals, DoubleParameter.ELITE_PROPORTION.getValue(), comparator);
+
+				newPopulation.addAll(elite);
+
+				List<Individual> crossoverPop = popManager.crossover(locationIndividuals, selectionOperator, crossoverOperator, comparator);
+
+				newPopulation.addAll(popManager.mutatePopulation(crossoverPop, mutationOperator));
+
+				world.getLocation(position).setIndividuals(newPopulation);
+				
+				population.addAll(newPopulation);
+			}
+		}
+	}
     
     private MutationOperator getMutationOperator() throws ClassNotFoundException, SecurityException, NoSuchMethodException,
         IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
