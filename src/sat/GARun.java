@@ -25,6 +25,7 @@ import parameters.StringParameter;
 import sat.operators.CrossoverOperator;
 import sat.operators.MutationOperator;
 import sat.operators.SelectionOperator;
+import util.SharedPRNG;
 
 public class GARun {
 
@@ -127,42 +128,39 @@ public class GARun {
     }
 
     private void processAllLocations() {
-        /*
-         * TODO There is a potential problem with this code: If we add in new
-         * children individuals as we iterate through all the locations in the
-         * world, there is a possibility that we will run the process on the
-         * children of the current generation, instead of processing them when
-         * we are suppoed to.
-         * 
-         * Perhaps we will want to add the children to the world AFTER the
-         * current generation has finished processing?
-         */
-
+        performMigration();
         performElitism();
         performReproduction();
         setFromPendingIndividuals();
+    }
+    
+    private void performMigration() {
+        double migrationProbability = DoubleParameter.MIGRATION_PROBABILITY.getValue();
+        int migrationDistance = IntParameter.MIGRATION_DISTANCE.getValue();
         
-//        for (Position position : world) {
-//            List<Individual> locationIndividuals = world.getLocation(position)
-//                    .getIndividuals();
-//
-//            if (!locationIndividuals.isEmpty()) {
-//                List<Individual> newPopulation = new ArrayList<Individual>();
-//
-//                List<Individual> elite = popManager.getElite(
-//                        locationIndividuals, DoubleParameter.ELITE_PROPORTION.getValue(), comparator);
-//
-//                newPopulation.addAll(elite);
-//
-//                List<Individual> crossoverPop = popManager.crossover(
-//                        locationIndividuals, selectionOperator,
-//                        crossoverOperator, comparator);
-//
-//                newPopulation.addAll(popManager.mutatePopulation(crossoverPop, mutationOperator));
-//
-//                world.getLocation(position).setIndividuals(newPopulation);
-//            }
-//        }
+        if(migrationProbability <= 0 || migrationDistance <= 0) return;
+        
+        for (Position position : world) {
+            List<Individual> locationIndividuals = world.getIndividualsAt(position);
+            List<Individual> individualsToRemove = new ArrayList<Individual>();
+            
+            for(Individual i:locationIndividuals) {
+                if(SharedPRNG.instance().nextDouble() < migrationProbability) {
+                    individualsToRemove.add(i);
+                    List<Position> neighborhood = world.getNeighborhood(position, migrationDistance);
+                    neighborhood.remove(position);
+                    Position newPosition;
+                    try {
+                        newPosition = neighborhood.get(SharedPRNG.instance().nextInt(neighborhood.size()));
+                    } catch (IndexOutOfBoundsException e) {
+                        throw new MigrationInWorldOfSizeOneException(e);
+                    }
+                    world.getLocation(newPosition).addToPendingIndividuals(i);
+                }
+            }
+            
+            world.getLocation(position).removeAll(individualsToRemove);
+        }
     }
     
     private void performElitism() {        
@@ -182,7 +180,7 @@ public class GARun {
         for (Position position : world) {
             List<Individual> locationIndividuals = world.getIndividualsAt(position);
 
-            if (!locationIndividuals.isEmpty()) {
+            if (locationIndividuals.size() >= IntParameter.TOURNAMENT_SIZE.getValue()) {
                 List<Individual> crossoverPop = popManager.crossover(
                         locationIndividuals, selectionOperator,
                         crossoverOperator, comparator);

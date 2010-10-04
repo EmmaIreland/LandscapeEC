@@ -41,8 +41,16 @@ public class Location {
         pendingIndividuals.addAll(newIndividuals);
     }
 
+    public void addToPendingIndividuals(Individual i) {
+        pendingIndividuals.add(i);
+    }
+
     public void setFromPendingIndividuals() {
         individuals = new ArrayList<Individual>(pendingIndividuals);
         pendingIndividuals = new ArrayList<Individual>();
+    }
+
+    public void removeAll(List<Individual> individualsToRemove) {
+        individuals.removeAll(individualsToRemove);
     }
 }
