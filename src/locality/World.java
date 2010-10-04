@@ -1,9 +1,12 @@
 package locality;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import sat.Individual;
 
 public class World implements Iterable<Position> {
     private boolean toroidal = false;
@@ -71,4 +74,8 @@ public class World implements Iterable<Position> {
 	public LocationIterator iterator() {
 		return new LocationIterator(this);
 	}
+
+    public List<Individual> getIndividualsAt(Position p) {
+        return getLocation(p).getIndividuals();
+    }
 }

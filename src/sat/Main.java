@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
+import observers.MapVisualizer;
+
 import parameters.GlobalParameters;
 
 
@@ -17,8 +19,9 @@ public class Main {
             File paramsFile = new File(arg);
             GlobalParameters.setParameters(paramsFile);
             
-            GARun ga = new GARun();
-            ga.run();
+            GARun run = new GARun();
+
+            run.run();
             
             /*GlobalParameters.setupLogging();
             doRuns();*/

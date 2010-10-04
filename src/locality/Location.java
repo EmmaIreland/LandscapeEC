@@ -9,10 +9,12 @@ import sat.Individual;
 public class Location {
     private final Position position;
     private List<Individual> individuals;
+    private List<Individual> pendingIndividuals;
     
     public Location(Position aPosition) {
         position = aPosition;
         individuals = new ArrayList<Individual>();
+        pendingIndividuals = new ArrayList<Individual>();
     }
 
     public Position getPosition() {
@@ -29,5 +31,18 @@ public class Location {
     
     public List<Individual> getIndividuals() {
     	return Collections.unmodifiableList(individuals);
+    }
+
+    public void addIndividuals(List<Individual> newIndividuals) {
+        individuals.addAll(newIndividuals);
+    }
+
+    public void addToPendingIndividuals(List<Individual> newIndividuals) {
+        pendingIndividuals.addAll(newIndividuals);
+    }
+
+    public void setFromPendingIndividuals() {
+        individuals = new ArrayList<Individual>(pendingIndividuals);
+        pendingIndividuals = new ArrayList<Individual>();
     }
 }

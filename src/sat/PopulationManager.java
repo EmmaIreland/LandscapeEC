@@ -15,6 +15,7 @@ public class PopulationManager {
     
 
     public List<Individual> getElite(List<Individual> startingIndividuals, double eliteProportion, IndividualComparator comparator) {
+        // TODO fix this to use carrying capacity instead of % population!
     	List<Individual> individuals = new ArrayList<Individual>(startingIndividuals);
         Collections.sort(individuals, comparator);
         
