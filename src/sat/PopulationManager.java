@@ -20,12 +20,17 @@ public class PopulationManager {
         Collections.sort(individuals, comparator);
         
         List<Individual> result = new ArrayList<Individual>();
-        int eliteSize = (int)Math.ceil(individuals.size()*eliteProportion);
+        int populationSize = individuals.size();
+		int eliteSize = getEliteSize(populationSize, eliteProportion);
         for(int i=0; i<eliteSize; i++) {
-            result.add(individuals.get(individuals.size()-1-i));
+            result.add(individuals.get(populationSize-1-i));
         }
         return result;
     }
+
+	private int getEliteSize(int populationSize, double eliteProportion) {
+		return (int)Math.ceil(populationSize*eliteProportion);
+	}
 
     public List<Individual> generatePopulation(SatInstance satInstance) {
         List<Individual> population = new ArrayList<Individual>();
@@ -51,7 +56,7 @@ public class PopulationManager {
             SelectionOperator selectionOperator, CrossoverOperator crossoverOperator, IndividualComparator comparator) {
         List<Individual> newPopulation = new ArrayList<Individual>();
         
-        int numChildren = getNumberOfNeededChildren();
+        int numChildren = getNumberOfNeededChildren(population.size());
         
         for(int i=0; i<numChildren; i++) {
             List<Individual> parents = selectionOperator.selectParents(population, comparator);
@@ -62,11 +67,12 @@ public class PopulationManager {
         return newPopulation;
     }
     
-    public int getNumberOfNeededChildren() {
+    public int getNumberOfNeededChildren(int populationSize) {
         int carryingCapacity = IntParameter.CARRYING_CAPACITY.getValue();
-        double eliteProportion = DoubleParameter.ELITE_PROPORTION.getValue();
-        int eliteSize = (int)Math.ceil(carryingCapacity*eliteProportion);
-        return carryingCapacity-eliteSize;
+        int eliteSize = getEliteSize(populationSize, DoubleParameter.ELITE_PROPORTION.getValue());
+        
+        int maxChildren = (int) (populationSize*DoubleParameter.REPRODUCTION_RATE.getValue());
+        return Math.min(carryingCapacity-eliteSize, maxChildren);
     }
 
 }

@@ -74,6 +74,7 @@ public class GARun {
             if (runGeneration()) {
                 successes++;
             }
+            satEvaluator.resetEvaluationsCounter();
         }
 
         System.out.println(successes + "/" + numRuns + " runs successful");
@@ -92,7 +93,8 @@ public class GARun {
         }
         world.getStartingLocation().setIndividuals(population);
 
-        for (int i = 0; i < IntParameter.NUM_GENERATIONS.getValue(); i++) {
+        int i = 0;
+        while (satEvaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO.getValue()) {
             processAllLocations();
             
             for(Observer o:observers) {
@@ -109,6 +111,8 @@ public class GARun {
                 System.out.println("SUCCESS");
                 return true;
             }
+            
+            i++;
         }
 
         System.out.println("FAILURE");
@@ -130,6 +134,8 @@ public class GARun {
 
     private void processAllLocations() {
         performMigration();
+        addFromPendingIndividuals();
+        
         performElitism();
         performReproduction();
         setFromPendingIndividuals();
@@ -196,6 +202,13 @@ public class GARun {
     private void setFromPendingIndividuals() {
         for (Position position : world) {
             world.getLocation(position).setFromPendingIndividuals();
+            //assert world.getLocation(position).getNumIndividuals() <= IntParameter.CARRYING_CAPACITY.getValue();
+        }
+    }
+    
+    private void addFromPendingIndividuals() {
+        for (Position position : world) {
+            world.getLocation(position).addFromPendingIndividuals();
         }
     }
 
