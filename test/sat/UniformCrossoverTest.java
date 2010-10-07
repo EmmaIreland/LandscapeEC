@@ -33,8 +33,7 @@ public class UniformCrossoverTest {
             Individual child = crossoverOperator.crossover(parents);
             
             for(int b=0; b<NUM_BITS; b++) {
-                if(child.getBitString().charAt(b) == '0') counter.addItem(0);
-                else counter.addItem(1);
+                counter.addItem(child.getBits()[b]);
             }
         }
         

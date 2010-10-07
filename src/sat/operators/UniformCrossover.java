@@ -11,20 +11,20 @@ public class UniformCrossover implements CrossoverOperator {
     public Individual crossover(List<Individual> parents) {
         if(parents.size() != 2) throw new IllegalArgumentException("Wrong number of parents");
         
-        String parentAString = parents.get(0).getBitString();
-        String parentBString = parents.get(1).getBitString();
+        int[] parentA = parents.get(0).getBits();
+        int[] parentB = parents.get(1).getBits();
         
-        StringBuilder childString = new StringBuilder();
+        int[] child = new int[parentA.length];
         
-        for(int i=0; i<parentAString.length(); i++) {
+        for(int i=0; i<parentA.length; i++) {
             if(SharedPRNG.instance().nextBoolean()) {
-                childString.append(parentAString.charAt(i));
+                child[i] = parentA[i];
             } else {
-                childString.append(parentBString.charAt(i));
+                child[i] = parentB[i];
             }
         }
         
-        return new Individual(childString.toString());
+        return new Individual(child);
     }
 
 }

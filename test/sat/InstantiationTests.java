@@ -33,7 +33,7 @@ public class InstantiationTests {
     public void individualFactoryTest(){                
         Individual individual = IndividualFactory.getInstance(satInstance.getNumVariables());
         
-        assertEquals("Individuals are not the same length", individualLength, individual.getBitString().length());
+        assertEquals("Individuals are not the same length", individualLength, individual.getBits().length);
     }
     
     @Test

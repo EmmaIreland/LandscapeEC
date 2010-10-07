@@ -1,30 +1,40 @@
 package sat;
 
 public class Individual {
-    private String bitString;
+    private int[] bits;
 
     public Individual(String bitString) {
-        this.bitString = bitString;
+        int[] newBits = new int[bitString.length()];
+        char[] chars = bitString.toCharArray();
+        for(int i=0; i<chars.length; i++) {
+            if(chars[i] == '0') newBits[i] = 0;
+            else newBits[i] = 1;
+        }
+        this.bits = newBits;
+    }
+    
+    public Individual(int[] bits) {
+        this.bits = bits;
     }
 
-    public String getBitString() {
-        return bitString;
+    public int[] getBits() {
+        return bits;
     }
 
-    public void setBitString(String bitString) {
-        this.bitString = bitString;
-    }
-
-    public int getValueAt(int variable) {
-        return Integer.parseInt(bitString.substring(variable, variable+1));
+    public void setBits(int[] bits) {
+        this.bits = bits;
     }
 
     boolean valueIsFalse(Literal literal) {
-        return getValueAt(literal.variable) == 0;
+        return bits[literal.variable] == 0;
     }
     
     @Override
     public String toString() {
-        return bitString;
+        String str = "";
+        for(int i:bits) {
+            str += i;
+        }
+        return str;
     }
 }

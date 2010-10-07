@@ -8,26 +8,22 @@ public class PointMutation implements MutationOperator {
 
     @Override
     public Individual mutate(Individual ind) {
-        String bitString = ind.getBitString();
-        StringBuilder newBitString = new StringBuilder();
+        int[] bits = ind.getBits();
 
-        double mutationRate = DoubleParameter.AVERAGE_MUTATIONS.getValue()/bitString.length();
+        double mutationRate = DoubleParameter.AVERAGE_MUTATIONS.getValue()/bits.length;
         
-        for (int i = 0; i < bitString.length(); i++) {
-            char character = bitString.charAt(i);
+        for (int i = 0; i < bits.length; i++) {
             if (SharedPRNG.instance().nextDouble() < mutationRate) {
-                newBitString.append(flipBit(character));
-            } else {
-                newBitString.append(character);
+                bits[i] = flipBit(bits[i]);
             }
         }
 
-        return new Individual(newBitString.toString());
+        return new Individual(bits);
     }
 
-    private String flipBit(char character) {
-        if (character == '0')
-            return "1";
-        return "0";
+    private int flipBit(int bit) {
+        if (bit == 0)
+            return 1;
+        return 0;
     }
 }

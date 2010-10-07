@@ -12,22 +12,22 @@ public class IndividualFactory {
     public static Individual getInstance(int numBits) {
         int length = numBits;
         
-        StringBuilder bitString = new StringBuilder();
+        int[] bits = new int[length];
         
         for(int i=0; i<length; i++){
-            bitString.append(makeBit());
+            bits[i] = makeBit();
         }
         
-        Individual individual = new Individual(bitString.toString());
+        Individual individual = new Individual(bits);
         
         return individual;    	
     }
 
-    private static String makeBit() {
+    private static int makeBit() {
         if (SharedPRNG.instance().nextBoolean()) {
-            return "1";
+            return 1;
         }
-        return "0";
+        return 0;
     }
 
 }

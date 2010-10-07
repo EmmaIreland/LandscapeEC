@@ -34,7 +34,7 @@ public class PointMutationTest {
             
             int bitsFlipped = 0;
             for(int b=0; b<NUM_BITS; b++) {
-                if(individual.getBitString().charAt(b) == '1') bitsFlipped++;
+                if(individual.getBits()[b] == 1) bitsFlipped++;
             }
             counter.addItem(bitsFlipped);
         }

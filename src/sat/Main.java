@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-import observers.MapVisualizer;
+import observers.vis.MapVisualizer;
 
 import parameters.GlobalParameters;
 

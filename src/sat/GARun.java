@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import observers.MapVisualizer;
 import observers.Observer;
+import observers.vis.DataDisplay;
+import observers.vis.MapVisualizer;
 
-import locality.Location;
 import locality.Position;
 import locality.World;
 
@@ -82,6 +82,7 @@ public class GARun {
     private void setupObservers() {
         // TODO generalize this to load from parameters (not just use a hard-coded visualizer)
         observers.add(new MapVisualizer(world));
+        observers.add(new DataDisplay());
     }
 
     private boolean runGeneration() {
@@ -95,7 +96,7 @@ public class GARun {
             processAllLocations();
             
             for(Observer o:observers) {
-                o.generationData(world, satEvaluator, satInstance);
+                o.generationData(i, world, satEvaluator, satInstance);
             }
 
             Individual bestIndividual = findBestIndividual();

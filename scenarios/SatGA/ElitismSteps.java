@@ -5,6 +5,7 @@ import static junit.framework.Assert.*;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jbehave.scenario.steps.Steps;
@@ -83,7 +84,7 @@ public class ElitismSteps extends Steps {
 
 	private boolean contains(Individual target, List<Individual> actualElite) {
 		for(Individual individual : actualElite) {
-			if (individual.getBitString().equals(target.getBitString())) {
+			if (Arrays.equals(individual.getBits(), target.getBits())) {
 				return true;
 			}
 		}
