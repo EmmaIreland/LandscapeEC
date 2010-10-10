@@ -49,7 +49,7 @@ public class Parse3SatSteps extends Steps {
         for(int i =0; i<clausesArray.length; i++){
             String[] clause = clausesArray[i].split(" ");
             for(int j=0;j<clause.length;j++){
-                int variable = Integer.parseInt(clause[j]);
+                int variable = Integer.parseInt(clause[j].trim());
                 newClause.addLiteral(new Literal(Math.abs(variable)-1, Math.signum(variable)==-1));
             }
             clauseSet.add(newClause);

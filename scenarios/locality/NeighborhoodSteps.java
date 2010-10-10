@@ -51,7 +51,7 @@ public class NeighborhoodSteps extends Steps {
 
             Position position = new Position();
             for (String s : positionStrings) {
-                position.add(Integer.parseInt(s));
+                position.add(Integer.parseInt(s.trim()));
             }
 
             expectedNeighborhood.add(position);
