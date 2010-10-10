@@ -3,7 +3,14 @@ Landscape EC Todo List
 
 
 ------- TO DO -------
+- Set up Locations to be able to contain a list of clauses, in order for geography to work.
 
+- Reconfigure elitism to be able to use the clause list contained within each location, in order
+to get the "elite" of a location that has geography.
+
+-OR-
+
+- Implement a 'reaper' method to remove all individuals that do not meet the clauses for a location.
 
 ----- COMPLETED -----
 - Figure out what we want to do about reproduction. We will probably need to change reproduction so that 
