@@ -6,7 +6,10 @@ public class SatEvaluator {
 
 	public double evaluate(SatInstance satInstance, Individual individual) {
 		ClauseList clauseList = satInstance.getClauseList();
-
+		if(clauseList.getNumClauses() == 0) {
+			return 1.0;
+		}
+		
 		int clausesSolved = 0;
 
 		for(Clause clause:clauseList) {

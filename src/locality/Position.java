@@ -104,6 +104,10 @@ public class Position {
     public int get(int i) {
         return coordinates.get(i);
     }
+    
+    public List<Integer> getCoordinates() {
+    	return new ArrayList<Integer>(coordinates);
+    }
 
     public void set(int index, int element) {
         coordinates.set(index, element);

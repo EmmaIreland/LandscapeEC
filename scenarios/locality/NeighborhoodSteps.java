@@ -10,6 +10,9 @@ import org.jbehave.scenario.annotations.Then;
 import org.jbehave.scenario.annotations.When;
 import org.jbehave.scenario.steps.Steps;
 
+import sat.SatEvaluator;
+import sat.SatInstance;
+
 public class NeighborhoodSteps extends Steps {
     private World world;
     private List<Position> neighborhood;
@@ -22,7 +25,7 @@ public class NeighborhoodSteps extends Steps {
             dimensions[i] = Integer.parseInt(dimensionStrings[i]);
         }
         boolean isToroidal = toroidalFlag.equals("toroidal");
-        world = new World(dimensions, isToroidal);
+        world = new World(dimensions, isToroidal, new SatInstance(), new SatEvaluator());
     }
 
     @When("I compute the neighborhood of [$location] with radius $radius")

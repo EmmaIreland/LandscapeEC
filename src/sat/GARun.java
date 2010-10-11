@@ -62,7 +62,7 @@ public class GARun {
         popManager = new PopulationManager();
 
         world = new World(IntArrayParameter.WORLD_DIMENSIONS.getValue(),
-                BooleanParameter.TOROIDAL.getValue());
+                BooleanParameter.TOROIDAL.getValue(), satInstance, satEvaluator);
 
         int numRuns = IntParameter.NUM_RUNS.getValue();
         
@@ -175,8 +175,7 @@ public class GARun {
             List<Individual> locationIndividuals = world.getIndividualsAt(position);
 
             if (!locationIndividuals.isEmpty()) {
-                List<Individual> elite = popManager.getElite(
-                        locationIndividuals, DoubleParameter.ELITE_PROPORTION.getValue(), comparator);
+                List<Individual> elite = popManager.getElite(locationIndividuals, DoubleParameter.ELITE_PROPORTION.getValue(), world.getLocation(position).getComparator());
                 
                 world.getLocation(position).addToPendingIndividuals(elite);
             }

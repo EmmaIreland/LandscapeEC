@@ -19,4 +19,8 @@ public class IndividualComparator implements Comparator<Individual> {
         if(fitness1 < fitness2) return -1;
         return 0;
     }
+    
+    public SatInstance getInstance() {
+    	return satInstance;
+    }
 }

@@ -70,8 +70,8 @@ public class MapVisualizer extends JFrame implements Observer {
             for(int x=0; x<worldWidth; x++) {
                 Location loc = world.getLocation(new Position(new Integer[] {x, y}));
                 if(loc.getNumIndividuals() > 0) {
-                    Individual bestIndividual = Collections.max(loc.getIndividuals(), comparator);
-                    double bestFitness = satEvaluator.evaluate(satInstance, bestIndividual);
+                    Individual bestIndividual = Collections.max(loc.getIndividuals(), loc.getComparator());
+                    double bestFitness = satEvaluator.evaluate(loc.getComparator().getInstance(), bestIndividual);
                     double scaledFitness = Math.pow(bestFitness, intensityScale);
                     double popScale = Math.min(1.0, loc.getNumIndividuals()/(double)IntParameter.CARRYING_CAPACITY.getValue());
                     Color color = new Color((int) (scaledFitness*255), (int) (scaledFitness*255), (int) (scaledFitness*255));

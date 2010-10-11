@@ -4,6 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import sat.SatEvaluator;
+import sat.SatInstance;
+
 public class LocationTest {
 
 	private static final int SIZE = 10;
@@ -11,7 +14,7 @@ public class LocationTest {
 	@Test
 	public void positionTest() {
 		Integer[] dimensions = new Integer[] { SIZE, SIZE };
-		World world = new World(dimensions, true);
+		World world = new World(dimensions, true, new SatInstance(), new SatEvaluator());
 		
 		for (int i=0; i<SIZE; ++i) {
 			for (int j=0; j<SIZE; ++j) {

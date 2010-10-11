@@ -21,10 +21,6 @@ public class Individual {
         return bits;
     }
 
-    public void setBits(int[] bits) {
-        this.bits = bits;
-    }
-
     boolean valueIsFalse(Literal literal) {
         return bits[literal.variable] == 0;
     }

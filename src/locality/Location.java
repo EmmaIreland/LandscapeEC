@@ -5,16 +5,19 @@ import java.util.Collections;
 import java.util.List;
 
 import sat.Individual;
+import sat.IndividualComparator;
 
 public class Location {
     private final Position position;
     private List<Individual> individuals;
     private List<Individual> pendingIndividuals;
+    private IndividualComparator locationComparator;
     
-    public Location(Position aPosition) {
+    public Location(Position aPosition, IndividualComparator comparator) {
         position = aPosition;
         individuals = new ArrayList<Individual>();
         pendingIndividuals = new ArrayList<Individual>();
+        locationComparator = comparator;
     }
 
     public Position getPosition() {
@@ -23,6 +26,10 @@ public class Location {
     
     public int getNumIndividuals() {
         return individuals.size();
+    }
+    
+    public IndividualComparator getComparator() {
+    	return locationComparator;
     }
     
     public void setIndividuals(List<Individual> individuals) {

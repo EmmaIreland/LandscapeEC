@@ -27,4 +27,15 @@ public class ClauseList implements Iterable<Clause> {
     public int getNumClauses() {
         return clauses.size();
     }
+
+	public ClauseList getSubClauseList(double percentage) {
+		int numClauses = (int) Math.ceil(clauses.size()*percentage);
+		
+		ClauseList subList = new ClauseList();
+		for(int i = 0; i < numClauses; i++) {
+			subList.addClause(clauses.get(i));
+		}
+		
+		return subList;
+	}
 }
