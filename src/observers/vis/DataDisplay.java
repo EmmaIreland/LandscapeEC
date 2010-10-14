@@ -41,8 +41,8 @@ public class DataDisplay extends JFrame implements Observer {
     }
 
     @Override
-    public void generationData(int generationNumber, World world, SatEvaluator satEvaluator, SatInstance satInstance) {
-        IndividualComparator comparator = new IndividualComparator(satInstance, satEvaluator);
+    public void generationData(int generationNumber, World world, SatInstance satInstance) {
+        IndividualComparator comparator = new IndividualComparator(satInstance);
 
         width = getWidth();
         height = getHeight();
@@ -56,8 +56,8 @@ public class DataDisplay extends JFrame implements Observer {
         
         Individual bestIndividual = findBestIndividual(world, comparator);
         GraphicsUtil.drawString(g, "Generation " + generationNumber, 5, 20, font, Color.WHITE);
-        GraphicsUtil.drawString(g, "NumEvalutaions " + satEvaluator.getNumEvaluations() + "/" + IntParameter.NUM_EVALS_TO_DO.getValue(), 5, 35, font, Color.WHITE);
-        double bestFitness = satEvaluator.evaluate(satInstance, bestIndividual);
+        GraphicsUtil.drawString(g, "NumEvalutaions " + SatEvaluator.getNumEvaluations() + "/" + IntParameter.NUM_EVALS_TO_DO.getValue(), 5, 35, font, Color.WHITE);
+        double bestFitness = SatEvaluator.evaluate(satInstance, bestIndividual);
         GraphicsUtil.drawString(g, "Best fitness: " + bestFitness, 5, 50, font, Color.WHITE);
         int numIndividuals = getIndividualCount(world);
         GraphicsUtil.drawString(g, "Number of individuals: " + numIndividuals, 5, 65, font, Color.WHITE);

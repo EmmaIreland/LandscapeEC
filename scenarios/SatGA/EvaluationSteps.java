@@ -17,13 +17,11 @@ import sat.SatInstance;
 import sat.SatParser;
 
 public class EvaluationSteps extends Steps {
-    private SatEvaluator satEvaluator;
     private String bitString;
     private SatInstance satInstance;
 
     @Given("a sat evaluator")
     public void constructParser() {
-        satEvaluator = new SatEvaluator();
     }
     
     @When("I have a bitstring of <bitstring>")
@@ -40,7 +38,7 @@ public class EvaluationSteps extends Steps {
     
     @Then("the fitness should be <fitness>")
     public void confirmEvaluation(@Named("fitness") double expectedFitness) {
-        double actualFitness = satEvaluator.evaluate(satInstance, new Individual(bitString));
+        double actualFitness = SatEvaluator.evaluate(satInstance, new Individual(bitString));
         
         assertEquals(expectedFitness, actualFitness);
     }

@@ -26,7 +26,6 @@ public class ElitismSteps extends Steps {
     private double eliteProportion;
     private SatInstance satInstance;
     private List<Individual> individuals = new ArrayList<Individual>();
-    private SatEvaluator satEvaluator;
 
     @Given("a population manager")
     public void constructPopulationManager() {
@@ -35,7 +34,6 @@ public class ElitismSteps extends Steps {
     
     @Given("a SAT evaluator")
     public void constructSATEvaluator() {
-        satEvaluator = new SatEvaluator();
     }
     
     @When("I have a population of $population")
@@ -69,7 +67,7 @@ public class ElitismSteps extends Steps {
             expectedElite.add(individual);
         }
         
-        IndividualComparator comparator = new IndividualComparator(satInstance, satEvaluator);
+        IndividualComparator comparator = new IndividualComparator(satInstance);
         List<Individual> actualElite = populationManager.getElite(individuals, eliteProportion, comparator);
 
         assertEquals("Expected elite and actual elite are different sizes", expectedElite.size(), actualElite.size());

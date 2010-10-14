@@ -6,12 +6,14 @@ import java.util.List;
 
 import sat.Individual;
 import sat.IndividualComparator;
+import sat.SatInstance;
 
 public class Location {
     private final Position position;
     private List<Individual> individuals;
     private List<Individual> pendingIndividuals;
     private IndividualComparator locationComparator;
+    private SatInstance satInstance;
     
     public Location(Position aPosition, IndividualComparator comparator) {
         position = aPosition;
@@ -30,6 +32,10 @@ public class Location {
     
     public IndividualComparator getComparator() {
     	return locationComparator;
+    }
+    
+    public SatInstance getSatInstance() {
+    	return satInstance;
     }
     
     public void setIndividuals(List<Individual> individuals) {

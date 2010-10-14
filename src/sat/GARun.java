@@ -37,7 +37,6 @@ public class GARun {
 
     private PopulationManager popManager;
     private SatInstance satInstance;
-    private SatEvaluator satEvaluator;
 
     private World world;
     
@@ -55,14 +54,14 @@ public class GARun {
         SatParser satParser = new SatParser();
         satInstance = satParser.parseInstance(new FileReader(new File(
                 StringParameter.PROBLEM_FILE.getValue())));
-        satEvaluator = new SatEvaluator();
+        
 
-        comparator = new IndividualComparator(satInstance, satEvaluator);
+        comparator = new IndividualComparator(satInstance);
 
         popManager = new PopulationManager();
 
         world = new World(IntArrayParameter.WORLD_DIMENSIONS.getValue(),
-                BooleanParameter.TOROIDAL.getValue(), satInstance, satEvaluator);
+                BooleanParameter.TOROIDAL.getValue(), satInstance);
 
         int numRuns = IntParameter.NUM_RUNS.getValue();
         
@@ -74,7 +73,7 @@ public class GARun {
             if (runGeneration()) {
                 successes++;
             }
-            satEvaluator.resetEvaluationsCounter();
+            SatEvaluator.resetEvaluationsCounter();
         }
 
         System.out.println(successes + "/" + numRuns + " runs successful");
@@ -94,18 +93,17 @@ public class GARun {
         world.getStartingLocation().setIndividuals(population);
 
         int i = 0;
-        while (satEvaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO.getValue()) {
+        while (SatEvaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO.getValue()) {
             processAllLocations();
             
             for(Observer o:observers) {
-                o.generationData(i, world, satEvaluator, satInstance);
+                o.generationData(i, world, satInstance);
             }
 
             Individual bestIndividual = findBestIndividual();
             System.out.println("Generation " + (i + 1));
             System.out.println("   Best individual: " + bestIndividual);
-            double bestFitness = satEvaluator.evaluate(satInstance,
-                    bestIndividual);
+            double bestFitness = SatEvaluator.evaluate(satInstance, bestIndividual);
             System.out.println("   Best fitness: " + bestFitness);
             if (bestFitness == 1.0) {
                 System.out.println("SUCCESS");
@@ -173,7 +171,7 @@ public class GARun {
     private void performElitism() {        
         for (Position position : world) {
             List<Individual> locationIndividuals = world.getIndividualsAt(position);
-
+            
             if (!locationIndividuals.isEmpty()) {
                 List<Individual> elite = popManager.getElite(locationIndividuals, DoubleParameter.ELITE_PROPORTION.getValue(), world.getLocation(position).getComparator());
                 

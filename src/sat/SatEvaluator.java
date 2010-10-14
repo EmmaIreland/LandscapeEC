@@ -2,9 +2,9 @@ package sat;
 
 public class SatEvaluator {
 
-	private int numEvalutations = 0;
-
-	public double evaluate(SatInstance satInstance, Individual individual) {
+	private static int numEvalutations = 0;
+	
+	public static double evaluate(SatInstance satInstance, Individual individual) {
 		ClauseList clauseList = satInstance.getClauseList();
 		if(clauseList.getNumClauses() == 0) {
 			return 1.0;
@@ -21,11 +21,11 @@ public class SatEvaluator {
 		return (double)clausesSolved/satInstance.getNumClauses();
 	}
 
-	public int getNumEvaluations() {
+	public static int getNumEvaluations() {
 		return numEvalutations;
 	}
 	
-	public void resetEvaluationsCounter() {
+	public static void resetEvaluationsCounter() {
 		numEvalutations = 0;
 	}
 }

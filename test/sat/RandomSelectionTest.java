@@ -23,8 +23,6 @@ public class RandomSelectionTest {
         SatInstance satInstance = new SatInstance();
         satInstance.setNumVariables(NUM_VARIABLES);
         
-        SatEvaluator satEvaluator = new SatEvaluator();
-        
         List<Individual> population = new ArrayList<Individual>();
         
         for(int i=0; i<NUM_INDIVIDUALS; i++) {
@@ -36,7 +34,7 @@ public class RandomSelectionTest {
         RandomSelection selectionOperator = new RandomSelection();
         
         for(int i=0; i<NUM_TESTS; i++) {
-            List<Individual> parents = selectionOperator.selectParents(population, new IndividualComparator(satInstance, satEvaluator));
+            List<Individual> parents = selectionOperator.selectParents(population, new IndividualComparator(satInstance));
             counter.addItem(parents.get(0));
             counter.addItem(parents.get(1));
         }

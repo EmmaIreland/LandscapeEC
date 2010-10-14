@@ -16,7 +16,7 @@ public class World implements Iterable<Position> {
     private Map<Position,Location> worldMap;
     private Integer[] dimensions;
 
-    public World(Integer[] dimensions, boolean isToroidal, SatInstance satInstance, SatEvaluator satEvaluator) {
+    public World(Integer[] dimensions, boolean isToroidal, SatInstance satInstance) {
         toroidal = isToroidal;
         this.dimensions = dimensions.clone();
 
@@ -38,7 +38,7 @@ public class World implements Iterable<Position> {
             double distance = Collections.max(position.getCoordinates());
             double clausePercentage = distance/getBiggestDimension();
             
-            IndividualComparator locationComparator = new IndividualComparator(satInstance.getSubInstance(clausePercentage), satEvaluator);
+            IndividualComparator locationComparator = new IndividualComparator(satInstance.getSubInstance(clausePercentage));
             
             worldMap.put(position, new Location(position, locationComparator));
         }

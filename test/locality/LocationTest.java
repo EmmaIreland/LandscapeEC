@@ -14,7 +14,7 @@ public class LocationTest {
 	@Test
 	public void positionTest() {
 		Integer[] dimensions = new Integer[] { SIZE, SIZE };
-		World world = new World(dimensions, true, new SatInstance(), new SatEvaluator());
+		World world = new World(dimensions, true, new SatInstance());
 		
 		for (int i=0; i<SIZE; ++i) {
 			for (int j=0; j<SIZE; ++j) {

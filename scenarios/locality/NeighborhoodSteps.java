@@ -25,7 +25,7 @@ public class NeighborhoodSteps extends Steps {
             dimensions[i] = Integer.parseInt(dimensionStrings[i]);
         }
         boolean isToroidal = toroidalFlag.equals("toroidal");
-        world = new World(dimensions, isToroidal, new SatInstance(), new SatEvaluator());
+        world = new World(dimensions, isToroidal, new SatInstance());
     }
 
     @When("I compute the neighborhood of [$location] with radius $radius")

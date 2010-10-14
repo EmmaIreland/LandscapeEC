@@ -15,11 +15,9 @@ public class ComparatorSteps extends Steps {
     private SatInstance satInstance;
     private Individual a;
     private Individual b;
-    private SatEvaluator satEvaluator;
-    
+
     @Given("a SAT evaluator")
     public void constructSATEvaluator() {
-        satEvaluator = new SatEvaluator();
     }
     
     @When("I have this clauseList $clauseList")
@@ -37,7 +35,7 @@ public class ComparatorSteps extends Steps {
     
     @Then("the result of the comparison is <result>")
     public void getComparisonResult(@Named("result") String expectedResult) {
-        IndividualComparator comparator = new IndividualComparator(satInstance, satEvaluator);
+        IndividualComparator comparator = new IndividualComparator(satInstance);
         
         int actualResult = comparator.compare(a, b);
         

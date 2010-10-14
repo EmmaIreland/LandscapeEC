@@ -24,14 +24,12 @@ import util.MockParameters;
 public class TournamentSteps extends Steps {
     
     private static final double EPSILON = 0.001;
-    private SatEvaluator satEvaluator;
     private SatInstance satInstance;
     private List<Individual> individuals = new ArrayList<Individual>();
     private FrequencyCounter<Individual> counter;
 
     @Given("a SAT evaluator")
     public void constructSATEvaluator() {
-        satEvaluator = new SatEvaluator();
     }
     
     @When("I have this clauseList $clauseList")
@@ -57,7 +55,7 @@ public class TournamentSteps extends Steps {
         mockParams.put("TOURNAMENT_SIZE", tournamentSize);
         GlobalParameters.setParameters(mockParams);
         
-        IndividualComparator comparator = new IndividualComparator(satInstance, satEvaluator);
+        IndividualComparator comparator = new IndividualComparator(satInstance);
         
         counter = new FrequencyCounter<Individual>();
         for(int i = 0; i < numTournaments; i++) {
