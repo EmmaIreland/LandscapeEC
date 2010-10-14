@@ -18,7 +18,7 @@ public class SatEvaluator {
 		}
 
 		numEvalutations++;
-
+		
 		return (double)clausesSolved/satInstance.getNumClauses();
 	}
 

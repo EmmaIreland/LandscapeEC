@@ -2,7 +2,7 @@ package parameters;
 
 public enum IntArrayParameter
 {
-    WORLD_DIMENSIONS;
+    WORLD_DIMENSIONS, STARTING_LOCATION;
 
     private static final String SEPARATOR = ",";
     /**

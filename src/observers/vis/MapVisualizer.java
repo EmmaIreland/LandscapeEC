@@ -69,7 +69,7 @@ public class MapVisualizer extends JFrame implements Observer {
                 Location loc = world.getLocation(new Position(new Integer[] {x, y}));
                 
                 double difficultyScale = loc.getComparator().getInstance().getNumClauses()/(double)satInstance.getNumClauses();
-                Color background = new Color(0, (int) (difficultyScale*255), 0);
+                Color background = new Color(0, (int) ((1-difficultyScale)*255), 0);
                 GraphicsUtil.fillRect(g, x*xScale, y*yScale, xScale, yScale, background);
                 
                 if(loc.getNumIndividuals() > 0) {
@@ -78,7 +78,7 @@ public class MapVisualizer extends JFrame implements Observer {
                     double scaledFitness = Math.pow(bestFitness, intensityScale);
                     double popScale = Math.min(1.0, loc.getNumIndividuals()/(double)IntParameter.CARRYING_CAPACITY.getValue());
                     
-                    Color foreground = new Color((int) (scaledFitness*255), (int) (difficultyScale*255), 0);
+                    Color foreground = new Color((int) (scaledFitness*255), (int) ((1-difficultyScale)*255), 0);
                     GraphicsUtil.fillRect(g, x*xScale+(0.5-popScale*0.5)*xScale, y*yScale+(0.5-popScale*0.5)*yScale, xScale*popScale, yScale*popScale, foreground);
                     
                 }

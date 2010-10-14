@@ -1,10 +1,13 @@
 package locality;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import parameters.IntArrayParameter;
 
 import sat.Individual;
 import sat.IndividualComparator;
@@ -34,25 +37,36 @@ public class World implements Iterable<Position> {
         LocationIterator iter = new LocationIterator(start, end, this);
         while (iter.hasNext()) {
             position = iter.next();
-            double distance = Collections.max(position.getCoordinates());
-            double clausePercentage = distance/getBiggestDimension();
+            // double distance = Collections.max(position.getCoordinates());
+            List<Integer> coordinates = position.getCoordinates();
+            int distance = manhattanVectorLength(coordinates);
+            double clausePercentage = distance/(1.0*manhattanVectorLength(dimensions)); // getBiggestDimension();
             
             IndividualComparator locationComparator = new IndividualComparator(satInstance.getSubInstance(clausePercentage));
             
             worldMap.put(position, new Location(position, locationComparator));
         }
     }
+
+	private int manhattanVectorLength(Integer[] dimensions) {
+		return manhattanVectorLength(Arrays.asList(dimensions));
+	}
+
+	private int manhattanVectorLength(List<Integer> coordinates) {
+		int distance = 0;
+		for (int coordinate : coordinates) {
+			distance += coordinate;
+		}
+		return distance;
+	}
     
     public Location getLocation(Position position) {
         return worldMap.get(position);
     }
     
     public Location getStartingLocation() {
-    	ArrayList<Integer> coordinates = new ArrayList<Integer>();
-    	for (int i = 0; i < dimensions.length; i++) {
-    		coordinates.add((int) Math.floor(((double)dimensions[i])/2.0));
-    	}
-    	Position position = new Position(coordinates);
+    	Integer[] startingLocation = IntArrayParameter.STARTING_LOCATION.getValue();
+    	Position position = new Position(startingLocation);
     	
     	return worldMap.get(position);
     }
