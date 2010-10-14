@@ -3,6 +3,7 @@ package sat;
 public class SatEvaluator {
 
 	private static int numEvalutations = 0;
+	private static int numResets = 0;
 	
 	public static double evaluate(SatInstance satInstance, Individual individual) {
 		ClauseList clauseList = satInstance.getClauseList();
@@ -27,5 +28,10 @@ public class SatEvaluator {
 	
 	public static void resetEvaluationsCounter() {
 		numEvalutations = 0;
+		numResets++;
+	}
+	
+	public static int getNumResets() {
+		return numResets;
 	}
 }

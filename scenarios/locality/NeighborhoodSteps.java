@@ -10,7 +10,6 @@ import org.jbehave.scenario.annotations.Then;
 import org.jbehave.scenario.annotations.When;
 import org.jbehave.scenario.steps.Steps;
 
-import sat.SatEvaluator;
 import sat.SatInstance;
 
 public class NeighborhoodSteps extends Steps {

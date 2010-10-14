@@ -138,8 +138,8 @@ public class GARun {
         performReproduction();
         setFromPendingIndividuals();
     }
-    
-    private void performMigration() {
+
+	private void performMigration() {
         double migrationProbability = DoubleParameter.MIGRATION_PROBABILITY.getValue();
         int migrationDistance = IntParameter.MIGRATION_DISTANCE.getValue();
         

@@ -17,7 +17,6 @@ import org.jbehave.scenario.annotations.Then;
 import sat.Individual;
 import sat.IndividualComparator;
 import sat.PopulationManager;
-import sat.SatEvaluator;
 import sat.SatInstance;
 import sat.SatParser;
 

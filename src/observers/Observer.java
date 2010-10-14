@@ -1,7 +1,6 @@
 package observers;
 
 import locality.World;
-import sat.SatEvaluator;
 import sat.SatInstance;
 
 public interface Observer {

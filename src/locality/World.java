@@ -8,7 +8,6 @@ import java.util.Map;
 
 import sat.Individual;
 import sat.IndividualComparator;
-import sat.SatEvaluator;
 import sat.SatInstance;
 
 public class World implements Iterable<Position> {

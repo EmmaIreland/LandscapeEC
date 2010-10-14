@@ -24,7 +24,7 @@ import sat.SatInstance;
 
 public class DataDisplay extends JFrame implements Observer {
     private int width = 300;
-    private int height = 120;
+    private int height = 135;
 
     private BufferedImage canvas;
 
@@ -38,6 +38,7 @@ public class DataDisplay extends JFrame implements Observer {
         setLayout(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocation(this.getLocation().x + width, this.getLocation().y);
     }
 
     @Override
@@ -55,14 +56,16 @@ public class DataDisplay extends JFrame implements Observer {
         Font font = new Font("Trebuchet MS", Font.BOLD, 12);
         
         Individual bestIndividual = findBestIndividual(world, comparator);
-        GraphicsUtil.drawString(g, "Generation " + generationNumber, 5, 20, font, Color.WHITE);
-        GraphicsUtil.drawString(g, "NumEvalutaions " + SatEvaluator.getNumEvaluations() + "/" + IntParameter.NUM_EVALS_TO_DO.getValue(), 5, 35, font, Color.WHITE);
+        
+        GraphicsUtil.drawString(g, "RUN " + (SatEvaluator.getNumResets()+1), 5, 20, font, Color.RED);
+        GraphicsUtil.drawString(g, "Generation " + generationNumber, 5, 35, font, Color.WHITE);
+        GraphicsUtil.drawString(g, "NumEvalutaions " + SatEvaluator.getNumEvaluations() + "/" + IntParameter.NUM_EVALS_TO_DO.getValue(), 5, 50, font, Color.WHITE);
         double bestFitness = SatEvaluator.evaluate(satInstance, bestIndividual);
-        GraphicsUtil.drawString(g, "Best fitness: " + bestFitness, 5, 50, font, Color.WHITE);
+        GraphicsUtil.drawString(g, "Best fitness: " + bestFitness, 5, 65, font, Color.WHITE);
         int numIndividuals = getIndividualCount(world);
-        GraphicsUtil.drawString(g, "Number of individuals: " + numIndividuals, 5, 65, font, Color.WHITE);
+        GraphicsUtil.drawString(g, "Number of individuals: " + numIndividuals, 5, 80, font, Color.WHITE);
         int inhabitedCells = getInhabitedCellCount(world);
-        GraphicsUtil.drawString(g, "Number of inhabited cells: " + inhabitedCells, 5, 80, font, Color.WHITE);
+        GraphicsUtil.drawString(g, "Number of inhabited cells: " + inhabitedCells, 5, 95, font, Color.WHITE);
 
         repaint();
     }

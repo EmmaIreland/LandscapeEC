@@ -16,7 +16,6 @@ import locality.Position;
 import locality.World;
 
 import sat.Individual;
-import sat.IndividualComparator;
 import sat.SatEvaluator;
 import sat.SatInstance;
 
@@ -59,7 +58,6 @@ public class MapVisualizer extends JFrame implements Observer {
     
     @Override
     public void generationData(int generationNumber, World world, SatInstance satInstance) {
-        IndividualComparator comparator = new IndividualComparator(satInstance);
         
         Graphics g = canvas.getGraphics();
         
@@ -69,17 +67,23 @@ public class MapVisualizer extends JFrame implements Observer {
         for(int y=0; y<worldHeight; y++) {
             for(int x=0; x<worldWidth; x++) {
                 Location loc = world.getLocation(new Position(new Integer[] {x, y}));
+                
+                double difficultyScale = loc.getComparator().getInstance().getNumClauses()/(double)satInstance.getNumClauses();
+                Color background = new Color(0, (int) (difficultyScale*255), 0);
+                GraphicsUtil.fillRect(g, x*xScale, y*yScale, xScale, yScale, background);
+                
                 if(loc.getNumIndividuals() > 0) {
                     Individual bestIndividual = Collections.max(loc.getIndividuals(), loc.getComparator());
                     double bestFitness = SatEvaluator.evaluate(loc.getComparator().getInstance(), bestIndividual);
                     double scaledFitness = Math.pow(bestFitness, intensityScale);
                     double popScale = Math.min(1.0, loc.getNumIndividuals()/(double)IntParameter.CARRYING_CAPACITY.getValue());
-                    Color color = new Color((int) (scaledFitness*255), (int) (scaledFitness*255), (int) (scaledFitness*255));
-                    GraphicsUtil.fillRect(g, x*xScale+(0.5-popScale*0.5)*xScale, y*yScale+(0.5-popScale*0.5)*yScale, xScale*popScale, yScale*popScale, color);
-                    GraphicsUtil.drawRect(g, x*xScale, y*yScale, xScale, yScale, Color.BLACK);
-                } else {
-                    //drawRect(g, x*xScale, y*yScale, xScale, yScale, Color.BLACK);
+                    
+                    Color foreground = new Color((int) (scaledFitness*255), (int) (difficultyScale*255), 0);
+                    GraphicsUtil.fillRect(g, x*xScale+(0.5-popScale*0.5)*xScale, y*yScale+(0.5-popScale*0.5)*yScale, xScale*popScale, yScale*popScale, foreground);
+                    
                 }
+                GraphicsUtil.drawRect(g, x*xScale+1, y*yScale+1, xScale-2, yScale-2, background);
+                GraphicsUtil.drawRect(g, x*xScale, y*yScale, xScale, yScale, Color.BLACK);
             }
         }
         

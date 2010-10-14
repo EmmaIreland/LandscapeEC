@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import sat.SatEvaluator;
 import sat.SatInstance;
 
 public class LocationTest {
