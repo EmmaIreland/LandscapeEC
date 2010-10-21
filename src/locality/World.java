@@ -13,74 +13,72 @@ import sat.Individual;
 import sat.IndividualComparator;
 import sat.SatInstance;
 
-public class World implements Iterable<Position> {
+public class World implements Iterable<Vector> {
     private boolean toroidal = false;
-    private Map<Position,Location> worldMap;
-    private Integer[] dimensions;
+    private Map<Vector,Location> worldMap;
+    private Vector dimensions;
 
-    public World(Integer[] dimensions, boolean isToroidal, SatInstance satInstance) {
+    public World(Vector dimensions, boolean isToroidal, SatInstance satInstance) {
         toroidal = isToroidal;
-        this.dimensions = dimensions.clone();
+        this.dimensions = new Vector(dimensions);
 
-        worldMap = new HashMap<Position,Location>();
+        worldMap = new HashMap<Vector,Location>();
 
-        int numDimensions = dimensions.length;
-        Position end = new Position(dimensions);
+        int numDimensions = dimensions.size();
+        Vector end = new Vector(dimensions);
 
-        Position start = new Position();
+        Vector start = new Vector();
         for (int i = 0; i < numDimensions; i++) {
             start.add(0);
         }
 
-        Position position;
-        
+        Vector position;
+
         LocationIterator iter = new LocationIterator(start, end, this);
         while (iter.hasNext()) {
             position = iter.next();
-            // double distance = Collections.max(position.getCoordinates());
-            List<Integer> coordinates = position.getCoordinates();
-            int distance = manhattanVectorLength(coordinates);
-            double clausePercentage = distance/(1.0*manhattanVectorLength(dimensions)); // getBiggestDimension();
-            
+
+            int distance = manhattanVectorLength(position);
+
+            Vector worldEdge = dimensions.minusToAll(1);
+
+            double clausePercentage = distance / (1.0 * manhattanVectorLength(worldEdge));
+
             IndividualComparator locationComparator = new IndividualComparator(satInstance.getSubInstance(clausePercentage));
-            
+
             worldMap.put(position, new Location(position, locationComparator));
         }
     }
 
-	private int manhattanVectorLength(Integer[] dimensions) {
-		return manhattanVectorLength(Arrays.asList(dimensions));
-	}
+    private int manhattanVectorLength(Vector v) {
+        int distance = 0;
+        for (int coordinate : v.coordinates) {
+            distance += coordinate;
+        }
+        return distance;
+    }
 
-	private int manhattanVectorLength(List<Integer> coordinates) {
-		int distance = 0;
-		for (int coordinate : coordinates) {
-			distance += coordinate;
-		}
-		return distance;
-	}
-    
-    public Location getLocation(Position position) {
+    public Location getLocation(Vector position) {
         return worldMap.get(position);
     }
-    
+
     public Location getStartingLocation() {
-    	Integer[] startingLocation = IntArrayParameter.STARTING_LOCATION.getValue();
-    	Position position = new Position(startingLocation);
-    	
-    	return worldMap.get(position);
+        Integer[] startingLocation = IntArrayParameter.STARTING_LOCATION.getValue();
+        Vector position = new Vector(startingLocation);
+
+        return worldMap.get(position);
     }
 
     public int getNumLocations() {
         return worldMap.size();
     }
-    
+
     public boolean isToroidal() {
-    	return toroidal;
+        return toroidal;
     }
 
-    public List<Position> getNeighborhood(Position position, int radius) {
-        List<Position> positions = new ArrayList<Position>();
+    public List<Vector> getNeighborhood(Vector position, int radius) {
+        List<Vector> positions = new ArrayList<Vector>();
         LocationIterator iter = new LocationIterator(position, radius, this);
         while (iter.hasNext()) {
             positions.add(iter.next());
@@ -88,27 +86,27 @@ public class World implements Iterable<Position> {
         return positions;
     }
 
-	public Integer[] getDimensions() {
-		return dimensions;
-	}
+    public Vector getDimensions() {
+        return dimensions;
+    }
 
-	@Override
-	public LocationIterator iterator() {
-		return new LocationIterator(this);
-	}
+    @Override
+    public LocationIterator iterator() {
+        return new LocationIterator(this);
+    }
 
-    public List<Individual> getIndividualsAt(Position p) {
+    public List<Individual> getIndividualsAt(Vector p) {
         return getLocation(p).getIndividuals();
     }
-    
+
     private int getBiggestDimension() {
-    	int biggestDim = 0;
-    	for (int i = 0; i < dimensions.length; i++) {
-    		if(dimensions[i] > biggestDim) {
-    			biggestDim = dimensions[i];
-    		}
-    	}
-    	
-    	return biggestDim-1;
+        int biggestDim = 0;
+        for (int i = 0; i < dimensions.size(); i++) {
+            if (dimensions.get(i) > biggestDim) {
+                biggestDim = dimensions.get(i);
+            }
+        }
+
+        return biggestDim - 1;
     }
 }

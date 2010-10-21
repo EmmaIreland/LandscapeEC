@@ -14,7 +14,7 @@ import observers.Observer;
 import observers.vis.DataDisplay;
 import observers.vis.MapVisualizer;
 
-import locality.Position;
+import locality.Vector;
 import locality.World;
 
 import parameters.BooleanParameter;
@@ -54,13 +54,12 @@ public class GARun {
         SatParser satParser = new SatParser();
         satInstance = satParser.parseInstance(new FileReader(new File(
                 StringParameter.PROBLEM_FILE.getValue())));
-        
 
         comparator = new IndividualComparator(satInstance);
 
         popManager = new PopulationManager();
 
-        world = new World(IntArrayParameter.WORLD_DIMENSIONS.getValue(),
+        world = new World(new Vector(IntArrayParameter.WORLD_DIMENSIONS.getValue()),
                 BooleanParameter.TOROIDAL.getValue(), satInstance);
 
         int numRuns = IntParameter.NUM_RUNS.getValue();
@@ -87,7 +86,7 @@ public class GARun {
 
     private boolean runGeneration() {
         List<Individual> population = popManager.generatePopulation(satInstance);
-        for(Position p:world) {
+        for(Vector p:world) {
             world.getLocation(p).setIndividuals(new ArrayList<Individual>());
         }
         world.getStartingLocation().setIndividuals(population);
@@ -100,7 +99,7 @@ public class GARun {
                 o.generationData(i, world, satInstance);
             }
 
-            Individual bestIndividual = findBestIndividual();
+            /*Individual bestIndividual = findBestIndividual();
             System.out.println("Generation " + (i + 1));
             System.out.println("   Best individual: " + bestIndividual);
             double bestFitness = SatEvaluator.evaluate(satInstance, bestIndividual);
@@ -108,18 +107,21 @@ public class GARun {
             if (bestFitness == 1.0) {
                 System.out.println("SUCCESS");
                 return true;
-            }
+            }*/
             
             i++;
         }
 
         System.out.println("FAILURE");
+        
+        SatEvaluator.printUnsolvedClauses(satInstance, findBestIndividual());
+        
         return false;
     }
     
     private Individual findBestIndividual() {
         List<Individual> bestFromCells = new ArrayList<Individual>();
-        for(Position p:world) {
+        for(Vector p:world) {
             if(world.getLocation(p).getNumIndividuals() > 0) {
                 bestFromCells.add(Collections.max(world.getIndividualsAt(p), comparator));
             }
@@ -145,16 +147,16 @@ public class GARun {
         
         if(migrationProbability <= 0 || migrationDistance <= 0) return;
         
-        for (Position position : world) {
+        for (Vector position : world) {
             List<Individual> locationIndividuals = world.getIndividualsAt(position);
             List<Individual> individualsToRemove = new ArrayList<Individual>();
             
             for(Individual i:locationIndividuals) {
                 if(SharedPRNG.instance().nextDouble() < migrationProbability) {
                     individualsToRemove.add(i);
-                    List<Position> neighborhood = world.getNeighborhood(position, migrationDistance);
+                    List<Vector> neighborhood = world.getNeighborhood(position, migrationDistance);
                     neighborhood.remove(position);
-                    Position newPosition;
+                    Vector newPosition;
                     try {
                         newPosition = neighborhood.get(SharedPRNG.instance().nextInt(neighborhood.size()));
                     } catch (IndexOutOfBoundsException e) {
@@ -168,8 +170,8 @@ public class GARun {
         }
     }
     
-    private void performElitism() {        
-        for (Position position : world) {
+    private void performElitism() {
+        for (Vector position : world) {
             List<Individual> locationIndividuals = world.getIndividualsAt(position);
             
             if (!locationIndividuals.isEmpty()) {
@@ -181,7 +183,7 @@ public class GARun {
     }
     
     private void performReproduction() {
-        for (Position position : world) {
+        for (Vector position : world) {
             List<Individual> locationIndividuals = world.getIndividualsAt(position);
 
             if (locationIndividuals.size() >= IntParameter.TOURNAMENT_SIZE.getValue()) {
@@ -197,14 +199,14 @@ public class GARun {
     }
     
     private void setFromPendingIndividuals() {
-        for (Position position : world) {
+        for (Vector position : world) {
             world.getLocation(position).setFromPendingIndividuals();
             //assert world.getLocation(position).getNumIndividuals() <= IntParameter.CARRYING_CAPACITY.getValue();
         }
     }
     
     private void addFromPendingIndividuals() {
-        for (Position position : world) {
+        for (Vector position : world) {
             world.getLocation(position).addFromPendingIndividuals();
         }
     }

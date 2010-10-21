@@ -2,13 +2,13 @@ package locality;
 
 import java.util.Iterator;
 
-public class LocationIterator implements Iterator<Position> {
+public class LocationIterator implements Iterator<Vector> {
 
-    private Position start, end, current;
+    private Vector start, end, current;
     private int numDimensions;
     private World world;
 
-    public LocationIterator(Position uncheckedStart, Position uncheckedEnd, World world) {
+    public LocationIterator(Vector uncheckedStart, Vector uncheckedEnd, World world) {
         for (int i = 0; i < uncheckedStart.size(); i++) {
             if (uncheckedStart.get(i) > uncheckedEnd.get(i)) {
                 throw new IllegalArgumentException(
@@ -20,21 +20,21 @@ public class LocationIterator implements Iterator<Position> {
 
         if (world.isToroidal()) {
         	start = uncheckedStart;
-        	end = uncheckedStart.plus(uncheckedEnd.minus(uncheckedStart).pairwiseMin(world.getDimensions()));
+        	end = uncheckedStart.plus(uncheckedEnd.minus(uncheckedStart).min(world.getDimensions()));
         } else {
         	start = uncheckedStart.maxWithZero();
-        	end = uncheckedEnd.pairwiseMin(world.getDimensions());
+        	end = uncheckedEnd.min(world.getDimensions());
         }
-        this.current = new Position(start);
+        this.current = new Vector(start);
         this.numDimensions = start.size();
     }
 
-    public LocationIterator(Position position, int radius, World world) {
+    public LocationIterator(Vector position, int radius, World world) {
         this(position.minusToAll(radius), position.plusToAll(radius+1), world);
     }
 
     public LocationIterator(World world) {
-		this(Position.origin(world.getDimensions().length), new Position(world.getDimensions()), world);
+		this(Vector.origin(world.getDimensions().size()), new Vector(world.getDimensions()), world);
 	}
 
 	@Override
@@ -46,11 +46,11 @@ public class LocationIterator implements Iterator<Position> {
     }
 
     @Override
-    public Position next() {
+    public Vector next() {
     	//We want to return the first position before we increment it, so
     	//result will always be the previous iteration. This way we don't have to initialize
     	//'start' to be start-1.
-        Position result = new Position(current);
+        Vector result = new Vector(current);
 
         current.set(0, current.get(0) + 1);
 
@@ -61,7 +61,7 @@ public class LocationIterator implements Iterator<Position> {
             }
         }
         
-        return result.pairwiseMod(world.getDimensions());
+        return result.mod(world.getDimensions());
     }
 
     @Override

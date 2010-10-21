@@ -12,7 +12,7 @@ import observers.Observer;
 import parameters.IntParameter;
 
 import locality.Location;
-import locality.Position;
+import locality.Vector;
 import locality.World;
 
 import sat.Individual;
@@ -30,16 +30,16 @@ public class MapVisualizer extends JFrame implements Observer {
     private BufferedImage canvas;
 
     public MapVisualizer(World world) {        
-        Integer[] worldDimensions = world.getDimensions();
+        Vector worldDimensions = world.getDimensions();
         
-        if(worldDimensions.length != 2) throw new IllegalArgumentException("World must be 2 dimensional for map visualization.");
+        if(worldDimensions.size() != 2) throw new IllegalArgumentException("World must be 2 dimensional for map visualization.");
         
         xScale = IntParameter.VISUALIZER_X_SCALE.getValue();
         yScale = IntParameter.VISUALIZER_X_SCALE.getValue();
         intensityScale = IntParameter.VISUALIZER_INTENSITY_SCALE.getValue();
         
-        worldWidth = worldDimensions[0];
-        worldHeight = worldDimensions[1];
+        worldWidth = worldDimensions.get(0);
+        worldHeight = worldDimensions.get(1);
         width = worldWidth*xScale;
         height = worldHeight*yScale;
         
@@ -66,7 +66,7 @@ public class MapVisualizer extends JFrame implements Observer {
         
         for(int y=0; y<worldHeight; y++) {
             for(int x=0; x<worldWidth; x++) {
-                Location loc = world.getLocation(new Position(new Integer[] {x, y}));
+                Location loc = world.getLocation(new Vector(new Integer[] {x, y}));
                 
                 double difficultyScale = loc.getComparator().getInstance().getNumClauses()/(double)satInstance.getNumClauses();
                 Color background = new Color(0, (int) ((1-difficultyScale)*255), 0);

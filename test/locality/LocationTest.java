@@ -12,12 +12,12 @@ public class LocationTest {
 
 	@Test
 	public void positionTest() {
-		Integer[] dimensions = new Integer[] { SIZE, SIZE };
+		Vector dimensions = new Vector(new Integer[] { SIZE, SIZE });
 		World world = new World(dimensions, true, new SatInstance());
 		
 		for (int i=0; i<SIZE; ++i) {
 			for (int j=0; j<SIZE; ++j) {
-				Position position = new Position(new Integer[] {i, j});
+				Vector position = new Vector(new Integer[] {i, j});
 				Location location = world.getLocation(position);
 				assertNotNull("Location " + position + " is null", location);
 				assertEquals(0, location.getNumIndividuals());

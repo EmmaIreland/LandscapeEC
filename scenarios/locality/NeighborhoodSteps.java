@@ -14,14 +14,14 @@ import sat.SatInstance;
 
 public class NeighborhoodSteps extends Steps {
     private World world;
-    private List<Position> neighborhood;
+    private List<Vector> neighborhood;
 
     @Given("a $toroid world of size [$size]")
     public void setupWorld(String toroidalFlag, String sizes) {
         String[] dimensionStrings = sizes.split(", *");
-        Integer[] dimensions = new Integer[dimensionStrings.length];
+        Vector dimensions = new Vector();
         for (int i = 0; i < dimensionStrings.length; i++) {
-            dimensions[i] = Integer.parseInt(dimensionStrings[i]);
+            dimensions.add(Integer.parseInt(dimensionStrings[i]));
         }
         boolean isToroidal = toroidalFlag.equals("toroidal");
         world = new World(dimensions, isToroidal, new SatInstance());
@@ -31,7 +31,7 @@ public class NeighborhoodSteps extends Steps {
     public void getNeighborhood(String locationString, int radius) {
         String[] positionStrings = locationString.split(", *");
 
-        Position position = new Position();
+        Vector position = new Vector();
         for (String s : positionStrings) {
             position.add(Integer.parseInt(s));
         }
@@ -43,7 +43,7 @@ public class NeighborhoodSteps extends Steps {
     public void testNeighborhoodCorrect(String locations) {
         String[] locationStrings = locations.split("\n");
 
-        List<Position> expectedNeighborhood = new ArrayList<Position>();
+        List<Vector> expectedNeighborhood = new ArrayList<Vector>();
 
         String positionString;
         String[] positionStrings;
@@ -51,7 +51,7 @@ public class NeighborhoodSteps extends Steps {
             positionString = locationString.replaceAll("\\[|\\]", "");
             positionStrings = positionString.split(", *");
 
-            Position position = new Position();
+            Vector position = new Vector();
             for (String s : positionStrings) {
                 position.add(Integer.parseInt(s.trim()));
             }

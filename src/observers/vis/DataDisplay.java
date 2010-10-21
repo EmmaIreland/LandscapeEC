@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 import observers.Observer;
 import parameters.IntParameter;
 
-import locality.Position;
+import locality.Vector;
 import locality.World;
 
 import sat.EmptyWorldException;
@@ -72,7 +72,7 @@ public class DataDisplay extends JFrame implements Observer {
     
     private int getIndividualCount(World world) {
         int count = 0;
-        for(Position p:world) {
+        for(Vector p:world) {
             count += world.getLocation(p).getNumIndividuals();
         }
         return count;
@@ -80,7 +80,7 @@ public class DataDisplay extends JFrame implements Observer {
     
     private int getInhabitedCellCount(World world) {
         int count = 0;
-        for(Position p:world) {
+        for(Vector p:world) {
             if(world.getLocation(p).getNumIndividuals() > 0) count++;
         }
         return count;
@@ -88,7 +88,7 @@ public class DataDisplay extends JFrame implements Observer {
 
     private Individual findBestIndividual(World world, IndividualComparator comparator) {
         List<Individual> bestFromCells = new ArrayList<Individual>();
-        for (Position p : world) {
+        for (Vector p : world) {
             if (world.getLocation(p).getNumIndividuals() > 0) {
                 bestFromCells.add(Collections.max(world.getIndividualsAt(p), comparator));
             }

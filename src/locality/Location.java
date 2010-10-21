@@ -8,19 +8,19 @@ import sat.Individual;
 import sat.IndividualComparator;
 
 public class Location {
-    private final Position position;
+    private final Vector position;
     private List<Individual> individuals;
     private List<Individual> pendingIndividuals;
     private IndividualComparator locationComparator;
     
-    public Location(Position aPosition, IndividualComparator comparator) {
+    public Location(Vector aPosition, IndividualComparator comparator) {
         position = aPosition;
         individuals = new ArrayList<Individual>();
         pendingIndividuals = new ArrayList<Individual>();
         locationComparator = comparator;
     }
 
-    public Position getPosition() {
+    public Vector getPosition() {
         return position;
     }
     
