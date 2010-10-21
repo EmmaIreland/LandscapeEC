@@ -99,22 +99,20 @@ public class GARun {
                 o.generationData(i, world, satInstance);
             }
 
-            /*Individual bestIndividual = findBestIndividual();
+            Individual bestIndividual = findBestIndividual();
             System.out.println("Generation " + (i + 1));
-            System.out.println("   Best individual: " + bestIndividual);
+            //System.out.println("   Best individual: " + bestIndividual);
             double bestFitness = SatEvaluator.evaluate(satInstance, bestIndividual);
-            System.out.println("   Best fitness: " + bestFitness);
+            //System.out.println("   Best fitness: " + bestFitness);
             if (bestFitness == 1.0) {
                 System.out.println("SUCCESS");
                 return true;
-            }*/
-            
+            }
+			
             i++;
         }
 
         System.out.println("FAILURE");
-        
-        SatEvaluator.printUnsolvedClauses(satInstance, findBestIndividual());
         
         return false;
     }
@@ -136,12 +134,39 @@ public class GARun {
         performMigration();
         addFromPendingIndividuals();
         
+        performDraconianReaper();
+        setFromPendingIndividuals();
+        
         performElitism();
         performReproduction();
         setFromPendingIndividuals();
     }
 
+	private void performDraconianReaper() {
+		int numKilled = 0;
+		
+		for (Vector position : world) {
+            List<Individual> locationIndividuals = world.getIndividualsAt(position);
+            
+            for(Individual individual : locationIndividuals) {
+            	SatInstance locationInstance = world.getLocation(position).getComparator().getInstance();
+				double fitness = SatEvaluator.evaluate(locationInstance, individual);
+            	int numClauses = locationInstance.getNumClauses();
+				int correctClauses = (int) Math.round(fitness * numClauses);
+            	if (numClauses == correctClauses) {
+            		world.getLocation(position).addToPendingIndividuals(individual);
+            	} else {
+            		numKilled++;
+            	}
+            }
+        }
+		
+		System.out.println("Killed: " + numKilled);
+	}
+
 	private void performMigration() {
+		int numMigrated = 0;
+		
         double migrationProbability = DoubleParameter.MIGRATION_PROBABILITY.getValue();
         int migrationDistance = IntParameter.MIGRATION_DISTANCE.getValue();
         
@@ -163,11 +188,14 @@ public class GARun {
                         throw new MigrationInWorldOfSizeOneException(e);
                     }
                     world.getLocation(newPosition).addToPendingIndividuals(i);
+                    
+                    numMigrated++;
                 }
             }
-            
             world.getLocation(position).removeAll(individualsToRemove);
         }
+        
+        System.out.println("Moved : " + numMigrated);
     }
     
     private void performElitism() {
@@ -175,7 +203,7 @@ public class GARun {
             List<Individual> locationIndividuals = world.getIndividualsAt(position);
             
             if (!locationIndividuals.isEmpty()) {
-                List<Individual> elite = popManager.getElite(locationIndividuals, DoubleParameter.ELITE_PROPORTION.getValue(), world.getLocation(position).getComparator());
+                List<Individual> elite = popManager.getElite(locationIndividuals, DoubleParameter.ELITE_PROPORTION.getValue(), comparator);
                 
                 world.getLocation(position).addToPendingIndividuals(elite);
             }
@@ -187,9 +215,7 @@ public class GARun {
             List<Individual> locationIndividuals = world.getIndividualsAt(position);
 
             if (locationIndividuals.size() >= IntParameter.TOURNAMENT_SIZE.getValue()) {
-                List<Individual> crossoverPop = popManager.crossover(
-                        locationIndividuals, selectionOperator,
-                        crossoverOperator, comparator);
+                List<Individual> crossoverPop = popManager.crossover(locationIndividuals, selectionOperator, crossoverOperator, comparator);
 
                 List<Individual> mutatedPopulation = popManager.mutatePopulation(crossoverPop, mutationOperator);
 
