@@ -1,6 +1,7 @@
 package sat;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -29,11 +30,14 @@ public class ClauseList implements Iterable<Clause> {
     }
 
     public ClauseList getSubClauseList(double percentage) {
-        int numClauses = (int) Math.ceil(clauses.size() * percentage);
+        List<Clause> shuffledClauses = new ArrayList<Clause>(clauses);
+        Collections.shuffle(shuffledClauses);
+        
+        int numClauses = (int) Math.ceil(shuffledClauses.size() * percentage);
 
         ClauseList subList = new ClauseList();
         for (int i = 0; i < numClauses; i++) {
-            subList.addClause(clauses.get(i));
+            subList.addClause(shuffledClauses.get(i));
         }
 
         return subList;
