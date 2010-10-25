@@ -109,6 +109,8 @@ public class Console extends JFrame implements ActionListener, Observer {
                     println(world.getLocation(new Vector(coord)).getIndividuals().toString());
                 } else if(token[0].equals("getClausesAt")) {
                     println(world.getLocation(new Vector(coord)).getComparator().getInstance().getClauseList().toString());
+                } else if(token[0].equals("getNumClausesAt")) {
+                    println(world.getLocation(new Vector(coord)).getComparator().getInstance().getClauseList().size()+"");
                 }
             } else {
                 println("incorrect # of args (must be equal to number of dimensions)");
@@ -123,7 +125,7 @@ public class Console extends JFrame implements ActionListener, Observer {
     }
 
     @Override
-    public void generationData(int generationNumber, World world, SatInstance satInstance) {
+    public void generationData(int generationNumber, World world, SatInstance satInstance, int successes) {
         this.generationNumber = generationNumber;
         this.world = world;
         this.satInstance = satInstance;

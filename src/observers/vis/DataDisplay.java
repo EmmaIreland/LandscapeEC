@@ -24,7 +24,7 @@ import sat.SatInstance;
 
 public class DataDisplay extends JFrame implements Observer {
     private int width = 300;
-    private int height = 135;
+    private int height = 155;
 
     private BufferedImage canvas;
 
@@ -42,7 +42,7 @@ public class DataDisplay extends JFrame implements Observer {
     }
 
     @Override
-    public void generationData(int generationNumber, World world, SatInstance satInstance) {
+    public void generationData(int generationNumber, World world, SatInstance satInstance, int successes) {
         IndividualComparator comparator = new IndividualComparator(satInstance);
 
         width = getWidth();
@@ -58,14 +58,15 @@ public class DataDisplay extends JFrame implements Observer {
         Individual bestIndividual = findBestIndividual(world, comparator);
         
         GraphicsUtil.drawString(g, "RUN " + (SatEvaluator.getNumResets()+1), 5, 20, font, Color.RED);
-        GraphicsUtil.drawString(g, "Generation " + generationNumber, 5, 35, font, Color.WHITE);
-        GraphicsUtil.drawString(g, "NumEvaluations " + SatEvaluator.getNumEvaluations() + "/" + IntParameter.NUM_EVALS_TO_DO.getValue(), 5, 50, font, Color.WHITE);
+        GraphicsUtil.drawString(g, successes + "/" + IntParameter.NUM_RUNS.getValue() + " runs successful", 5, 35, font, Color.WHITE);
+        GraphicsUtil.drawString(g, "Generation " + generationNumber, 5, 50, font, Color.WHITE);
+        GraphicsUtil.drawString(g, "NumEvaluations " + SatEvaluator.getNumEvaluations() + "/" + IntParameter.NUM_EVALS_TO_DO.getValue(), 5, 65, font, Color.WHITE);
         double bestFitness = SatEvaluator.evaluate(satInstance, bestIndividual);
-        GraphicsUtil.drawString(g, "Best fitness: " + bestFitness, 5, 65, font, Color.WHITE);
+        GraphicsUtil.drawString(g, "Best fitness: " + bestFitness, 5, 80, font, Color.WHITE);
         int numIndividuals = getIndividualCount(world);
-        GraphicsUtil.drawString(g, "Number of individuals: " + numIndividuals, 5, 80, font, Color.WHITE);
+        GraphicsUtil.drawString(g, "Number of individuals: " + numIndividuals, 5, 95, font, Color.WHITE);
         int inhabitedCells = getInhabitedCellCount(world);
-        GraphicsUtil.drawString(g, "Number of inhabited cells: " + inhabitedCells, 5, 95, font, Color.WHITE);
+        GraphicsUtil.drawString(g, "Number of inhabited cells: " + inhabitedCells, 5, 110, font, Color.WHITE);
 
         repaint();
     }

@@ -40,6 +40,7 @@ public class GARun {
     private World world;
     
     private List<Observer> observers = new ArrayList<Observer>();
+    private int successes;
 
     public void run() throws FileNotFoundException, IOException,
             SecurityException, IllegalArgumentException,
@@ -65,12 +66,18 @@ public class GARun {
         
         setupObservers();
 
-        int successes = 0;
+        successes = 0;
         for (int i = 0; i < numRuns; i++) {
             System.out.println("\nRUN " + (i + 1) + "\n");
-            if (runGeneration()) {
+            
+            try {
+                if (runGenerations()) {
                 successes++;
+                }
+            } catch (EmptyWorldException e) {
+                System.err.println("All individuals died!");
             }
+            
             SatEvaluator.resetEvaluationsCounter();
         }
 
@@ -79,12 +86,13 @@ public class GARun {
 
     private void setupObservers() {
         // TODO generalize this to load from parameters (not just use a hard-coded visualizer)
+        
         observers.add(new Console());
         observers.add(new MapVisualizer(world));
         observers.add(new DataDisplay());
     }
 
-    private boolean runGeneration() {
+    private boolean runGenerations() {
         List<Individual> population = popManager.generatePopulation(satInstance);
         for(Vector p:world) {
             world.getLocation(p).setIndividuals(new ArrayList<Individual>());
@@ -96,7 +104,7 @@ public class GARun {
             processAllLocations();
             
             for(Observer o:observers) {
-                o.generationData(i, world, satInstance);
+                o.generationData(i, world, satInstance, successes);
             }
 
             Individual bestIndividual = findBestIndividual();
@@ -131,6 +139,8 @@ public class GARun {
     }
 
     private void processAllLocations() {
+        updateFitnesses();
+        
         performMigration();
         addFromPendingIndividuals();
         
@@ -141,43 +151,55 @@ public class GARun {
         performReproduction();
         setFromPendingIndividuals();
     }
-
-	private void performDraconianReaper() {
-		int numKilled = 0;
-		
-		for (Vector position : world) {
+    
+    private void updateFitnesses() {
+        for (Vector position : world) {
             List<Individual> locationIndividuals = world.getIndividualsAt(position);
-            
-            for(Individual individual : locationIndividuals) {
-            	SatInstance locationInstance = world.getLocation(position).getComparator().getInstance();
-				double fitness = SatEvaluator.evaluate(locationInstance, individual);
-            	int numClauses = locationInstance.getNumClauses();
-				int correctClauses = (int) Math.round(fitness * numClauses);
-            	if (numClauses == correctClauses) {
-            		world.getLocation(position).addToPendingIndividuals(individual);
-            	} else {
-            		numKilled++;
-            	}
+
+            for (Individual individual : locationIndividuals) {
+                double fitness = SatEvaluator.evaluate(comparator.getInstance(), individual);
+                individual.setGlobalFitness(fitness);
             }
         }
-		
-		System.out.println("Killed: " + numKilled);
-	}
+    }
 
-	private void performMigration() {
-		int numMigrated = 0;
-		
+    private void performDraconianReaper() {
+        int numKilled = 0;
+
+        for (Vector position : world) {
+            List<Individual> locationIndividuals = world.getIndividualsAt(position);
+
+            for (Individual individual : locationIndividuals) {
+                SatInstance locationInstance = world.getLocation(position).getComparator().getInstance();
+                double fitness = SatEvaluator.evaluate(locationInstance, individual);
+                int numClauses = locationInstance.getNumClauses();
+                int correctClauses = (int) Math.round(fitness * numClauses);
+                if (numClauses == correctClauses) {
+                    world.getLocation(position).addToPendingIndividuals(individual);
+                } else {
+                    numKilled++;
+                }
+            }
+        }
+
+        System.out.println("Killed: " + numKilled);
+    }
+
+    private void performMigration() {
+        int numMigrated = 0;
+
         double migrationProbability = DoubleParameter.MIGRATION_PROBABILITY.getValue();
         int migrationDistance = IntParameter.MIGRATION_DISTANCE.getValue();
-        
-        if(migrationProbability <= 0 || migrationDistance <= 0) return;
-        
+
+        if (migrationProbability <= 0 || migrationDistance <= 0)
+            return;
+
         for (Vector position : world) {
             List<Individual> locationIndividuals = world.getIndividualsAt(position);
             List<Individual> individualsToRemove = new ArrayList<Individual>();
-            
-            for(Individual i:locationIndividuals) {
-                if(SharedPRNG.instance().nextDouble() < migrationProbability) {
+
+            for (Individual i : locationIndividuals) {
+                if (SharedPRNG.instance().nextDouble() < migrationProbability) {
                     individualsToRemove.add(i);
                     List<Vector> neighborhood = world.getNeighborhood(position, migrationDistance);
                     neighborhood.remove(position);
@@ -188,13 +210,13 @@ public class GARun {
                         throw new MigrationInWorldOfSizeOneException(e);
                     }
                     world.getLocation(newPosition).addToPendingIndividuals(i);
-                    
+
                     numMigrated++;
                 }
             }
             world.getLocation(position).removeAll(individualsToRemove);
         }
-        
+
         System.out.println("Moved : " + numMigrated);
     }
     

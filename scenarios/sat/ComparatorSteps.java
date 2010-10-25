@@ -30,7 +30,9 @@ public class ComparatorSteps extends Steps {
     @When("I have individuals: <individualA> and <individualB>")
     public void getIndividuals(@Named("individualA") String aString, @Named("individualB") String bString) {
         a = new Individual(aString);
+        a.setGlobalFitness(satInstance);
         b = new Individual(bString);
+        b.setGlobalFitness(satInstance);
     }
     
     @Then("the result of the comparison is <result>")

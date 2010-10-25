@@ -57,7 +57,7 @@ public class MapVisualizer extends JFrame implements Observer {
     }
     
     @Override
-    public void generationData(int generationNumber, World world, SatInstance satInstance) {        
+    public void generationData(int generationNumber, World world, SatInstance satInstance, int successes) {        
         Graphics g = canvas.getGraphics();
         
         g.setColor(Color.BLACK);

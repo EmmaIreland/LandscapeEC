@@ -2,6 +2,7 @@ package sat;
 
 public class Individual {
     private int[] bits;
+    private double globalFitness;
 
     public Individual(String bitString) {
         int[] newBits = new int[bitString.length()];
@@ -20,8 +21,20 @@ public class Individual {
     public int[] getBits() {
         return bits;
     }
+    
+    public void setGlobalFitness(double fitness) {
+        globalFitness = fitness;
+    }
+    
+    public void setGlobalFitness(SatInstance globalInstance) {
+        globalFitness = SatEvaluator.evaluate(globalInstance, this);
+    }
+    
+    public double getGlobalFitness() {
+        return globalFitness;
+    }
 
-    boolean valueIsFalse(Literal literal) {
+    public final boolean valueIsFalse(Literal literal) {
         return bits[literal.variable] == 0;
     }
     

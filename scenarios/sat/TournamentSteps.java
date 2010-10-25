@@ -45,6 +45,7 @@ public class TournamentSteps extends Steps {
         for(String line:lines) {
             Individual individual = new Individual(line);
             individuals.add(individual);
+            individual.setGlobalFitness(satInstance);
         }
     }
     

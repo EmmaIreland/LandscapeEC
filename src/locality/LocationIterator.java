@@ -11,33 +11,32 @@ public class LocationIterator implements Iterator<Vector> {
     public LocationIterator(Vector uncheckedStart, Vector uncheckedEnd, World world) {
         for (int i = 0; i < uncheckedStart.size(); i++) {
             if (uncheckedStart.get(i) > uncheckedEnd.get(i)) {
-                throw new IllegalArgumentException(
-                        "Bad range for Location Iterator");
+                throw new IllegalArgumentException("Bad range for Location Iterator");
             }
         }
-        
+
         this.world = world;
 
         if (world.isToroidal()) {
-        	start = uncheckedStart;
-        	end = uncheckedStart.plus(uncheckedEnd.minus(uncheckedStart).min(world.getDimensions()));
+            start = uncheckedStart;
+            end = uncheckedStart.plus(uncheckedEnd.minus(uncheckedStart).min(world.getDimensions()));
         } else {
-        	start = uncheckedStart.maxWithZero();
-        	end = uncheckedEnd.min(world.getDimensions());
+            start = uncheckedStart.maxWithZero();
+            end = uncheckedEnd.min(world.getDimensions());
         }
         this.current = new Vector(start);
         this.numDimensions = start.size();
     }
 
     public LocationIterator(Vector position, int radius, World world) {
-        this(position.minusToAll(radius), position.plusToAll(radius+1), world);
+        this(position.minusToAll(radius), position.plusToAll(radius + 1), world);
     }
 
     public LocationIterator(World world) {
-		this(Vector.origin(world.getDimensions().size()), new Vector(world.getDimensions()), world);
-	}
+        this(Vector.origin(world.getDimensions().size()), new Vector(world.getDimensions()), world);
+    }
 
-	@Override
+    @Override
     public boolean hasNext() {
         if (current.get(numDimensions - 1) >= end.get(numDimensions - 1)) {
             return false;
@@ -47,9 +46,10 @@ public class LocationIterator implements Iterator<Vector> {
 
     @Override
     public Vector next() {
-    	//We want to return the first position before we increment it, so
-    	//result will always be the previous iteration. This way we don't have to initialize
-    	//'start' to be start-1.
+        // We want to return the first position before we increment it, so
+        // result will always be the previous iteration. This way we don't have
+        // to initialize
+        // 'start' to be start-1.
         Vector result = new Vector(current);
 
         current.set(0, current.get(0) + 1);
@@ -60,14 +60,13 @@ public class LocationIterator implements Iterator<Vector> {
                 current.set(i + 1, current.get(i + 1) + 1);
             }
         }
-        
+
         return result.mod(world.getDimensions());
     }
 
     @Override
     public void remove() {
-        throw new UnsupportedOperationException(
-                "Remove is not supported on Location Iterators");
+        throw new UnsupportedOperationException("Remove is not supported on Location Iterators");
     }
 
 }
