@@ -37,11 +37,11 @@ public class Clause {
 
     @Override
     public String toString() {
-        String string = "";
+        String string = "( ";
         for (int i = 0; i < literals.size(); i++) {
             string = string + literals.get(i) + " ";
         }
-        return string;
+        return string + ")";
     }
 
     public boolean satisfiedBy(Individual individual) {

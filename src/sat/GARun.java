@@ -11,8 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 import observers.Observer;
-import observers.vis.DataDisplay;
-import observers.vis.MapVisualizer;
+import observers.vis.*;
 
 import locality.Vector;
 import locality.World;
@@ -80,6 +79,7 @@ public class GARun {
 
     private void setupObservers() {
         // TODO generalize this to load from parameters (not just use a hard-coded visualizer)
+        observers.add(new Console());
         observers.add(new MapVisualizer(world));
         observers.add(new DataDisplay());
     }

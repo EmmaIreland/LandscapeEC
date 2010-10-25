@@ -21,4 +21,9 @@ public class IndividualComparator implements Comparator<Individual> {
     public SatInstance getInstance() {
     	return satInstance;
     }
+    
+    @Override
+    public String toString() {
+        return satInstance.toString();
+    }
 }

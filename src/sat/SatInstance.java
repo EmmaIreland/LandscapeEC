@@ -36,4 +36,11 @@ public class SatInstance {
     public void addClause(Clause newClause){
         cnf.addClause(newClause);
     }
+    
+    @Override
+    public String toString() {
+        return
+            "Num variables: " + numVariables + "\n" +
+            "Clauses: " + cnf;
+    }
 }

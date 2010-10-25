@@ -6,12 +6,12 @@ import java.util.List;
 
 public class ClauseList implements Iterable<Clause> {
     private List<Clause> clauses = new ArrayList<Clause>();
-    
+
     public void addClause(Clause clause) {
         clauses.add(clause);
     }
-    
-    public Clause getClause(int index){
+
+    public Clause getClause(int index) {
         return clauses.get(index);
     }
 
@@ -28,14 +28,19 @@ public class ClauseList implements Iterable<Clause> {
         return clauses.size();
     }
 
-	public ClauseList getSubClauseList(double percentage) {
-		int numClauses = (int) Math.ceil(clauses.size()*percentage);
-		
-		ClauseList subList = new ClauseList();
-		for(int i = 0; i < numClauses; i++) {
-			subList.addClause(clauses.get(i));
-		}
-		
-		return subList;
-	}
+    public ClauseList getSubClauseList(double percentage) {
+        int numClauses = (int) Math.ceil(clauses.size() * percentage);
+
+        ClauseList subList = new ClauseList();
+        for (int i = 0; i < numClauses; i++) {
+            subList.addClause(clauses.get(i));
+        }
+
+        return subList;
+    }
+    
+    @Override
+    public String toString() {
+        return clauses.toString();
+    }
 }

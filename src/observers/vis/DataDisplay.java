@@ -59,7 +59,7 @@ public class DataDisplay extends JFrame implements Observer {
         
         GraphicsUtil.drawString(g, "RUN " + (SatEvaluator.getNumResets()+1), 5, 20, font, Color.RED);
         GraphicsUtil.drawString(g, "Generation " + generationNumber, 5, 35, font, Color.WHITE);
-        GraphicsUtil.drawString(g, "NumEvalutaions " + SatEvaluator.getNumEvaluations() + "/" + IntParameter.NUM_EVALS_TO_DO.getValue(), 5, 50, font, Color.WHITE);
+        GraphicsUtil.drawString(g, "NumEvaluations " + SatEvaluator.getNumEvaluations() + "/" + IntParameter.NUM_EVALS_TO_DO.getValue(), 5, 50, font, Color.WHITE);
         double bestFitness = SatEvaluator.evaluate(satInstance, bestIndividual);
         GraphicsUtil.drawString(g, "Best fitness: " + bestFitness, 5, 65, font, Color.WHITE);
         int numIndividuals = getIndividualCount(world);
