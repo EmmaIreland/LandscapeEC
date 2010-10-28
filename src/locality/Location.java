@@ -20,6 +20,10 @@ public class Location {
         locationComparator = comparator;
     }
 
+    public Location(Vector position) {
+        this(position, null);
+    }
+
     public Vector getPosition() {
         return position;
     }
@@ -29,8 +33,15 @@ public class Location {
     }
     
     public IndividualComparator getComparator() {
+        if (locationComparator == null) {
+            throw new IllegalStateException("Comparator undefined for position " + position);
+        }
     	return locationComparator;
     }
+    
+    public void setComparator(IndividualComparator locationComparator) {
+        this.locationComparator = locationComparator;
+    }    
     
     public void setIndividuals(List<Individual> individuals) {
     	this.individuals = new ArrayList<Individual>(individuals);
@@ -65,4 +76,5 @@ public class Location {
         individuals.addAll(pendingIndividuals);
         pendingIndividuals.clear();
     }
+
 }
