@@ -31,31 +31,18 @@ public class World implements Iterable<Vector> {
         for (int i = 0; i < numDimensions; i++) {
             start.add(0);
         }
-
-        Vector position;
+        
+        ManhattanDistanceGradiantGeography geography = new ManhattanDistanceGradiantGeography();
 
         LocationIterator iter = new LocationIterator(start, end, this);
         while (iter.hasNext()) {
-            position = iter.next();
+            Vector position = iter.next();
 
-            int distance = manhattanVectorLength(position);
-
-            Vector worldEdge = dimensions.minusToAll(1);
-
-            double clausePercentage = distance / (1.0 * manhattanVectorLength(worldEdge));
-
-            IndividualComparator locationComparator = new IndividualComparator(satInstance.getSubInstance(clausePercentage));
+            final SatInstance subInstance = geography.getSubInstance(dimensions, satInstance, position, this);
+            IndividualComparator locationComparator = new IndividualComparator(subInstance);
 
             worldMap.put(position, new Location(position, locationComparator));
         }
-    }
-
-    private int manhattanVectorLength(Vector v) {
-        int distance = 0;
-        for (int coordinate : v.coordinates) {
-            distance += coordinate;
-        }
-        return distance;
     }
 
     public Location getLocation(Vector position) {

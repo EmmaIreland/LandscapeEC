@@ -151,4 +151,12 @@ public class Vector {
         return coordinates.toString();
     }
 
+    int manhattanVectorLength(World world) {
+        int distance = 0;
+        for (int coordinate : coordinates) {
+            distance += coordinate;
+        }
+        return distance;
+    }
+
 }

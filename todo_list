@@ -4,6 +4,10 @@ Landscape EC Todo List
 
 ------- TO DO -------
 
+- It would be nice to be able to specify a way of building the geography (fractal, gradiant, etc.)
+in the parameters file, but this probably involves reflection and other craziness since you'd probably
+want to specify a class name for an implementation of an interface that generates sub-instances for
+a given location.
 
 ----- COMPLETED -----
 - Reconfigure elitism to be able to use the clause list contained within each location, in order
