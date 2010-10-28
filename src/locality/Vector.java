@@ -151,7 +151,7 @@ public class Vector {
         return coordinates.toString();
     }
 
-    int manhattanVectorLength(World world) {
+    public int manhattanLength() {
         int distance = 0;
         for (int coordinate : coordinates) {
             distance += coordinate;
