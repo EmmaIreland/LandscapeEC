@@ -3,7 +3,7 @@ package locality;
 import sat.IndividualComparator;
 import sat.SatInstance;
 
-public class ManhattanDistanceGradiantGeography {
+public class ManhattanDistanceGradiantGeography implements Geography {
 
     private SatInstance getSubInstance(Vector dimensions, SatInstance satInstance, Vector position) {
         int distance = position.manhattanLength();
