@@ -1,14 +1,11 @@
 package locality;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import parameters.IntArrayParameter;
-
 import sat.Individual;
 import sat.IndividualComparator;
 import sat.SatInstance;
@@ -23,32 +20,24 @@ public class World implements Iterable<Vector> {
         this.dimensions = new Vector(dimensions);
 
         worldMap = new HashMap<Vector,Location>();
-
-        int numDimensions = dimensions.size();
-        Vector end = new Vector(dimensions);
-
-        Vector start = new Vector();
-        for (int i = 0; i < numDimensions; i++) {
-            start.add(0);
+        for (Vector position : this) {
+            worldMap.put(position, new Location(position));
         }
         
         ManhattanDistanceGradiantGeography geography = new ManhattanDistanceGradiantGeography();
 
-        LocationIterator iter = new LocationIterator(start, end, this);
-        while (iter.hasNext()) {
-            Vector position = iter.next();
+        geography.generateGeography(satInstance, this);
+    }
 
-            final SatInstance subInstance = geography.getSubInstance(dimensions, satInstance, position, this);
-            IndividualComparator locationComparator = new IndividualComparator(subInstance);
-
-            worldMap.put(position, new Location(position, locationComparator));
-        }
+    public void setLocationComparator(Vector position,
+            IndividualComparator locationComparator) {
+        getLocation(position).setComparator(locationComparator);
     }
 
     public Location getLocation(Vector position) {
         return worldMap.get(position);
     }
-
+    
     public Location getStartingLocation() {
         Integer[] startingLocation = IntArrayParameter.STARTING_LOCATION.getValue();
         Vector position = new Vector(startingLocation);
@@ -84,16 +73,5 @@ public class World implements Iterable<Vector> {
 
     public List<Individual> getIndividualsAt(Vector p) {
         return getLocation(p).getIndividuals();
-    }
-
-    private int getBiggestDimension() {
-        int biggestDim = 0;
-        for (int i = 0; i < dimensions.size(); i++) {
-            if (dimensions.get(i) > biggestDim) {
-                biggestDim = dimensions.get(i);
-            }
-        }
-
-        return biggestDim - 1;
     }
 }
