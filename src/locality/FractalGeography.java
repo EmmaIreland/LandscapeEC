@@ -37,7 +37,7 @@ public class FractalGeography implements Geography {
 		Vector topRight = getCrossDiagonalVector(topLeft, bottomRight);
 		Vector bottomLeft = getCrossDiagonalVector(bottomRight, topLeft);
 		
-		
+		/*
 		System.out.println("TopLeft     " + topLeft);
 		System.out.println("Top Right   " + topRight);
 		System.out.println("Middle      " + middle);
@@ -49,7 +49,7 @@ public class FractalGeography implements Geography {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}
+		}*/
 		
 		if(!middle.equals(topLeft) && !middle.equals(bottomRight)) {
 			SatInstance midInstance = doClauseListCrossover(topLeftInstance, bottomRightInstance);
@@ -62,14 +62,19 @@ public class FractalGeography implements Geography {
 		SatInstance bottomLeftInstance = doClauseListCrossover(topLeftInstance, bottomRightInstance);
 		world.setLocationComparator(bottomLeft, new IndividualComparator(bottomLeftInstance));
 		
-		if(bottomRight.get(0) - topLeft.get(0) == 1 && bottomRight.get(1) - topLeft.get(1) == 1 ) {
+		if(bottomRight.get(0) - topLeft.get(0) <= 1 && bottomRight.get(1) - topLeft.get(1) <= 1 ) {
 			return;
 		}
 		
-		doFractalGeography(topLeft, middle);
+		Vector midLeft = topLeft.getMidPoint(bottomLeft);
+		Vector bottomMid = bottomLeft.getMidPoint(bottomRight);
+		Vector topMid = topLeft.getMidPoint(topRight);
+		Vector midRight = topRight.getMidPoint(bottomRight);
+		
+		doFractalGeography(topLeft, middle);  //this order is very important
 		doFractalGeography(middle, bottomRight);
-		//doFractalGeography(bottomLeft, middle);
-		//doFractalGeography(middle, topRight);
+		doFractalGeography(midLeft, bottomMid);
+		doFractalGeography(topMid, midRight);
 	}
 
 	private Vector getCrossDiagonalVector(Vector topLeft, Vector bottomRight) {
@@ -80,11 +85,11 @@ public class FractalGeography implements Geography {
 	}
 
 	private SatInstance doClauseListCrossover(SatInstance satInstanceA, SatInstance satInstanceB) {
+		//TODO THIS DOES NOT WORK, DO NOT KNOW WHY
     	ClauseList newClauseList = new ClauseList();
     	
     	for(int i = 0; i < globalClauseList.getNumClauses(); i++) {
     		Clause currentClause = globalClauseList.getClause(i);
-    		
     		if(SharedPRNG.instance().nextBoolean()) {
     			if(satInstanceA.getClauseList().contains(currentClause)) {
     				newClauseList.addClause(currentClause);
@@ -95,6 +100,8 @@ public class FractalGeography implements Geography {
     			}
     		}
     	}
+    	
+    	System.out.println(newClauseList);
     	
     	return new SatInstance(newClauseList, totalNumVariables);
     }

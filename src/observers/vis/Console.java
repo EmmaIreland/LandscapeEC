@@ -59,8 +59,6 @@ public class Console extends JFrame implements ActionListener, Observer {
         add("North", scrollPane);
 
         commandInput.requestFocus();
-
-        setLocation(this.getLocation().x - width, this.getLocation().y);
         
         repaint();
         
