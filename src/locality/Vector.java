@@ -112,6 +112,15 @@ public class Vector {
         }
         return newPosition;
     }
+    
+    public Vector getMidPoint(Vector v) {
+    	Vector newPosition = new Vector();
+        for (int i = 0; i < coordinates.size(); i++) {
+        	int middle = (int) Math.floor((this.get(i) + v.get(i))/2.0);
+            newPosition.add(middle);
+        }
+        return newPosition;
+    }
 
     public void add(Integer i) {
         coordinates.add(i);

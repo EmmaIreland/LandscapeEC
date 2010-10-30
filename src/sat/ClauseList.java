@@ -43,6 +43,10 @@ public class ClauseList implements Iterable<Clause> {
         return subList;
     }
     
+    public Boolean contains(Clause clause) {
+    	return clauses.contains(clause);
+    }
+    
     @Override
     public String toString() {
         return clauses.toString();

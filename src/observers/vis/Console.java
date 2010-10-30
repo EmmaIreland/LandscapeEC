@@ -60,9 +60,10 @@ public class Console extends JFrame implements ActionListener, Observer {
 
         commandInput.requestFocus();
 
+        setLocation(this.getLocation().x - width, this.getLocation().y);
+        
         repaint();
         
-
         
         resize(width+1, height+1);
     }

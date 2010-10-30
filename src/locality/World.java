@@ -24,8 +24,8 @@ public class World implements Iterable<Vector> {
             worldMap.put(position, new Location(position));
         }
         
-        // Geography geography = new ManhattanDistanceGradiantGeography();
-        Geography geography = new UniformGeography();
+        //Geography geography = new ManhattanDistanceGradiantGeography();
+        Geography geography = new FractalGeography();
 
         geography.generateGeography(satInstance, this);
     }
