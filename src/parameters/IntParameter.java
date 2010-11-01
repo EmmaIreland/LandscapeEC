@@ -4,7 +4,7 @@ package parameters;
 public enum IntParameter
 {
     NUM_RUNS, NUM_EVALS_TO_DO, TOURNAMENT_SIZE, CARRYING_CAPACITY, VISUALIZER_X_SCALE, VISUALIZER_Y_SCALE, VISUALIZER_INTENSITY_SCALE,
-    MIGRATION_DISTANCE;
+    MIGRATION_DISTANCE, GEOGRAPHY_NOISE_STRENGTH;
 
     /**
      * Return the (integer) value of this parameter.

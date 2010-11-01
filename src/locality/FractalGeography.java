@@ -1,5 +1,7 @@
 package locality;
 
+import parameters.DoubleParameter;
+import parameters.IntParameter;
 import sat.Clause;
 import sat.ClauseList;
 import sat.IndividualComparator;
@@ -23,15 +25,18 @@ public class FractalGeography implements Geography {
     	IndividualComparator fullComparator = new IndividualComparator(satInstance);
         IndividualComparator emptyComparator = new IndividualComparator(satInstance.getSubInstance(0));
         
-        world.setLocationComparator(Vector.origin(world.getDimensions().size()), emptyComparator);
-        world.setLocationComparator(world.getDimensions().minusToAll(1), fullComparator);
+        Vector origin = Vector.origin(world.getDimensions().size());
+        Vector oppositeCorner = world.getDimensions().minusToAll(1);
+
+        world.setLocationComparator(origin, emptyComparator);
+		world.setLocationComparator(oppositeCorner, fullComparator);
         
-        doFractalGeography(Vector.origin(world.getDimensions().size()), world.getDimensions().minusToAll(1));
+        doFractalGeography(origin, oppositeCorner);
     }
     
     private void doFractalGeography(Vector topLeft, Vector bottomRight) {
 		SatInstance topLeftInstance = world.getLocation(topLeft).getComparator().getInstance();
-		SatInstance bottomRightInstance = world.getLocation(topLeft).getComparator().getInstance();
+		SatInstance bottomRightInstance = world.getLocation(bottomRight).getComparator().getInstance();
 		
 		Vector middle = bottomRight.getMidPoint(topLeft);
 		Vector topRight = getCrossDiagonalVector(topLeft, bottomRight);
@@ -77,31 +82,36 @@ public class FractalGeography implements Geography {
 		doFractalGeography(topMid, midRight);
 	}
 
-	private Vector getCrossDiagonalVector(Vector topLeft, Vector bottomRight) {
-		Vector topRight = new Vector();
-		topRight.add(bottomRight.get(0));
-		topRight.add(topLeft.get(1));
-		return topRight;
+	private Vector getCrossDiagonalVector(Vector verticalPos, Vector horizontalPos) {
+		Vector crossDiagonal = new Vector();
+		crossDiagonal.add(horizontalPos.get(0));
+		crossDiagonal.add(verticalPos.get(1));
+		return crossDiagonal;
 	}
 
 	private SatInstance doClauseListCrossover(SatInstance satInstanceA, SatInstance satInstanceB) {
-		//TODO THIS DOES NOT WORK, DO NOT KNOW WHY
     	ClauseList newClauseList = new ClauseList();
+    	int NumClauses = globalClauseList.getNumClauses();
     	
-    	for(int i = 0; i < globalClauseList.getNumClauses(); i++) {
+    	
+    	for(int i = 0; i < NumClauses; i++) {
     		Clause currentClause = globalClauseList.getClause(i);
+    		
+    		// Decide whether or not this clause will be mutated according to Geography Noise Strength
+    		// Then if a clauseList contains a clause and mutate=true, then we don't add it
+    		// If a clauseList doesn't contain a clause and mutate=true then we add it
+    		// Reverse for when mutate is false
+    		boolean mutate = SharedPRNG.instance().nextDouble() < (IntParameter.GEOGRAPHY_NOISE_STRENGTH.getValue()/(double)NumClauses);
     		if(SharedPRNG.instance().nextBoolean()) {
-    			if(satInstanceA.getClauseList().contains(currentClause)) {
+    			if(satInstanceA.getClauseList().contains(currentClause) != mutate) {
     				newClauseList.addClause(currentClause);
     			}
     		} else {
-    			if(satInstanceB.getClauseList().contains(currentClause)) {
+    			if(satInstanceB.getClauseList().contains(currentClause) != mutate) {
     				newClauseList.addClause(currentClause);
     			}
     		}
     	}
-    	
-    	System.out.println(newClauseList);
     	
     	return new SatInstance(newClauseList, totalNumVariables);
     }

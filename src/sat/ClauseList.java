@@ -46,7 +46,6 @@ public class ClauseList implements Iterable<Clause> {
     public Boolean contains(Clause c) {
     	for(Clause clause: clauses) {
     		if (clause.equals(c)) {
-    			System.out.println("ayay");
     			return true;
     		}
     	}
