@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,6 +19,7 @@ import locality.World;
 
 import parameters.BooleanParameter;
 import parameters.DoubleParameter;
+import parameters.GlobalParameters;
 import parameters.IntArrayParameter;
 import parameters.IntParameter;
 import parameters.StringParameter;
@@ -42,11 +44,7 @@ public class GARun {
     private List<Observer> observers = new ArrayList<Observer>();
     private int successes;
 
-    public void run() throws FileNotFoundException, IOException,
-            SecurityException, IllegalArgumentException,
-            ClassNotFoundException, NoSuchMethodException,
-            InstantiationException, IllegalAccessException,
-            InvocationTargetException {
+    public void run() throws Exception {
         mutationOperator = getMutationOperator();
         selectionOperator = getSelectionOperator();
         crossoverOperator = getCrossoverOperator();
@@ -58,9 +56,6 @@ public class GARun {
         comparator = new IndividualComparator(satInstance);
 
         popManager = new PopulationManager();
-
-        world = new World(new Vector(IntArrayParameter.WORLD_DIMENSIONS.getValue()),
-                BooleanParameter.TOROIDAL.getValue(), satInstance);
 
         int numRuns = IntParameter.NUM_RUNS.getValue();
         
@@ -83,23 +78,35 @@ public class GARun {
 
         System.out.println(successes + "/" + numRuns + " runs successful");
     }
+    
+    @SuppressWarnings("unchecked")
+	private void setupObservers() throws Exception {
+		if (!GlobalParameters.isSet(StringParameter.OBSERVERS.toString()))
+			return;
 
-    private void setupObservers() {
-        // TODO generalize this to load from parameters (not just use a hard-coded visualizer)
-        
-        observers.add(new Console());
-        observers.add(new MapVisualizer(world));
-        observers.add(new DataDisplay());
-    }
+		String observerNames[] = StringParameter.OBSERVERS.getValue()
+				.split(",");
 
-    private boolean runGenerations() {
+		for (String observerName : observerNames) {
+			Class<Observer> obs = (Class<Observer>) Class.forName(observerName);
+			Constructor<Observer> cons = obs.getConstructor();
+			Observer instance = (Observer) cons.newInstance();
+			observers.add(instance);
+		}
+	}
+
+    private boolean runGenerations() throws Exception {
         List<Individual> population = popManager.generatePopulation(satInstance);
-        for(Vector p:world) {
-            world.getLocation(p).setIndividuals(new ArrayList<Individual>());
-        }
+        
+        world = new World(new Vector(IntArrayParameter.WORLD_DIMENSIONS.getValue()),
+                BooleanParameter.TOROIDAL.getValue(), satInstance);
+        
+        world.clear();
         world.getStartingLocation().setIndividuals(population);
 
         int i = 0;
+        double bestFitness = 0.0;
+        Individual bestIndividual = null;
         while (SatEvaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO.getValue()) {
             processAllLocations();
             
@@ -107,25 +114,29 @@ public class GARun {
                 o.generationData(i, world, satInstance, successes);
             }
 
-            Individual bestIndividual = findBestIndividual();
-            System.out.println("Generation " + (i + 1));
+            bestIndividual = findBestIndividual();
+            //System.out.println("Generation " + (i + 1));
             //System.out.println("   Best individual: " + bestIndividual);
-            double bestFitness = SatEvaluator.evaluate(satInstance, bestIndividual);
+            bestFitness = SatEvaluator.evaluate(satInstance, bestIndividual);
             //System.out.println("   Best fitness: " + bestFitness);
             if (bestFitness == 1.0) {
+            	System.out.println("Best Fitness: " + bestFitness);
+            	SatEvaluator.printUnsolvedClauses(satInstance, bestIndividual);
                 System.out.println("SUCCESS");
                 return true;
             }
 			
             i++;
         }
-
+        
+        System.out.println("Best Fitness: " + bestFitness);
+        SatEvaluator.printUnsolvedClauses(satInstance, bestIndividual);
         System.out.println("FAILURE");
         
         return false;
     }
-    
-    private Individual findBestIndividual() {
+
+	private Individual findBestIndividual() {
         List<Individual> bestFromCells = new ArrayList<Individual>();
         for(Vector p:world) {
             if(world.getLocation(p).getNumIndividuals() > 0) {
@@ -164,7 +175,6 @@ public class GARun {
     }
 
     private void performDraconianReaper() {
-        int numKilled = 0;
 
         for (Vector position : world) {
             List<Individual> locationIndividuals = world.getIndividualsAt(position);
@@ -176,17 +186,12 @@ public class GARun {
                 int correctClauses = (int) Math.round(fitness * numClauses);
                 if (numClauses == correctClauses) {
                     world.getLocation(position).addToPendingIndividuals(individual);
-                } else {
-                    numKilled++;
                 }
             }
         }
-
-        System.out.println("Killed: " + numKilled);
     }
 
     private void performMigration() {
-        int numMigrated = 0;
 
         double migrationProbability = DoubleParameter.MIGRATION_PROBABILITY.getValue();
         int migrationDistance = IntParameter.MIGRATION_DISTANCE.getValue();
@@ -210,14 +215,10 @@ public class GARun {
                         throw new MigrationInWorldOfSizeOneException(e);
                     }
                     world.getLocation(newPosition).addToPendingIndividuals(i);
-
-                    numMigrated++;
                 }
             }
             world.getLocation(position).removeAll(individualsToRemove);
         }
-
-        System.out.println("Moved : " + numMigrated);
     }
     
     private void performElitism() {

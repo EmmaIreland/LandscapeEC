@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 
 import observers.Observer;
 
+import parameters.IntArrayParameter;
 import parameters.IntParameter;
 
 import locality.Location;
@@ -29,17 +30,18 @@ public class MapVisualizer extends JFrame implements Observer {
     
     private BufferedImage canvas;
 
-    public MapVisualizer(World world) {        
-        Vector worldDimensions = world.getDimensions();
+    public MapVisualizer() {
+    	Integer[] worldDimensions = IntArrayParameter.WORLD_DIMENSIONS.getValue();
+    	
+        if(worldDimensions.length != 2) throw new IllegalArgumentException("World must be 2 dimensional for map visualization.");
         
-        if(worldDimensions.size() != 2) throw new IllegalArgumentException("World must be 2 dimensional for map visualization.");
-        
+        worldWidth = worldDimensions[0];
+        worldHeight = worldDimensions[1];
+    	
         xScale = IntParameter.VISUALIZER_X_SCALE.getValue();
         yScale = IntParameter.VISUALIZER_X_SCALE.getValue();
         intensityScale = IntParameter.VISUALIZER_INTENSITY_SCALE.getValue();
         
-        worldWidth = worldDimensions.get(0);
-        worldHeight = worldDimensions.get(1);
         width = worldWidth*xScale;
         height = worldHeight*yScale;
         

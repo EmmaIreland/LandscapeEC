@@ -2,7 +2,11 @@ package locality;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import org.junit.Test;
+
+import parameters.GlobalParameters;
 
 import sat.SatInstance;
 
@@ -11,7 +15,10 @@ public class LocationTest {
 	private static final int SIZE = 10;
 
 	@Test
-	public void positionTest() {
+	public void positionTest() throws Exception {
+    	File paramsFile = new File("properties/test.properties");
+        GlobalParameters.setParameters(paramsFile);
+		
 		Vector dimensions = new Vector(new Integer[] { SIZE, SIZE });
 		World world = new World(dimensions, true, new SatInstance());
 		

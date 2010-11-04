@@ -1,5 +1,7 @@
-package locality;
+package locality.geography;
 
+import locality.Vector;
+import locality.World;
 import parameters.DoubleParameter;
 import parameters.IntParameter;
 import sat.Clause;

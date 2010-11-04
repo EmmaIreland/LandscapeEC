@@ -9,8 +9,7 @@ import parameters.GlobalParameters;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException, SecurityException, IllegalArgumentException, ClassNotFoundException,
-        NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException{
+    public static void main(String[] args) throws Exception{
         if(args.length <= 0) System.out.println("Wrong number of arguments");
         for (String arg : args)
         {                        

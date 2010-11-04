@@ -42,7 +42,7 @@ public class SatEvaluator {
             return;
         }
 
-        System.out.print("Didn't solve... ");
+        System.out.print("Unsolved Clauses:");
 
         int i = 0;
         for (Clause clause : clauseList) {
@@ -51,5 +51,6 @@ public class SatEvaluator {
             }
             i++;
         }
+        System.out.print("\n");
     }
 }

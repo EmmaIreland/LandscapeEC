@@ -4,7 +4,7 @@ package parameters;
 public enum StringParameter
 {    
       
-    SEED, PROBLEM_FILE, MUTATION_OPERATOR, SELECTION_OPERATOR, CROSSOVER_OPERATOR;
+    SEED, PROBLEM_FILE, MUTATION_OPERATOR, SELECTION_OPERATOR, CROSSOVER_OPERATOR, OBSERVERS, GEOGRAPHY_TYPE;
 
     /**
      * Return the (String) value of this parameter. It will trim all whitespace

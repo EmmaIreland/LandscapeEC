@@ -1,11 +1,18 @@
 package locality;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import locality.geography.Geography;
+
+import observers.Observer;
+
+import parameters.GlobalParameters;
 import parameters.IntArrayParameter;
+import parameters.StringParameter;
 import sat.Individual;
 import sat.IndividualComparator;
 import sat.SatInstance;
@@ -15,7 +22,7 @@ public class World implements Iterable<Vector> {
     private Map<Vector,Location> worldMap;
     private Vector dimensions;
 
-    public World(Vector dimensions, boolean isToroidal, SatInstance satInstance) {
+    public World(Vector dimensions, boolean isToroidal, SatInstance satInstance) throws Exception {
         toroidal = isToroidal;
         this.dimensions = new Vector(dimensions);
 
@@ -24,11 +31,20 @@ public class World implements Iterable<Vector> {
             worldMap.put(position, new Location(position));
         }
         
-        //Geography geography = new ManhattanDistanceGradiantGeography();
-        Geography geography = new FractalGeography();
-
+        Geography geography = createGeography();
+        
         geography.generateGeography(satInstance, this);
     }
+    
+    @SuppressWarnings("unchecked")
+	private Geography createGeography() throws Exception {
+		String geographyName = StringParameter.GEOGRAPHY_TYPE.getValue();
+
+		Class<Geography> geography = (Class<Geography>) Class.forName(geographyName);
+		Constructor<Geography> cons = geography.getConstructor();
+		Geography instance = (Geography) cons.newInstance();
+		return instance;
+	}
 
     public void setLocationComparator(Vector position,
             IndividualComparator locationComparator) {
@@ -75,4 +91,10 @@ public class World implements Iterable<Vector> {
     public List<Individual> getIndividualsAt(Vector p) {
         return getLocation(p).getIndividuals();
     }
+
+	public void clear() {
+		for(Vector p:this) {
+	        getLocation(p).setIndividuals(new ArrayList<Individual>());
+	    }
+	}
 }

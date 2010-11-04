@@ -1,14 +1,18 @@
 package locality;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.Assert.*;
 
+import org.apache.commons.io.FileUtils;
 import org.jbehave.scenario.annotations.Given;
 import org.jbehave.scenario.annotations.Then;
 import org.jbehave.scenario.annotations.When;
 import org.jbehave.scenario.steps.Steps;
+
+import parameters.GlobalParameters;
 
 import sat.SatInstance;
 
@@ -17,7 +21,10 @@ public class NeighborhoodSteps extends Steps {
     private List<Vector> neighborhood;
 
     @Given("a $toroid world of size [$size]")
-    public void setupWorld(String toroidalFlag, String sizes) {
+    public void setupWorld(String toroidalFlag, String sizes) throws Exception {
+    	File paramsFile = new File("properties/test.properties");
+        GlobalParameters.setParameters(paramsFile);
+    	
         String[] dimensionStrings = sizes.split(", *");
         Vector dimensions = new Vector();
         for (int i = 0; i < dimensionStrings.length; i++) {

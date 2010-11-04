@@ -1,5 +1,6 @@
-package locality;
+package locality.geography;
 
+import locality.World;
 import sat.SatInstance;
 
 public interface Geography {
