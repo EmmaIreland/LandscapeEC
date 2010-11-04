@@ -44,7 +44,7 @@ public class GARun {
     private List<Observer> observers = new ArrayList<Observer>();
     private int successes;
 
-    public void run() throws Exception {
+    public void run() throws Exception {    	
         mutationOperator = getMutationOperator();
         selectionOperator = getSelectionOperator();
         crossoverOperator = getCrossoverOperator();

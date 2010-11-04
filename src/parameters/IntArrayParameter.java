@@ -4,7 +4,7 @@ public enum IntArrayParameter
 {
     WORLD_DIMENSIONS, STARTING_LOCATION;
 
-    private static final String SEPARATOR = ",";
+    private static final String SEPARATOR = ", *";
     /**
      * Return the (String) value of this parameter. It will trim all whitespace
      * before returning the value.
