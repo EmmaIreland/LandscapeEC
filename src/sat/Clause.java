@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Clause {
     private List<Literal> literals = new ArrayList<Literal>();
+    private int cachedHash = Integer.MIN_VALUE;
 
     public void addLiteral(Literal literal) {
         literals.add(literal);
@@ -15,23 +16,31 @@ public class Clause {
         if (!(object instanceof Clause)) {
             return false;
         }
+        
+        if(hashCode() != object.hashCode()) return false;
 
         Clause clause = (Clause) object;
-        boolean equalClauses = true;
         for (int i = 0; i < literals.size(); i++) {
             if (!clause.literals.get(i).equals(this.literals.get(i))) {
-                equalClauses = false;
+                return false;
             }
         }
-        return equalClauses;
+        return true;
     }
 
     @Override
     public int hashCode() {
+    	if(cachedHash != Integer.MIN_VALUE) {
+    		return cachedHash;
+    	}
+    	
         int result = 17;
         for (Literal literal : literals) {
             result = 37 * result + literal.hashCode();
         }
+        
+        cachedHash = result;
+        
         return result;
     }
 

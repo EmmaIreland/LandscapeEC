@@ -14,6 +14,7 @@ import java.util.List;
 import observers.Observer;
 import observers.vis.*;
 
+import locality.Location;
 import locality.Vector;
 import locality.World;
 
@@ -103,6 +104,11 @@ public class GARun {
         
         world.clear();
         world.getStartingLocation().setIndividuals(population);
+        
+        for(Vector v:world) {
+        	Location l = world.getLocation(v);
+        	l.setIndividuals(popManager.generatePopulation(satInstance));
+        }
 
         int i = 0;
         double bestFitness = 0.0;

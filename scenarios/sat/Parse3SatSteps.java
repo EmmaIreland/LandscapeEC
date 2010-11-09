@@ -62,15 +62,6 @@ public class Parse3SatSteps extends Steps {
         assertEquals(clauseList.size(), clauseSet.size());
         
         //AND each clause in the satInstance are in the clauseSet
-        boolean allInSet= true;
-        for(int i=0; i<clauseList.size();i++){
-            if(!clauseSet.contains(clauseList.getClause(i))){
-                System.out.println("not " + clauseList.getClause(i));
-                System.out.println("Clause set = " + clauseSet);
-                allInSet=false;
-            }       
-        }
-                
-        assertTrue(allInSet);
+        assertEquals(clauseSet, clauseList.getClauses());
     }
 }

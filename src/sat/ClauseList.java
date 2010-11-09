@@ -2,18 +2,16 @@ package sat;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class ClauseList implements Iterable<Clause> {
-    private List<Clause> clauses = new ArrayList<Clause>();
+    private Set<Clause> clauses = new HashSet<Clause>();
 
     public void addClause(Clause clause) {
         clauses.add(clause);
-    }
-
-    public Clause getClause(int index) {
-        return clauses.get(index);
     }
 
     public int size() {
@@ -57,4 +55,8 @@ public class ClauseList implements Iterable<Clause> {
     public String toString() {
         return clauses.toString();
     }
+
+	public Set<Clause> getClauses() {
+		return Collections.unmodifiableSet(clauses);
+	}
 }

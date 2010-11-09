@@ -27,13 +27,30 @@ public class FractalGeography implements Geography {
     	IndividualComparator fullComparator = new IndividualComparator(satInstance);
         IndividualComparator emptyComparator = new IndividualComparator(satInstance.getSubInstance(0));
         
-        Vector origin = Vector.origin(world.getDimensions().size());
-        Vector oppositeCorner = world.getDimensions().minusToAll(1);
+        Vector topLeft = Vector.origin(world.getDimensions().size());
+        Vector bottomRight = world.getDimensions().minusToAll(1);
+        Vector middle = topLeft.getMidPoint(bottomRight);
+        Vector topRight = getCorner(topLeft, bottomRight);
+        Vector bottomLeft = getCorner(bottomRight, topLeft);
+        Vector midLeft = topLeft.getMidPoint(bottomLeft);
+        Vector topMid = topLeft.getMidPoint(topRight);
+        Vector midRight = topRight.getMidPoint(bottomRight);
+        Vector bottomMid = bottomLeft.getMidPoint(bottomRight);
 
-        world.setLocationComparator(origin, emptyComparator);
-		world.setLocationComparator(oppositeCorner, fullComparator);
+        world.setLocationComparator(topLeft, emptyComparator);
+        world.setLocationComparator(topMid, emptyComparator);
+        world.setLocationComparator(topRight, emptyComparator);
+        world.setLocationComparator(midLeft, emptyComparator);
+        world.setLocationComparator(midRight, emptyComparator);
+        world.setLocationComparator(bottomLeft, emptyComparator);
+        world.setLocationComparator(bottomMid, emptyComparator);
+        world.setLocationComparator(bottomRight, emptyComparator);
+		world.setLocationComparator(middle, fullComparator);
         
-        doFractalGeography(origin, oppositeCorner);
+        doFractalGeography(topLeft, middle);
+		doFractalGeography(middle, bottomRight);
+		doFractalGeography(midLeft, bottomMid);
+		doFractalGeography(topMid, midRight);
     }
     
     private void doFractalGeography(Vector topLeft, Vector bottomRight) {
@@ -41,8 +58,8 @@ public class FractalGeography implements Geography {
 		SatInstance bottomRightInstance = world.getLocation(bottomRight).getComparator().getInstance();
 		
 		Vector middle = bottomRight.getMidPoint(topLeft);
-		Vector topRight = getCrossDiagonalVector(topLeft, bottomRight);
-		Vector bottomLeft = getCrossDiagonalVector(bottomRight, topLeft);
+		Vector topRight = getCorner(topLeft, bottomRight);
+		Vector bottomLeft = getCorner(bottomRight, topLeft);
 		
 		/*
 		System.out.println("TopLeft     " + topLeft);
@@ -84,7 +101,7 @@ public class FractalGeography implements Geography {
 		doFractalGeography(topMid, midRight);
 	}
 
-	private Vector getCrossDiagonalVector(Vector verticalPos, Vector horizontalPos) {
+	private Vector getCorner(Vector verticalPos, Vector horizontalPos) {
 		Vector crossDiagonal = new Vector();
 		crossDiagonal.add(horizontalPos.get(0));
 		crossDiagonal.add(verticalPos.get(1));
@@ -95,22 +112,19 @@ public class FractalGeography implements Geography {
     	ClauseList newClauseList = new ClauseList();
     	int NumClauses = globalClauseList.getNumClauses();
     	
-    	
-    	for(int i = 0; i < NumClauses; i++) {
-    		Clause currentClause = globalClauseList.getClause(i);
-    		
+    	for(Clause clause:globalClauseList.getClauses()) {    		
     		// Decide whether or not this clause will be mutated according to Geography Noise Strength
     		// Then if a clauseList contains a clause and mutate=true, then we don't add it
     		// If a clauseList doesn't contain a clause and mutate=true then we add it
     		// Reverse for when mutate is false
     		boolean mutate = SharedPRNG.instance().nextDouble() < (IntParameter.GEOGRAPHY_NOISE_STRENGTH.getValue()/(double)NumClauses);
     		if(SharedPRNG.instance().nextBoolean()) {
-    			if(satInstanceA.getClauseList().contains(currentClause) != mutate) {
-    				newClauseList.addClause(currentClause);
+    			if(satInstanceA.getClauseList().contains(clause) != mutate) {
+    				newClauseList.addClause(clause);
     			}
     		} else {
-    			if(satInstanceB.getClauseList().contains(currentClause) != mutate) {
-    				newClauseList.addClause(currentClause);
+    			if(satInstanceB.getClauseList().contains(clause) != mutate) {
+    				newClauseList.addClause(clause);
     			}
     		}
     	}
