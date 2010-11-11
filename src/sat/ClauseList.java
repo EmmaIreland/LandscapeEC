@@ -42,13 +42,7 @@ public class ClauseList implements Iterable<Clause> {
     }
     
     public Boolean contains(Clause c) {
-    	for(Clause clause: clauses) {
-    		if (clause.equals(c)) {
-    			return true;
-    		}
-    	}
-    	
-    	return false;
+        return clauses.contains(c);
     }
     
     @Override
