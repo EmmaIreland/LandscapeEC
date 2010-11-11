@@ -33,11 +33,15 @@ public class Location {
     }
     
     public IndividualComparator getComparator() {
-        if (locationComparator == null) {
+        if (hasNoComparator()) {
             throw new IllegalStateException("Comparator undefined for position " + position);
         }
     	return locationComparator;
     }
+
+	public boolean hasNoComparator() {
+		return locationComparator == null;
+	}
     
     public void setComparator(IndividualComparator locationComparator) {
         this.locationComparator = locationComparator;

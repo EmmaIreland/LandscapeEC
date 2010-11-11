@@ -23,9 +23,10 @@ public class FractalGeography implements Geography {
     	globalClauseList = satInstance.getClauseList();
     	totalNumVariables = satInstance.getNumVariables();
     	this.world = world;
+    	SatInstance emptyInstance = satInstance.getSubInstance(0);
     	
     	IndividualComparator fullComparator = new IndividualComparator(satInstance);
-        IndividualComparator emptyComparator = new IndividualComparator(satInstance.getSubInstance(0));
+		IndividualComparator emptyComparator = new IndividualComparator(emptyInstance);
         
         Vector topLeft = Vector.origin(world.getDimensions().size());
         Vector bottomRight = world.getDimensions().minusToAll(1);
@@ -38,28 +39,36 @@ public class FractalGeography implements Geography {
         Vector bottomMid = bottomLeft.getMidPoint(bottomRight);
 
         world.setLocationComparator(topLeft, emptyComparator);
-        world.setLocationComparator(topMid, emptyComparator);
+        world.setLocationComparator(topMid, getInitalMidpointComparator(satInstance, emptyInstance));
         world.setLocationComparator(topRight, emptyComparator);
-        world.setLocationComparator(midLeft, emptyComparator);
-        world.setLocationComparator(midRight, emptyComparator);
+        world.setLocationComparator(midLeft, getInitalMidpointComparator(satInstance, emptyInstance));
+        world.setLocationComparator(midRight, getInitalMidpointComparator(satInstance, emptyInstance));
         world.setLocationComparator(bottomLeft, emptyComparator);
-        world.setLocationComparator(bottomMid, emptyComparator);
+        world.setLocationComparator(bottomMid, getInitalMidpointComparator(satInstance, emptyInstance));
         world.setLocationComparator(bottomRight, emptyComparator);
 		world.setLocationComparator(middle, fullComparator);
         
-        doFractalGeography(topLeft, middle);
-		doFractalGeography(middle, bottomRight);
-		doFractalGeography(midLeft, bottomMid);
-		doFractalGeography(topMid, midRight);
+        doFractalGeography(topLeft, topMid, middle, midLeft);
+        doFractalGeography(topMid, topRight, midRight, middle);
+		doFractalGeography(middle, midRight, bottomRight, bottomMid);
+		doFractalGeography(midLeft, middle, bottomMid, bottomLeft);
     }
+
+	private IndividualComparator getInitalMidpointComparator(SatInstance satInstance, SatInstance emptyInstance) {
+		return new IndividualComparator(doClauseListCrossover(satInstance, emptyInstance));
+	}
     
-    private void doFractalGeography(Vector topLeft, Vector bottomRight) {
+    private void doFractalGeography(Vector topLeft, Vector topRight, Vector bottomRight, Vector bottomLeft) {
 		SatInstance topLeftInstance = world.getLocation(topLeft).getComparator().getInstance();
+		SatInstance topRightInstance = world.getLocation(topRight).getComparator().getInstance();
 		SatInstance bottomRightInstance = world.getLocation(bottomRight).getComparator().getInstance();
+		SatInstance bottomLeftInstance = world.getLocation(bottomLeft).getComparator().getInstance();
 		
 		Vector middle = bottomRight.getMidPoint(topLeft);
-		Vector topRight = getCorner(topLeft, bottomRight);
-		Vector bottomLeft = getCorner(bottomRight, topLeft);
+		Vector midLeft = topLeft.getMidPoint(bottomLeft);
+		Vector bottomMid = bottomLeft.getMidPoint(bottomRight);
+		Vector topMid = topLeft.getMidPoint(topRight);
+		Vector midRight = topRight.getMidPoint(bottomRight);
 		
 		/*
 		System.out.println("TopLeft     " + topLeft);
@@ -75,32 +84,38 @@ public class FractalGeography implements Geography {
 			e.printStackTrace();
 		}*/
 		
-		if(!middle.equals(topLeft) && !middle.equals(bottomRight)) {
-			SatInstance midInstance = doClauseListCrossover(topLeftInstance, bottomRightInstance);
-			world.setLocationComparator(middle, new IndividualComparator(midInstance));
-		}
-		
-		SatInstance topRightInstance = doClauseListCrossover(topLeftInstance, bottomRightInstance);
-		world.setLocationComparator(topRight, new IndividualComparator(topRightInstance));
-		
-		SatInstance bottomLeftInstance = doClauseListCrossover(topLeftInstance, bottomRightInstance);
-		world.setLocationComparator(bottomLeft, new IndividualComparator(bottomLeftInstance));
+		tryAddingComparator(topLeftInstance, topRightInstance, topMid);
+		tryAddingComparator(topRightInstance, bottomRightInstance, midRight);
+		tryAddingComparator(bottomRightInstance, bottomLeftInstance, bottomMid);
+		tryAddingComparator(topLeftInstance, bottomLeftInstance, midLeft);
+		tryAddingComparator(topLeftInstance, topRightInstance, bottomRightInstance, bottomLeftInstance, middle);
 		
 		if(bottomRight.get(0) - topLeft.get(0) <= 1 && bottomRight.get(1) - topLeft.get(1) <= 1 ) {
 			return;
 		}
 		
-		Vector midLeft = topLeft.getMidPoint(bottomLeft);
-		Vector bottomMid = bottomLeft.getMidPoint(bottomRight);
-		Vector topMid = topLeft.getMidPoint(topRight);
-		Vector midRight = topRight.getMidPoint(bottomRight);
-		
-		doFractalGeography(topLeft, middle);  //this order is very important
-		doFractalGeography(middle, bottomRight);
-		doFractalGeography(midLeft, bottomMid);
-		doFractalGeography(topMid, midRight);
+		doFractalGeography(topLeft, topMid, middle, midLeft);
+        doFractalGeography(topMid, topRight, midRight, middle);
+		doFractalGeography(middle, midRight, bottomRight, bottomMid);
+		doFractalGeography(midLeft, middle, bottomMid, bottomLeft);
 	}
 
+	private void tryAddingComparator(SatInstance firstInstance, SatInstance secondInstance, Vector midpoint) {
+		if(world.getLocation(midpoint).hasNoComparator()) {
+			SatInstance midInstance = doClauseListCrossover(firstInstance, secondInstance);
+			world.setLocationComparator(midpoint, new IndividualComparator(midInstance));
+		}
+	}
+
+	private void tryAddingComparator(SatInstance firstInstance, SatInstance secondInstance, SatInstance thirdInstance, SatInstance forthInstance, Vector midpoint) {
+		if(world.getLocation(midpoint).hasNoComparator()) {
+			SatInstance s = doClauseListCrossover(firstInstance, secondInstance);
+			SatInstance t = doClauseListCrossover(thirdInstance, forthInstance);
+			SatInstance midInstance = doClauseListCrossover(s, t);
+			world.setLocationComparator(midpoint, new IndividualComparator(midInstance));
+		}
+	}
+	
 	private Vector getCorner(Vector verticalPos, Vector horizontalPos) {
 		Vector crossDiagonal = new Vector();
 		crossDiagonal.add(horizontalPos.get(0));
