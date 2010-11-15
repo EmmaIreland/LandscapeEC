@@ -163,7 +163,7 @@ public class Vector {
     public int manhattanLength() {
         int distance = 0;
         for (int coordinate : coordinates) {
-            distance += coordinate;
+            distance += Math.abs(coordinate);
         }
         return distance;
     }

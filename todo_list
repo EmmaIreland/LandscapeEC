@@ -4,11 +4,13 @@ Landscape EC Todo List
 
 ------- TO DO -------
 
-- Change ManhattanDistanceGeography to be a smooth gradient to the center of the world
+- Consider having cells gradually get harder over time, this could be implemented as Uniform Geography slowly "blending" into Fractal Geography
 
 - Look at impoving speed in certain areas
 
 ----- COMPLETED -----
+- Change ManhattanDistanceGeography to be a smooth gradient to the center of the world
+
 - It would be nice to be able to specify a way of building the geography (fractal, gradiant, etc.)
 in the parameters file, but this probably involves reflection and other craziness since you'd probably
 want to specify a class name for an implementation of an interface that generates sub-instances for
