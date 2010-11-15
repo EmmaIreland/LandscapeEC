@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import landscapeEC.util.FrequencyCounter;
+
 /**
  * Runs a basic Chi Squared test comparing an observed distribution against an expected distribution.
  * 

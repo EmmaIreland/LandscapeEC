@@ -8,17 +8,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import landscapeEC.sat.Individual;
+import landscapeEC.sat.IndividualComparator;
+import landscapeEC.sat.PopulationManager;
+import landscapeEC.sat.SatInstance;
+import landscapeEC.sat.SatParser;
+
 import org.jbehave.scenario.steps.Steps;
 
 import org.jbehave.scenario.annotations.Given;
 import org.jbehave.scenario.annotations.When;
 import org.jbehave.scenario.annotations.Then;
 
-import sat.Individual;
-import sat.IndividualComparator;
-import sat.PopulationManager;
-import sat.SatInstance;
-import sat.SatParser;
 
 public class ElitismSteps extends Steps {
     private PopulationManager populationManager;

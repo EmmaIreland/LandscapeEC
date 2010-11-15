@@ -4,6 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import landscapeEC.locality.Vector;
+import landscapeEC.locality.World;
+import landscapeEC.parameters.GlobalParameters;
+import landscapeEC.sat.SatInstance;
+
 import static junit.framework.Assert.*;
 
 import org.apache.commons.io.FileUtils;
@@ -12,9 +17,7 @@ import org.jbehave.scenario.annotations.Then;
 import org.jbehave.scenario.annotations.When;
 import org.jbehave.scenario.steps.Steps;
 
-import parameters.GlobalParameters;
 
-import sat.SatInstance;
 
 public class NeighborhoodSteps extends Steps {
     private World world;

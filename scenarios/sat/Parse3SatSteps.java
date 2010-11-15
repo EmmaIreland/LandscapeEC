@@ -4,6 +4,12 @@ import java.io.StringReader;
 import java.util.HashSet;
 import java.util.Set;
 
+import landscapeEC.sat.Clause;
+import landscapeEC.sat.ClauseList;
+import landscapeEC.sat.Literal;
+import landscapeEC.sat.SatInstance;
+import landscapeEC.sat.SatParser;
+
 import static junit.framework.Assert.*;
 
 import org.jbehave.scenario.steps.Steps;
@@ -12,8 +18,6 @@ import org.jbehave.scenario.annotations.Given;
 import org.jbehave.scenario.annotations.When;
 import org.jbehave.scenario.annotations.Then;
 
-import sat.SatInstance;
-import sat.SatParser;
 
 public class Parse3SatSteps extends Steps {
     private SatParser satParser;

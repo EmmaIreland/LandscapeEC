@@ -2,16 +2,18 @@ package sat;
 
 import java.util.Map;
 
+import landscapeEC.parameters.GlobalParameters;
+import landscapeEC.sat.Individual;
+import landscapeEC.sat.operators.PointMutation;
+import landscapeEC.util.FrequencyCounter;
+import landscapeEC.util.ProbabilityUtils;
+
 import org.junit.Test;
 
 import static junit.framework.Assert.*;
 
-import parameters.GlobalParameters;
-import sat.operators.PointMutation;
 import util.ChiSquaredStatistics;
-import util.FrequencyCounter;
 import util.MockParameters;
-import util.ProbabilityUtils;
 
 public class PointMutationTest {
     private static final double AVERAGE_MUTATIONS = 1;

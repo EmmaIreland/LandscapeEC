@@ -4,11 +4,15 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 
+import landscapeEC.locality.Location;
+import landscapeEC.locality.Vector;
+import landscapeEC.locality.World;
+import landscapeEC.parameters.GlobalParameters;
+import landscapeEC.sat.SatInstance;
+
 import org.junit.Test;
 
-import parameters.GlobalParameters;
 
-import sat.SatInstance;
 
 public class LocationTest {
 

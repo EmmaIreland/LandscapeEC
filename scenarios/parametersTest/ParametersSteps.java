@@ -2,6 +2,10 @@ package parametersTest;
 import java.io.File;
 import java.io.IOException;
 
+import landscapeEC.parameters.DoubleParameter;
+import landscapeEC.parameters.GlobalParameters;
+import landscapeEC.parameters.IntParameter;
+
 import static junit.framework.Assert.*;
 
 import org.apache.commons.io.FileUtils;
@@ -10,9 +14,6 @@ import org.jbehave.scenario.steps.Steps;
 import org.jbehave.scenario.annotations.When;
 import org.jbehave.scenario.annotations.Then;
 
-import parameters.DoubleParameter;
-import parameters.GlobalParameters;
-import parameters.IntParameter;
 
 
 public class ParametersSteps extends Steps {

@@ -5,13 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import landscapeEC.sat.Individual;
+import landscapeEC.sat.SatInstance;
+import landscapeEC.sat.operators.UniformCrossover;
+import landscapeEC.util.FrequencyCounter;
+
 import org.junit.Test;
 
 import static junit.framework.Assert.*;
 
-import sat.operators.UniformCrossover;
 import util.ChiSquaredStatistics;
-import util.FrequencyCounter;
 
 public class UniformCrossoverTest {
     private static final int NUM_BITS = 9;

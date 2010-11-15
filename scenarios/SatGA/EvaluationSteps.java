@@ -2,6 +2,11 @@ package SatGA;
 import java.io.IOException;
 import java.io.StringReader;
 
+import landscapeEC.sat.Individual;
+import landscapeEC.sat.SatEvaluator;
+import landscapeEC.sat.SatInstance;
+import landscapeEC.sat.SatParser;
+
 import static junit.framework.Assert.*;
 
 import org.jbehave.scenario.steps.Steps;
@@ -11,10 +16,6 @@ import org.jbehave.scenario.annotations.When;
 import org.jbehave.scenario.annotations.Then;
 import org.jbehave.scenario.annotations.Named;
 
-import sat.Individual;
-import sat.SatEvaluator;
-import sat.SatInstance;
-import sat.SatParser;
 
 public class EvaluationSteps extends Steps {
     private String bitString;

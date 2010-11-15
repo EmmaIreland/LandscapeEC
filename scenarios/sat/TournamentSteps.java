@@ -7,6 +7,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import landscapeEC.parameters.GlobalParameters;
+import landscapeEC.sat.Individual;
+import landscapeEC.sat.IndividualComparator;
+import landscapeEC.sat.SatInstance;
+import landscapeEC.sat.SatParser;
+import landscapeEC.sat.operators.TournamentSelection;
+import landscapeEC.util.FrequencyCounter;
+
 import static junit.framework.Assert.*;
 
 import org.jbehave.scenario.annotations.Given;
@@ -14,11 +22,8 @@ import org.jbehave.scenario.annotations.Then;
 import org.jbehave.scenario.annotations.When;
 import org.jbehave.scenario.steps.Steps;
 
-import parameters.GlobalParameters;
 
-import sat.operators.TournamentSelection;
 import util.ChiSquaredStatistics;
-import util.FrequencyCounter;
 import util.MockParameters;
 
 public class TournamentSteps extends Steps {

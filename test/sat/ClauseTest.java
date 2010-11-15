@@ -1,6 +1,8 @@
 package sat;
 
 import static org.junit.Assert.assertEquals;
+import landscapeEC.sat.Clause;
+import landscapeEC.sat.Literal;
 
 import org.junit.Test;
 

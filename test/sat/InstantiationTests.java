@@ -6,11 +6,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import landscapeEC.parameters.GlobalParameters;
+import landscapeEC.parameters.IntParameter;
+import landscapeEC.sat.Individual;
+import landscapeEC.sat.IndividualFactory;
+import landscapeEC.sat.PopulationManager;
+import landscapeEC.sat.SatInstance;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import parameters.GlobalParameters;
-import parameters.IntParameter;
 
 public class InstantiationTests {
     

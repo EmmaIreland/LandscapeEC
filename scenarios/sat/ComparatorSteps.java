@@ -3,6 +3,11 @@ package sat;
 import java.io.IOException;
 import java.io.StringReader;
 
+import landscapeEC.sat.Individual;
+import landscapeEC.sat.IndividualComparator;
+import landscapeEC.sat.SatInstance;
+import landscapeEC.sat.SatParser;
+
 import static junit.framework.Assert.*;
 
 import org.jbehave.scenario.annotations.Given;

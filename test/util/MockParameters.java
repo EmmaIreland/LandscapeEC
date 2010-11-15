@@ -1,6 +1,6 @@
 package util;
 
-import parameters.*;
+import landscapeEC.parameters.*;
 
 public class MockParameters extends Parameters
 {
