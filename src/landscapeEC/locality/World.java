@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import landscapeEC.locality.geography.Geography;
-import landscapeEC.observers.Observer;
-import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntArrayParameter;
 import landscapeEC.parameters.StringParameter;
 import landscapeEC.sat.Individual;
@@ -55,9 +53,8 @@ public class World implements Iterable<Vector> {
         return worldMap.get(position);
     }
     
-    public Location getStartingLocation() {
-        Integer[] startingLocation = IntArrayParameter.STARTING_LOCATION.getValue();
-        Vector position = new Vector(startingLocation);
+    public Location getOrigin() {
+        Vector position = Vector.origin(dimensions.size());
 
         return worldMap.get(position);
     }
@@ -92,9 +89,9 @@ public class World implements Iterable<Vector> {
         return getLocation(p).getIndividuals();
     }
 
-	public void clear() {
-		for(Vector p:this) {
-	        getLocation(p).setIndividuals(new ArrayList<Individual>());
-	    }
-	}
+    public void clear() {
+        for (Vector p : this) {
+            getLocation(p).setIndividuals(new ArrayList<Individual>());
+        }
+    }
 }

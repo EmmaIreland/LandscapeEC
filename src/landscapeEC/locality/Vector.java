@@ -168,4 +168,11 @@ public class Vector {
         return distance;
     }
 
+    public static Vector getCorner(Vector horizontalPos, Vector verticalPos) {
+    	Vector crossDiagonal = new Vector();
+    	crossDiagonal.add(horizontalPos.get(0));
+    	crossDiagonal.add(verticalPos.get(1));
+    	return crossDiagonal;
+    }
+
 }

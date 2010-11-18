@@ -2,7 +2,7 @@ package landscapeEC.parameters;
 
 public enum IntArrayParameter
 {
-    WORLD_DIMENSIONS, STARTING_LOCATION;
+    WORLD_DIMENSIONS;
 
     private static final String SEPARATOR = ", *";
     /**
