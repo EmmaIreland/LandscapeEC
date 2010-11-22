@@ -4,6 +4,14 @@ Landscape EC Todo List
 
 ------- TO DO -------
 
+- Output information about: unsolved clauses, number of evaluations, possibly successes at fixed points (10M evals, 15M evals, etc.)
+
+- Find more medium-difficulty problems (harder than the 50, easier than the 250)
+
+- Investigate other GA problems, preferably not combinatorial optimization
+
+- Lit review of 3-SAT - how do people show results?
+
 - Consider having cells gradually get harder over time, this could be implemented as Uniform Geography slowly "blending" into Fractal Geography
 
 - Look at impoving speed in certain areas

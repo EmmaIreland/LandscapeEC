@@ -47,6 +47,7 @@ public class GARun {
     private int successes;
     private String propertiesFilename;
     private FileWriter writer;
+    private double bestOverallFitness;
 
     public GARun(String propertiesFilename) {
         this.propertiesFilename = propertiesFilename;
@@ -76,10 +77,10 @@ public class GARun {
 
             try {
                 if (runGenerations()) {
-                    addRunToRFile(true);
+                    addRunToRFile(true, SatEvaluator.getNumEvaluations(), 1.0);
                     successes++;
                 } else {
-                    addRunToRFile(false);
+                    addRunToRFile(false, IntParameter.NUM_EVALS_TO_DO.getValue(), bestOverallFitness);
                 }
             } catch (EmptyWorldException e) {
                 System.err.println("All individuals died!");
@@ -93,7 +94,7 @@ public class GARun {
         closeRFile();
     }
 
-    private void addRunToRFile(boolean success) throws IOException {
+    private void addRunToRFile(boolean success, int completedEvaluations, double bestFitness) throws IOException {
         Set<String> propertyNames = GlobalParameters.getParameterNames();
         for(String name:propertyNames) {
             if(GlobalParameters.isSet(name)) {
@@ -101,7 +102,7 @@ public class GARun {
             }
         }
         
-        writer.write(success+"\n");
+        writer.write(success+" " + completedEvaluations + " " + bestFitness + "\n");
     }
 
     private void generateRFile(int successes) throws IOException {
@@ -113,7 +114,7 @@ public class GARun {
                 writer.write(name + " ");
             }
         }
-        writer.write("SUCCESS\n");
+        writer.write("SUCCESS COMPLETED_EVALS BEST_FITNESS\n");
     }
     
     private void closeRFile() throws IOException {
@@ -163,7 +164,7 @@ public class GARun {
         }
 
         int i = 0;
-        double bestFitness = 0.0;
+        bestOverallFitness = 0.0;
         Individual bestIndividual = null;
         while (SatEvaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO.getValue()) {
             processAllLocations();
@@ -175,10 +176,10 @@ public class GARun {
             bestIndividual = findBestIndividual();
             // System.out.println("Generation " + (i + 1));
             // System.out.println("   Best individual: " + bestIndividual);
-            bestFitness = SatEvaluator.evaluate(satInstance, bestIndividual);
+            bestOverallFitness = SatEvaluator.evaluate(satInstance, bestIndividual);
             // System.out.println("   Best fitness: " + bestFitness);
-            if (bestFitness == 1.0) {
-                System.out.println("Best Fitness: " + bestFitness);
+            if (bestOverallFitness == 1.0) {
+                System.out.println("Best Fitness: " + bestOverallFitness);
                 SatEvaluator.printUnsolvedClauses(satInstance, bestIndividual);
                 System.out.println("SUCCESS");
                 return true;
@@ -187,7 +188,7 @@ public class GARun {
             i++;
         }
 
-        System.out.println("Best Fitness: " + bestFitness);
+        System.out.println("Best Fitness: " + bestOverallFitness);
         SatEvaluator.printUnsolvedClauses(satInstance, bestIndividual);
         System.out.println("FAILURE");
 
