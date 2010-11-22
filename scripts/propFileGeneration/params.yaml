@@ -1,5 +1,5 @@
 ---
-File_prefix: FirstRuns
+File_prefix: 2010-11-19-
 Base_properties_file: default.properties
 
 PROBLEM_FILE:
@@ -9,24 +9,27 @@ PROBLEM_FILE:
 WORLD_DIMENSIONS:
   - 30, 30
   - 20, 20
-  - 10, 10
   
 CARRYING_CAPACITY:
   - 20
   - 10
   
-GEOGRAPHY_TYPE:
-  - locality.geography.FractalGeography
-  - locality.geography.ManhattanDistanceGeography
-  
 GEOGRAPHY_NOISE_STRENGTH:
   - 0
   - 1
   
-MIGRATION_PROBABILITY:
-  - 0.1
-  - 0.15
-  
 MIGRATION_DISTANCE:
   - 1
   - 2
+  
+AVERAGE_MUTATIONS:
+  - 1
+  - 2
+  
+GEOGRAPHY_TYPE:
+  - locality.geography.FractalGeography
+  - locality.geography.ManhattanDistanceGeography
+  
+STARTING_POPULATION:
+  - ORIGIN
+  - EVERYWHERE

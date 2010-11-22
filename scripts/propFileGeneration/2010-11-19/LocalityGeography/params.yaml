@@ -1,0 +1,34 @@
+---
+File_prefix: 2010-11-19-
+Base_properties_file: default.properties
+
+PROBLEM_FILE:
+  - exampleproblems/hgen1-v250-s671234684.cnf
+  - exampleproblems/uf50-0456.cnf
+  
+WORLD_DIMENSIONS:
+  - 30, 30
+  - 20, 20
+  
+CARRYING_CAPACITY:
+  - 20
+  - 10
+  
+GEOGRAPHY_NOISE_STRENGTH:
+  - 0
+  - 1
+  
+MIGRATION_DISTANCE:
+  - 1
+  - 2
+  
+AVERAGE_MUTATIONS:
+  - 1
+  - 2
+  
+GEOGRAPHY_TYPE:
+  - locality.geography.FractalGeography
+  - locality.geography.ManhattanDistanceGeography
+  
+STARTING_POPULATION:
+  - EVERYWHERE

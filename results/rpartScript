@@ -1,0 +1,13 @@
+runData <- read.table("Geo2010_11_19_results.R", header=T)
+#runData <- subset(runData, PROBLEM_FILE=="exampleproblems/hgen1-v250-s671234684.cnf")
+#runData <- subset(runData, PROBLEM_FILE=="exampleproblems/uf50-0456.cnf")
+fractalData <- subset(runData, GEOGRAPHY_TYPE == "landscapeEC.locality.geography.FractalGeography")
+manhattanData <- subset(runData, GEOGRAPHY_TYPE == "landscapeEC.locality.geography.ManhattanDistanceGeography")
+uniformData <- subset(runData, GEOGRAPHY_TYPE == "landscapeEC.locality.geography.UniformGeography")
+#runData <- fractalData
+localityGeography <- subset(runData, GEOGRAPHY_TYPE != "landscapeEC.locality.geography.UniformGeography" & WORLD_DIMENSIONS != "1_1")
+localityNoGeography <- subset(runData, GEOGRAPHY_TYPE == "landscapeEC.locality.geography.UniformGeography" & WORLD_DIMENSIONS != "1_1")
+noLocalityNoGeography <- subset(runData, GEOGRAPHY_TYPE == "landscapeEC.locality.geography.UniformGeography" & WORLD_DIMENSIONS == "1_1")
+partPlot <- rpart(SUCCESS~MIGRATION_DISTANCE+CARRYING_CAPACITY+REPRODUCTION_RATE+GEOGRAPHY_NOISE_STRENGTH+GEOGRAPHY_TYPE+PROBLEM_FILE+STARTING_POPULATION+AVERAGE_MUTATIONS+WORLD_DIMENSIONS+MIGRATION_PROBABILITY, data=runData, minsplit=1, minbucket=1, cp=0.000001)
+plot(partPlot, uniform=T)
+text(partPlot, use.n=T, pretty=0, all=T)

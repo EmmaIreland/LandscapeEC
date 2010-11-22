@@ -17,7 +17,7 @@ public class Main {
             File paramsFile = new File(arg);
             GlobalParameters.setParameters(paramsFile);
             
-            GARun run = new GARun();
+            GARun run = new GARun(arg);
 
             run.run();
             

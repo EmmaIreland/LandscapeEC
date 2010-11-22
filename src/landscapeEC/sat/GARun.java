@@ -3,6 +3,7 @@ package landscapeEC.sat;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
@@ -43,6 +45,12 @@ public class GARun {
 
     private List<Observer> observers = new ArrayList<Observer>();
     private int successes;
+    private String propertiesFilename;
+    private FileWriter writer;
+
+    public GARun(String propertiesFilename) {
+        this.propertiesFilename = propertiesFilename;
+    }
 
     public void run() throws Exception {
         mutationOperator = getMutationOperator();
@@ -59,6 +67,8 @@ public class GARun {
         int numRuns = IntParameter.NUM_RUNS.getValue();
 
         setupObservers();
+        
+        generateRFile(successes);
 
         successes = 0;
         for (int i = 0; i < numRuns; i++) {
@@ -66,7 +76,10 @@ public class GARun {
 
             try {
                 if (runGenerations()) {
+                    addRunToRFile(true);
                     successes++;
+                } else {
+                    addRunToRFile(false);
                 }
             } catch (EmptyWorldException e) {
                 System.err.println("All individuals died!");
@@ -76,6 +89,36 @@ public class GARun {
         }
 
         System.out.println(successes + "/" + numRuns + " runs successful");
+        
+        closeRFile();
+    }
+
+    private void addRunToRFile(boolean success) throws IOException {
+        Set<String> propertyNames = GlobalParameters.getParameterNames();
+        for(String name:propertyNames) {
+            if(GlobalParameters.isSet(name)) {
+                writer.write(GlobalParameters.getStringValue(name).replaceAll(" ", "") + " ");
+            }
+        }
+        
+        writer.write(success+"\n");
+    }
+
+    private void generateRFile(int successes) throws IOException {
+        writer = new FileWriter(new File(propertiesFilename+".R"));
+        
+        Set<String> propertyNames = GlobalParameters.getParameterNames();
+        for(String name:propertyNames) {
+            if(GlobalParameters.isSet(name)) {
+                writer.write(name + " ");
+            }
+        }
+        writer.write("SUCCESS\n");
+    }
+    
+    private void closeRFile() throws IOException {
+        writer.flush();
+        writer.close();
     }
 
     @SuppressWarnings("unchecked")
