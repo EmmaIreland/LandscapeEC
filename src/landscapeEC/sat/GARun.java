@@ -1,13 +1,11 @@
 package landscapeEC.sat;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,8 +16,8 @@ import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
-import landscapeEC.observers.vis.*;
 import landscapeEC.parameters.BooleanParameter;
+import landscapeEC.parameters.DoubleArrayParameter;
 import landscapeEC.parameters.DoubleParameter;
 import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntArrayParameter;
@@ -48,6 +46,8 @@ public class GARun {
     private String propertiesFilename;
     private FileWriter writer;
     private double bestOverallFitness;
+    
+    private double[] intervalFitnesses;
 
     public GARun(String propertiesFilename) {
         this.propertiesFilename = propertiesFilename;
@@ -58,6 +58,9 @@ public class GARun {
         selectionOperator = getSelectionOperator();
         crossoverOperator = getCrossoverOperator();
 
+        intervalFitnesses = new double[getReportingIntervals().length];
+        Arrays.fill(intervalFitnesses, Double.NaN);
+        
         SatParser satParser = new SatParser();
         satInstance = satParser.parseInstance(new FileReader(new File(StringParameter.PROBLEM_FILE.getValue())));
 
@@ -102,6 +105,14 @@ public class GARun {
             }
         }
         
+        for(int i = 0; i < intervalFitnesses.length; i++) {
+        	double fitness = intervalFitnesses[i];
+        	if (Double.isNaN(fitness)) {
+        		fitness = 1.0;
+        	}
+			writer.write(fitness+ " ");
+        }
+        
         writer.write(success+" " + completedEvaluations + " " + bestFitness + "\n");
     }
 
@@ -114,8 +125,15 @@ public class GARun {
                 writer.write(name + " ");
             }
         }
+        for(int i = 0; i < getReportingIntervals().length; i++) {
+        	writer.write("INTERVAL_"+getReportingIntervals()[i]+ " ");
+        }
         writer.write("SUCCESS COMPLETED_EVALS BEST_FITNESS\n");
     }
+
+	private double[] getReportingIntervals() {
+		return DoubleArrayParameter.REPORTING_INTERVALS.getValue();
+	}
     
     private void closeRFile() throws IOException {
         writer.flush();
@@ -178,6 +196,14 @@ public class GARun {
             // System.out.println("   Best individual: " + bestIndividual);
             bestOverallFitness = SatEvaluator.evaluate(satInstance, bestIndividual);
             // System.out.println("   Best fitness: " + bestFitness);
+            
+            double[] reportingIntervals = getReportingIntervals();
+            for (int j = 0; j < reportingIntervals.length; j++) {
+            	if(SatEvaluator.getNumEvaluations() > reportingIntervals[j]*IntParameter.NUM_EVALS_TO_DO.getValue() && Double.isNaN(intervalFitnesses[j])) {
+            		intervalFitnesses[j] = bestOverallFitness;
+            	}
+            }
+            
             if (bestOverallFitness == 1.0) {
                 System.out.println("Best Fitness: " + bestOverallFitness);
                 SatEvaluator.printUnsolvedClauses(satInstance, bestIndividual);

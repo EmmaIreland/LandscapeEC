@@ -3,7 +3,7 @@ package landscapeEC.parameters;
 
 public enum DoubleArrayParameter
 {
-    COEFFICIENTS;
+    REPORTING_INTERVALS;
 
     private static final String SEPARATOR = ",";
     
