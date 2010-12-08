@@ -33,4 +33,4 @@ to get the "elite" of a location that has geography.
 two individuals in a cell will not instantly fill the cell to carrying capacity with their children.
 
 - We need to fix the clock to stop counting the number of generations and instead measure the time spent working on a 
-problem in another way. Perhaps by counting fitness evaluations, using a parameter set in the properties file.
+problem in another way. Perhaps by counting fitness evaluations, using a parameter set in the properties file. 
