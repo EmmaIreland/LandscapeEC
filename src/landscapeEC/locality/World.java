@@ -1,5 +1,6 @@
 package landscapeEC.locality;
 
+import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;

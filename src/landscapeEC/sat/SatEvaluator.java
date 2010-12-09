@@ -53,4 +53,20 @@ public class SatEvaluator {
         }
         System.out.print("\n");
     }
+
+    public static String getSolvedClausesBitstring(SatInstance satInstance, Individual individual) {
+        ClauseList clauseList = satInstance.getClauseList();
+        if (clauseList.getNumClauses() == 0) {
+            return "";
+        }
+        
+        String bitString = "";
+
+        for (Clause clause : clauseList) {
+            if(clause.satisfiedBy(individual)) bitString += "1";
+            else bitString += "0";
+        }
+        
+        return bitString;
+    }
 }
