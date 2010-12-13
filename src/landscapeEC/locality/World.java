@@ -1,7 +1,6 @@
 package landscapeEC.locality;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -23,6 +22,7 @@ import landscapeEC.sat.SatInstance;
 
 
 public class World implements Iterable<Vector>, Serializable {
+    private static final long serialVersionUID = 8032708223600669849L;
     private boolean toroidal = false;
     private Map<Vector,Location> worldMap;
     private Vector dimensions;
@@ -100,19 +100,6 @@ public class World implements Iterable<Vector>, Serializable {
         for (Vector p : this) {
             getLocation(p).setIndividuals(new ArrayList<Individual>());
         }
-    }
-    
-    public void serialize(String fileName) throws IOException {
-        FileOutputStream fileStream = new FileOutputStream(fileName + ".world.sav");
-        ObjectOutputStream outputStream = new ObjectOutputStream(fileStream);
-        outputStream.writeObject(this);
-    }
-    
-    public static World deserialize(String file) throws IOException, ClassNotFoundException {
-        FileInputStream fileStream = new FileInputStream(file);
-        ObjectInputStream objectStream = new ObjectInputStream(fileStream);
-        World result = (World) objectStream.readObject();
-        return result;
     }
 
     public Individual findBestIndividual(IndividualComparator comparator) {

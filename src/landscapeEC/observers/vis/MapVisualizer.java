@@ -23,6 +23,7 @@ import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.DoubleParameter;
+import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntArrayParameter;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.parameters.StringParameter;
@@ -31,6 +32,7 @@ import landscapeEC.sat.Individual;
 import landscapeEC.sat.IndividualComparator;
 import landscapeEC.sat.SatEvaluator;
 import landscapeEC.sat.SatInstance;
+import landscapeEC.sat.SnapShot;
 
 
 public class MapVisualizer extends JFrame implements Observer {    
@@ -155,20 +157,21 @@ public class MapVisualizer extends JFrame implements Observer {
     }
     
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        if (args.length < 8) {
-            System.out.println("Usage: outputImage world.sav satInstance.sav xScale yScale intensityScale visualizerType");
+        if (args.length < 6) {
+            System.out.println("Usage: outputImage snapshot.sav xScale yScale intensityScale visualizerType");
             return;
         }
         
-        String outputFile = args[1];
-        World world = World.deserialize(args[2]);
-        SatInstance satInstance = SatInstance.deserialize(args[3]);
-        int xScale = Integer.parseInt(args[4]);
-        int yScale = Integer.parseInt(args[5]);
-        int intensityScale = Integer.parseInt(args[6]);
-        VisualizerType visType = VisualizerType.valueOf(args[7]);
+        String outputFile = args[0];
+        SnapShot snapShot = SnapShot.loadSnapShot(args[1]);
+        int xScale = Integer.parseInt(args[2]);
+        int yScale = Integer.parseInt(args[3]);
+        int intensityScale = Integer.parseInt(args[4]);
+        VisualizerType visType = VisualizerType.valueOf(args[5]);
 
-        saveImageToFile(drawMapImage(world, satInstance, xScale, yScale, intensityScale, visType), outputFile);
+        GlobalParameters.setParameters(snapShot.getParams());
+        
+        saveImageToFile(drawMapImage(snapShot.getWorld(), snapShot.getSatInstance(), xScale, yScale, intensityScale, visType), outputFile);
     }
     
     @Override

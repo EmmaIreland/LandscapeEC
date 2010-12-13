@@ -61,7 +61,6 @@ public class GARun {
         
         SatParser satParser = new SatParser();
         satInstance = satParser.parseInstance(new FileReader(new File(StringParameter.PROBLEM_FILE.getValue())));
-        satInstance.serialize(propertiesFilename);
 
         comparator = new IndividualComparator(satInstance);
 
@@ -202,7 +201,7 @@ public class GARun {
             for (int j = 0; j < reportingIntervals.length; j++) {
             	if(SatEvaluator.getNumEvaluations() > reportingIntervals[j]*IntParameter.NUM_EVALS_TO_DO.getValue() && Double.isNaN(intervalFitnesses[j])) {
             		intervalFitnesses[j] = bestOverallFitness;
-            		world.serialize(propertiesFilename + ".run" + currentRun + ".part" + j);
+            		SnapShot.saveSnapShot(propertiesFilename + ".run" + currentRun + ".part" + j, world, satInstance);
             	}
             }
             

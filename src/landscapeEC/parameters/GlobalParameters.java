@@ -77,6 +77,10 @@ public class GlobalParameters {
             _parameters.put(ByteArrayParameter.SEED.toString(), seed);
         }
     }
+    
+    public static Parameters getParameters() {
+        return (Parameters) _parameters.clone();
+    }
 
     /**
      * Set the global parameters to the given Parameters object.
