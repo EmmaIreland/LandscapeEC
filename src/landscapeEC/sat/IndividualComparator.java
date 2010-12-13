@@ -1,8 +1,9 @@
 package landscapeEC.sat;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-public class IndividualComparator implements Comparator<Individual> {
+public class IndividualComparator implements Comparator<Individual>, Serializable{
     private SatInstance satInstance;
     
     public IndividualComparator(SatInstance satInstance) {

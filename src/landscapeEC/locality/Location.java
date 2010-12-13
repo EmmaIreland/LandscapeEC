@@ -1,5 +1,6 @@
 package landscapeEC.locality;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,7 +9,7 @@ import landscapeEC.sat.Individual;
 import landscapeEC.sat.IndividualComparator;
 
 
-public class Location {
+public class Location implements Serializable {
     private final Vector position;
     private List<Individual> individuals;
     private List<Individual> pendingIndividuals;

@@ -1,9 +1,10 @@
 package landscapeEC.locality;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Vector {
+public class Vector implements Serializable {
     public List<Integer> coordinates;
 
     public Vector() {

@@ -1,6 +1,8 @@
 package landscapeEC.sat;
 
-public class Literal {
+import java.io.Serializable;
+
+public class Literal implements Serializable {
     public int variable;
     public boolean negated;
 

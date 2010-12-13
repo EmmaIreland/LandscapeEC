@@ -13,19 +13,15 @@ the visualizer, we would probably choose the most common, or perhaps the best, b
 It would probably also take some tweaking to figure out the best way to compute a hue from the bitstring, but just converting it 
 to an integer and modding it to 256 might work.
 
+- Investigate other GA problems, preferably not combinatorial optimization
+
+- Consider having cells gradually get harder over time, this could be implemented as Uniform Geography slowly "blending" into Fractal Geography
+
+----- COMPLETED -----
 - Output information about: unsolved clauses, number of evaluations, possibly successes at fixed points (10M evals, 15M evals, etc.)
 
 - Find more medium-difficulty problems (harder than the 50, easier than the 250)
 
-- Investigate other GA problems, preferably not combinatorial optimization
-
-- Lit review of 3-SAT - how do people show results?
-
-- Consider having cells gradually get harder over time, this could be implemented as Uniform Geography slowly "blending" into Fractal Geography
-
-- Look at impoving speed in certain areas
-
------ COMPLETED -----
 - Change ManhattanDistanceGeography to be a smooth gradient to the center of the world
 
 - It would be nice to be able to specify a way of building the geography (fractal, gradiant, etc.)

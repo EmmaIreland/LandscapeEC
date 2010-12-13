@@ -1,9 +1,10 @@
 package landscapeEC.sat;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Clause {
+public class Clause implements Serializable{
     private List<Literal> literals = new ArrayList<Literal>();
     private int cachedHash = Integer.MIN_VALUE;
 

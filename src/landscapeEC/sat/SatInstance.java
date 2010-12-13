@@ -1,6 +1,15 @@
 package landscapeEC.sat;
 
-public class SatInstance {
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+import landscapeEC.locality.World;
+
+public class SatInstance implements Serializable{
     private int numVariables;
     private ClauseList cnf = new ClauseList();
 
@@ -35,6 +44,19 @@ public class SatInstance {
     
     public void addClause(Clause newClause){
         cnf.addClause(newClause);
+    }
+    
+    public void serialize(String fileName) throws IOException {
+        FileOutputStream fileStream = new FileOutputStream(fileName + ".satins.sav");
+        ObjectOutputStream outputStream = new ObjectOutputStream(fileStream);
+        outputStream.writeObject(this);
+    }
+    
+    public static SatInstance deserialize(String file) throws IOException, ClassNotFoundException {
+        FileInputStream fileStream = new FileInputStream(file);
+        ObjectInputStream objectStream = new ObjectInputStream(fileStream);
+        SatInstance result = (SatInstance) objectStream.readObject();
+        return result;
     }
     
     @Override

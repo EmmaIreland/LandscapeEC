@@ -1,22 +1,28 @@
 package landscapeEC.locality;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import landscapeEC.locality.geography.Geography;
-import landscapeEC.parameters.IntArrayParameter;
 import landscapeEC.parameters.StringParameter;
+import landscapeEC.sat.EmptyWorldException;
 import landscapeEC.sat.Individual;
 import landscapeEC.sat.IndividualComparator;
 import landscapeEC.sat.SatInstance;
 
 
-
-public class World implements Iterable<Vector> {
+public class World implements Iterable<Vector>, Serializable {
     private boolean toroidal = false;
     private Map<Vector,Location> worldMap;
     private Vector dimensions;
@@ -94,5 +100,31 @@ public class World implements Iterable<Vector> {
         for (Vector p : this) {
             getLocation(p).setIndividuals(new ArrayList<Individual>());
         }
+    }
+    
+    public void serialize(String fileName) throws IOException {
+        FileOutputStream fileStream = new FileOutputStream(fileName + ".world.sav");
+        ObjectOutputStream outputStream = new ObjectOutputStream(fileStream);
+        outputStream.writeObject(this);
+    }
+    
+    public static World deserialize(String file) throws IOException, ClassNotFoundException {
+        FileInputStream fileStream = new FileInputStream(file);
+        ObjectInputStream objectStream = new ObjectInputStream(fileStream);
+        World result = (World) objectStream.readObject();
+        return result;
+    }
+
+    public Individual findBestIndividual(IndividualComparator comparator) {
+        List<Individual> bestFromCells = new ArrayList<Individual>();
+        for (Vector p : this) {
+            if (getLocation(p).getNumIndividuals() > 0) {
+                bestFromCells.add(Collections.max(getIndividualsAt(p), comparator));
+            }
+        }
+        if (bestFromCells.isEmpty()) {
+            throw new EmptyWorldException();
+        }
+        return Collections.max(bestFromCells, comparator);
     }
 }

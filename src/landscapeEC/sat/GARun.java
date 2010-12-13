@@ -8,7 +8,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -58,11 +57,11 @@ public class GARun {
         selectionOperator = getSelectionOperator();
         crossoverOperator = getCrossoverOperator();
 
-        intervalFitnesses = new double[getReportingIntervals().length];
-        Arrays.fill(intervalFitnesses, Double.NaN);
+        intervalFitnesses = new double[getReportingIntervals().length];   
         
         SatParser satParser = new SatParser();
         satInstance = satParser.parseInstance(new FileReader(new File(StringParameter.PROBLEM_FILE.getValue())));
+        satInstance.serialize(propertiesFilename);
 
         comparator = new IndividualComparator(satInstance);
 
@@ -78,8 +77,10 @@ public class GARun {
         for (int i = 0; i < numRuns; i++) {
             System.out.println("\nRUN " + (i + 1) + "\n");
 
+            Arrays.fill(intervalFitnesses, Double.NaN);
+            
             try {
-                if (runGenerations()) {
+                if (runGenerations(i)) {
                     addRunToRFile(true, SatEvaluator.getNumEvaluations(), 1.0);
                     successes++;
                 } else {
@@ -155,7 +156,7 @@ public class GARun {
         }
     }
 
-    private boolean runGenerations() throws Exception {
+    private boolean runGenerations(int currentRun) throws Exception {
         List<Individual> population = popManager.generatePopulation(satInstance);
 
         world = new World(new Vector(IntArrayParameter.WORLD_DIMENSIONS.getValue()), BooleanParameter.TOROIDAL.getValue(), satInstance);
@@ -191,7 +192,7 @@ public class GARun {
                 o.generationData(i, world, satInstance, successes);
             }
 
-            bestIndividual = findBestIndividual();
+            bestIndividual = world.findBestIndividual(comparator);
             // System.out.println("Generation " + (i + 1));
             // System.out.println("   Best individual: " + bestIndividual);
             bestOverallFitness = SatEvaluator.evaluate(satInstance, bestIndividual);
@@ -201,6 +202,7 @@ public class GARun {
             for (int j = 0; j < reportingIntervals.length; j++) {
             	if(SatEvaluator.getNumEvaluations() > reportingIntervals[j]*IntParameter.NUM_EVALS_TO_DO.getValue() && Double.isNaN(intervalFitnesses[j])) {
             		intervalFitnesses[j] = bestOverallFitness;
+            		world.serialize(propertiesFilename + ".run" + currentRun + ".part" + j);
             	}
             }
             
@@ -226,19 +228,6 @@ public class GARun {
             Location l = world.getLocation(v);
             l.setIndividuals(popManager.generatePopulation(satInstance));
         }
-    }
-
-    private Individual findBestIndividual() {
-        List<Individual> bestFromCells = new ArrayList<Individual>();
-        for (Vector p : world) {
-            if (world.getLocation(p).getNumIndividuals() > 0) {
-                bestFromCells.add(Collections.max(world.getIndividualsAt(p), comparator));
-            }
-        }
-        if (bestFromCells.isEmpty()) {
-            throw new EmptyWorldException();
-        }
-        return Collections.max(bestFromCells, comparator);
     }
 
     private void processAllLocations() {

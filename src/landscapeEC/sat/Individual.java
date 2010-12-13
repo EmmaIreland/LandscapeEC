@@ -1,6 +1,8 @@
 package landscapeEC.sat;
 
-public class Individual {
+import java.io.Serializable;
+
+public class Individual implements Serializable {
     private int[] bits;
     private double globalFitness;
 

@@ -4,9 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import javax.swing.JFrame;
 
@@ -55,7 +52,7 @@ public class DataDisplay extends JFrame implements Observer {
 
         Font font = new Font("Trebuchet MS", Font.BOLD, 12);
         
-        Individual bestIndividual = findBestIndividual(world, comparator);
+        Individual bestIndividual = world.findBestIndividual(comparator);
         
         GraphicsUtil.drawString(g, "RUN " + (SatEvaluator.getNumResets()+1), 5, 20, font, Color.RED);
         GraphicsUtil.drawString(g, successes + "/" + SatEvaluator.getNumResets() + " runs successful", 5, 35, font, Color.WHITE);
@@ -85,19 +82,6 @@ public class DataDisplay extends JFrame implements Observer {
             if(world.getLocation(p).getNumIndividuals() > 0) count++;
         }
         return count;
-    }
-
-    private Individual findBestIndividual(World world, IndividualComparator comparator) {
-        List<Individual> bestFromCells = new ArrayList<Individual>();
-        for (Vector p : world) {
-            if (world.getLocation(p).getNumIndividuals() > 0) {
-                bestFromCells.add(Collections.max(world.getIndividualsAt(p), comparator));
-            }
-        }
-        if (bestFromCells.isEmpty()) {
-            throw new EmptyWorldException();
-        }
-        return Collections.max(bestFromCells, comparator);
     }
 
     @Override
