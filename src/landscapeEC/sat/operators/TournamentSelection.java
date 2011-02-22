@@ -15,13 +15,15 @@ import landscapeEC.util.SharedPRNG;
 
 public class TournamentSelection implements SelectionOperator {
 
+    private static final int NUMBER_OF_PARENTS = 2;
+
     @Override
     public List<Individual> selectParents(List<Individual> population, IndividualComparator comparator) {
         List<Individual> parents = new ArrayList<Individual>();
         
         int tournamentSize = IntParameter.TOURNAMENT_SIZE.getValue();
         
-        for(int i=0; i<2; i++) {
+        for(int i=0; i<NUMBER_OF_PARENTS; i++) {
             Set<Individual> set = new LinkedHashSet<Individual>();
             while(set.size() < tournamentSize) {
                 Individual individual = population.get(SharedPRNG.instance().nextInt(population.size()));

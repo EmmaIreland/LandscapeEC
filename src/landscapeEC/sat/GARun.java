@@ -74,6 +74,8 @@ public class GARun {
 
         successes = 0;
         for (int i = 0; i < numRuns; i++) {
+            SharedPRNG.updateGenerator();
+            
             System.out.println("\nRUN " + (i + 1) + "\n");
 
             Arrays.fill(intervalFitnesses, Double.NaN);
@@ -323,6 +325,15 @@ public class GARun {
                 List<Individual> mutatedPopulation = popManager.mutatePopulation(crossoverPop, mutationOperator);
 
                 world.getLocation(position).addToPendingIndividuals(mutatedPopulation);
+            } else if (BooleanParameter.PROMOTE_SMALL_POPULATIONS.getValue()) {
+                List<Individual> copiedPopulation = new ArrayList<Individual>();
+                for (Individual individual : locationIndividuals) {
+                    copiedPopulation.add(individual);
+                }
+
+                List<Individual> mutatedPopulation = popManager.mutatePopulation(copiedPopulation, mutationOperator);
+
+                world.getLocation(position).addToPendingIndividuals(mutatedPopulation);                
             }
         }
     }
