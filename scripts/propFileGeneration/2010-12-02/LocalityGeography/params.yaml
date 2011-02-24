@@ -30,8 +30,8 @@ AVERAGE_MUTATIONS:
   - 2
   
 GEOGRAPHY_TYPE:
-  - locality.geography.FractalGeography
-  - locality.geography.ManhattanDistanceGeography
+  - landscapeEC.locality.geography.FractalGeography
+  - landscapeEC.locality.geography.ManhattanDistanceGeography
   
 STARTING_POPULATION:
   - EVERYWHERE

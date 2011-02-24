@@ -16,8 +16,8 @@ CARRYING_CAPACITY:
   - 10
   
 GEOGRAPHY_TYPE:
-  - locality.geography.FractalGeography
-  - locality.geography.ManhattanDistanceGeography
+  - landscapeEC.locality.geography.FractalGeography
+  - landscapeEC.locality.geography.ManhattanDistanceGeography
   
 GEOGRAPHY_NOISE_STRENGTH:
   - 0

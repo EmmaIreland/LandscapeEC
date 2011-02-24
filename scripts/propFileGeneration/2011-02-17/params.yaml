@@ -38,7 +38,7 @@ ELITE_PROPORTION:
   - 0.2
 
 GEOGRAPHY_TYPE:
-  - locality.geography.UniformGeography
+  - landscapeEC.locality.geography.UniformGeography
   
 STARTING_POPULATION:
   - ORIGIN
