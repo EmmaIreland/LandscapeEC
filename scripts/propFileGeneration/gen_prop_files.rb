@@ -15,7 +15,7 @@ def generate_file_name(property_list)
   property_list.each do |prop, val|
     prop = prop[0..0]+prop[1..-1].gsub(/[AEIOUaeiou]/,"")
 	val = val.to_s.gsub(/\//,"_")
-    result = result + "##{prop}:#{val}"
+    result = result + "_#{prop}:#{val}"
   end
   result = result + ".properties"
   return result.gsub(/ /, "")
