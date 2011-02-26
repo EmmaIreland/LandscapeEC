@@ -1,0 +1,5 @@
+#!/bin/bash
+
+dir="LnoG_$1"
+
+echo $dir
