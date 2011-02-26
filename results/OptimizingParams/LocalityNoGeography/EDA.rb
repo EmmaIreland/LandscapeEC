@@ -1,9 +1,11 @@
 #!/usr/bin/ruby
 
+r_file = ARGV[0]
+
 problem_files = ["exampleproblems/uf75-015.cnf", "exampleproblems/uf75-05.cnf", "exampleproblems/uf100-0193.cnf"]
 problem_file_position = 7
 
-lines = File.open("LnoG_2011_02_26_02_42_26.R").readlines
+lines = File.open(r_file).readlines
 lines = lines.map { |l| l.chomp }
 lines = lines.map { |l| l.split }
 
