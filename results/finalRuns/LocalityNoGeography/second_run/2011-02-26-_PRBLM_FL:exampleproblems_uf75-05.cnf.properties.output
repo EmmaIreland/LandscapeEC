@@ -1,0 +1,457 @@
+default.properties
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 6599AB0D
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 8A1AAAE3
+Updating the PRNG
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed ADD36BAD
+Updating the PRNG
+
+RUN 1
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:130 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed CD082366
+Updating the PRNG
+
+RUN 2
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:24 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 1D4072A3
+Updating the PRNG
+
+RUN 3
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:168 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed B9254DFA
+Updating the PRNG
+
+RUN 4
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:130 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed F23670D1
+Updating the PRNG
+
+RUN 5
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:127 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 005FB639
+Updating the PRNG
+
+RUN 6
+
+Best Fitness: 0.9938461538461538
+Unsolved Clauses:56 205 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 27842EA8
+Updating the PRNG
+
+RUN 7
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:24 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 79762154
+Updating the PRNG
+
+RUN 8
+
+Best Fitness: 0.9938461538461538
+Unsolved Clauses:64 186 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed D8E94CD9
+Updating the PRNG
+
+RUN 9
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:179 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 206C1A0D
+Updating the PRNG
+
+RUN 10
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:313 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 797FA641
+Updating the PRNG
+
+RUN 11
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:66 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed D9C43ACB
+Updating the PRNG
+
+RUN 12
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:266 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 8F7A4DC0
+Updating the PRNG
+
+RUN 13
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:37 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 4B4DC224
+Updating the PRNG
+
+RUN 14
+
+Best Fitness: 1.0
+Unsolved Clauses:
+SUCCESS
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed E376FD7F
+Updating the PRNG
+
+RUN 15
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:203 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 29274030
+Updating the PRNG
+
+RUN 16
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:25 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed E891FE39
+Updating the PRNG
+
+RUN 17
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:203 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 758C8D7E
+Updating the PRNG
+
+RUN 18
+
+Best Fitness: 0.9938461538461538
+Unsolved Clauses:56 188 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 6091E239
+Updating the PRNG
+
+RUN 19
+
+Best Fitness: 1.0
+Unsolved Clauses:
+SUCCESS
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 97BA1AF6
+Updating the PRNG
+
+RUN 20
+
+Best Fitness: 1.0
+Unsolved Clauses:
+SUCCESS
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 3C3BA13E
+Updating the PRNG
+
+RUN 21
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:66 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 94207E94
+Updating the PRNG
+
+RUN 22
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:313 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 51D16D89
+Updating the PRNG
+
+RUN 23
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:203 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 9284A518
+Updating the PRNG
+
+RUN 24
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:9 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed C8C53ECC
+Updating the PRNG
+
+RUN 25
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:257 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 34BE0532
+Updating the PRNG
+
+RUN 26
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:266 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 868093FD
+Updating the PRNG
+
+RUN 27
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:16 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 6247F597
+Updating the PRNG
+
+RUN 28
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:46 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed FE699B72
+Updating the PRNG
+
+RUN 29
+
+Best Fitness: 1.0
+Unsolved Clauses:
+SUCCESS
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 2AF45B35
+Updating the PRNG
+
+RUN 30
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:127 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed B3C6CD0C
+Updating the PRNG
+
+RUN 31
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:128 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 52AC8F5C
+Updating the PRNG
+
+RUN 32
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:66 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed A906E481
+Updating the PRNG
+
+RUN 33
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:66 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 2CE5C278
+Updating the PRNG
+
+RUN 34
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:130 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 18C4C26A
+Updating the PRNG
+
+RUN 35
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:266 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 49342D53
+Updating the PRNG
+
+RUN 36
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:179 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed E831B8CE
+Updating the PRNG
+
+RUN 37
+
+Best Fitness: 1.0
+Unsolved Clauses:
+SUCCESS
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 7F03CA4C
+Updating the PRNG
+
+RUN 38
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:257 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed BFFA53B9
+Updating the PRNG
+
+RUN 39
+
+Best Fitness: 1.0
+Unsolved Clauses:
+SUCCESS
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed EAB1C6E7
+Updating the PRNG
+
+RUN 40
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:203 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 60D39C75
+Updating the PRNG
+
+RUN 41
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:301 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed E47AA9E4
+Updating the PRNG
+
+RUN 42
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:130 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed A8A8DEBB
+Updating the PRNG
+
+RUN 43
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:136 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 146D540E
+Updating the PRNG
+
+RUN 44
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:66 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 48F201CB
+Updating the PRNG
+
+RUN 45
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:266 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 644FD81B
+Updating the PRNG
+
+RUN 46
+
+Best Fitness: 0.9938461538461538
+Unsolved Clauses:244 272 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 80AE4D53
+Updating the PRNG
+
+RUN 47
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:179 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 626AFEFE
+Updating the PRNG
+
+RUN 48
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:32 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 4B4A8A5D
+Updating the PRNG
+
+RUN 49
+
+Best Fitness: 0.9969230769230769
+Unsolved Clauses:257 
+FAILURE
+4 bytes of seed data acquired from /dev/random
+Cellular Automaton RNG created with seed 534E64AC
+Updating the PRNG
+
+RUN 50
+
+Best Fitness: 1.0
+Unsolved Clauses:
+SUCCESS
+7/50 runs successful

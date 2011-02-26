@@ -1,0 +1,12 @@
+---
+File_prefix: 2011-02-26-
+Base_properties_file: default.properties
+
+PROBLEM_FILE:
+  - exampleproblems/uf75-015.cnf
+  - exampleproblems/uf75-05.cnf
+  - exampleproblems/uf75-090.cnf
+  - exampleproblems/uf100-0193.cnf
+  - exampleproblems/uf50-0456.cnf
+  
+
