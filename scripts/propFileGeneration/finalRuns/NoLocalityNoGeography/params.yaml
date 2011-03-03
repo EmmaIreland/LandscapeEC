@@ -1,45 +1,12 @@
 ---
-File_prefix: 2011-02-17-
+File_prefix: 2011-02-26-
 Base_properties_file: default.properties
 
 PROBLEM_FILE:
   - exampleproblems/uf75-015.cnf
   - exampleproblems/uf75-05.cnf
-  - exampleproblems/uf75-90.cnf
+  - exampleproblems/uf75-090.cnf
   - exampleproblems/uf100-0193.cnf
+  - exampleproblems/uf50-0456.cnf
   
-PROMOTE_SMALL_POPULATIONS: 
-  - TRUE
-  - FALSE
 
-TOROIDAL:
-  - TRUE
-  - FALSE
-
-WORLD_DIMENSIONS:
-  - 40, 40
-  - 30, 30
-  - 20, 20
-  
-CARRYING_CAPACITY:
-  - 30
-  - 20
-  - 10
-  - 5
-
-REPRODUCTION_RATE:
-  - 1.0
-  - 3.0
-  - 5.0
-  - 10.0
-  
-ELITE_PROPORTION:
-  - 0.1
-  - 0.2
-
-GEOGRAPHY_TYPE:
-  - landscapeEC.locality.geography.UniformGeography
-  
-STARTING_POPULATION:
-  - ORIGIN
-  - CORNERS
