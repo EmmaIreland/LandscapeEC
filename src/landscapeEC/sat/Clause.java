@@ -7,6 +7,11 @@ import java.util.List;
 public class Clause implements Serializable{
     private List<Literal> literals = new ArrayList<Literal>();
     private int cachedHash = Integer.MIN_VALUE;
+    private int id = Integer.MIN_VALUE;;
+
+    public Clause(int id) {
+        this.id = id;
+    }
 
     public void addLiteral(Literal literal) {
         literals.add(literal);
@@ -65,6 +70,10 @@ public class Clause implements Serializable{
 
     private boolean satisfiesLiteral(Individual individual, Literal literal) {
         return individual.valueIsFalse(literal) == literal.negated;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
 }

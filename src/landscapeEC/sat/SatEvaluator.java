@@ -42,12 +42,12 @@ public class SatEvaluator {
             return;
         }
 
-        System.out.print("Unsolved Clauses:");
+        System.out.print("Unsolved Clause IDs:");
 
         int i = 0;
         for (Clause clause : clauseList) {
             if (!clause.satisfiedBy(individual)) {
-                System.out.print(i + " ");
+                System.out.print(clause.getId() + " ");
             }
             i++;
         }

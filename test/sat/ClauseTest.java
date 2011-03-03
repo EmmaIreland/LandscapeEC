@@ -12,7 +12,7 @@ public class ClauseTest {
 
     @Test
     public void compareClausesTest(){
-        Clause testClause = new Clause();
+        Clause testClause = new Clause(1);
         testClause.addLiteral(new Literal(3, false));
         testClause.addLiteral(new Literal(6, false));
         testClause.addLiteral(new Literal(13, true));
@@ -27,7 +27,7 @@ public class ClauseTest {
         Clause comparisonClause[] = new Clause[numClauses];
             
         for(int clause=0; clause<numClauses; clause++) {
-            comparisonClause[clause] = new Clause();
+            comparisonClause[clause] = new Clause(clause);
             for(int literal=0; literal<numLiterals; literal++) {
                 comparisonClause[clause].addLiteral(new Literal(variable[clause][literal], negation[clause][literal]));
             }

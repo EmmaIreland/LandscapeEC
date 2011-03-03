@@ -46,18 +46,17 @@ public class Parse3SatSteps extends Steps {
 
     @Then("the instance contains these clauses: $clauses")
     public void confirmCNFInstance(String clauses) {
-        Clause newClause = new Clause();
         Set<Clause> clauseSet = new HashSet<Clause>();
         
         String[] clausesArray = clauses.split("\n");
         for(int i =0; i<clausesArray.length; i++){
+            Clause newClause = new Clause(i);
             String[] clause = clausesArray[i].split(" ");
             for(int j=0;j<clause.length;j++){
                 int variable = Integer.parseInt(clause[j].trim());
                 newClause.addLiteral(new Literal(Math.abs(variable)-1, Math.signum(variable)==-1));
             }
             clauseSet.add(newClause);
-            newClause = new Clause();
         }
 
         ClauseList clauseList = satInstance.getClauseList();

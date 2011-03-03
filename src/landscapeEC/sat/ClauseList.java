@@ -10,7 +10,8 @@ import java.util.Set;
 
 public class ClauseList implements Iterable<Clause>, Serializable {
     private Set<Clause> clauses = new HashSet<Clause>();
-
+    private List<Clause> shuffledClauses = new ArrayList<Clause>();
+    
     public void addClause(Clause clause) {
         clauses.add(clause);
     }
@@ -29,9 +30,6 @@ public class ClauseList implements Iterable<Clause>, Serializable {
     }
 
     public ClauseList getSubClauseList(double percentage) {
-        List<Clause> shuffledClauses = new ArrayList<Clause>(clauses);
-        Collections.shuffle(shuffledClauses);
-        
         int numClauses = (int) Math.ceil(shuffledClauses.size() * percentage);
 
         ClauseList subList = new ClauseList();
@@ -51,7 +49,12 @@ public class ClauseList implements Iterable<Clause>, Serializable {
         return clauses.toString();
     }
 
-	public Set<Clause> getClauses() {
-		return Collections.unmodifiableSet(clauses);
-	}
+    public Set<Clause> getClauses() {
+        return Collections.unmodifiableSet(clauses);
+    }
+
+    public void shuffleClauses() {
+        shuffledClauses = new ArrayList<Clause>(clauses);
+        Collections.shuffle(shuffledClauses);
+    }
 }

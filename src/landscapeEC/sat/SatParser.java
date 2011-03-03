@@ -32,9 +32,9 @@ public class SatParser {
     }
 
     private void parseClauses(SatInstance newSatInstance, String clauses) {
-        Clause newClause = new Clause();
         String[] clausesArray = clauses.trim().split("\n");
         for(int i =0; i<clausesArray.length; i++){
+            Clause newClause = new Clause(i);
             String[] clause = clausesArray[i].split(" ");
             for(int j=0;j<clause.length;j++){
                 if(!clause[j].equals("0")) {
@@ -43,8 +43,10 @@ public class SatParser {
                 }
             }
             newSatInstance.addClause(newClause);
-            newClause = new Clause();
         }
+        
+        //Shuffle Clauses to prevent similar geographies from forming
+        newSatInstance.getClauseList().shuffleClauses();
     }
 
     private boolean ignoreLine(String line) {
