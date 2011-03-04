@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import landscapeEC.util.SharedPRNG;
+
 public class ClauseList implements Iterable<Clause>, Serializable {
     private Set<Clause> clauses = new HashSet<Clause>();
     private List<Clause> shuffledClauses = new ArrayList<Clause>();
@@ -55,6 +57,6 @@ public class ClauseList implements Iterable<Clause>, Serializable {
 
     public void shuffleClauses() {
         shuffledClauses = new ArrayList<Clause>(clauses);
-        Collections.shuffle(shuffledClauses);
+        Collections.shuffle(shuffledClauses, SharedPRNG.instance());
     }
 }

@@ -77,8 +77,6 @@ public class GARun {
 
       successes = 0;
       for(int i = 0; i < numRuns; i++) {
-         SharedPRNG.updateGenerator();
-
          System.out.println("\nRUN " + (i + 1) + "\n");
 
          Arrays.fill(intervalFitnesses, Double.NaN);
@@ -95,6 +93,7 @@ public class GARun {
          }
 
          SatEvaluator.resetEvaluationsCounter();
+         SharedPRNG.updateGenerator(); //Generate a new seed for each run
       }
 
       System.out.println(successes + "/" + numRuns + " runs successful");
