@@ -1,23 +1,21 @@
 package landscapeEC.locality;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import landscapeEC.locality.geography.Geography;
 import landscapeEC.parameters.StringParameter;
 import landscapeEC.sat.EmptyWorldException;
 import landscapeEC.sat.Individual;
 import landscapeEC.sat.IndividualComparator;
+import landscapeEC.sat.Literal;
 import landscapeEC.sat.SatInstance;
 
 
@@ -114,4 +112,19 @@ public class World implements Iterable<Vector>, Serializable {
         }
         return Collections.max(bestFromCells, comparator);
     }
+
+   public double calculateDiversity() {
+      int individualCount = 0;
+      Set<Integer> uniqueBitstrings = new HashSet<Integer>();
+      for(Vector p:this) {
+         for(Individual i:getLocation(p).getIndividuals()) {
+            StringBuilder bitString = new StringBuilder();
+            for(int bit:i.getBits()) bitString.append(bit);
+            uniqueBitstrings.add(bitString.toString().hashCode());
+            individualCount++;
+         }
+      }
+      System.out.println((double)uniqueBitstrings.size()/(double)individualCount);
+      return (double)uniqueBitstrings.size()/(double)individualCount;
+   }
 }
