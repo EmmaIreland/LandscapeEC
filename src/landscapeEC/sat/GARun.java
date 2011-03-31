@@ -223,7 +223,7 @@ public class GARun {
             }
          }
 
-         if(bestOverallFitness == 1.0) {
+         if(BooleanParameter.QUIT_ON_SUCCESS.getValue() && bestOverallFitness == 1.0) {
             System.out.println("Best Fitness: " + bestOverallFitness);
             SatEvaluator.printUnsolvedClauses(satInstance, bestIndividual);
             System.out.println("SUCCESS");
@@ -233,10 +233,16 @@ public class GARun {
          i++;
       }
 
+      if (bestOverallFitness == 1.0) {
+          System.out.println("Best Fitness: " + bestOverallFitness);
+          SatEvaluator.printUnsolvedClauses(satInstance, bestIndividual);
+          System.out.println("SUCCESS");
+          return true;            
+      }
+      
       System.out.println("Best Fitness: " + bestOverallFitness);
       SatEvaluator.printUnsolvedClauses(satInstance, bestIndividual);
       System.out.println("FAILURE");
-
       return false;
    }
 
