@@ -99,10 +99,18 @@ public class SharedPRNG
      * @return the array of bytes
      */
     public static byte[] parseBytes(String seedString) {
-        String[] parts = seedString.split(",");
-        byte[] result = new byte[parts.length];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = Byte.parseByte(parts[i]);
+        byte[] result;
+        if (seedString.indexOf(',') != -1) {
+            String[] parts = seedString.split(",");
+            result = new byte[parts.length];
+            for (int i = 0; i < result.length; i++) {
+                result[i] = Byte.parseByte(parts[i]);
+            }
+        } else {
+            result = new byte[seedString.length() / 2];
+            for (int i=0; i < result.length; ++i) {
+                result[i] = Byte.parseByte(seedString.substring(2*i, 2*(i+1)), 16);
+            }
         }
         return result;
     }
