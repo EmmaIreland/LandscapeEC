@@ -158,7 +158,7 @@ public class MapVisualizer extends JFrame implements Observer {
                     System.out.println("They were different! " + (bestFitness * len) + " vs. " + (onesPercent(clauseString)*len));
                     System.out.println(satInstance.getClauseList());
                     //System.exit(1);
-                    // throw new RuntimeException("Bad stuff happened!");
+                    throw new RuntimeException("Bad stuff happened!");
                 }
                 foreground = Color.getHSBColor((Math.abs(clausesNumber)%255)/(float)255.0, (float) Math.pow(bestFitness, 30), (float)  Math.pow(bestFitness, 30));
             break;

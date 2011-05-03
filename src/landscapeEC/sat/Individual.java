@@ -28,7 +28,7 @@ public class Individual implements Serializable {
     public void setGlobalFitness(SatInstance globalInstance) {
         double oldFitness = globalFitness;
         globalFitness = SatEvaluator.evaluate(globalInstance, this);
-        if (oldFitness >= 0) {
+        if (oldFitness >= 0 && Math.abs(oldFitness - globalFitness) > 1e-5) {
             System.out.println("We're re-computing global fitness!");
             System.out.println("Old fitness = " + oldFitness + " and new fitness = " + globalFitness);
             System.out.println("Instance = " + globalInstance);
@@ -41,12 +41,12 @@ public class Individual implements Serializable {
     
     public double getGlobalFitness(SatInstance globalInstance) {
         //TODO FIND OUT WHY THIS WORKS WHEN IT SHOULD NOT BE DIFFERENT
-        double oldFitness = globalFitness;
-        globalFitness = SatEvaluator.evaluate(globalInstance, this);
-        if (oldFitness >= 0 && Math.abs(oldFitness - globalFitness) > 1e-5) {
-            System.out.println("Old fitness was " + oldFitness + " and new fitness is " + globalFitness);
-            System.out.println(globalFitness);
-        }
+//        double oldFitness = globalFitness;
+//        globalFitness = SatEvaluator.evaluate(globalInstance, this);
+//        if (oldFitness >= 0 && Math.abs(oldFitness - globalFitness) > 1e-5) {
+//            System.out.println("Old fitness was " + oldFitness + " and new fitness is " + globalFitness);
+//            System.out.println(globalFitness);
+//        }
         return globalFitness;
     }
 
