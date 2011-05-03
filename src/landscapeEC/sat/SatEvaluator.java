@@ -14,8 +14,9 @@ public class SatEvaluator {
         int clausesSolved = 0;
 
         for (Clause clause : clauseList) {
-            if (clause.satisfiedBy(individual))
+            if (clause.satisfiedBy(individual)) {
                 clausesSolved++;
+            }
         }
 
         numEvaluations++;
@@ -63,10 +64,14 @@ public class SatEvaluator {
         String bitString = "";
 
         for (Clause clause : clauseList) {
-            if(clause.satisfiedBy(individual)) bitString += "1";
-            else bitString += "0";
+            if (clause.satisfiedBy(individual)) {
+                bitString += "1";
+            } else  {
+                bitString += "0";
+            }
         }
         
         return bitString;
     }
+
 }

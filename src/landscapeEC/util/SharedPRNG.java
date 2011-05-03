@@ -107,10 +107,16 @@ public class SharedPRNG
                 result[i] = Byte.parseByte(parts[i]);
             }
         } else {
-            result = new byte[seedString.length() / 2];
-            for (int i=0; i < result.length; ++i) {
-                result[i] = Byte.parseByte(seedString.substring(2*i, 2*(i+1)), 16);
-            }
+            result = parseHexBytes(seedString);
+        }
+        return result;
+    }
+
+    public static byte[] parseHexBytes(String seedString) {
+        byte[] result = new byte[seedString.length() / 2];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = (byte) ((Character.digit(seedString.charAt(2*i), 16) << 4)
+                               + Character.digit(seedString.charAt((2*i)+1), 16));
         }
         return result;
     }

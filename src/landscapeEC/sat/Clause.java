@@ -7,7 +7,7 @@ import java.util.List;
 public class Clause implements Serializable{
     private List<Literal> literals = new ArrayList<Literal>();
     private int cachedHash = Integer.MIN_VALUE;
-    private int id = Integer.MIN_VALUE;;
+    private int id = Integer.MIN_VALUE;
 
     public Clause(int id) {
         this.id = id;

@@ -6,6 +6,16 @@ import java.io.Reader;
 
 public class SatParser {
 
+    private boolean shuffle = true;
+    
+    public SatParser() {
+        //
+    }
+    
+    public SatParser(boolean shuffleClauses) {
+        shuffle = shuffleClauses;
+    }
+
     public SatInstance parseInstance(Reader reader) throws IOException {
         SatInstance newSatInstance = new SatInstance();
         
@@ -46,7 +56,9 @@ public class SatParser {
         }
         
         //Shuffle Clauses to prevent similar geographies from forming
-        newSatInstance.getClauseList().shuffleClauses();
+        if (shuffle) {
+            newSatInstance.getClauseList().shuffleClauses();
+        }
     }
 
     private boolean ignoreLine(String line) {

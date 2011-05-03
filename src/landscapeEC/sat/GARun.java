@@ -217,7 +217,7 @@ public class GARun {
                   * IntParameter.NUM_EVALS_TO_DO.getValue()
                   && Double.isNaN(intervalFitnesses[j])) {
                intervalFitnesses[j] = bestOverallFitness;
-               intervalDiversities[j] = world.calculateDiversity();
+               intervalDiversities[j] = DiversityCalculator.calculateDiversity();
                SnapShot.saveSnapShot(propertiesFilename + ".run" + currentRun + ".part" + j, world,
                      satInstance);
             }
@@ -268,12 +268,14 @@ public class GARun {
    }
 
    private void updateFitnesses() {
+      DiversityCalculator.reset();
+       
       for(Vector position : world) {
          List<Individual> locationIndividuals = world.getIndividualsAt(position);
 
          for(Individual individual : locationIndividuals) {
-            double fitness = SatEvaluator.evaluate(comparator.getInstance(), individual);
-            individual.setGlobalFitness(fitness);
+            DiversityCalculator.addIndividual(individual);
+            individual.setGlobalFitness(satInstance); //TODO maybe wrong fitness is being assigned to an individual here
          }
       }
    }

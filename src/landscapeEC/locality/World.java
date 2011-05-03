@@ -112,19 +112,4 @@ public class World implements Iterable<Vector>, Serializable {
         }
         return Collections.max(bestFromCells, comparator);
     }
-
-   public double calculateDiversity() {
-      int individualCount = 0;
-      Set<Integer> uniqueBitstrings = new HashSet<Integer>();
-      for(Vector p:this) {
-         for(Individual i:getLocation(p).getIndividuals()) {
-            StringBuilder bitString = new StringBuilder();
-            for(int bit:i.getBits()) bitString.append(bit);
-            uniqueBitstrings.add(bitString.toString().hashCode());
-            individualCount++;
-         }
-      }
-      System.out.println((double)uniqueBitstrings.size()/(double)individualCount);
-      return (double)uniqueBitstrings.size()/(double)individualCount;
-   }
 }
