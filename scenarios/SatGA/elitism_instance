@@ -6,7 +6,12 @@ the elite individuals from a population
 
 Given a population manager
 And a SAT evaluator
-When I have a population of
+When I have this clauseList
+1
+2
+3
+4
+And I have a population of
 1000
 0100
 0010
@@ -16,11 +21,6 @@ When I have a population of
 0001
 1111
 And I have an elite proportion of 0.25
-And I have this clauseList
-1
-2
-3
-4
 Then the elite set should be
 1011
 1111

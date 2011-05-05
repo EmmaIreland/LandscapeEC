@@ -4,7 +4,12 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 public class IndividualComparator implements Comparator<Individual>, Serializable{
+    private static final long serialVersionUID = 6890926228504302829L;
     private SatInstance satInstance;
+    
+    public IndividualComparator() {
+        this.satInstance = GlobalSatInstance.getInstance().getSubInstance(0);
+    }
     
     public IndividualComparator(SatInstance satInstance) {
         this.satInstance = satInstance;

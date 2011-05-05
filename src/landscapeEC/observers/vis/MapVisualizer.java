@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Collections;
 
 import javax.imageio.ImageIO;
-import javax.sound.midi.SysexMessage;
 import javax.swing.JFrame;
 
 import landscapeEC.locality.Location;
@@ -19,9 +18,9 @@ import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntArrayParameter;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.parameters.StringParameter;
+import landscapeEC.sat.GlobalSatInstance;
 import landscapeEC.sat.Individual;
 import landscapeEC.sat.SatEvaluator;
-import landscapeEC.sat.SatInstance;
 import landscapeEC.sat.SnapShot;
 
 public class MapVisualizer extends JFrame implements Observer {
@@ -67,18 +66,18 @@ public class MapVisualizer extends JFrame implements Observer {
     }
     
     @Override
-    public void generationData(int generationNumber, World world, SatInstance satInstance, int successes) {
+    public void generationData(int generationNumber, World world, int successes) {
         Vector oneByOne = new Vector(new Integer[] {1, 1});
         if(world.getDimensions().equals(oneByOne)) {
-            canvas = drawNonCellular(world, satInstance);
+            canvas = drawNonCellular(world);
         } else {
-            canvas = drawCellular(world, satInstance);
+            canvas = drawCellular(world);
         }
 
         repaint();
     }
 
-    public BufferedImage drawCellular(World world, SatInstance satInstance) {
+    public BufferedImage drawCellular(World world) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics g = image.getGraphics();
         
@@ -89,7 +88,7 @@ public class MapVisualizer extends JFrame implements Observer {
             for(int x=0; x<worldWidth; x++) {
                 Location loc = world.getLocation(new Vector(new Integer[] {x, y}));
                 
-                double difficultyScale = loc.getComparator().getInstance().getNumClauses()/(double)satInstance.getNumClauses();
+                double difficultyScale = loc.getComparator().getInstance().getNumClauses()/(double)GlobalSatInstance.getInstance().getNumClauses();
                 int intensity = (int) ((1-difficultyScale)*255);
                 Color background = new Color(intensity, intensity, intensity);
                 GraphicsUtil.fillRect(g, x*xScale, y*yScale, xScale, yScale, background);
@@ -97,7 +96,7 @@ public class MapVisualizer extends JFrame implements Observer {
                 if(loc.getNumIndividuals() > 0) {
                     double popScale = Math.min(1.0, loc.getNumIndividuals()/(double)IntParameter.CARRYING_CAPACITY.getValue());
                     
-                    Color foreground = getForegroundColor(satInstance, loc, difficultyScale);
+                    Color foreground = getForegroundColor(loc, difficultyScale);
                     
                     GraphicsUtil.fillRect(g, x*xScale+(0.5-popScale*0.5)*xScale, y*yScale+(0.5-popScale*0.5)*yScale, xScale*popScale, yScale*popScale, foreground);
                 }
@@ -108,7 +107,7 @@ public class MapVisualizer extends JFrame implements Observer {
         return image;
     }
     
-    private BufferedImage drawNonCellular(World world, SatInstance satInstance) {
+    private BufferedImage drawNonCellular(World world) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics g = image.getGraphics();
         
@@ -119,7 +118,7 @@ public class MapVisualizer extends JFrame implements Observer {
             for(int x=0; x<worldWidth; x++) {
                 Location loc = world.getLocation(new Vector(new Integer[] {x, y}));
                 
-                double difficultyScale = loc.getComparator().getInstance().getNumClauses()/(double)satInstance.getNumClauses();
+                double difficultyScale = loc.getComparator().getInstance().getNumClauses()/(double)GlobalSatInstance.getInstance().getNumClauses();
                 int intensity = (int) ((1-difficultyScale)*255);
                 Color background = new Color(intensity, intensity, intensity);
                 GraphicsUtil.fillRect(g, x*xScale, y*yScale, xScale, yScale, background);
@@ -127,7 +126,7 @@ public class MapVisualizer extends JFrame implements Observer {
                 if(loc.getNumIndividuals() > 0) {
                     double popScale = Math.min(1.0, loc.getNumIndividuals()/(double)IntParameter.CARRYING_CAPACITY.getValue());
                     
-                    Color foreground = getForegroundColor(satInstance, loc, difficultyScale);
+                    Color foreground = getForegroundColor(loc, difficultyScale);
                     
                     GraphicsUtil.fillRect(g, x*xScale+(0.5-popScale*0.5)*xScale, y*yScale+(0.5-popScale*0.5)*yScale, xScale*popScale, yScale*popScale, foreground);
                 }
@@ -138,9 +137,9 @@ public class MapVisualizer extends JFrame implements Observer {
         return image;
     }
 
-    private Color getForegroundColor(SatInstance satInstance, Location loc, double difficultyScale) {
-        Individual bestIndividual = Collections.max(loc.getIndividuals(), loc.getComparator()); //TODO is this thing doing what we want??
-        double bestFitness = bestIndividual.getGlobalFitness(satInstance);
+    private Color getForegroundColor(Location loc, double difficultyScale) {
+        Individual bestIndividual = Collections.max(loc.getIndividuals(), loc.getComparator());
+        double bestFitness = bestIndividual.getGlobalFitness();
         double scaledFitness = Math.pow(bestFitness, intensityScale);
         Color foreground = Color.black;
         
@@ -149,17 +148,8 @@ public class MapVisualizer extends JFrame implements Observer {
                 foreground = new Color((int) (scaledFitness*255), (int) ((1-difficultyScale)*255), 0);
             break;
             case COLORED_CLAUSES:
-                String clauseString = SatEvaluator.getSolvedClausesBitstring(satInstance, bestIndividual);
+                String clauseString = SatEvaluator.getSolvedClausesBitstring(bestIndividual);
                 Integer clausesNumber = clauseString.hashCode();
-                if (Math.abs(bestFitness - onesPercent(clauseString)) > 1e-5) {
-                    int len = clauseString.length();
-                    System.out.println("Individual: " + bestIndividual);
-                    System.out.println("Clauses: " + clauseString);
-                    System.out.println("They were different! " + (bestFitness * len) + " vs. " + (onesPercent(clauseString)*len));
-                    System.out.println(satInstance.getClauseList());
-                    //System.exit(1);
-                    throw new RuntimeException("Bad stuff happened!");
-                }
                 foreground = Color.getHSBColor((Math.abs(clausesNumber)%255)/(float)255.0, (float) Math.pow(bestFitness, 30), (float)  Math.pow(bestFitness, 30));
             break;
         }
@@ -190,14 +180,10 @@ public class MapVisualizer extends JFrame implements Observer {
         
         String outputFile = args[0];
         SnapShot snapShot = SnapShot.loadSnapShot(args[1]);
-        int xScale = Integer.parseInt(args[2]);
-        int yScale = Integer.parseInt(args[3]);
-        int intensityScale = Integer.parseInt(args[4]);
-        VisualizerType visType = VisualizerType.valueOf(args[5]);
 
         GlobalParameters.setParameters(snapShot.getParams());
         MapVisualizer vis = new MapVisualizer();
-        saveImageToFile(vis.drawCellular(snapShot.getWorld(), snapShot.getSatInstance()), outputFile);
+        saveImageToFile(vis.drawCellular(snapShot.getWorld()), outputFile);
     }
     
     @Override

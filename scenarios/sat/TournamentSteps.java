@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import landscapeEC.parameters.GlobalParameters;
+import landscapeEC.sat.GlobalSatInstance;
 import landscapeEC.sat.Individual;
 import landscapeEC.sat.IndividualComparator;
 import landscapeEC.sat.SatInstance;
@@ -34,7 +35,7 @@ public class TournamentSteps extends Steps {
     private FrequencyCounter<Individual> counter;
 
     @Given("a SAT evaluator")
-    public void constructSATEvaluator() {
+    public void constructSATEvaluator() { //
     }
     
     @When("I have this clauseList $clauseList")
@@ -42,6 +43,7 @@ public class TournamentSteps extends Steps {
         SatParser satParser= new SatParser();
         StringReader stringReader = new StringReader(clauseList);
         satInstance = satParser.parseInstance(stringReader);        
+        GlobalSatInstance.setInstance(satInstance);
     }
     
     @When("I have a population of $population")
@@ -50,7 +52,6 @@ public class TournamentSteps extends Steps {
         for(String line:lines) {
             Individual individual = new Individual(line);
             individuals.add(individual);
-            individual.setGlobalFitness(satInstance);
         }
     }
     

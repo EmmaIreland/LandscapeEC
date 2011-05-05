@@ -5,18 +5,15 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import landscapeEC.locality.geography.Geography;
 import landscapeEC.parameters.StringParameter;
 import landscapeEC.sat.EmptyWorldException;
+import landscapeEC.sat.GlobalSatInstance;
 import landscapeEC.sat.Individual;
 import landscapeEC.sat.IndividualComparator;
-import landscapeEC.sat.Literal;
-import landscapeEC.sat.SatInstance;
 
 
 public class World implements Iterable<Vector>, Serializable {
@@ -25,7 +22,7 @@ public class World implements Iterable<Vector>, Serializable {
     private Map<Vector,Location> worldMap;
     private Vector dimensions;
 
-    public World(Vector dimensions, boolean isToroidal, SatInstance satInstance) throws Exception {
+    public World(Vector dimensions, boolean isToroidal) throws Exception {
         toroidal = isToroidal;
         this.dimensions = new Vector(dimensions);
 
@@ -36,7 +33,7 @@ public class World implements Iterable<Vector>, Serializable {
         
         Geography geography = createGeography();
         
-        geography.generateGeography(satInstance, this);
+        geography.generateGeography(this);
     }
     
     @SuppressWarnings("unchecked")
@@ -45,7 +42,7 @@ public class World implements Iterable<Vector>, Serializable {
 
 		Class<Geography> geography = (Class<Geography>) Class.forName(geographyName);
 		Constructor<Geography> cons = geography.getConstructor();
-		Geography instance = (Geography) cons.newInstance();
+		Geography instance = cons.newInstance();
 		return instance;
 	}
 
@@ -100,7 +97,8 @@ public class World implements Iterable<Vector>, Serializable {
         }
     }
 
-    public Individual findBestIndividual(IndividualComparator comparator) {
+    public Individual findBestIndividual() {
+        IndividualComparator comparator = GlobalSatInstance.getComparator();
         List<Individual> bestFromCells = new ArrayList<Individual>();
         for (Vector p : this) {
             if (getLocation(p).getNumIndividuals() > 0) {

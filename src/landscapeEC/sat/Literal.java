@@ -3,6 +3,7 @@ package landscapeEC.sat;
 import java.io.Serializable;
 
 public class Literal implements Serializable {
+    private static final long serialVersionUID = -6905437698532067448L;
     public int variable;
     public boolean negated;
 

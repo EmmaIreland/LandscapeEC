@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import landscapeEC.sat.Clause;
+import landscapeEC.sat.GlobalSatInstance;
 import landscapeEC.sat.Individual;
 import landscapeEC.sat.SatEvaluator;
 import landscapeEC.sat.SatInstance;
@@ -46,6 +47,7 @@ public class MapVisualizerTest {
         SatParser parser = new SatParser(false);
         StringReader stringReader = new StringReader("1 2 3\n-1 2 -3\n1 2 -3\n1 -2 3\n");
         SatInstance instance = parser.parseInstance(stringReader);
+        GlobalSatInstance.setInstance(instance);
         
         List<Clause> clauses = new ArrayList<Clause>();
         for (Clause clause : instance.getClauseList()) {

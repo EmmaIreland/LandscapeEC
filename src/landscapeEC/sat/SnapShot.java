@@ -17,16 +17,16 @@ public class SnapShot implements Serializable{
     private World world;
     private SatInstance satInstance;
 
-    public SnapShot(World world, SatInstance satInstance) {
+    public SnapShot(World world) {
         params = GlobalParameters.getParameters();
         this.world = world;
-        this.satInstance = satInstance;
+        this.satInstance = GlobalSatInstance.getInstance();
     }
     
-    public static void saveSnapShot(String fileName, World world, SatInstance satInstance) throws IOException {
+    public static void saveSnapShot(String fileName, World world) throws IOException {
         FileOutputStream fileStream = new FileOutputStream(fileName + ".sav");
         ObjectOutputStream outputStream = new ObjectOutputStream(fileStream);
-        outputStream.writeObject(new SnapShot(world, satInstance));
+        outputStream.writeObject(new SnapShot(world));
     }
     
     public static SnapShot loadSnapShot(String file) throws IOException, ClassNotFoundException {

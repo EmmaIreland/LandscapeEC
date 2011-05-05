@@ -3,6 +3,7 @@ package sat;
 import java.io.IOException;
 import java.io.StringReader;
 
+import landscapeEC.sat.GlobalSatInstance;
 import landscapeEC.sat.Individual;
 import landscapeEC.sat.IndividualComparator;
 import landscapeEC.sat.SatInstance;
@@ -22,22 +23,21 @@ public class ComparatorSteps extends Steps {
     private Individual b;
 
     @Given("a SAT evaluator")
-    public void constructSATEvaluator() {
+    public void constructSATEvaluator() { //
     }
     
     @When("I have this clauseList $clauseList")
     public void getSatInstance(String clauseList) throws IOException {
         SatParser satParser= new SatParser();
         StringReader stringReader = new StringReader(clauseList);
-        satInstance = satParser.parseInstance(stringReader);        
+        satInstance = satParser.parseInstance(stringReader);
+        GlobalSatInstance.setInstance(satInstance);
     }
     
     @When("I have individuals: <individualA> and <individualB>")
     public void getIndividuals(@Named("individualA") String aString, @Named("individualB") String bString) {
         a = new Individual(aString);
-        a.setGlobalFitness(satInstance);
         b = new Individual(bString);
-        b.setGlobalFitness(satInstance);
     }
     
     @Then("the result of the comparison is <result>")

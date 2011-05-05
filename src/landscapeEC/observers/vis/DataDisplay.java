@@ -7,19 +7,16 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
-
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.IntParameter;
-import landscapeEC.sat.EmptyWorldException;
 import landscapeEC.sat.Individual;
-import landscapeEC.sat.IndividualComparator;
 import landscapeEC.sat.SatEvaluator;
-import landscapeEC.sat.SatInstance;
 
 
 public class DataDisplay extends JFrame implements Observer {
+    private static final long serialVersionUID = 4151957839382676250L;
     private int width = 300;
     private int height = 155;
 
@@ -39,8 +36,7 @@ public class DataDisplay extends JFrame implements Observer {
     }
 
     @Override
-    public void generationData(int generationNumber, World world, SatInstance satInstance, int successes) {
-        IndividualComparator comparator = new IndividualComparator(satInstance);
+    public void generationData(int generationNumber, World world, int successes) {
 
         width = getWidth();
         height = getHeight();
@@ -52,7 +48,7 @@ public class DataDisplay extends JFrame implements Observer {
 
         Font font = new Font("Trebuchet MS", Font.BOLD, 12);
         
-        Individual bestIndividual = world.findBestIndividual(comparator);
+        Individual bestIndividual = world.findBestIndividual();
         
         GraphicsUtil.drawString(g, "RUN " + (SatEvaluator.getNumResets()+1), 5, 20, font, Color.RED);
         GraphicsUtil.drawString(g, successes + "/" + SatEvaluator.getNumResets() + " runs successful", 5, 35, font, Color.WHITE);

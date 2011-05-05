@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Clause implements Serializable{
+    private static final long serialVersionUID = 1603168697591241162L;
     private List<Literal> literals = new ArrayList<Literal>();
     private int cachedHash = Integer.MIN_VALUE;
     private int id = Integer.MIN_VALUE;

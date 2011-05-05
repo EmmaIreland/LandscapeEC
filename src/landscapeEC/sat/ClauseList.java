@@ -11,6 +11,7 @@ import java.util.Set;
 import landscapeEC.util.SharedPRNG;
 
 public class ClauseList implements Iterable<Clause>, Serializable {
+    private static final long serialVersionUID = -5945097488454416320L;
     private Set<Clause> clauses = new HashSet<Clause>();
     private List<Clause> shuffledClauses = new ArrayList<Clause>();
     

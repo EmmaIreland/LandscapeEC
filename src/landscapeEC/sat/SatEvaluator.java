@@ -5,6 +5,10 @@ public class SatEvaluator {
     private static int numEvaluations = 0;
     private static int numResets = 0;
 
+    public static double evaluate(Individual individual) {
+        return evaluate(GlobalSatInstance.getInstance(), individual);
+    }
+    
     public static double evaluate(SatInstance satInstance, Individual individual) {
         ClauseList clauseList = satInstance.getClauseList();
         if (clauseList.getNumClauses() == 0) {
@@ -37,8 +41,8 @@ public class SatEvaluator {
         return numResets;
     }
 
-    public static void printUnsolvedClauses(SatInstance satInstance, Individual individual) {
-        ClauseList clauseList = satInstance.getClauseList();
+    public static void printUnsolvedClauses(Individual individual) {
+        ClauseList clauseList = GlobalSatInstance.getInstance().getClauseList();
         if (clauseList.getNumClauses() == 0) {
             return;
         }
@@ -53,6 +57,10 @@ public class SatEvaluator {
             i++;
         }
         System.out.print("\n");
+    }
+    
+    public static String getSolvedClausesBitstring(Individual individual) {
+        return getSolvedClausesBitstring(GlobalSatInstance.getInstance(), individual);
     }
 
     public static String getSolvedClausesBitstring(SatInstance satInstance, Individual individual) {

@@ -3,11 +3,6 @@ package landscapeEC.sat;
 import landscapeEC.util.SharedPRNG;
 
 public class IndividualFactory {
-
-	@Deprecated
-    public static Individual getInstance(SatInstance satInstance) {
-    	return getInstance(satInstance.getNumVariables());
-    }
     
     public static Individual getInstance(int numBits) {
         int length = numBits;

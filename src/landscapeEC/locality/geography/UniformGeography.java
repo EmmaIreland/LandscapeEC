@@ -8,8 +8,8 @@ import landscapeEC.sat.SatInstance;
 public class UniformGeography implements Geography {
 
     @Override
-    public void generateGeography(SatInstance satInstance, World world) {
-        IndividualComparator comparator = new IndividualComparator(satInstance.getSubInstance(0));
+    public void generateGeography(World world) {
+        IndividualComparator comparator = new IndividualComparator();
         for (Vector position : world) {
             world.setLocationComparator(position, comparator);
         }

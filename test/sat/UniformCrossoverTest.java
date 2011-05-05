@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import landscapeEC.sat.GlobalSatInstance;
 import landscapeEC.sat.Individual;
 import landscapeEC.sat.SatInstance;
 import landscapeEC.sat.operators.UniformCrossover;
@@ -24,6 +25,7 @@ public class UniformCrossoverTest {
     public void testUniformCrossover() {        
         SatInstance satInstance = new SatInstance();
         satInstance.setNumVariables(NUM_BITS);
+        GlobalSatInstance.setInstance(satInstance);
 
         FrequencyCounter<Integer> counter = new FrequencyCounter<Integer>();
         

@@ -6,6 +6,7 @@ import landscapeEC.parameters.DoubleParameter;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.sat.Clause;
 import landscapeEC.sat.ClauseList;
+import landscapeEC.sat.GlobalSatInstance;
 import landscapeEC.sat.IndividualComparator;
 import landscapeEC.sat.SatInstance;
 import landscapeEC.util.SharedPRNG;
@@ -19,7 +20,8 @@ public class FractalGeography implements Geography {
     // Currently only works with 2 dimensions
 
     @Override
-    public void generateGeography(SatInstance satInstance, World world) {
+    public void generateGeography(World world) {
+        SatInstance satInstance = GlobalSatInstance.getInstance();
         globalClauseList = satInstance.getClauseList();
         totalNumVariables = satInstance.getNumVariables();
         this.world = world;

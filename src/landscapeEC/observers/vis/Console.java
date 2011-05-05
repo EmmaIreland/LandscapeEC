@@ -19,9 +19,7 @@ public class Console extends JFrame implements ActionListener, Observer {
     JScrollPane scrollPane;
 
     boolean newLine = false;
-    private int generationNumber;
     private World world;
-    private SatInstance satInstance;
 
     public Console() {
         init();
@@ -124,9 +122,7 @@ public class Console extends JFrame implements ActionListener, Observer {
     }
 
     @Override
-    public void generationData(int generationNumber, World world, SatInstance satInstance, int successes) {
-        this.generationNumber = generationNumber;
+    public void generationData(int generationNumber, World world, int successes) {
         this.world = world;
-        this.satInstance = satInstance;
     }
 }

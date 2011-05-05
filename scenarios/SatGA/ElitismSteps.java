@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import landscapeEC.sat.GlobalSatInstance;
 import landscapeEC.sat.Individual;
-import landscapeEC.sat.IndividualComparator;
 import landscapeEC.sat.PopulationManager;
 import landscapeEC.sat.SatInstance;
 import landscapeEC.sat.SatParser;
@@ -33,7 +33,7 @@ public class ElitismSteps extends Steps {
     }
 
     @Given("a SAT evaluator")
-    public void constructSATEvaluator() {
+    public void constructSATEvaluator() { //
     }
 
     @When("I have a population of $population")
@@ -55,6 +55,7 @@ public class ElitismSteps extends Steps {
         SatParser satParser = new SatParser();
         StringReader stringReader = new StringReader(clauseList);
         satInstance = satParser.parseInstance(stringReader);
+        GlobalSatInstance.setInstance(satInstance);
     }
 
     @Then("the elite set should be $eliteSet")
@@ -66,13 +67,8 @@ public class ElitismSteps extends Steps {
             Individual individual = new Individual(line);
             expectedElite.add(individual);
         }
-        
-        for(Individual individual : individuals) {
-            individual.setGlobalFitness(satInstance);
-        }
 
-        IndividualComparator comparator = new IndividualComparator(satInstance);
-        List<Individual> actualElite = populationManager.getElite(individuals, eliteProportion, comparator);
+        List<Individual> actualElite = populationManager.getElite(individuals, eliteProportion);
 
         assertEquals("Expected elite and actual elite are different sizes", expectedElite.size(), actualElite.size());
 

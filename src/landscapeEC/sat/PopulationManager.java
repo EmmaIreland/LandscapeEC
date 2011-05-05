@@ -15,9 +15,9 @@ import landscapeEC.sat.operators.SelectionOperator;
 public class PopulationManager {
     
 
-    public List<Individual> getElite(List<Individual> startingIndividuals, double eliteProportion, IndividualComparator comparator) {
+    public List<Individual> getElite(List<Individual> startingIndividuals, double eliteProportion) {
     	List<Individual> individuals = new ArrayList<Individual>(startingIndividuals);
-        Collections.sort(individuals, comparator);
+        Collections.sort(individuals, GlobalSatInstance.getComparator());
         
         List<Individual> result = new ArrayList<Individual>();
         int populationSize = individuals.size();
@@ -32,10 +32,10 @@ public class PopulationManager {
 		return (int)Math.ceil(populationSize*eliteProportion);
 	}
 
-    public List<Individual> generatePopulation(SatInstance satInstance) {
+    public List<Individual> generatePopulation() {
         List<Individual> population = new ArrayList<Individual>();
         for(int i=0;i<IntParameter.CARRYING_CAPACITY.getValue();i++){
-            population.add(IndividualFactory.getInstance(satInstance.getNumVariables()));
+            population.add(IndividualFactory.getInstance(GlobalSatInstance.getInstance().getNumVariables()));
         }
         return population;
     }
@@ -52,14 +52,13 @@ public class PopulationManager {
         
     }
 
-    public List<Individual> crossover(List<Individual> population,
-            SelectionOperator selectionOperator, CrossoverOperator crossoverOperator, IndividualComparator comparator) {
+    public List<Individual> crossover(List<Individual> population, SelectionOperator selectionOperator, CrossoverOperator crossoverOperator) {
         List<Individual> newPopulation = new ArrayList<Individual>();
         
         int numChildren = getNumberOfNeededChildren(population.size());
         
         for(int i=0; i<numChildren; i++) {
-            List<Individual> parents = selectionOperator.selectParents(population, comparator);
+            List<Individual> parents = selectionOperator.selectParents(population, GlobalSatInstance.getComparator());
             Individual individual = crossoverOperator.crossover(parents);
             newPopulation.add(individual);
         }

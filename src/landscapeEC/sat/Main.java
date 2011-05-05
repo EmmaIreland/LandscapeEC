@@ -1,12 +1,8 @@
 package landscapeEC.sat;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 import landscapeEC.parameters.GlobalParameters;
-
-
 
 public class Main {
 
@@ -20,9 +16,6 @@ public class Main {
             GARun run = new GARun(arg);
 
             run.run();
-            
-            /*GlobalParameters.setupLogging();
-            doRuns();*/
         }
     }
 }
