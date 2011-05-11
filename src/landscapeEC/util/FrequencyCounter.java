@@ -146,4 +146,8 @@ public class FrequencyCounter<T> implements Iterable<T> {
         return keys();
     }
 
+    public void reset() {
+        _map.clear();
+    }
+
 }
