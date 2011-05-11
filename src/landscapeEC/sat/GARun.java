@@ -248,6 +248,7 @@ public class GARun {
    }
 
    private void processAllLocations() {
+      updateDiversityCounts();
       performMigration();
       addFromPendingIndividuals();
 
@@ -259,7 +260,17 @@ public class GARun {
       setFromPendingIndividuals();
    }
 
-   private void performDraconianReaper() {
+   private void updateDiversityCounts() {
+       DiversityCalculator.reset();
+       for (Vector position : world) {
+           List<Individual> locationIndividuals = world.getIndividualsAt(position);
+           for (Individual individual : locationIndividuals) {
+               DiversityCalculator.addIndividual(individual);
+           }
+       }
+   }
+
+private void performDraconianReaper() {
 
       for(Vector position : world) {
          List<Individual> locationIndividuals = world.getIndividualsAt(position);

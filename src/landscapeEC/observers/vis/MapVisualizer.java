@@ -2,13 +2,23 @@ package landscapeEC.observers.vis;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+
+import org.jfree.chart.demo.PieChartDemo1;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.PlotState;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
 
 import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
@@ -18,6 +28,7 @@ import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntArrayParameter;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.parameters.StringParameter;
+import landscapeEC.sat.DiversityCalculator;
 import landscapeEC.sat.GlobalSatInstance;
 import landscapeEC.sat.Individual;
 import landscapeEC.sat.SatEvaluator;
@@ -108,32 +119,21 @@ public class MapVisualizer extends JFrame implements Observer {
     }
     
     private BufferedImage drawNonCellular(World world) {
+//        System.out.println("About to draw non-cellular world");
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        Graphics g = image.getGraphics();
+        Graphics2D g = image.createGraphics();
         
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, image.getWidth(), image.getHeight());
-                
-        for(int y=0; y<worldHeight; y++) {
-            for(int x=0; x<worldWidth; x++) {
-                Location loc = world.getLocation(new Vector(new Integer[] {x, y}));
-                
-                double difficultyScale = loc.getComparator().getInstance().getNumClauses()/(double)GlobalSatInstance.getInstance().getNumClauses();
-                int intensity = (int) ((1-difficultyScale)*255);
-                Color background = new Color(intensity, intensity, intensity);
-                GraphicsUtil.fillRect(g, x*xScale, y*yScale, xScale, yScale, background);
-                
-                if(loc.getNumIndividuals() > 0) {
-                    double popScale = Math.min(1.0, loc.getNumIndividuals()/(double)IntParameter.CARRYING_CAPACITY.getValue());
-                    
-                    Color foreground = getForegroundColor(loc, difficultyScale);
-                    
-                    GraphicsUtil.fillRect(g, x*xScale+(0.5-popScale*0.5)*xScale, y*yScale+(0.5-popScale*0.5)*yScale, xScale*popScale, yScale*popScale, foreground);
-                }
-                GraphicsUtil.drawRect(g, x*xScale+1, y*yScale+1, xScale-2, yScale-2, background); //outline for cells to show a bit of underlying geography
-                GraphicsUtil.drawRect(g, x*xScale, y*yScale, xScale, yScale, Color.BLACK); //grid outline for cells
-            }
-        }
+//        DefaultPieDataset pieDataSet = new DefaultPieDataset();
+//        System.out.println("Length of clause list = " + DiversityCalculator.clauseLists().size());
+//        for (String clauseList : DiversityCalculator.clauseLists()) {
+//            double percentage = DiversityCalculator.clauseListPercentage(clauseList);
+//            pieDataSet.setValue(clauseList, percentage);
+////            System.out.println("Added " + clauseList + " with percentage " + percentage);
+//        }
+//        PiePlot piePlot = new PiePlot(pieDataSet);
+//        Rectangle2D area = new Rectangle(width, height);
+//        piePlot.draw(g, area, null, new PlotState(), null);
+        
         return image;
     }
 
