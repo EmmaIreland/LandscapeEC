@@ -1,5 +1,7 @@
 #!/usr/bin/ruby
 
+cmd_line_options = CommandLineParser.parse(ARGV)
+
 r_file = ARGV[0]
 
 # TODO - Make this less fragile
