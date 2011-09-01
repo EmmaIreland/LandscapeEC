@@ -14,12 +14,6 @@ import java.util.Collections;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
-import org.jfree.chart.demo.PieChartDemo1;
-import org.jfree.chart.plot.PiePlot;
-import org.jfree.chart.plot.PlotState;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.general.PieDataset;
-
 import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
