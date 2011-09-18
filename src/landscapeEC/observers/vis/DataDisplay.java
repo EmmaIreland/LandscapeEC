@@ -13,12 +13,12 @@ import landscapeEC.observers.Observer;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.sat.Individual;
 import landscapeEC.sat.SatEvaluator;
-
+import landscapeEC.sat.DiversityCalculator;
 
 public class DataDisplay extends JFrame implements Observer {
     private static final long serialVersionUID = 4151957839382676250L;
     private int width = 300;
-    private int height = 155;
+    private int height = 190;
 
     private BufferedImage canvas;
 
@@ -60,7 +60,11 @@ public class DataDisplay extends JFrame implements Observer {
         GraphicsUtil.drawString(g, "Number of individuals: " + numIndividuals, 5, 95, font, Color.WHITE);
         int inhabitedCells = getInhabitedCellCount(world);
         GraphicsUtil.drawString(g, "Number of inhabited cells: " + inhabitedCells, 5, 110, font, Color.WHITE);
-
+        double diversity = DiversityCalculator.calculateBitStringDiversity();
+        GraphicsUtil.drawString(g,  String.format("Current bitstring diversity: %.2f", diversity), 5, 125, font, Color.WHITE);
+        double semanticDiversity = DiversityCalculator.calculateClauseListDiversity();
+        GraphicsUtil.drawString(g,  String.format("Current solved clauses diversity: %.2f", semanticDiversity), 5, 140, font, Color.WHITE);
+        
         repaint();
     }
     

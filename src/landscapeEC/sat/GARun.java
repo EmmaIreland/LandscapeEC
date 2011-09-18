@@ -212,7 +212,7 @@ public class GARun {
                   * IntParameter.NUM_EVALS_TO_DO.getValue()
                   && Double.isNaN(intervalFitnesses[j])) {
                intervalFitnesses[j] = bestOverallFitness;
-               intervalDiversities[j] = DiversityCalculator.calculateDiversity();
+               intervalDiversities[j] = DiversityCalculator.calculateClauseListDiversity();
                SnapShot.saveSnapShot(propertiesFilename + ".run" + currentRun + ".part" + j, world);
             }
          }

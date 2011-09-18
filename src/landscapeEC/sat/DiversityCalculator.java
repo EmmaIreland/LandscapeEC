@@ -1,6 +1,5 @@
 package landscapeEC.sat;
 
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -22,16 +21,9 @@ public class DiversityCalculator {
         individualCounts.addItem(individual.toString());
         String clauseString = SatEvaluator.getSolvedClausesBitstring(individual);
         clauseListCounter.addItem(clauseString);
-//        System.out.println("We've seen " + seenClauseLists.size() + " different clause strings");
-        if (seenClauseLists.contains(clauseString)) {
-            System.out.println("This is a previously seen clause string");
-        }
-//        } else {
-//            System.out.println("This is an unseen clause string");
-//        }
-//        System.out.println("We have " + seenClauseLists.size() + " clauses so far");
+        
+        //Add clause list to the set, it will not add duplicates
         seenClauseLists.add(clauseString);
-//        System.out.println("We have " + seenClauseLists.size() + " clauses after addition");
     }
     
     public static Set<String> clauseLists() {
@@ -41,8 +33,12 @@ public class DiversityCalculator {
     public static double clauseListPercentage(String clauseListString) {
         return (double) clauseListCounter.getCount(clauseListString) / (double) clauseListCounter.totalCount();
     }
+
+    public static double calculateClauseListDiversity() {
+        return (double)clauseListCounter.numKeys()/(double)clauseListCounter.totalCount();
+    }
     
-    public static double calculateDiversity() {
+    public static double calculateBitStringDiversity() {
         return (double)individualCounts.numKeys()/(double)individualCounts.totalCount();
     }
 }

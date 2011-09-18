@@ -10,6 +10,7 @@ import landscapeEC.sat.IndividualComparator;
 
 
 public class Location implements Serializable {
+    private static final long serialVersionUID = 8006609685140336153L;
     private final Vector position;
     private List<Individual> individuals;
     private List<Individual> pendingIndividuals;
@@ -41,9 +42,9 @@ public class Location implements Serializable {
     	return locationComparator;
     }
 
-	public boolean hasNoComparator() {
-		return locationComparator == null;
-	}
+    public boolean hasNoComparator() {
+	return locationComparator == null;
+    }
     
     public void setComparator(IndividualComparator locationComparator) {
         this.locationComparator = locationComparator;
