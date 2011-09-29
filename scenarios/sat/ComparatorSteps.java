@@ -3,11 +3,11 @@ package sat;
 import java.io.IOException;
 import java.io.StringReader;
 
-import landscapeEC.sat.GlobalSatInstance;
-import landscapeEC.sat.Individual;
-import landscapeEC.sat.IndividualComparator;
-import landscapeEC.sat.SatInstance;
-import landscapeEC.sat.SatParser;
+import landscapeEC.problem.sat.GlobalSatInstance;
+import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.sat.IndividualComparator;
+import landscapeEC.problem.sat.SatInstance;
+import landscapeEC.problem.sat.SatParser;
 
 import static junit.framework.Assert.*;
 

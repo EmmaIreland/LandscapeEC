@@ -1,4 +1,4 @@
-package landscapeEC.sat;
+package landscapeEC.core;
 
 import java.io.File;
 

@@ -6,13 +6,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import landscapeEC.core.PopulationManager;
 import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntParameter;
-import landscapeEC.sat.GlobalSatInstance;
-import landscapeEC.sat.Individual;
-import landscapeEC.sat.IndividualFactory;
-import landscapeEC.sat.PopulationManager;
-import landscapeEC.sat.SatInstance;
+import landscapeEC.problem.sat.GlobalSatInstance;
+import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.sat.IndividualFactory;
+import landscapeEC.problem.sat.SatInstance;
 
 import org.junit.Before;
 import org.junit.Test;

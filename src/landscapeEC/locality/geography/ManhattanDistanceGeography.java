@@ -2,9 +2,9 @@ package landscapeEC.locality.geography;
 
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
-import landscapeEC.sat.GlobalSatInstance;
-import landscapeEC.sat.IndividualComparator;
-import landscapeEC.sat.SatInstance;
+import landscapeEC.problem.sat.GlobalSatInstance;
+import landscapeEC.problem.sat.IndividualComparator;
+import landscapeEC.problem.sat.SatInstance;
 
 public class ManhattanDistanceGeography implements Geography {
 

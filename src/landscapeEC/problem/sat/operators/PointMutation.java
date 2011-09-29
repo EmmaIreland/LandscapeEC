@@ -1,7 +1,7 @@
-package landscapeEC.sat.operators;
+package landscapeEC.problem.sat.operators;
 
 import landscapeEC.parameters.DoubleParameter;
-import landscapeEC.sat.Individual;
+import landscapeEC.problem.sat.Individual;
 import landscapeEC.util.SharedPRNG;
 
 public class PointMutation implements MutationOperator {

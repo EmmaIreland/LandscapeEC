@@ -1,4 +1,4 @@
-package landscapeEC.sat;
+package landscapeEC.problem.sat;
 
 public class GlobalSatInstance {
     private static SatInstance globalInstance;

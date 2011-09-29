@@ -3,8 +3,8 @@ package sat;
 import java.util.Map;
 
 import landscapeEC.parameters.GlobalParameters;
-import landscapeEC.sat.Individual;
-import landscapeEC.sat.operators.PointMutation;
+import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.sat.operators.PointMutation;
 import landscapeEC.util.FrequencyCounter;
 import landscapeEC.util.ProbabilityUtils;
 

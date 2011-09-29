@@ -1,4 +1,4 @@
-package landscapeEC.sat;
+package landscapeEC.problem.sat;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

@@ -7,7 +7,7 @@ import javax.swing.*;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
-import landscapeEC.sat.SatInstance;
+import landscapeEC.problem.sat.SatInstance;
 
 
 public class Console extends JFrame implements ActionListener, Observer {
@@ -105,9 +105,9 @@ public class Console extends JFrame implements ActionListener, Observer {
                 if(token[0].equals("getIndividualsAt")) {
                     println(world.getLocation(new Vector(coord)).getIndividuals().toString());
                 } else if(token[0].equals("getClausesAt")) {
-                    println(world.getLocation(new Vector(coord)).getComparator().getInstance().getClauseList().toString());
+                    println(world.getLocation(new Vector(coord)).getComparator().getInstance().toString());
                 } else if(token[0].equals("getNumClausesAt")) {
-                    println(world.getLocation(new Vector(coord)).getComparator().getInstance().getClauseList().size()+"");
+                    println(world.getLocation(new Vector(coord)).getComparator().getInstance().getNumClauses()+"");
                 }
             } else {
                 println("incorrect # of args (must be equal to number of dimensions)");

@@ -4,30 +4,27 @@ import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.parameters.DoubleParameter;
 import landscapeEC.parameters.IntParameter;
-import landscapeEC.sat.Clause;
-import landscapeEC.sat.ClauseList;
-import landscapeEC.sat.GlobalSatInstance;
-import landscapeEC.sat.IndividualComparator;
-import landscapeEC.sat.SatInstance;
+import landscapeEC.problem.sat.Clause;
+import landscapeEC.problem.sat.ClauseList;
+import landscapeEC.problem.sat.GlobalSatInstance;
+import landscapeEC.problem.sat.IndividualComparator;
+import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.util.SharedPRNG;
 
 public class FractalGeography implements Geography {
 
-    private ClauseList globalClauseList;
-    private int totalNumVariables;
+    private SatInstance globalSatInstance;
     private World world;
 
     // Currently only works with 2 dimensions
 
     @Override
     public void generateGeography(World world) {
-        SatInstance satInstance = GlobalSatInstance.getInstance();
-        globalClauseList = satInstance.getClauseList();
-        totalNumVariables = satInstance.getNumVariables();
+        globalSatInstance = GlobalSatInstance.getInstance();
         this.world = world;
-        SatInstance emptyInstance = satInstance.getSubInstance(0);
+        SatInstance emptyInstance = globalSatInstance.getSubInstance(0);
 
-        IndividualComparator fullComparator = new IndividualComparator(satInstance);
+        IndividualComparator fullComparator = new IndividualComparator(globalSatInstance);
         IndividualComparator emptyComparator = new IndividualComparator(emptyInstance);
 
         Vector topLeft = Vector.origin(world.getDimensions().size());
@@ -41,12 +38,12 @@ public class FractalGeography implements Geography {
         Vector bottomMid = bottomLeft.getMidPoint(bottomRight);
 
         world.setLocationComparator(topLeft, emptyComparator);
-        world.setLocationComparator(topMid, generateMidpointGoal(satInstance, emptyInstance));
+        world.setLocationComparator(topMid, generateMidpointGoal(globalSatInstance, emptyInstance));
         world.setLocationComparator(topRight, emptyComparator);
-        world.setLocationComparator(midLeft, generateMidpointGoal(satInstance, emptyInstance));
-        world.setLocationComparator(midRight, generateMidpointGoal(satInstance, emptyInstance));
+        world.setLocationComparator(midLeft, generateMidpointGoal(globalSatInstance, emptyInstance));
+        world.setLocationComparator(midRight, generateMidpointGoal(globalSatInstance, emptyInstance));
         world.setLocationComparator(bottomLeft, emptyComparator);
-        world.setLocationComparator(bottomMid, generateMidpointGoal(satInstance, emptyInstance));
+        world.setLocationComparator(bottomMid, generateMidpointGoal(globalSatInstance, emptyInstance));
         world.setLocationComparator(bottomRight, emptyComparator);
         world.setLocationComparator(middle, fullComparator);
 
@@ -119,10 +116,10 @@ public class FractalGeography implements Geography {
     }
 
     private SatInstance doClauseListCrossover(SatInstance firstInstance, SatInstance secondInstance, int noiseStrength) {
-        ClauseList newClauseList = new ClauseList();
-        int NumClauses = globalClauseList.getNumClauses();
+        SatInstance newSatInstance = new SatInstance();
+        int NumClauses = globalSatInstance.getNumClauses();
 
-        for (Clause clause : globalClauseList.getClauses()) {
+        for (Clause clause : globalSatInstance.getClauses()) {
             // Decide whether or not this clause will be mutated according to
             // Geography Noise Strength
             // Then if a clauseList contains a clause and mutate=true, then we
@@ -132,17 +129,17 @@ public class FractalGeography implements Geography {
             // Reverse for when mutate is false
             boolean mutate = SharedPRNG.instance().nextDouble() < (noiseStrength / (double) NumClauses);
             if (SharedPRNG.instance().nextBoolean()) {
-                if (firstInstance.getClauseList().contains(clause) != mutate) {
-                    newClauseList.addClause(clause);
+                if (firstInstance.contains(clause) != mutate) {
+                    newSatInstance.addClause(clause);
                 }
             } else {
-                if (secondInstance.getClauseList().contains(clause) != mutate) {
-                    newClauseList.addClause(clause);
+                if (secondInstance.contains(clause) != mutate) {
+                    newSatInstance.addClause(clause);
                 }
             }
         }
 
-        return new SatInstance(newClauseList, totalNumVariables);
+        return newSatInstance;
     }
 
     private SatInstance doClauseListCrossover(SatInstance satInstanceA, SatInstance satInstanceB) {

@@ -1,4 +1,4 @@
-package landscapeEC.sat;
+package landscapeEC.problem.sat;
 
 public class SatEvaluator {
 
@@ -10,14 +10,13 @@ public class SatEvaluator {
     }
     
     public static double evaluate(SatInstance satInstance, Individual individual) {
-        ClauseList clauseList = satInstance.getClauseList();
-        if (clauseList.getNumClauses() == 0) {
+        if (satInstance.getNumClauses() == 0) {
             return 1.0;
         }
 
         int clausesSolved = 0;
 
-        for (Clause clause : clauseList) {
+        for (Clause clause : satInstance) {
             if (clause.satisfiedBy(individual)) {
                 clausesSolved++;
             }
@@ -42,15 +41,15 @@ public class SatEvaluator {
     }
 
     public static void printUnsolvedClauses(Individual individual) {
-        ClauseList clauseList = GlobalSatInstance.getInstance().getClauseList();
-        if (clauseList.getNumClauses() == 0) {
+        SatInstance satInstance = GlobalSatInstance.getInstance();
+        if (satInstance.getNumClauses() == 0) {
             return;
         }
 
         System.out.print("Unsolved Clause IDs:");
 
         int i = 0;
-        for (Clause clause : clauseList) {
+        for (Clause clause : satInstance) {
             if (!clause.satisfiedBy(individual)) {
                 System.out.print(clause.getId() + " ");
             }
@@ -64,14 +63,13 @@ public class SatEvaluator {
     }
 
     public static String getSolvedClausesBitstring(SatInstance satInstance, Individual individual) {
-        ClauseList clauseList = satInstance.getClauseList();
-        if (clauseList.getNumClauses() == 0) {
+        if (satInstance.getNumClauses() == 0) {
             return "";
         }
         
         String bitString = "";
 
-        for (Clause clause : clauseList) {
+        for (Clause clause : satInstance) {
             if (clause.satisfiedBy(individual)) {
                 bitString += "1";
             } else  {

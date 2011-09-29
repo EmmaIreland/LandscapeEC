@@ -19,10 +19,10 @@ import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntArrayParameter;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.parameters.StringParameter;
-import landscapeEC.sat.GlobalSatInstance;
-import landscapeEC.sat.Individual;
-import landscapeEC.sat.SatEvaluator;
-import landscapeEC.sat.SnapShot;
+import landscapeEC.problem.sat.GlobalSatInstance;
+import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.sat.SatEvaluator;
+import landscapeEC.problem.sat.SnapShot;
 
 public class MapVisualizer extends JFrame implements Observer {
     private final int xScale;

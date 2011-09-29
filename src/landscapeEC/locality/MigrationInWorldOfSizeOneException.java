@@ -1,4 +1,4 @@
-package landscapeEC.sat;
+package landscapeEC.locality;
 
 public class MigrationInWorldOfSizeOneException extends RuntimeException {
     // Thrown if we try to migrate in a world of size one.

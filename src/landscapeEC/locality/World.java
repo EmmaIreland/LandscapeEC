@@ -10,10 +10,10 @@ import java.util.Map;
 
 import landscapeEC.locality.geography.Geography;
 import landscapeEC.parameters.StringParameter;
-import landscapeEC.sat.EmptyWorldException;
-import landscapeEC.sat.GlobalSatInstance;
-import landscapeEC.sat.Individual;
-import landscapeEC.sat.IndividualComparator;
+import landscapeEC.problem.sat.EmptyWorldException;
+import landscapeEC.problem.sat.GlobalSatInstance;
+import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.sat.IndividualComparator;
 
 
 public class World implements Iterable<Vector>, Serializable {

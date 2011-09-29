@@ -1,4 +1,4 @@
-package landscapeEC.sat;
+package landscapeEC.core;
 
 import java.io.File;
 import java.io.FileReader;
@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 import landscapeEC.locality.Location;
+import landscapeEC.locality.MigrationInWorldOfSizeOneException;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
@@ -22,9 +23,18 @@ import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntArrayParameter;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.parameters.StringParameter;
-import landscapeEC.sat.operators.CrossoverOperator;
-import landscapeEC.sat.operators.MutationOperator;
-import landscapeEC.sat.operators.SelectionOperator;
+import landscapeEC.problem.sat.DiversityCalculator;
+import landscapeEC.problem.sat.EmptyWorldException;
+import landscapeEC.problem.sat.GlobalSatInstance;
+import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.sat.SatEvaluator;
+import landscapeEC.problem.sat.SatInstance;
+import landscapeEC.problem.sat.SatParser;
+import landscapeEC.problem.sat.SeedType;
+import landscapeEC.problem.sat.SnapShot;
+import landscapeEC.problem.sat.operators.CrossoverOperator;
+import landscapeEC.problem.sat.operators.MutationOperator;
+import landscapeEC.problem.sat.operators.SelectionOperator;
 import landscapeEC.util.SharedPRNG;
 
 public class GARun {

@@ -1,4 +1,4 @@
-package landscapeEC.sat;
+package landscapeEC.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,9 +6,12 @@ import java.util.List;
 
 import landscapeEC.parameters.DoubleParameter;
 import landscapeEC.parameters.IntParameter;
-import landscapeEC.sat.operators.CrossoverOperator;
-import landscapeEC.sat.operators.MutationOperator;
-import landscapeEC.sat.operators.SelectionOperator;
+import landscapeEC.problem.sat.GlobalSatInstance;
+import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.sat.IndividualFactory;
+import landscapeEC.problem.sat.operators.CrossoverOperator;
+import landscapeEC.problem.sat.operators.MutationOperator;
+import landscapeEC.problem.sat.operators.SelectionOperator;
 
 
 

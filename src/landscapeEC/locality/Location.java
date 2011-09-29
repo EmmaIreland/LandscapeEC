@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import landscapeEC.sat.Individual;
-import landscapeEC.sat.IndividualComparator;
+import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.sat.IndividualComparator;
 
 
 public class Location implements Serializable {

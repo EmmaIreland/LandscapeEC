@@ -1,4 +1,4 @@
-package landscapeEC.sat;
+package landscapeEC.problem.sat;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -57,7 +57,7 @@ public class SatParser {
         
         //Shuffle Clauses to prevent similar geographies from forming
         if (shuffle) {
-            newSatInstance.getClauseList().shuffleClauses();
+            newSatInstance.shuffleClauses();
         }
     }
 

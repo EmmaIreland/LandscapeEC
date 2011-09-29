@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import landscapeEC.sat.GlobalSatInstance;
-import landscapeEC.sat.Individual;
-import landscapeEC.sat.PopulationManager;
-import landscapeEC.sat.SatInstance;
-import landscapeEC.sat.SatParser;
+import landscapeEC.core.PopulationManager;
+import landscapeEC.problem.sat.GlobalSatInstance;
+import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.sat.SatInstance;
+import landscapeEC.problem.sat.SatParser;
 
 import org.jbehave.scenario.steps.Steps;
 

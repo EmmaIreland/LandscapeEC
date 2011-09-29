@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import landscapeEC.sat.Individual;
-import landscapeEC.sat.IndividualComparator;
-import landscapeEC.sat.IndividualFactory;
-import landscapeEC.sat.SatInstance;
-import landscapeEC.sat.operators.RandomSelection;
+import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.sat.IndividualComparator;
+import landscapeEC.problem.sat.IndividualFactory;
+import landscapeEC.problem.sat.SatInstance;
+import landscapeEC.problem.sat.operators.RandomSelection;
 import landscapeEC.util.FrequencyCounter;
 
 import org.junit.Test;

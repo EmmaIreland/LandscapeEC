@@ -8,8 +8,8 @@ import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.parameters.GlobalParameters;
-import landscapeEC.sat.GlobalSatInstance;
-import landscapeEC.sat.SatInstance;
+import landscapeEC.problem.sat.GlobalSatInstance;
+import landscapeEC.problem.sat.SatInstance;
 
 import org.junit.Test;
 

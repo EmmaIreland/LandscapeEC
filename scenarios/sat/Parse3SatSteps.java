@@ -4,11 +4,11 @@ import java.io.StringReader;
 import java.util.HashSet;
 import java.util.Set;
 
-import landscapeEC.sat.Clause;
-import landscapeEC.sat.ClauseList;
-import landscapeEC.sat.Literal;
-import landscapeEC.sat.SatInstance;
-import landscapeEC.sat.SatParser;
+import landscapeEC.problem.sat.Clause;
+import landscapeEC.problem.sat.ClauseList;
+import landscapeEC.problem.sat.Literal;
+import landscapeEC.problem.sat.SatInstance;
+import landscapeEC.problem.sat.SatParser;
 
 import static junit.framework.Assert.*;
 
@@ -59,12 +59,10 @@ public class Parse3SatSteps extends Steps {
             clauseSet.add(newClause);
         }
 
-        ClauseList clauseList = satInstance.getClauseList();
-
         //There is the correct number of clauses in the clauseSet
-        assertEquals(clauseList.size(), clauseSet.size());
+        assertEquals(satInstance.getNumClauses(), clauseSet.size());
         
         //AND each clause in the satInstance are in the clauseSet
-        assertEquals(clauseSet, clauseList.getClauses());
+        assertEquals(clauseSet, satInstance.getClauses());
     }
 }

@@ -11,9 +11,9 @@ import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.IntParameter;
-import landscapeEC.sat.Individual;
-import landscapeEC.sat.SatEvaluator;
-import landscapeEC.sat.DiversityCalculator;
+import landscapeEC.problem.sat.DiversityCalculator;
+import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.sat.SatEvaluator;
 
 public class DataDisplay extends JFrame implements Observer {
     private static final long serialVersionUID = 4151957839382676250L;

@@ -2,10 +2,10 @@ package SatGA;
 import java.io.IOException;
 import java.io.StringReader;
 
-import landscapeEC.sat.Individual;
-import landscapeEC.sat.SatEvaluator;
-import landscapeEC.sat.SatInstance;
-import landscapeEC.sat.SatParser;
+import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.sat.SatEvaluator;
+import landscapeEC.problem.sat.SatInstance;
+import landscapeEC.problem.sat.SatParser;
 
 import static junit.framework.Assert.*;
 

@@ -7,7 +7,7 @@ import java.util.List;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.parameters.GlobalParameters;
-import landscapeEC.sat.SatInstance;
+import landscapeEC.problem.sat.SatInstance;
 
 import static junit.framework.Assert.*;
 

@@ -1,6 +1,6 @@
-package landscapeEC.sat.operators;
+package landscapeEC.problem.sat.operators;
 
-import landscapeEC.sat.Individual;
+import landscapeEC.problem.sat.Individual;
 
 public interface MutationOperator {
     public Individual mutate(Individual ind);

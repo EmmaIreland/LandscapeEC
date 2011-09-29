@@ -1,4 +1,4 @@
-package landscapeEC.sat;
+package landscapeEC.problem.sat;
 
 import landscapeEC.util.SharedPRNG;
 

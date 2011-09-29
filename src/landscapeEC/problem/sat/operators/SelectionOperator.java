@@ -1,9 +1,9 @@
-package landscapeEC.sat.operators;
+package landscapeEC.problem.sat.operators;
 
 import java.util.List;
 
-import landscapeEC.sat.Individual;
-import landscapeEC.sat.IndividualComparator;
+import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.sat.IndividualComparator;
 
 
 public interface SelectionOperator {

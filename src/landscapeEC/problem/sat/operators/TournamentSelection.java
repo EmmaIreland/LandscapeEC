@@ -1,4 +1,4 @@
-package landscapeEC.sat.operators;
+package landscapeEC.problem.sat.operators;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 import landscapeEC.parameters.IntParameter;
-import landscapeEC.sat.Individual;
-import landscapeEC.sat.IndividualComparator;
+import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.sat.IndividualComparator;
 import landscapeEC.util.SharedPRNG;
 
 
