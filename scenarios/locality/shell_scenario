@@ -1,0 +1,43 @@
+Scenario: Generate a shell
+
+As a machine learning researcher
+I want to be able to generate nesting shells
+in order to find the range a species dominates.
+
+Given a non-toroidal world of size [10]
+When I compute a shell of [5] with radius 2
+Then the result contains:
+[3]
+[7]
+
+Given a non-toroidal world of size [10, 10]
+When I compute a shell of [5, 5] with radius 1
+Then the result contains:
+[4,4]
+[4,5]
+[4,6]
+[5,6]
+[6,6]
+[6,5]
+[6,4]
+[5,4]
+
+Given a non-toroidal world of size [10, 10]
+When I compute a shell of [5, 5] with radius 2
+Then the result contains:
+[3,3]
+[3,4]
+[3,5]
+[3,6]
+[3,7]
+[4,7]
+[5,7]
+[6,7]
+[7,7]
+[7,6]
+[7,5]
+[7,4]
+[7,3]
+[6,3]
+[5,3]
+[4,3]

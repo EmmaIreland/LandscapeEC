@@ -6,14 +6,14 @@ in order to find potential mates for an individual
 
 Given a non-toroidal world of size [10]
 When I compute the neighborhood of [5] with radius 1
-Then the neighborhood contains:
+Then the result contains:
 [4]
 [5]
 [6]
 
 Given a non-toroidal world of size [10]
 When I compute the neighborhood of [5] with radius 3
-Then the neighborhood contains:
+Then the result contains:
 [2]
 [3]
 [4]
@@ -24,7 +24,7 @@ Then the neighborhood contains:
 
 Given a non-toroidal world of size [10]
 When I compute the neighborhood of [8] with radius 3
-Then the neighborhood contains:
+Then the result contains:
 [5]
 [6]
 [7]
@@ -33,7 +33,7 @@ Then the neighborhood contains:
 
 Given a toroidal world of size [10]
 When I compute the neighborhood of [8] with radius 3
-Then the neighborhood contains:
+Then the result contains:
 [0]
 [1]
 [5]
@@ -44,7 +44,7 @@ Then the neighborhood contains:
 
 Given a non-toroidal world of size [10, 10]
 When I compute the neighborhood of [5, 5] with radius 1
-Then the neighborhood contains:
+Then the result contains:
 [4, 4]
 [4, 5]
 [4, 6]
@@ -57,7 +57,7 @@ Then the neighborhood contains:
 
 Given a non-toroidal world of size [10, 10]
 When I compute the neighborhood of [5, 5] with radius 2
-Then the neighborhood contains:
+Then the result contains:
 [3, 3]
 [3, 4]
 [3, 5]
@@ -86,7 +86,7 @@ Then the neighborhood contains:
 
 Given a non-toroidal world of size [10, 10]
 When I compute the neighborhood of [9, 1] with radius 2
-Then the neighborhood contains:
+Then the result contains:
 [7, 0]
 [7, 1]
 [7, 2]
@@ -102,7 +102,7 @@ Then the neighborhood contains:
 
 Given a toroidal world of size [10, 10]
 When I compute the neighborhood of [9, 1] with radius 2
-Then the neighborhood contains:
+Then the result contains:
 [0, 0]
 [0, 1]
 [0, 2]
@@ -131,7 +131,7 @@ Then the neighborhood contains:
 
 Given a toroidal world of size [2, 2]
 When I compute the neighborhood of [1,1] with radius 5
-Then the neighborhood contains:
+Then the result contains:
 [0, 0]
 [0, 1]
 [1, 0]
@@ -139,7 +139,7 @@ Then the neighborhood contains:
 
 Given a toroidal world of size [10, 10, 10]
 When I compute the neighborhood of [5, 5, 5] with radius 1
-Then the neighborhood contains:
+Then the result contains:
 [4, 4, 4]
 [4, 4, 5]
 [4, 4, 6]

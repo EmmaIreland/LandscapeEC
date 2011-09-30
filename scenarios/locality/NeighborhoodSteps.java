@@ -49,7 +49,19 @@ public class NeighborhoodSteps extends Steps {
         neighborhood = world.getNeighborhood(position, radius);
     }
 
-    @Then("the neighborhood contains: $locations")
+    @When("I compute a shell of [$location] with radius $radius")
+    public void getShell(String locationString, int radius) {
+        String[] positionStrings = locationString.split(", *");
+
+        Vector position = new Vector();
+        for (String s : positionStrings) {
+            position.add(Integer.parseInt(s));
+        }
+
+        neighborhood = world.makeShell(position, radius);
+    }
+    
+    @Then("the result contains: $locations")
     public void testNeighborhoodCorrect(String locations) {
         String[] locationStrings = locations.split("\n");
 
