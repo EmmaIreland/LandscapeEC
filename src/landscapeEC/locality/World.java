@@ -97,17 +97,44 @@ public class World implements Iterable<Vector>, Serializable {
         }
     }
 
+    private Individual findBestInCell(IndividualComparator comparator,
+	    Vector position) {
+	return Collections.max(getIndividualsAt(position), comparator);
+    }
+
     public Individual findBestIndividual() {
         IndividualComparator comparator = GlobalSatInstance.getComparator();
         List<Individual> bestFromCells = new ArrayList<Individual>();
         for (Vector p : this) {
             if (getLocation(p).getNumIndividuals() > 0) {
-                bestFromCells.add(Collections.max(getIndividualsAt(p), comparator));
+                bestFromCells.add(findBestInCell(comparator, p));
             }
         }
         if (bestFromCells.isEmpty()) {
             throw new EmptyWorldException();
         }
         return Collections.max(bestFromCells, comparator);
+    }
+
+    public List<Vector> makeShell(Vector position, int radius){
+	/*
+	 * In order to make a shell with no repetition, take the following steps (using a three-dimensional example)
+	 * For a shell radius 2, centered on origin:
+	 * Start with (2,x,y) and (-2,x,y), locking 2 and -2 in place and allowing x and y to go through their ranges of allowed values, [-2,2].
+	 * Then, move to (x,2,y) and (x,-2,y) and repeat, ONLY ALLOWING X THE RANGE [-1,1].
+	 * Repeat this for as many dimensions as are present, only allowing dimension tokens to the left to attain [-r+1,r-1]
+	 * 
+	 * In short, dimension tokens to the LEFT of the locked dimension may only do most of their range.  This is to avoid including certain positions multiple times.
+	 */
+	return null;
+    }
+    
+    public List<Individual> getSpeciesNeighborhood(Vector p) {
+        IndividualComparator comparator = GlobalSatInstance.getComparator();
+	int[] speciesBits = findBestInCell(comparator, p).getBits();
+	for(int rad=0; (rad<dimensions.size()/2); rad++){
+	    
+	}
+	return getIndividualsAt(p);
     }
 }
