@@ -25,7 +25,7 @@ public class World implements Iterable<Vector>, Serializable {
     public World(Vector dimensions, boolean isToroidal) throws Exception {
         toroidal = isToroidal;
         this.dimensions = new Vector(dimensions);
-
+        
         worldMap = new HashMap<Vector,Location>();
         for (Vector position : this) {
             worldMap.put(position, new Location(position));
@@ -116,20 +116,77 @@ public class World implements Iterable<Vector>, Serializable {
         return Collections.max(bestFromCells, comparator);
     }
 
-    public List<Vector> makeShell(Vector position, int radius){
-	/*
-	 * In order to make a shell with no repetition, take the following steps (using a three-dimensional example)
-	 * For a shell radius 2, centered on origin:
-	 * Start with (2,x,y) and (-2,x,y), locking 2 and -2 in place and allowing x and y to go through their ranges of allowed values, [-2,2].
-	 * Then, move to (x,2,y) and (x,-2,y) and repeat, ONLY ALLOWING X THE RANGE [-1,1].
-	 * Repeat this for as many dimensions as are present, only allowing dimension tokens to the left to attain [-r+1,r-1]
-	 * 
-	 * In short, dimension tokens to the LEFT of the locked dimension may only do most of their range.  This is to avoid including certain positions multiple times.
-	 */
-	return null;
-    }
-    
-    public List<Individual> getSpeciesNeighborhood(Vector p) {
+	public List<Vector> makeShell(final Vector position, final int radius) {
+		List<Vector> result = new ArrayList<Vector>();
+		Vector currentPosition = new Vector(position.getCoordinates());
+		int lockedDimension = 0;
+		while(lockedDimension < dimensions.size()){
+			
+			currentPosition.set(lockedDimension, position.get(lockedDimension)-radius);
+		    result.addAll(finishMakingShell(currentPosition, lockedDimension, radius));
+			
+			currentPosition.set(lockedDimension, position.get(lockedDimension)+radius);
+			result.addAll(finishMakingShell(currentPosition, lockedDimension, radius));
+			
+			currentPosition.set(lockedDimension, position.get(lockedDimension));
+			lockedDimension++;
+		}
+		if(dimensions.size()==1){
+			currentPosition.set(0, position.get(0)-radius);
+			result.add(currentPosition.clone());
+			currentPosition.set(0, position.get(0)+radius);
+			result.add(currentPosition.clone());
+			//I don't know why, but without this, the shell code doesn't work for one dimension.
+		}
+		/*
+		 * In order to make a shell with no repetition, take the following steps
+		 * (using a three-dimensional example) For a shell radius 2, centered on
+		 * origin: Start with (2,x,y) and (-2,x,y), locking 2 and -2 in place
+		 * and allowing x and y to go through their ranges of allowed values,
+		 * [-2,2]. Then, move to (x,2,y) and (x,-2,y) and repeat, ONLY ALLOWING
+		 * X THE RANGE [-1,1]. Repeat this for as many dimensions as are
+		 * present, only allowing dimension tokens to the left to attain
+		 * [-r+1,r-1]
+		 * 
+		 * In short, dimension tokens to the LEFT of the locked dimension may
+		 * only do most of their range. This is to avoid including certain
+		 * positions multiple times.
+		 */
+		System.out.println(result.toString());
+		return result;
+	}
+	
+    private List<Vector> finishMakingShell(final Vector position, int lockedDimension, int radius) {
+    	List<Vector> result = new ArrayList<Vector>();
+    	int currentDimension = 0;
+    	int leftRange = radius-1;
+    	int scan = -1;
+    	Vector currentPosition = new Vector(position.getCoordinates());
+    	while(currentDimension < lockedDimension){
+    		scan = currentPosition.get(currentDimension)-leftRange;
+    		currentPosition.set(currentDimension, scan);
+    		while(currentPosition.get(currentDimension)<=position.get(currentDimension)+leftRange){
+    			result.add(currentPosition.clone());
+    			scan++;
+    			currentPosition.set(currentDimension, scan);
+    		}
+    		currentDimension++;
+    	}
+    	currentDimension++;
+    	while(currentDimension<dimensions.size()){
+    		scan = currentPosition.get(currentDimension)-radius;
+    		currentPosition.set(currentDimension, scan);
+    		while(currentPosition.get(currentDimension)<=position.get(currentDimension)+radius){
+    			result.add(currentPosition.clone());
+    			scan++;
+    			currentPosition.set(currentDimension, scan);
+    		}
+    		currentDimension++;
+    	}
+		return result;
+	}
+
+	public List<Individual> getSpeciesNeighborhood(Vector p) {
         IndividualComparator comparator = GlobalSatInstance.getComparator();
 	int[] speciesBits = findBestInCell(comparator, p).getBits();
 	for(int rad=0; (rad<dimensions.size()/2); rad++){
