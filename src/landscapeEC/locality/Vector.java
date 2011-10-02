@@ -175,5 +175,10 @@ public class Vector implements Serializable {
     	crossDiagonal.add(verticalPos.get(1));
     	return crossDiagonal;
     }
+    
+    public Vector clone(){
+    	Vector result = new Vector(this.getCoordinates());
+    	return result;
+    }
 
 }
