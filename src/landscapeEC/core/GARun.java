@@ -23,10 +23,10 @@ import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntArrayParameter;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.parameters.StringParameter;
+import landscapeEC.problem.Individual;
 import landscapeEC.problem.sat.DiversityCalculator;
 import landscapeEC.problem.sat.EmptyWorldException;
 import landscapeEC.problem.sat.GlobalSatInstance;
-import landscapeEC.problem.sat.Individual;
 import landscapeEC.problem.sat.SatEvaluator;
 import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.problem.sat.SatParser;
@@ -35,6 +35,7 @@ import landscapeEC.problem.sat.SnapShot;
 import landscapeEC.problem.sat.operators.CrossoverOperator;
 import landscapeEC.problem.sat.operators.MutationOperator;
 import landscapeEC.problem.sat.operators.SelectionOperator;
+import landscapeEC.util.ParameterClassLoader;
 import landscapeEC.util.SharedPRNG;
 
 public class GARun {
@@ -61,9 +62,9 @@ public class GARun {
    }
 
    public void run() throws Exception {
-      mutationOperator = getMutationOperator();
-      selectionOperator = getSelectionOperator();
-      crossoverOperator = getCrossoverOperator();
+      mutationOperator = ParameterClassLoader.loadClass(StringParameter.MUTATION_OPERATOR);
+      selectionOperator = ParameterClassLoader.loadClass(StringParameter.SELECTION_OPERATOR);
+      crossoverOperator = ParameterClassLoader.loadClass(StringParameter.CROSSOVER_OPERATOR);
 
       intervalFitnesses = new double[getReportingIntervals().length];
       intervalDiversities = new double[getReportingIntervals().length];
@@ -213,7 +214,7 @@ public class GARun {
          bestIndividual = world.findBestIndividual();
          // System.out.println("Generation " + (i + 1));
          // System.out.println("   Best individual: " + bestIndividual);
-         bestOverallFitness = SatEvaluator.evaluate(bestIndividual);
+         bestOverallFitness = bestIndividual.getGlobalFitness();        
          // System.out.println("   Best fitness: " + bestFitness);
 
          double[] reportingIntervals = getReportingIntervals();
@@ -230,6 +231,7 @@ public class GARun {
          if(BooleanParameter.QUIT_ON_SUCCESS.getValue() && bestOverallFitness == 1.0) {
             System.out.println("Best Fitness: " + bestOverallFitness);
             SatEvaluator.printUnsolvedClauses(bestIndividual);
+            //This will be removed during refactoring
             System.out.println("SUCCESS");
             return true;
          }
@@ -240,12 +242,14 @@ public class GARun {
       if (bestOverallFitness == 1.0) {
           System.out.println("Best Fitness: " + bestOverallFitness);
           SatEvaluator.printUnsolvedClauses(bestIndividual);
+          //This will be removed during refactoring
           System.out.println("SUCCESS");
           return true;            
       }
       
       System.out.println("Best Fitness: " + bestOverallFitness);
       SatEvaluator.printUnsolvedClauses(bestIndividual);
+      //This will be removed during refactoring
       System.out.println("FAILURE");
       return false;
    }
@@ -380,38 +384,5 @@ private void performDraconianReaper() {
       for(Vector position : world) {
          world.getLocation(position).addFromPendingIndividuals();
       }
-   }
-
-   private MutationOperator getMutationOperator() throws ClassNotFoundException, SecurityException,
-         NoSuchMethodException, IllegalArgumentException, InstantiationException,
-         IllegalAccessException, InvocationTargetException {
-      String evaluatorName = StringParameter.MUTATION_OPERATOR.getValue();
-
-      Class<MutationOperator> eval = (Class<MutationOperator>) Class.forName(evaluatorName);
-      Constructor<MutationOperator> factory = eval.getConstructor();
-      MutationOperator instance = factory.newInstance();
-      return instance;
-   }
-
-   private SelectionOperator getSelectionOperator() throws ClassNotFoundException,
-         SecurityException, NoSuchMethodException, IllegalArgumentException,
-         InstantiationException, IllegalAccessException, InvocationTargetException {
-      String evaluatorName = StringParameter.SELECTION_OPERATOR.getValue();
-
-      Class<SelectionOperator> eval = (Class<SelectionOperator>) Class.forName(evaluatorName);
-      Constructor<SelectionOperator> factory = eval.getConstructor();
-      SelectionOperator instance = factory.newInstance();
-      return instance;
-   }
-
-   private CrossoverOperator getCrossoverOperator() throws ClassNotFoundException,
-         SecurityException, NoSuchMethodException, IllegalArgumentException,
-         InstantiationException, IllegalAccessException, InvocationTargetException {
-      String evaluatorName = StringParameter.CROSSOVER_OPERATOR.getValue();
-
-      Class<CrossoverOperator> eval = (Class<CrossoverOperator>) Class.forName(evaluatorName);
-      Constructor<CrossoverOperator> factory = eval.getConstructor();
-      CrossoverOperator instance = factory.newInstance();
-      return instance;
    }
 }
