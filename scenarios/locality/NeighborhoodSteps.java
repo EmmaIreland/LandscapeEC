@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import landscapeEC.locality.ShellMaker;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.parameters.GlobalParameters;
@@ -57,8 +58,8 @@ public class NeighborhoodSteps extends Steps {
         for (String s : positionStrings) {
             position.add(Integer.parseInt(s));
         }
-
-        neighborhood = world.makeShell(position, radius);
+        ShellMaker shellMaker = new ShellMaker(world);
+        neighborhood = shellMaker.makeShell(position, radius);
     }
     
     @Then("the result contains: $locations")
