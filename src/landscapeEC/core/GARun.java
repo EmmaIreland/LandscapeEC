@@ -23,7 +23,7 @@ import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntArrayParameter;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.parameters.StringParameter;
-import landscapeEC.problem.Individual;
+import landscapeEC.problem.sat.Individual;
 import landscapeEC.problem.sat.DiversityCalculator;
 import landscapeEC.problem.sat.EmptyWorldException;
 import landscapeEC.problem.sat.GlobalSatInstance;
