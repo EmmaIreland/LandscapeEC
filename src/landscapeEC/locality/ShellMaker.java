@@ -1,17 +1,21 @@
 package landscapeEC.locality;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ShellMaker {
+    //TODO: This doesn't account for toroidal worlds!
+    //TODO: Currently, this may run off the end of the world!
     private World world;
     private Vector dimensions;
-    private boolean isToroidal;
+    private boolean toroidal;
+    
     
     public ShellMaker(World world){
 	this.world=world;
 	this.dimensions=world.getDimensions();
-	this.isToroidal = world.isToroidal();
+	this.toroidal = world.isToroidal();
     }
     
     public List<Vector> makeShell(final Vector position, int radius){
@@ -27,7 +31,7 @@ public class ShellMaker {
 	    
 	    currentPosition.set(lockedDimension, original);
 	}
-	System.out.println(result.toString());
+	process(result);
 	return result;
     }
     
@@ -62,5 +66,33 @@ public class ShellMaker {
 	    result.add(position.clone());
 	}
 	return result;
+    }
+    
+    private void process(List<Vector> input){
+	if(toroidal){
+	    //toroidal case goes here, eventually
+	}
+	else{
+	    for(Vector v:input){
+		v.nonToroidalNormalize(dimensions);
+	    }
+	    removeDuplicates(input);
+	}
+    }
+    
+    private void removeDuplicates(List<Vector> input){
+	for(int i=0; i<input.size()-1;){
+	    if(input.get(i).equals(input.get(i+1))){
+		input.remove(i+1);
+	    }
+	    else{
+		i++;
+	    }
+	}
+    }
+    
+    private List<Vector> sort(List<Vector> input){
+	return input;
+	//TODO: Write sorting function
     }
 }

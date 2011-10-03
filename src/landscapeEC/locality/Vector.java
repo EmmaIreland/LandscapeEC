@@ -180,5 +180,11 @@ public class Vector implements Serializable {
     	Vector result = new Vector(this.getCoordinates());
     	return result;
     }
+    
+    public void nonToroidalNormalize(Vector worldDimensions){
+	this.coordinates = this.maxWithZero().getCoordinates();
+	this.coordinates = this.min(worldDimensions).getCoordinates();
+	
+    }
 
 }

@@ -116,15 +116,15 @@ public class World implements Iterable<Vector>, Serializable {
 	return Collections.max(bestFromCells, comparator);
     }
 
-    //This will be un-commented momentarily.  I wanted to commit what I had.
- /*   public List<Individual> getSpeciesNeighborhood(Vector p) {
+    public List<Individual> getSpeciesNeighborhood(Vector p) {
 	IndividualComparator comparator = GlobalSatInstance.getComparator();
 	int[] speciesBits = findBestInCell(comparator, p).getBits();
 	List<Vector> currentNeighborhood = new ArrayList<Vector>();
+	
 	currentNeighborhood.add(p);
-	for (int rad = 0; (rad < dimensions.size() / 2); rad++) {
-	    List<Vector> 
+	for (int rad = 0; (rad <= dimensions.size() / 2); rad++) {
+	    
 	}
 	return getIndividualsAt(p);
-    }*/
+    }
 }
