@@ -120,11 +120,27 @@ public class World implements Iterable<Vector>, Serializable {
 	IndividualComparator comparator = GlobalSatInstance.getComparator();
 	int[] speciesBits = findBestInCell(comparator, p).getBits();
 	List<Vector> currentNeighborhood = new ArrayList<Vector>();
+	List<Vector> temp = new ArrayList<Vector>();
+	ShellMaker shellMaker = new ShellMaker(this);
+	Boolean match = true;
 	
 	currentNeighborhood.add(p);
-	for (int rad = 0; (rad <= dimensions.size() / 2); rad++) {
-	    
+	for (int rad = 0; (rad <= dimensions.size() / 2)&&match; rad++) {
+	    temp.addAll(shellMaker.makeShell(p, rad));
+	    for(Vector v : temp){
+		if(findBestInCell(comparator, v).getBits().equals(speciesBits)){
+		    //do nothing - everything is going according to plan!
+		}
+		else{
+		    match = false;
+		    break;
+		}
+	    }
 	}
-	return getIndividualsAt(p);
+	List<Individual> individuals = new ArrayList<Individual>();
+	for(Vector v : currentNeighborhood){
+	    individuals.addAll(getIndividualsAt(v));
+	}
+	return individuals;
     }
 }
