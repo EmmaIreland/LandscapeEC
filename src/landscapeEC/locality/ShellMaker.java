@@ -31,7 +31,7 @@ public class ShellMaker {
 	    
 	    currentPosition.set(lockedDimension, original);
 	}
-	process(result);
+	result = process(result);
 	return result;
     }
     
@@ -68,31 +68,41 @@ public class ShellMaker {
 	return result;
     }
     
-    private void process(List<Vector> input){
+    private List<Vector> process(List<Vector> input){
+	List<Vector> result = new ArrayList<Vector>();
 	if(toroidal){
 	    //toroidal case goes here, eventually
 	}
 	else{
 	    for(Vector v:input){
-		v.nonToroidalNormalize(dimensions);
+		if(isValid(v)){
+		    result.add(v);
+		}
 	    }
-	    removeDuplicates(input);
+	    removeDuplicates(result);
 	}
+	return result;
     }
     
     private void removeDuplicates(List<Vector> input){
-	for(int i=0; i<input.size()-1;){
-	    if(input.get(i).equals(input.get(i+1))){
-		input.remove(i+1);
+	List<Vector> seen = new ArrayList<Vector>();
+	for(int i=0; input.size() > seen.size();){
+	    if(seen.contains(input.get(i))){
+		input.remove(i);
 	    }
 	    else{
+		seen.add(input.get(i));
 		i++;
 	    }
 	}
     }
     
-    private List<Vector> sort(List<Vector> input){
-	return input;
-	//TODO: Write sorting function
+    private boolean isValid(Vector v){
+	for(int i=0; i<dimensions.size(); i++){
+	    if (v.get(i)<0||v.get(i)>dimensions.get(i)){
+		return false;
+	    }
+	}
+	return true;
     }
 }
