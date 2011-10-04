@@ -70,8 +70,17 @@ public class ShellMaker {
     
     private List<Vector> process(List<Vector> input){
 	List<Vector> result = new ArrayList<Vector>();
-	if(toroidal){
-	    //toroidal case goes here, eventually
+	if(toroidal){ // NOT YET TESTED
+	    	      //TODO: TEST THIS
+	    for(Vector v:input){
+		if(isValid(v)){
+		    result.add(v);
+		}
+		else{
+		    result.add(v.mod(dimensions));
+		}
+	    }
+	    removeDuplicates(result);
 	}
 	else{
 	    for(Vector v:input){
