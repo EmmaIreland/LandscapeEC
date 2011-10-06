@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import landscapeEC.problem.Individual;
+
 public class Clause implements Serializable{
     private static final long serialVersionUID = 1603168697591241162L;
     private List<Literal> literals = new ArrayList<Literal>();
@@ -12,6 +14,13 @@ public class Clause implements Serializable{
 
     public Clause(int id) {
         this.id = id;
+    }
+    
+    public Clause(int id, Literal literals[]) {
+        this.id = id;
+        for (Literal l : literals) {
+            this.literals.add(l);
+        }
     }
 
     public void addLiteral(Literal literal) {
@@ -70,7 +79,8 @@ public class Clause implements Serializable{
     }
 
     private boolean satisfiesLiteral(Individual individual, Literal literal) {
-        return individual.valueIsFalse(literal) == literal.negated;
+        return (individual.getBit(literal.variable) == 0) == literal.negated;
+//        return individual.valueIsFalse(literal) == literal.negated;
     }
 
     public Integer getId() {

@@ -3,8 +3,8 @@ package sat;
 import java.io.IOException;
 import java.io.StringReader;
 
+import landscapeEC.problem.Individual;
 import landscapeEC.problem.sat.GlobalSatInstance;
-import landscapeEC.problem.sat.Individual;
 import landscapeEC.problem.sat.IndividualComparator;
 import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.problem.sat.SatParser;

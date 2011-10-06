@@ -1,6 +1,8 @@
-package landscapeEC.problem.sat;
+package landscapeEC.problem;
 
 import java.io.Serializable;
+
+import landscapeEC.problem.sat.SatEvaluator;
 
 public class Individual implements Serializable {
     private static final long serialVersionUID = 8709627944120749083L;
@@ -33,9 +35,9 @@ public class Individual implements Serializable {
     public double getGlobalFitness() {
         return globalFitness;
     }
-
-    public final boolean valueIsFalse(Literal literal) {
-        return bits[literal.variable] == 0;
+    
+    public int getBit(int index) {
+        return bits[index];
     }
     
     @Override

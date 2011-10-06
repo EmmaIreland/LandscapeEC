@@ -1,5 +1,7 @@
 package landscapeEC.problem.sat;
 
+import landscapeEC.problem.Individual;
+
 public class SatEvaluator {
 
     private static int numEvaluations = 0;

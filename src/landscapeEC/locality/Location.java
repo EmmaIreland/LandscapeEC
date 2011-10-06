@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.Individual;
 import landscapeEC.problem.sat.IndividualComparator;
 
 

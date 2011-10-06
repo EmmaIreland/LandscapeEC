@@ -3,7 +3,7 @@ package landscapeEC.problem.sat.operators;
 import java.util.ArrayList;
 import java.util.List;
 
-import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.Individual;
 import landscapeEC.problem.sat.IndividualComparator;
 import landscapeEC.util.SharedPRNG;
 

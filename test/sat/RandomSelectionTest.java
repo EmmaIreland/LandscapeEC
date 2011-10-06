@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.Individual;
 import landscapeEC.problem.sat.IndividualComparator;
 import landscapeEC.problem.sat.IndividualFactory;
 import landscapeEC.problem.sat.SatInstance;

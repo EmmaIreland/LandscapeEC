@@ -23,7 +23,7 @@ import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntArrayParameter;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.parameters.StringParameter;
-import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.Individual;
 import landscapeEC.problem.sat.DiversityCalculator;
 import landscapeEC.problem.sat.EmptyWorldException;
 import landscapeEC.problem.sat.GlobalSatInstance;
@@ -65,7 +65,7 @@ public class GARun {
       mutationOperator = ParameterClassLoader.loadClass(StringParameter.MUTATION_OPERATOR);
       selectionOperator = ParameterClassLoader.loadClass(StringParameter.SELECTION_OPERATOR);
       crossoverOperator = ParameterClassLoader.loadClass(StringParameter.CROSSOVER_OPERATOR);
-
+      
       intervalFitnesses = new double[getReportingIntervals().length];
       intervalDiversities = new double[getReportingIntervals().length];
 

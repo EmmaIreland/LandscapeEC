@@ -11,8 +11,8 @@ import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.IntParameter;
+import landscapeEC.problem.Individual;
 import landscapeEC.problem.sat.DiversityCalculator;
-import landscapeEC.problem.sat.Individual;
 import landscapeEC.problem.sat.SatEvaluator;
 
 public class DataDisplay extends JFrame implements Observer {

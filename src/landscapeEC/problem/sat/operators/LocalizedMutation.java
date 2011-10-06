@@ -1,7 +1,7 @@
 package landscapeEC.problem.sat.operators;
 
 import landscapeEC.parameters.DoubleParameter;
-import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.Individual;
 import landscapeEC.util.SharedPRNG;
 
 public class LocalizedMutation implements MutationOperator {

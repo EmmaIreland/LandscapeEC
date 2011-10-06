@@ -3,6 +3,8 @@ package landscapeEC.problem.sat;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import landscapeEC.problem.Individual;
+
 public class IndividualComparator implements Comparator<Individual>, Serializable{
     private static final long serialVersionUID = 6890926228504302829L;
     private SatInstance satInstance;

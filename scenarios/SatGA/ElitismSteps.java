@@ -9,8 +9,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import landscapeEC.core.PopulationManager;
+import landscapeEC.problem.Individual;
 import landscapeEC.problem.sat.GlobalSatInstance;
-import landscapeEC.problem.sat.Individual;
 import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.problem.sat.SatParser;
 

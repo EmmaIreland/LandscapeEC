@@ -9,8 +9,8 @@ import java.util.List;
 import landscapeEC.core.PopulationManager;
 import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntParameter;
+import landscapeEC.problem.Individual;
 import landscapeEC.problem.sat.GlobalSatInstance;
-import landscapeEC.problem.sat.Individual;
 import landscapeEC.problem.sat.IndividualFactory;
 import landscapeEC.problem.sat.SatInstance;
 

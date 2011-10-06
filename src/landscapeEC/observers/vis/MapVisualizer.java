@@ -19,8 +19,8 @@ import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntArrayParameter;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.parameters.StringParameter;
+import landscapeEC.problem.Individual;
 import landscapeEC.problem.sat.GlobalSatInstance;
-import landscapeEC.problem.sat.Individual;
 import landscapeEC.problem.sat.SatEvaluator;
 import landscapeEC.problem.sat.SnapShot;
 

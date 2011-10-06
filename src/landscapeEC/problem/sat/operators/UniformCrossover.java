@@ -2,7 +2,7 @@ package landscapeEC.problem.sat.operators;
 
 import java.util.List;
 
-import landscapeEC.problem.sat.Individual;
+import landscapeEC.problem.Individual;
 import landscapeEC.util.SharedPRNG;
 
 

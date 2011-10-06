@@ -12,7 +12,6 @@ import landscapeEC.util.SharedPRNG;
 public class SatInstance implements Iterable<Clause>, Serializable {
     private static final long serialVersionUID = 3401366560852023162L;
     private int numVariables;
-    //private ClauseList cnf = new ClauseList();
     private LinkedHashSet<Clause> clauseList = new LinkedHashSet<Clause>();
 
     public SatInstance() {
