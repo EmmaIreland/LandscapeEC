@@ -9,10 +9,9 @@ import landscapeEC.parameters.IntParameter;
 import static junit.framework.Assert.*;
 
 import org.apache.commons.io.FileUtils;
-import org.jbehave.scenario.steps.Steps;
-
-import org.jbehave.scenario.annotations.When;
-import org.jbehave.scenario.annotations.Then;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
+import org.jbehave.core.steps.Steps;
 
 
 

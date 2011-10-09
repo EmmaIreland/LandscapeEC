@@ -3,21 +3,20 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import landscapeEC.problem.Individual;
+import landscapeEC.problem.sat.GlobalSatInstance;
 import landscapeEC.problem.sat.SatEvaluator;
 import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.problem.sat.SatParser;
 
 import static junit.framework.Assert.*;
 
-import org.jbehave.scenario.steps.Steps;
-
-import org.jbehave.scenario.annotations.Given;
-import org.jbehave.scenario.annotations.When;
-import org.jbehave.scenario.annotations.Then;
-import org.jbehave.scenario.annotations.Named;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
+import org.jbehave.core.annotations.Named;
 
 
-public class EvaluationSteps extends Steps {
+public class EvaluationSteps {
     private String bitString;
     private SatInstance satInstance;
 
@@ -34,7 +33,8 @@ public class EvaluationSteps extends Steps {
     public void getSatInstance(String clauseList) throws IOException {
         SatParser satParser= new SatParser();
         StringReader stringReader = new StringReader(clauseList);
-        this.satInstance = satParser.parseInstance(stringReader);        
+        this.satInstance = satParser.parseInstance(stringReader);
+        //GlobalSatInstance.setInstance(satInstance);
     }
     
     @Then("the fitness should be <fitness>")

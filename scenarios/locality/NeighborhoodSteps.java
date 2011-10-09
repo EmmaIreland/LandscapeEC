@@ -8,15 +8,14 @@ import landscapeEC.locality.ShellMaker;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.parameters.GlobalParameters;
-import landscapeEC.problem.sat.SatInstance;
 
 import static junit.framework.Assert.*;
 
-import org.apache.commons.io.FileUtils;
-import org.jbehave.scenario.annotations.Given;
-import org.jbehave.scenario.annotations.Then;
-import org.jbehave.scenario.annotations.When;
-import org.jbehave.scenario.steps.Steps;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
+import org.jbehave.core.annotations.Pending;
+import org.jbehave.core.steps.Steps;
 
 
 
@@ -49,8 +48,9 @@ public class NeighborhoodSteps extends Steps {
 
         neighborhood = world.getNeighborhood(position, radius);
     }
-
+    
     @When("I compute a shell of [$location] with radius $radius")
+    @Pending
     public void getShell(String locationString, int radius) {
         String[] positionStrings = locationString.split(", *");
 
