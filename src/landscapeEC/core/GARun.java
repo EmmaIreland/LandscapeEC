@@ -365,7 +365,7 @@ private void performDraconianReaper() {
             }
 
             List<Individual> mutatedPopulation = popManager.mutatePopulation(copiedPopulation,
-                  mutationOperator);
+                  mutationOperator, position);
 
             world.getLocation(position).addToPendingIndividuals(mutatedPopulation);
          }

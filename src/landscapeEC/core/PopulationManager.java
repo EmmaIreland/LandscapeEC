@@ -43,11 +43,11 @@ public class PopulationManager {
         return population;
     }
 
-    public List<Individual> mutatePopulation(List<Individual> population, MutationOperator mutationOperator) {
+    public List<Individual> mutatePopulation(List<Individual> population, MutationOperator mutationOperator, Object... parameters) {
         List<Individual> newPopulation = new ArrayList<Individual>();
         
         for(Individual ind:population){
-            Individual newIndividual = mutationOperator.mutate(ind);
+            Individual newIndividual = mutationOperator.mutate(ind, parameters);
             
             newPopulation.add(newIndividual);
         }

@@ -6,7 +6,6 @@ import java.util.List;
 
 public class ShellMaker {
     //TODO: This doesn't account for toroidal worlds!
-    //TODO: Currently, this may run off the end of the world!
     private World world;
     private Vector dimensions;
     private boolean toroidal;

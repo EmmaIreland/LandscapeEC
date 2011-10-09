@@ -7,7 +7,7 @@ import landscapeEC.util.SharedPRNG;
 public class PointMutation implements MutationOperator {
 
     @Override
-    public Individual mutate(Individual ind) {
+    public Individual mutate(Individual ind, Object... parameters) {
         int[] bits = ind.getBits();
 
         double mutationRate = DoubleParameter.AVERAGE_MUTATIONS.getValue()/bits.length;
