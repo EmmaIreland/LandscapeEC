@@ -1,5 +1,7 @@
 package sat;
 
+import static junit.framework.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +17,6 @@ import landscapeEC.util.FrequencyCounter;
 import org.junit.Test;
 
 import util.ChiSquaredStatistics;
-
-import static junit.framework.Assert.*;
 
 public class RandomSelectionTest {    
     private static final int NUM_INDIVIDUALS = 10;

@@ -1,9 +1,24 @@
 package landscapeEC.problem;
 
-public interface Evaluator {
+public abstract class Evaluator {
     
-    //need to keep track of number of evalutaions
+    private static int numEvaluations = 0;
+    private static int numResets = 0;
     
-    //need method evaluate(problem, individual) that will return the fitness
+    //Method which evaluates the individual using a given problem, returns a fitness as a decimal from 0-1
+    public abstract double evaluate(Problem problem, Individual individual);
+    
+    public static int getNumberEvaluations() {
+        return numEvaluations;
+    }
+    
+    public static void resetEvaluationsCounter() {
+        numEvaluations = 0;
+        numResets++;
+    }
+
+    public static int getNumResets() {
+        return numResets;
+    }
     
 }

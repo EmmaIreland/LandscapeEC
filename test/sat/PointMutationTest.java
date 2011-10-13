@@ -1,5 +1,7 @@
 package sat;
 
+import static junit.framework.Assert.assertTrue;
+
 import java.util.Map;
 
 import landscapeEC.parameters.GlobalParameters;
@@ -9,8 +11,6 @@ import landscapeEC.util.FrequencyCounter;
 import landscapeEC.util.ProbabilityUtils;
 
 import org.junit.Test;
-
-import static junit.framework.Assert.*;
 
 import util.ChiSquaredStatistics;
 import util.MockParameters;

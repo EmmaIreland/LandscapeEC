@@ -1,5 +1,7 @@
 package sat;
 
+import static junit.framework.Assert.assertTrue;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -16,13 +18,11 @@ import landscapeEC.problem.sat.SatParser;
 import landscapeEC.problem.sat.operators.TournamentSelection;
 import landscapeEC.util.FrequencyCounter;
 
-import static junit.framework.Assert.*;
-
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
-import org.jbehave.core.steps.Steps;
-
+import org.jbehave.scenario.annotations.AfterScenario;
+import org.jbehave.scenario.annotations.Given;
+import org.jbehave.scenario.annotations.Then;
+import org.jbehave.scenario.annotations.When;
+import org.jbehave.scenario.steps.Steps;
 
 import util.ChiSquaredStatistics;
 import util.MockParameters;
@@ -85,5 +85,10 @@ public class TournamentSteps extends Steps {
         }
         
         assertTrue(ChiSquaredStatistics.chiSquaredTest(counter, expectedProportions));
+    }
+    
+    @AfterScenario
+    public void clearGlobalSatInstance() {
+        GlobalSatInstance.setInstance(null);
     }
 }

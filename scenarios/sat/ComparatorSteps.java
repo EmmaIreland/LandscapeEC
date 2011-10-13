@@ -1,5 +1,7 @@
 package sat;
 
+import static junit.framework.Assert.assertTrue;
+
 import java.io.IOException;
 import java.io.StringReader;
 
@@ -9,13 +11,12 @@ import landscapeEC.problem.sat.IndividualComparator;
 import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.problem.sat.SatParser;
 
-import static junit.framework.Assert.*;
-
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
-import org.jbehave.core.annotations.Named;
-import org.jbehave.core.steps.Steps;
+import org.jbehave.scenario.annotations.AfterScenario;
+import org.jbehave.scenario.annotations.Given;
+import org.jbehave.scenario.annotations.Named;
+import org.jbehave.scenario.annotations.Then;
+import org.jbehave.scenario.annotations.When;
+import org.jbehave.scenario.steps.Steps;
 
 public class ComparatorSteps extends Steps {
     private SatInstance satInstance;
@@ -53,4 +54,8 @@ public class ComparatorSteps extends Steps {
         } 
     }
 
+    @AfterScenario
+    public void clearGlobalSatInstance() {
+        GlobalSatInstance.setInstance(null);
+    }
 }

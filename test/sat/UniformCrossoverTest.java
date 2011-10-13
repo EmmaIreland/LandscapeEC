@@ -1,5 +1,7 @@
 package sat;
 
+import static junit.framework.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,8 +14,6 @@ import landscapeEC.problem.sat.operators.UniformCrossover;
 import landscapeEC.util.FrequencyCounter;
 
 import org.junit.Test;
-
-import static junit.framework.Assert.*;
 
 import util.ChiSquaredStatistics;
 

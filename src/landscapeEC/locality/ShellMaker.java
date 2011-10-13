@@ -1,7 +1,6 @@
 package landscapeEC.locality;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ShellMaker {

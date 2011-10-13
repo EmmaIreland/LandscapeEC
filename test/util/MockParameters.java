@@ -1,6 +1,12 @@
 package util;
 
-import landscapeEC.parameters.*;
+import landscapeEC.parameters.BooleanParameter;
+import landscapeEC.parameters.DoubleArrayParameter;
+import landscapeEC.parameters.DoubleParameter;
+import landscapeEC.parameters.IntParameter;
+import landscapeEC.parameters.Parameters;
+import landscapeEC.parameters.StringArrayParameter;
+import landscapeEC.parameters.StringParameter;
 
 public class MockParameters extends Parameters
 {

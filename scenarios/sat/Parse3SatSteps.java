@@ -1,21 +1,20 @@
 package sat;
+import static junit.framework.Assert.assertEquals;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashSet;
 import java.util.Set;
 
 import landscapeEC.problem.sat.Clause;
-import landscapeEC.problem.sat.ClauseList;
 import landscapeEC.problem.sat.Literal;
 import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.problem.sat.SatParser;
 
-import static junit.framework.Assert.*;
-
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
-import org.jbehave.core.steps.Steps;
+import org.jbehave.scenario.annotations.Given;
+import org.jbehave.scenario.annotations.Then;
+import org.jbehave.scenario.annotations.When;
+import org.jbehave.scenario.steps.Steps;
 
 
 public class Parse3SatSteps extends Steps {

@@ -1,5 +1,8 @@
 package locality;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,14 +11,13 @@ import landscapeEC.locality.ShellMaker;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.parameters.GlobalParameters;
+import landscapeEC.problem.sat.GlobalSatInstance;
 
-import static junit.framework.Assert.*;
-
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
-import org.jbehave.core.annotations.Pending;
-import org.jbehave.core.steps.Steps;
+import org.jbehave.scenario.annotations.AfterScenario;
+import org.jbehave.scenario.annotations.Given;
+import org.jbehave.scenario.annotations.Then;
+import org.jbehave.scenario.annotations.When;
+import org.jbehave.scenario.steps.Steps;
 
 
 
@@ -48,9 +50,8 @@ public class NeighborhoodSteps extends Steps {
 
         neighborhood = world.getNeighborhood(position, radius);
     }
-    
+
     @When("I compute a shell of [$location] with radius $radius")
-    @Pending
     public void getShell(String locationString, int radius) {
         String[] positionStrings = locationString.split(", *");
 
@@ -84,5 +85,11 @@ public class NeighborhoodSteps extends Steps {
 
         assertTrue("Actual neighborhood = " + neighborhood, expectedNeighborhood.containsAll(neighborhood));
         assertEquals(expectedNeighborhood.size(), neighborhood.size());
+    }
+    
+    
+    @AfterScenario
+    public void clearGlobalSatInstance() {
+        GlobalSatInstance.setInstance(null);
     }
 }
