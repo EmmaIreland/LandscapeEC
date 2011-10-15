@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import landscapeEC.problem.Individual;
+import landscapeEC.problem.sat.GlobalSatInstance;
 import landscapeEC.problem.sat.IndividualComparator;
 import landscapeEC.problem.sat.IndividualFactory;
 import landscapeEC.problem.sat.SatInstance;
@@ -27,6 +28,7 @@ public class RandomSelectionTest {
     public void testRandomSelection() {    
         SatInstance satInstance = new SatInstance();
         satInstance.setNumVariables(NUM_VARIABLES);
+        GlobalSatInstance.setInstance(satInstance);
         
         List<Individual> population = new ArrayList<Individual>();
         

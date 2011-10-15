@@ -10,7 +10,7 @@ public class IndividualComparator implements Comparator<Individual>, Serializabl
     private SatInstance satInstance;
     
     public IndividualComparator() {
-        this.satInstance = GlobalSatInstance.getInstance().getSubInstance(0);
+        this.satInstance = new SatInstance();
     }
     
     public IndividualComparator(SatInstance satInstance) {

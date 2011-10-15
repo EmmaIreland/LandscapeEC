@@ -22,17 +22,17 @@ public class World implements Iterable<Vector>, Serializable {
 	private Vector dimensions;
 
 	public World(Vector dimensions, boolean isToroidal) throws Exception {
-		toroidal = isToroidal;
-		this.dimensions = new Vector(dimensions);
+	    toroidal = isToroidal;
+	    this.dimensions = new Vector(dimensions);
 
-		worldMap = new HashMap<Vector, Location>();
-		for (Vector position : this) {
-			worldMap.put(position, new Location(position));
-		}
+	    worldMap = new HashMap<Vector, Location>();
+	    for (Vector position : this) {
+	        worldMap.put(position, new Location(position));
+	    }
 
-		Geography geography = createGeography();
+	    Geography geography = createGeography();
 
-		geography.generateGeography(this);
+	    geography.generateGeography(this);
 	}
 
 	@SuppressWarnings("unchecked")
