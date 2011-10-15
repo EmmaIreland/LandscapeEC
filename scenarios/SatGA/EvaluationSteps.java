@@ -9,6 +9,7 @@ import landscapeEC.problem.sat.SatEvaluator;
 import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.problem.sat.SatParser;
 
+import org.jbehave.scenario.annotations.BeforeStory;
 import org.jbehave.scenario.annotations.Given;
 import org.jbehave.scenario.annotations.Named;
 import org.jbehave.scenario.annotations.Then;
@@ -20,8 +21,14 @@ public class EvaluationSteps extends Steps {
     private String bitString;
     private SatInstance satInstance;
 
+    @BeforeStory
+    public void beforeScenario() {
+        SatEvaluator.resetEvaluationsCounter();
+    }
+    
     @Given("a sat evaluator")
     public void constructParser() {
+        //
     }
     
     @When("I have a bitstring of <bitstring>")
@@ -38,9 +45,15 @@ public class EvaluationSteps extends Steps {
     
     @Then("the fitness should be <fitness>")
     public void confirmEvaluation(@Named("fitness") double expectedFitness) {
-        double actualFitness = SatEvaluator.evaluate(satInstance, new Individual(bitString));
+        double actualFitness = SatEvaluator.evaluate(satInstance, new Individual(bitString, false));
         
         assertEquals(expectedFitness, actualFitness);
     }
-
+    
+    @Then("the evaluation count should be <count>")
+    public void confirmEvaluationCount(@Named("count") int expectedCount) {
+        int actualCount = SatEvaluator.getNumEvaluations();
+        
+        assertEquals(expectedCount, actualCount);
+    }
 }

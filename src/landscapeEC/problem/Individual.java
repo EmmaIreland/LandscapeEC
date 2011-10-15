@@ -12,7 +12,19 @@ public class Individual implements Serializable {
     public Individual(String bitString) {
         this(parseBits(bitString));
     }
+    
+    public Individual(String bitString, boolean evaluateOnCreation) {
+        instantiate(parseBits(bitString), evaluateOnCreation);
+    }
 
+    private void instantiate(int[] newBits, boolean evaluateOnCreation) {
+        this.bits = newBits.clone();
+        if(evaluateOnCreation){
+            globalFitness = SatEvaluator.evaluate(this);
+        }
+    }
+    
+    
     private static int[] parseBits(String bitString) {
         int[] newBits = new int[bitString.length()];
         char[] chars = bitString.toCharArray();
@@ -24,8 +36,12 @@ public class Individual implements Serializable {
     }
     
     public Individual(int[] bits) {
-        this.bits = bits.clone();
-        globalFitness = SatEvaluator.evaluate(this);
+        instantiate(bits, true);
+    }
+    
+    public Individual(int[] bits, boolean evaluateOnCreation) {
+        instantiate(bits, evaluateOnCreation);
+        
     }
 
     public int[] getBits() {
