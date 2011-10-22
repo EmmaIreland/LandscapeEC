@@ -4,85 +4,85 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShellMaker {
-    //TODO: This doesn't account for toroidal worlds!
+    // TODO: This doesn't account for toroidal worlds!
     private World world;
     private Vector dimensions;
     private boolean toroidal;
-    
-    
-    public ShellMaker(World world){
-	this.world=world;
-	this.dimensions=world.getDimensions();
+
+    public ShellMaker(World world) {
+	this.world = world;
+	this.dimensions = world.getDimensions();
 	this.toroidal = world.isToroidal();
     }
-    
-    public List<Vector> makeShell(final Vector position, int radius){
+
+    public List<Vector> makeShell(final Vector position, int radius) {
 	List<Vector> result = new ArrayList<Vector>();
 	Vector currentPosition = new Vector(position.getCoordinates());
-	for(int lockedDimension = 0; lockedDimension < dimensions.size(); lockedDimension++){
+	for (int lockedDimension = 0; lockedDimension < dimensions.size(); lockedDimension++) {
 	    int original = position.get(lockedDimension);
-	    currentPosition.set(lockedDimension, original-radius);
-	    result.addAll(leftSolve(currentPosition, radius, lockedDimension, 0));
-	    
-	    currentPosition.set(lockedDimension, original+radius);
-	    result.addAll(leftSolve(currentPosition, radius, lockedDimension, 0));
-	    
+	    currentPosition.set(lockedDimension, original - radius);
+	    result
+		    .addAll(leftSolve(currentPosition, radius, lockedDimension,
+			    0));
+
+	    currentPosition.set(lockedDimension, original + radius);
+	    result
+		    .addAll(leftSolve(currentPosition, radius, lockedDimension,
+			    0));
+
 	    currentPosition.set(lockedDimension, original);
 	}
 	result = process(result);
 	return result;
     }
-    
-    private List<Vector> leftSolve(final Vector position, int inputRadius, int lockedDimension, int current){
+
+    private List<Vector> leftSolve(final Vector position, int inputRadius,
+	    int lockedDimension, int current) {
 	List<Vector> result = new ArrayList<Vector>();
-	if(current<lockedDimension){
-	    int radius = inputRadius-1;
+	if (current < lockedDimension) {
+	    int radius = inputRadius - 1;
 	    int original = position.get(current);
 	    Vector currentPosition = new Vector(position.getCoordinates());
-	    for(int i = original-radius; i<=original+radius; i++){
+	    for (int i = original - radius; i <= original + radius; i++) {
 		currentPosition.set(current, i);
-		result.addAll(leftSolve(currentPosition, inputRadius, lockedDimension, current+1));
+		result.addAll(leftSolve(currentPosition, inputRadius,
+			lockedDimension, current + 1));
 	    }
-	}
-	else{
-	    result.addAll(rightSolve(position, inputRadius, lockedDimension+1));
+	} else {
+	    result
+		    .addAll(rightSolve(position, inputRadius,
+			    lockedDimension + 1));
 	}
 	return result;
     }
-    
-    private List<Vector> rightSolve(final Vector position, int radius, int current){
+
+    private List<Vector> rightSolve(final Vector position, int radius,
+	    int current) {
 	List<Vector> result = new ArrayList<Vector>();
-	if(current<dimensions.size()){
+	if (current < dimensions.size()) {
 	    int original = position.get(current);
 	    Vector currentPosition = new Vector(position.getCoordinates());
-	    for(int i = original-radius; i<=original+radius; i++){
+	    for (int i = original - radius; i <= original + radius; i++) {
 		currentPosition.set(current, i);
-		result.addAll(rightSolve(currentPosition, radius, current+1));
+		result.addAll(rightSolve(currentPosition, radius, current + 1));
 	    }
-	}
-	else{
+	} else {
 	    result.add(position.clone());
 	}
 	return result;
     }
-    
-    private List<Vector> process(List<Vector> input){
+
+    private List<Vector> process(List<Vector> input) {
 	List<Vector> result = new ArrayList<Vector>();
-	if(toroidal){ // NOT YET TESTED
-	    	      //TODO: TEST THIS
-	    for(Vector v:input){
-		if(isValid(v)){
-		    result.add(v);
-		}
-		else{
-		    result.add(v.mod(dimensions));
-		}
+	if (toroidal) { // NOT YET TESTED
+	    // TODO: TEST THIS
+	    for (Vector v : input) {
+		result.add(v.mod(dimensions));
 	    }
 	    removeDuplicates(result);
-	}
-	else{
-	    for(Vector v:input){
-		if(isValid(v)){
+	} else {
+	    for (Vector v : input) {
+		if (isValid(v)) {
 		    result.add(v);
 		}
 	    }
@@ -90,23 +90,22 @@ public class ShellMaker {
 	}
 	return result;
     }
-    
-    private void removeDuplicates(List<Vector> input){
+
+    private void removeDuplicates(List<Vector> input) {
 	List<Vector> seen = new ArrayList<Vector>();
-	for(int i=0; input.size() > seen.size();){
-	    if(seen.contains(input.get(i))){
+	for (int i = 0; input.size() > seen.size();) {
+	    if (seen.contains(input.get(i))) {
 		input.remove(i);
-	    }
-	    else{
+	    } else {
 		seen.add(input.get(i));
 		i++;
 	    }
 	}
     }
-    
-    private boolean isValid(Vector v){
-	for(int i=0; i<dimensions.size(); i++){
-	    if (v.get(i)<0||v.get(i)>dimensions.get(i)){
+
+    private boolean isValid(Vector v) {
+	for (int i = 0; i < dimensions.size(); i++) {
+	    if (v.get(i) < 0 || v.get(i) > dimensions.get(i)-1) {
 		return false;
 	    }
 	}
