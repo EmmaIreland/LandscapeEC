@@ -168,7 +168,7 @@ public class GARun {
       for(String observerName : observerNames) {
          Class<Observer> obs = (Class<Observer>) Class.forName(observerName);
          Constructor<Observer> cons = obs.getConstructor();
-         Observer instance = (Observer) cons.newInstance();
+         Observer instance = cons.newInstance();
          observers.add(instance);
       }
    }

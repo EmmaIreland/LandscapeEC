@@ -176,6 +176,7 @@ public class Vector implements Serializable {
     	return crossDiagonal;
     }
     
+    @Override
     public Vector clone(){
     	Vector result = new Vector(this.getCoordinates());
     	return result;

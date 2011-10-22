@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShellMaker {
-    // TODO: This doesn't account for toroidal worlds!
     private World world;
     private Vector dimensions;
     private boolean toroidal;
@@ -33,6 +32,7 @@ public class ShellMaker {
 	    currentPosition.set(lockedDimension, original);
 	}
 	result = process(result);
+	
 	return result;
     }
 
@@ -74,8 +74,7 @@ public class ShellMaker {
 
     private List<Vector> process(List<Vector> input) {
 	List<Vector> result = new ArrayList<Vector>();
-	if (toroidal) { // NOT YET TESTED
-	    // TODO: TEST THIS
+	if (toroidal) {
 	    for (Vector v : input) {
 		result.add(v.mod(dimensions));
 	    }
