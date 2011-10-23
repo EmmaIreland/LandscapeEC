@@ -35,10 +35,10 @@ public class PopulationManager {
 		return (int)Math.ceil(populationSize*eliteProportion);
 	}
 
-    public List<Individual> generatePopulation() {
+    public List<Individual> generatePopulation (Object... parameters) {
         List<Individual> population = new ArrayList<Individual>();
         for(int i=0;i<IntParameter.CARRYING_CAPACITY.getValue();i++){
-            population.add(IndividualFactory.getInstance(GlobalSatInstance.getInstance().getNumVariables()));
+            population.add(IndividualFactory.getInstance(GlobalSatInstance.getInstance().getNumVariables(), parameters));
         }
         return population;
     }
