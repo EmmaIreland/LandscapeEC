@@ -6,12 +6,10 @@ import java.util.List;
 public class ShellMaker {
     private World world;
     private Vector dimensions;
-    private boolean toroidal;
 
     public ShellMaker(World world) {
 	this.world = world;
 	this.dimensions = world.getDimensions();
-	this.toroidal = world.isToroidal();
     }
 
     public List<Vector> makeShell(final Vector position, int radius) {
@@ -74,7 +72,7 @@ public class ShellMaker {
 
     private List<Vector> process(List<Vector> input) {
 	List<Vector> result = new ArrayList<Vector>();
-	if (toroidal) {
+	if (world.isToroidal()) {
 	    for (Vector v : input) {
 		result.add(v.mod(dimensions));
 	    }
@@ -94,6 +92,7 @@ public class ShellMaker {
 	List<Vector> seen = new ArrayList<Vector>();
 	for (int i = 0; input.size() > seen.size();) {
 	    if (seen.contains(input.get(i))) {
+	        System.out.println("Removing a point: "+input.get(i).toString());
 		input.remove(i);
 	    } else {
 		seen.add(input.get(i));
