@@ -9,7 +9,7 @@ import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.parameters.GlobalParameters;
-import landscapeEC.problem.sat.GlobalSatInstance;
+import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.sat.SatInstance;
 
 import org.junit.Test;
@@ -24,7 +24,7 @@ public class LocationTest {
     public void positionTest() throws Exception {
         File paramsFile = new File("properties/test.properties");
         GlobalParameters.setParameters(paramsFile);
-        GlobalSatInstance.setInstance(new SatInstance());
+        GlobalProblem.setProblem(new SatInstance());
 
         Vector dimensions = new Vector(new Integer[] { SIZE, SIZE });
         World world = new World(dimensions, true);

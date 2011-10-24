@@ -4,14 +4,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 
-public class SatParser {
+import landscapeEC.problem.ProblemParser;
+
+public class SatParser implements ProblemParser{
 
     
     public SatParser() {
         //
     }
     
-    public SatInstance parseInstance(Reader reader) throws IOException {
+    @Override
+    public SatInstance parseProblem(Reader reader) throws IOException {
         SatInstance newSatInstance = new SatInstance();
         
         BufferedReader bufferedReader = new BufferedReader(reader);

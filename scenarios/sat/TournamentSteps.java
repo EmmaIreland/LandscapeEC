@@ -10,9 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 import landscapeEC.parameters.GlobalParameters;
+import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
-import landscapeEC.problem.sat.GlobalSatInstance;
-import landscapeEC.problem.sat.IndividualComparator;
+import landscapeEC.problem.IndividualComparator;
+import landscapeEC.problem.sat.SatEvaluator;
 import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.problem.sat.SatParser;
 import landscapeEC.problem.sat.operators.TournamentSelection;
@@ -42,8 +43,8 @@ public class TournamentSteps extends Steps {
     public void getSatInstance(String clauseList) throws IOException {
         SatParser satParser= new SatParser();
         StringReader stringReader = new StringReader(clauseList);
-        satInstance = satParser.parseInstance(stringReader);        
-        GlobalSatInstance.setInstance(satInstance);
+        satInstance = satParser.parseProblem(stringReader);        
+        GlobalProblem.setProblem(satInstance);
     }
     
     @When("I have a population of $population")
@@ -62,7 +63,7 @@ public class TournamentSteps extends Steps {
         mockParams.put("TOURNAMENT_SIZE", tournamentSize);
         GlobalParameters.setParameters(mockParams);
         
-        IndividualComparator comparator = new IndividualComparator(satInstance);
+        IndividualComparator comparator = IndividualComparator.getComparator();
         
         counter = new FrequencyCounter<Individual>();
         for(int i = 0; i < numTournaments; i++) {
@@ -89,6 +90,6 @@ public class TournamentSteps extends Steps {
     
     @AfterScenario
     public void clearGlobalSatInstance() {
-        GlobalSatInstance.setInstance(null);
+        GlobalProblem.setProblem(null);
     }
 }

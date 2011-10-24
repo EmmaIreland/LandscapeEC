@@ -9,8 +9,8 @@ import java.util.List;
 import landscapeEC.core.PopulationManager;
 import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntParameter;
+import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
-import landscapeEC.problem.sat.GlobalSatInstance;
 import landscapeEC.problem.sat.IndividualFactory;
 import landscapeEC.problem.sat.SatInstance;
 
@@ -31,7 +31,7 @@ public class InstantiationTests {
         SatInstance satInstance = new SatInstance();
         individualLength = 20;
         satInstance.setNumVariables(individualLength);
-        GlobalSatInstance.setInstance(satInstance);
+        GlobalProblem.setProblem(satInstance);
     }
     
     @Test

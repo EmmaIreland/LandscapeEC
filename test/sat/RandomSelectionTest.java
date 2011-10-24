@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
-import landscapeEC.problem.sat.GlobalSatInstance;
-import landscapeEC.problem.sat.IndividualComparator;
+import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.sat.IndividualFactory;
 import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.problem.sat.operators.RandomSelection;
@@ -28,12 +28,12 @@ public class RandomSelectionTest {
     public void testRandomSelection() {    
         SatInstance satInstance = new SatInstance();
         satInstance.setNumVariables(NUM_VARIABLES);
-        GlobalSatInstance.setInstance(satInstance);
+        GlobalProblem.setProblem(satInstance);
         
         List<Individual> population = new ArrayList<Individual>();
         
         for(int i=0; i<NUM_INDIVIDUALS; i++) {
-            population.add(IndividualFactory.getInstance(satInstance.getNumVariables()));
+            population.add(IndividualFactory.getInstance(satInstance.getBitStringSize()));
         }
         
         FrequencyCounter<Individual> counter = new FrequencyCounter<Individual>();
@@ -41,7 +41,7 @@ public class RandomSelectionTest {
         RandomSelection selectionOperator = new RandomSelection();
         
         for(int i=0; i<NUM_TESTS; i++) {
-            List<Individual> parents = selectionOperator.selectParents(population, new IndividualComparator(satInstance));
+            List<Individual> parents = selectionOperator.selectParents(population, IndividualComparator.getComparator());
             counter.addItem(parents.get(0));
             counter.addItem(parents.get(1));
         }

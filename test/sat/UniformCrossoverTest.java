@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
-import landscapeEC.problem.sat.GlobalSatInstance;
 import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.problem.sat.operators.UniformCrossover;
 import landscapeEC.util.FrequencyCounter;
@@ -25,14 +25,14 @@ public class UniformCrossoverTest {
     public void testUniformCrossover() {        
         SatInstance satInstance = new SatInstance();
         satInstance.setNumVariables(NUM_BITS);
-        GlobalSatInstance.setInstance(satInstance);
+        GlobalProblem.setProblem(satInstance);
 
         FrequencyCounter<Integer> counter = new FrequencyCounter<Integer>();
         
         for(int m=0; m<NUM_TESTS; m++) {
             List<Individual> parents = new ArrayList<Individual>();
-            parents.add(new Individual(generateStringOfZeroes(NUM_BITS)));
-            parents.add(new Individual(generateStringOfOnes(NUM_BITS)));
+            parents.add(new Individual(generateStringOfZeroes(NUM_BITS), false));
+            parents.add(new Individual(generateStringOfOnes(NUM_BITS), false));
             
             UniformCrossover crossoverOperator = new UniformCrossover();
             Individual child = crossoverOperator.crossover(parents);

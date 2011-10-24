@@ -5,9 +5,9 @@ import static junit.framework.Assert.assertTrue;
 import java.io.IOException;
 import java.io.StringReader;
 
+import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
-import landscapeEC.problem.sat.GlobalSatInstance;
-import landscapeEC.problem.sat.IndividualComparator;
+import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.problem.sat.SatParser;
 
@@ -31,8 +31,8 @@ public class ComparatorSteps extends Steps {
     public void getSatInstance(String clauseList) throws IOException {
         SatParser satParser= new SatParser();
         StringReader stringReader = new StringReader(clauseList);
-        satInstance = satParser.parseInstance(stringReader);
-        GlobalSatInstance.setInstance(satInstance);
+        satInstance = satParser.parseProblem(stringReader);
+        GlobalProblem.setProblem(satInstance);
     }
     
     @When("I have individuals: <individualA> and <individualB>")
@@ -43,7 +43,7 @@ public class ComparatorSteps extends Steps {
     
     @Then("the result of the comparison is <result>")
     public void getComparisonResult(@Named("result") String expectedResult) {
-        IndividualComparator comparator = new IndividualComparator(satInstance);
+        IndividualComparator comparator = IndividualComparator.getComparator();
         
         int actualResult = comparator.compare(a, b);
         
@@ -56,6 +56,6 @@ public class ComparatorSteps extends Steps {
 
     @AfterScenario
     public void clearGlobalSatInstance() {
-        GlobalSatInstance.setInstance(null);
+        GlobalProblem.setProblem(null);
     }
 }

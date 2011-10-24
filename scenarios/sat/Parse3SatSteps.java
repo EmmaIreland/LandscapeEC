@@ -29,12 +29,12 @@ public class Parse3SatSteps extends Steps {
     @When("I parse this 3-SAT instance $instance")
     public void parseInstance(String instance) throws IOException {
         StringReader reader = new StringReader(instance);
-        satInstance = satParser.parseInstance(reader);
+        satInstance = satParser.parseProblem(reader);
     }
     
     @Then("the number of variables is $numVariables")
     public void confirmNumberOfVariables(int numVariables) {
-        assertEquals(numVariables, satInstance.getNumVariables());
+        assertEquals(numVariables, satInstance.getBitStringSize());
     }
     
     @Then("the number of clauses is $numClauses")

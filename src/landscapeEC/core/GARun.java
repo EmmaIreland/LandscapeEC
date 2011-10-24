@@ -22,13 +22,14 @@ import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntArrayParameter;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.parameters.StringParameter;
+import landscapeEC.problem.Evaluator;
+import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
+import landscapeEC.problem.Problem;
+import landscapeEC.problem.ProblemParser;
 import landscapeEC.problem.sat.DiversityCalculator;
 import landscapeEC.problem.sat.EmptyWorldException;
-import landscapeEC.problem.sat.GlobalSatInstance;
-import landscapeEC.problem.sat.SatEvaluator;
 import landscapeEC.problem.sat.SatInstance;
-import landscapeEC.problem.sat.SatParser;
 import landscapeEC.problem.sat.SeedType;
 import landscapeEC.problem.sat.SnapShot;
 import landscapeEC.problem.sat.operators.CrossoverOperator;
@@ -44,6 +45,7 @@ public class GARun {
    private CrossoverOperator crossoverOperator;
 
    private PopulationManager popManager;
+   private Evaluator evaluator;
 
    private World world;
 
@@ -68,9 +70,12 @@ public class GARun {
       intervalFitnesses = new double[getReportingIntervals().length];
       intervalDiversities = new double[getReportingIntervals().length];
 
-      SatParser satParser = new SatParser();
-      SatInstance satInstance = satParser.parseInstance(new FileReader(new File(StringParameter.PROBLEM_FILE.getValue())));
-      GlobalSatInstance.setInstance(satInstance);
+      ProblemParser problemParser = ParameterClassLoader.loadClass(StringParameter.PROBLEM_PARSER);
+      Problem problem = problemParser.parseProblem(new FileReader(new File(StringParameter.PROBLEM_FILE.getValue())));
+      
+      GlobalProblem.setProblem(problem);
+      GlobalProblem.setEvaluator((Evaluator) ParameterClassLoader.loadClass(StringParameter.PROBLEM_EVALUATOR));
+      evaluator = GlobalProblem.getEvaluator();
 
       popManager = new PopulationManager();
 
@@ -88,7 +93,7 @@ public class GARun {
 
          try {
             if(runGenerations(i)) {
-               addRunToRFile(true, SatEvaluator.getNumEvaluations(), 1.0);
+               addRunToRFile(true, evaluator.getNumEvaluations(), 1.0);
                successes++;
             } else {
                addRunToRFile(false, IntParameter.NUM_EVALS_TO_DO.getValue(), bestOverallFitness);
@@ -97,7 +102,7 @@ public class GARun {
             System.err.println("All individuals died!");
          }
 
-         SatEvaluator.resetEvaluationsCounter();
+         evaluator.resetEvaluationsCounter();
          SharedPRNG.updateGenerator(); //Generate a new seed for each run
       }
 
@@ -203,7 +208,7 @@ public class GARun {
       int i = 0;
       bestOverallFitness = 0.0;
       Individual bestIndividual = null;
-      while(SatEvaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO.getValue()) {
+      while(evaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO.getValue()) {
          processAllLocations();
 
          for(Observer o : observers) {
@@ -218,18 +223,17 @@ public class GARun {
 
          double[] reportingIntervals = getReportingIntervals();
          for(int j = 0; j < reportingIntervals.length; j++) {
-            if(SatEvaluator.getNumEvaluations() > reportingIntervals[j]
+            if(evaluator.getNumEvaluations() > reportingIntervals[j]
                   * IntParameter.NUM_EVALS_TO_DO.getValue()
                   && Double.isNaN(intervalFitnesses[j])) {
                intervalFitnesses[j] = bestOverallFitness;
-               intervalDiversities[j] = DiversityCalculator.calculateClauseListDiversity();
+               intervalDiversities[j] = DiversityCalculator.calculateResultStringDiversity();
                SnapShot.saveSnapShot(propertiesFilename + ".run" + currentRun + ".part" + j, world);
             }
          }
 
          if(BooleanParameter.QUIT_ON_SUCCESS.getValue() && bestOverallFitness == 1.0) {
             System.out.println("Best Fitness: " + bestOverallFitness);
-            SatEvaluator.printUnsolvedClauses(bestIndividual);
             //This will be removed during refactoring
             System.out.println("SUCCESS");
             return true;
@@ -240,14 +244,12 @@ public class GARun {
 
       if (bestOverallFitness == 1.0) {
           System.out.println("Best Fitness: " + bestOverallFitness);
-          SatEvaluator.printUnsolvedClauses(bestIndividual);
           //This will be removed during refactoring
           System.out.println("SUCCESS");
           return true;            
       }
       
       System.out.println("Best Fitness: " + bestOverallFitness);
-      SatEvaluator.printUnsolvedClauses(bestIndividual);
       //This will be removed during refactoring
       System.out.println("FAILURE");
       return false;
@@ -289,12 +291,8 @@ private void performDraconianReaper() {
          List<Individual> locationIndividuals = world.getIndividualsAt(position);
 
          for(Individual individual : locationIndividuals) {
-            SatInstance locationInstance = world.getLocation(position).getComparator()
-                  .getInstance();
-            double fitness = SatEvaluator.evaluate(locationInstance, individual);
-            int numClauses = locationInstance.getNumClauses();
-            int correctClauses = (int) Math.round(fitness * numClauses);
-            if(numClauses == correctClauses) {
+            Problem locationProblem = world.getLocation(position).getProblem();
+            if(evaluator.solvesSubProblem(individual, locationProblem)) {
                world.getLocation(position).addToPendingIndividuals(individual);
             }
          }

@@ -10,17 +10,19 @@ import java.io.Serializable;
 import landscapeEC.locality.World;
 import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.Parameters;
+import landscapeEC.problem.GlobalProblem;
+import landscapeEC.problem.Problem;
 
 public class SnapShot implements Serializable{
     private static final long serialVersionUID = -2078745941945517413L;
     private Parameters params;
     private World world;
-    private SatInstance satInstance;
+    private Problem problem;
 
     public SnapShot(World world) {
         params = GlobalParameters.getParameters();
         this.world = world;
-        this.satInstance = GlobalSatInstance.getInstance();
+        this.problem = GlobalProblem.getProblem();
     }
     
     public static void saveSnapShot(String fileName, World world) throws IOException {
@@ -44,7 +46,7 @@ public class SnapShot implements Serializable{
         return world;
     }
 
-    public SatInstance getSatInstance() {
-        return satInstance;
+    public Problem getProblem() {
+        return problem;
     }
 }

@@ -3,9 +3,10 @@ package landscapeEC.locality.geography;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.parameters.IntParameter;
+import landscapeEC.parameters.StringParameter;
+import landscapeEC.problem.GlobalProblem;
+import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.sat.Clause;
-import landscapeEC.problem.sat.GlobalSatInstance;
-import landscapeEC.problem.sat.IndividualComparator;
 import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.util.SharedPRNG;
 
@@ -14,16 +15,23 @@ public class FractalGeography implements Geography {
     private SatInstance globalSatInstance;
     private World world;
 
+    
+    // !!!! THIS CLASS IS CURRENTLY BEING REFACTORED !!!!
+    
+    private final static double PLACEHOLDER = 1.0;
+    
     // Currently only works with 2 dimensions
+    // and only 3Sat Problems
 
     @Override
     public void generateGeography(World world) {
-        globalSatInstance = GlobalSatInstance.getInstance();
+        if (notUsingSatProblem()) {
+            throw new RuntimeException("Fractal Geography currently only supports 3SAT problems! You are not using a 3SAT problem.");
+        }
+        
+        globalSatInstance = (SatInstance) GlobalProblem.getProblem();
         this.world = world;
-        SatInstance emptyInstance = globalSatInstance.getSubInstance(0);
-
-        IndividualComparator fullComparator = new IndividualComparator(globalSatInstance);
-        IndividualComparator emptyComparator = new IndividualComparator(emptyInstance);
+        SatInstance emptyInstance = (SatInstance) globalSatInstance.getSubProblem(0);
 
         Vector topLeft = Vector.origin(world.getDimensions().size());
         Vector bottomRight = world.getDimensions().minusToAll(1);
@@ -35,15 +43,15 @@ public class FractalGeography implements Geography {
         Vector midRight = topRight.getMidPoint(bottomRight);
         Vector bottomMid = bottomLeft.getMidPoint(bottomRight);
 
-        world.setLocationComparator(topLeft, emptyComparator);
-        world.setLocationComparator(topMid, generateMidpointGoal(globalSatInstance, emptyInstance));
-        world.setLocationComparator(topRight, emptyComparator);
-        world.setLocationComparator(midLeft, generateMidpointGoal(globalSatInstance, emptyInstance));
-        world.setLocationComparator(midRight, generateMidpointGoal(globalSatInstance, emptyInstance));
-        world.setLocationComparator(bottomLeft, emptyComparator);
-        world.setLocationComparator(bottomMid, generateMidpointGoal(globalSatInstance, emptyInstance));
-        world.setLocationComparator(bottomRight, emptyComparator);
-        world.setLocationComparator(middle, fullComparator);
+        world.setLocationProblem(topLeft, emptyInstance, 0.0);
+        world.setLocationProblem(topMid, generateMidpointGoal(globalSatInstance, emptyInstance), PLACEHOLDER);
+        world.setLocationProblem(topRight, emptyInstance, 0.0);
+        world.setLocationProblem(midLeft, generateMidpointGoal(globalSatInstance, emptyInstance), PLACEHOLDER);
+        world.setLocationProblem(midRight, generateMidpointGoal(globalSatInstance, emptyInstance), PLACEHOLDER);
+        world.setLocationProblem(bottomLeft, emptyInstance, 0.0);
+        world.setLocationProblem(bottomMid, generateMidpointGoal(globalSatInstance, emptyInstance), PLACEHOLDER);
+        world.setLocationProblem(bottomRight, emptyInstance, 0.0);
+        world.setLocationProblem(middle, globalSatInstance, PLACEHOLDER);
 
         doFractalGeography(topLeft, topMid, middle, midLeft);
         doFractalGeography(topMid, topRight, midRight, middle);
@@ -51,16 +59,15 @@ public class FractalGeography implements Geography {
         doFractalGeography(midLeft, middle, bottomMid, bottomLeft);
     }
 
-    private IndividualComparator generateMidpointGoal(SatInstance satInstance, SatInstance emptyInstance) {
-        return new IndividualComparator(doClauseListCrossover(emptyInstance, doClauseListCrossover(emptyInstance, doClauseListCrossover(satInstance,
-                emptyInstance, 0), 0), 0));
+    private SatInstance generateMidpointGoal(SatInstance satInstance, SatInstance emptyInstance) {
+        return doClauseListCrossover(emptyInstance, doClauseListCrossover(emptyInstance, doClauseListCrossover(satInstance, emptyInstance, 0), 0), 0);
     }
 
     private void doFractalGeography(Vector topLeft, Vector topRight, Vector bottomRight, Vector bottomLeft) {
-        SatInstance topLeftInstance = world.getLocation(topLeft).getComparator().getInstance();
-        SatInstance topRightInstance = world.getLocation(topRight).getComparator().getInstance();
-        SatInstance bottomRightInstance = world.getLocation(bottomRight).getComparator().getInstance();
-        SatInstance bottomLeftInstance = world.getLocation(bottomLeft).getComparator().getInstance();
+        SatInstance topLeftInstance = (SatInstance) world.getLocation(topLeft).getProblem();
+        SatInstance topRightInstance = (SatInstance) world.getLocation(topRight).getProblem();
+        SatInstance bottomRightInstance = (SatInstance) world.getLocation(bottomRight).getProblem();
+        SatInstance bottomLeftInstance = (SatInstance) world.getLocation(bottomLeft).getProblem();
 
         Vector middle = bottomRight.getMidPoint(topLeft);
         Vector midLeft = topLeft.getMidPoint(bottomLeft);
@@ -97,19 +104,19 @@ public class FractalGeography implements Geography {
     }
 
     private void tryAddingComparator(SatInstance firstInstance, SatInstance secondInstance, Vector midpoint) {
-        if (world.getLocation(midpoint).hasNoComparator()) {
+        if (world.getLocation(midpoint).hasNoProblem()) {
             SatInstance midInstance = doClauseListCrossover(firstInstance, secondInstance);
-            world.setLocationComparator(midpoint, new IndividualComparator(midInstance));
+            world.setLocationProblem(midpoint, midInstance, PLACEHOLDER);
         }
     }
 
     private void tryAddingComparator(SatInstance firstInstance, SatInstance secondInstance, SatInstance thirdInstance, SatInstance forthInstance,
             Vector midpoint) {
-        if (world.getLocation(midpoint).hasNoComparator()) {
+        if (world.getLocation(midpoint).hasNoProblem()) {
             SatInstance s = doClauseListCrossover(firstInstance, secondInstance);
             SatInstance t = doClauseListCrossover(thirdInstance, forthInstance);
             SatInstance midInstance = doClauseListCrossover(s, t);
-            world.setLocationComparator(midpoint, new IndividualComparator(midInstance));
+            world.setLocationProblem(midpoint, midInstance, PLACEHOLDER);
         }
     }
 
@@ -144,4 +151,8 @@ public class FractalGeography implements Geography {
         return doClauseListCrossover(satInstanceA, satInstanceB, IntParameter.GEOGRAPHY_NOISE_STRENGTH.getValue());
     }
 
+
+    private boolean notUsingSatProblem() {
+        return StringParameter.PROBLEM_TYPE.getValue() == "landscapeEC.problem.sat.SatInstance.java";
+    }
 }

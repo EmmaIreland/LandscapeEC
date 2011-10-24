@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import landscapeEC.problem.Individual;
-import landscapeEC.problem.sat.IndividualComparator;
+import landscapeEC.problem.IndividualComparator;
 import landscapeEC.util.SharedPRNG;
 
 

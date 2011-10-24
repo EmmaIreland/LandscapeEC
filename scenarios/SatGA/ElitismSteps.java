@@ -10,8 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import landscapeEC.core.PopulationManager;
+import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
-import landscapeEC.problem.sat.GlobalSatInstance;
 import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.problem.sat.SatParser;
 
@@ -55,8 +55,8 @@ public class ElitismSteps extends Steps {
     public void getSatInstance(String clauseList) throws IOException {
         SatParser satParser = new SatParser();
         StringReader stringReader = new StringReader(clauseList);
-        satInstance = satParser.parseInstance(stringReader);
-        GlobalSatInstance.setInstance(satInstance);
+        satInstance = satParser.parseProblem(stringReader);
+        GlobalProblem.setProblem(satInstance);
     }
 
     @Then("the elite set should be $eliteSet")
@@ -93,6 +93,6 @@ public class ElitismSteps extends Steps {
     
     @AfterScenario
     public void clearGlobalSatInstance() {
-        GlobalSatInstance.setInstance(null);
+        GlobalProblem.setProblem(null);
     }
 }

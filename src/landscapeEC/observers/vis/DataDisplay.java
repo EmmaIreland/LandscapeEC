@@ -11,9 +11,10 @@ import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.IntParameter;
+import landscapeEC.problem.Evaluator;
+import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.sat.DiversityCalculator;
-import landscapeEC.problem.sat.SatEvaluator;
 
 public class DataDisplay extends JFrame implements Observer {
     private static final long serialVersionUID = 4151957839382676250L;
@@ -50,10 +51,12 @@ public class DataDisplay extends JFrame implements Observer {
         
         Individual bestIndividual = world.findBestIndividual();
         
-        GraphicsUtil.drawString(g, "RUN " + (SatEvaluator.getNumResets()+1), 5, 20, font, Color.RED);
-        GraphicsUtil.drawString(g, successes + "/" + SatEvaluator.getNumResets() + " runs successful", 5, 35, font, Color.WHITE);
+        Evaluator evaluator = GlobalProblem.getEvaluator();
+        
+        GraphicsUtil.drawString(g, "RUN " + (evaluator.getNumResets()+1), 5, 20, font, Color.RED);
+        GraphicsUtil.drawString(g, successes + "/" + evaluator.getNumResets() + " runs successful", 5, 35, font, Color.WHITE);
         GraphicsUtil.drawString(g, "Generation " + generationNumber, 5, 50, font, Color.WHITE);
-        GraphicsUtil.drawString(g, "NumEvaluations " + SatEvaluator.getNumEvaluations() + "/" + IntParameter.NUM_EVALS_TO_DO.getValue(), 5, 65, font, Color.WHITE);
+        GraphicsUtil.drawString(g, "NumEvaluations " + evaluator.getNumEvaluations() + "/" + IntParameter.NUM_EVALS_TO_DO.getValue(), 5, 65, font, Color.WHITE);
         double bestFitness = bestIndividual.getGlobalFitness();
         GraphicsUtil.drawString(g, "Best fitness: " + bestFitness, 5, 80, font, Color.WHITE);
         int numIndividuals = getIndividualCount(world);
@@ -62,7 +65,7 @@ public class DataDisplay extends JFrame implements Observer {
         GraphicsUtil.drawString(g, "Number of inhabited cells: " + inhabitedCells, 5, 110, font, Color.WHITE);
         double diversity = DiversityCalculator.calculateBitStringDiversity();
         GraphicsUtil.drawString(g,  String.format("Current bitstring diversity: %.2f", diversity), 5, 125, font, Color.WHITE);
-        double semanticDiversity = DiversityCalculator.calculateClauseListDiversity();
+        double semanticDiversity = DiversityCalculator.calculateResultStringDiversity();
         GraphicsUtil.drawString(g,  String.format("Current solved clauses diversity: %.2f", semanticDiversity), 5, 140, font, Color.WHITE);
         
         repaint();

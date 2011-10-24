@@ -9,9 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import landscapeEC.observers.vis.MapVisualizer;
+import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
+import landscapeEC.problem.Problem;
 import landscapeEC.problem.sat.Clause;
-import landscapeEC.problem.sat.GlobalSatInstance;
 import landscapeEC.problem.sat.Literal;
 import landscapeEC.problem.sat.SatEvaluator;
 import landscapeEC.problem.sat.SatInstance;
@@ -54,8 +55,8 @@ public class SatInstanceTest {
     private void checkInstance(String satInstanceString, Clause[] expectedClauses, String individualBitString, boolean[] expectedAnswers) throws IOException {
         SatParser parser = new SatParser();
         StringReader stringReader = new StringReader(satInstanceString);
-        SatInstance instance = parser.parseInstance(stringReader);
-        GlobalSatInstance.setInstance(instance);
+        SatInstance instance = parser.parseProblem(stringReader);
+        GlobalProblem.setProblem(instance);
         
         List<Clause> clauses = new ArrayList<Clause>();
         for (Clause clause : instance) {
@@ -72,7 +73,9 @@ public class SatInstanceTest {
             assertEquals(expectedAnswers[i], expectedClauses[i].satisfiedBy(individual));
         }
 
-        assertEquals("Evaluate and OnesPercent were not the same value", SatEvaluator.evaluate(instance, individual), 
-                    MapVisualizer.onesPercent(SatEvaluator.getSolvedClausesBitstring(instance, individual)), 1e-5);
+        SatEvaluator evaluator = new SatEvaluator();
+        
+        assertEquals("Evaluate and OnesPercent were not the same value", evaluator.evaluate(instance, individual), 
+                    MapVisualizer.onesPercent(evaluator.getResultString(instance, individual)), 1e-5);
     }
 }

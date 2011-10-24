@@ -8,7 +8,7 @@ import java.util.Set;
 
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.problem.Individual;
-import landscapeEC.problem.sat.IndividualComparator;
+import landscapeEC.problem.IndividualComparator;
 import landscapeEC.util.SharedPRNG;
 
 

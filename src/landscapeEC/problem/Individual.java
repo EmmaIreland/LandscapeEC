@@ -20,7 +20,7 @@ public class Individual implements Serializable {
     private void instantiate(int[] newBits, boolean evaluateOnCreation) {
         this.bits = newBits.clone();
         if(evaluateOnCreation){
-            globalFitness = SatEvaluator.evaluate(this);
+            globalFitness = GlobalProblem.getEvaluator().evaluate(this);
         }
     }
     

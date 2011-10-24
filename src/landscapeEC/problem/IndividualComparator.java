@@ -1,22 +1,16 @@
-package landscapeEC.problem.sat;
+package landscapeEC.problem;
 
 import java.io.Serializable;
 import java.util.Comparator;
 
-import landscapeEC.problem.Individual;
-
 public class IndividualComparator implements Comparator<Individual>, Serializable{
     private static final long serialVersionUID = 6890926228504302829L;
-    private SatInstance satInstance;
+    private static IndividualComparator instance = new IndividualComparator();
     
-    public IndividualComparator() {
-        this.satInstance = new SatInstance();
+    private IndividualComparator() {
+        //private constructor
     }
     
-    public IndividualComparator(SatInstance satInstance) {
-        this.satInstance = satInstance;
-    }
-
     @Override
     public int compare(Individual individual1, Individual individual2) {
         double fitness1 = individual1.getGlobalFitness();
@@ -26,12 +20,7 @@ public class IndividualComparator implements Comparator<Individual>, Serializabl
         return 0;
     }
     
-    public SatInstance getInstance() {
-    	return satInstance;
-    }
-    
-    @Override
-    public String toString() {
-        return satInstance.toString();
+    public static IndividualComparator getComparator() {
+        return instance;
     }
 }

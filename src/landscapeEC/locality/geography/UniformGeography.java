@@ -2,15 +2,16 @@ package landscapeEC.locality.geography;
 
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
-import landscapeEC.problem.sat.IndividualComparator;
+import landscapeEC.problem.GlobalProblem;
+import landscapeEC.problem.Problem;
 
 public class UniformGeography implements Geography {
 
     @Override
     public void generateGeography(World world) {
-        IndividualComparator comparator = new IndividualComparator();
+        Problem problem = GlobalProblem.getProblem().getSubProblem(0);
         for (Vector position : world) {
-            world.setLocationComparator(position, comparator);
+            world.setLocationProblem(position, problem, 0);
         }
     }
 

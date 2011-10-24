@@ -20,10 +20,11 @@ import org.jbehave.scenario.steps.Steps;
 public class EvaluationSteps extends Steps {
     private String bitString;
     private SatInstance satInstance;
+    private SatEvaluator evaluator;
 
     @BeforeStory
     public void beforeScenario() {
-        SatEvaluator.resetEvaluationsCounter();
+        evaluator = new SatEvaluator();
     }
     
     @Given("a sat evaluator")
@@ -40,19 +41,19 @@ public class EvaluationSteps extends Steps {
     public void getSatInstance(String clauseList) throws IOException {
         SatParser satParser= new SatParser();
         StringReader stringReader = new StringReader(clauseList);
-        this.satInstance = satParser.parseInstance(stringReader);
+        this.satInstance = satParser.parseProblem(stringReader);
     }
     
     @Then("the fitness should be <fitness>")
     public void confirmEvaluation(@Named("fitness") double expectedFitness) {
-        double actualFitness = SatEvaluator.evaluate(satInstance, new Individual(bitString, false));
+        double actualFitness = evaluator.evaluate(satInstance, new Individual(bitString, false));
         
         assertEquals(expectedFitness, actualFitness);
     }
     
     @Then("the evaluation count should be <count>")
     public void confirmEvaluationCount(@Named("count") int expectedCount) {
-        int actualCount = SatEvaluator.getNumEvaluations();
+        int actualCount = evaluator.getNumEvaluations();
         
         assertEquals(expectedCount, actualCount);
     }

@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import landscapeEC.problem.Individual;
-import landscapeEC.problem.sat.IndividualComparator;
+import landscapeEC.problem.Problem;
 
 
 public class Location implements Serializable {
@@ -14,13 +14,14 @@ public class Location implements Serializable {
     private final Vector position;
     private List<Individual> individuals;
     private List<Individual> pendingIndividuals;
-    private IndividualComparator locationComparator;
+    private Problem problem;
+    private double difficulty;
     
-    public Location(Vector aPosition, IndividualComparator comparator) {
+    public Location(Vector aPosition, Problem aProblem) {
         position = aPosition;
         individuals = new ArrayList<Individual>();
         pendingIndividuals = new ArrayList<Individual>();
-        locationComparator = comparator;
+        problem = aProblem;
     }
 
     public Location(Vector position) {
@@ -35,20 +36,24 @@ public class Location implements Serializable {
         return individuals.size();
     }
     
-    public IndividualComparator getComparator() {
-        if (hasNoComparator()) {
-            throw new IllegalStateException("Comparator undefined for position " + position);
-        }
-    	return locationComparator;
+    public Problem getProblem() {
+        return problem;
     }
 
-    public boolean hasNoComparator() {
-	return locationComparator == null;
+    public boolean hasNoProblem() {
+	return problem == null;
     }
     
-    public void setComparator(IndividualComparator locationComparator) {
-        this.locationComparator = locationComparator;
-    }    
+    //This is deprecated because we want to move difficulty to be entirely within problem.
+    @Deprecated
+    public void setProblem(Problem aProblem, double difficulty) {
+        problem = aProblem;
+        this.difficulty = difficulty;
+    }
+    
+    public double getDifficulty(){
+        return difficulty;
+    }
     
     public void setIndividuals(List<Individual> individuals) {
     	this.individuals = new ArrayList<Individual>(individuals);

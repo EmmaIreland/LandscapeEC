@@ -7,9 +7,11 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import landscapeEC.problem.Evaluator;
+import landscapeEC.problem.Problem;
 import landscapeEC.util.SharedPRNG;
 
-public class SatInstance implements Iterable<Clause>, Serializable {
+public class SatInstance implements Iterable<Clause>, Serializable, Problem {
     private static final long serialVersionUID = 3401366560852023162L;
     private int numVariables;
     private LinkedHashSet<Clause> clauseList = new LinkedHashSet<Clause>();
@@ -22,7 +24,8 @@ public class SatInstance implements Iterable<Clause>, Serializable {
     	numVariables = numVars;
     }
     
-    public int getNumVariables() {
+    @Override
+    public int getBitStringSize() {
         return numVariables;
     }
 
@@ -38,8 +41,9 @@ public class SatInstance implements Iterable<Clause>, Serializable {
         clauseList.add(newClause);
     }
 
-    public SatInstance getSubInstance(double percentage) {
-        int numClauses = (int) Math.ceil(clauseList.size() * percentage);
+    @Override
+    public Problem getSubProblem(double difficulty) {
+        int numClauses = (int) Math.ceil(clauseList.size() * difficulty);
         
         SatInstance subInstance = new SatInstance();
         ArrayList<Clause> clauses = new ArrayList<Clause>(clauseList); //This should preserve the order of the clauses
@@ -49,6 +53,11 @@ public class SatInstance implements Iterable<Clause>, Serializable {
         }
 
         return subInstance;
+    }
+    
+    @Override
+    public Evaluator getEvaluator() {
+        return new SatEvaluator();
     }
     
     public Boolean contains(Clause c) {

@@ -19,9 +19,10 @@ import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntArrayParameter;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.parameters.StringParameter;
+import landscapeEC.problem.Evaluator;
+import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
-import landscapeEC.problem.sat.GlobalSatInstance;
-import landscapeEC.problem.sat.SatEvaluator;
+import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.sat.SnapShot;
 
 public class MapVisualizer extends JFrame implements Observer {
@@ -89,7 +90,7 @@ public class MapVisualizer extends JFrame implements Observer {
             for(int x=0; x<worldWidth; x++) {
                 Location loc = world.getLocation(new Vector(new Integer[] {x, y}));
                 
-                double difficultyScale = loc.getComparator().getInstance().getNumClauses()/(double)GlobalSatInstance.getInstance().getNumClauses();
+                double difficultyScale = loc.getDifficulty();
                 int intensity = (int) ((1-difficultyScale)*255);
                 Color background = new Color(intensity, intensity, intensity);
                 GraphicsUtil.fillRect(g, x*xScale, y*yScale, xScale, yScale, background);
@@ -128,17 +129,19 @@ public class MapVisualizer extends JFrame implements Observer {
     }
 
     private Color getForegroundColor(Location loc, double difficultyScale) {
-        Individual bestIndividual = Collections.max(loc.getIndividuals(), loc.getComparator());
+        Individual bestIndividual = Collections.max(loc.getIndividuals(), IndividualComparator.getComparator());
         double bestFitness = bestIndividual.getGlobalFitness();
         double scaledFitness = Math.pow(bestFitness, intensityScale);
         Color foreground = Color.black;
+        
+        Evaluator evaluator = GlobalProblem.getEvaluator();
         
         switch (visType) {
             case FITNESS_ONLY:
                 foreground = new Color((int) (scaledFitness*255), (int) ((1-difficultyScale)*255), 0);
             break;
             case COLORED_CLAUSES:
-                String clauseString = SatEvaluator.getSolvedClausesBitstring(bestIndividual);
+                String clauseString = evaluator.getResultString(bestIndividual);
                 Integer clausesNumber = clauseString.hashCode();
                 foreground = Color.getHSBColor((Math.abs(clausesNumber)%255)/(float)255.0, (float) Math.pow(bestFitness, 30), (float)  Math.pow(bestFitness, 30));
             break;

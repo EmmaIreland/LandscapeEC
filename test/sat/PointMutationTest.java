@@ -5,6 +5,7 @@ import static junit.framework.Assert.assertTrue;
 import java.util.Map;
 
 import landscapeEC.parameters.GlobalParameters;
+import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.sat.operators.PointMutation;
 import landscapeEC.util.FrequencyCounter;
@@ -13,6 +14,7 @@ import landscapeEC.util.ProbabilityUtils;
 import org.junit.Test;
 
 import util.ChiSquaredStatistics;
+import util.MockEvaluator;
 import util.MockParameters;
 
 public class PointMutationTest {
@@ -26,6 +28,8 @@ public class PointMutationTest {
         mockParams.put("AVERAGE_MUTATIONS", ""+AVERAGE_MUTATIONS);
         GlobalParameters.setParameters(mockParams);
 
+        GlobalProblem.setEvaluator(new MockEvaluator());
+        
         FrequencyCounter<Integer> counter = new FrequencyCounter<Integer>();
         
         for(int m=0; m<NUM_TESTS; m++) {
