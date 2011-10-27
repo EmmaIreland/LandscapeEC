@@ -93,6 +93,6 @@ public class NeighborhoodSteps extends Steps {
     
     @AfterScenario
     public void clearGlobalSatInstance() {
-        GlobalProblem.setProblem(null);
+        GlobalProblem.unsetProblem();
     }
 }

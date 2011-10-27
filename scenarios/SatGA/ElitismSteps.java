@@ -93,6 +93,6 @@ public class ElitismSteps extends Steps {
     
     @AfterScenario
     public void clearGlobalSatInstance() {
-        GlobalProblem.setProblem(null);
+        GlobalProblem.unsetProblem();
     }
 }

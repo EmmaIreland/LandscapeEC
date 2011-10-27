@@ -90,6 +90,6 @@ public class TournamentSteps extends Steps {
     
     @AfterScenario
     public void clearGlobalSatInstance() {
-        GlobalProblem.setProblem(null);
+        GlobalProblem.unsetProblem();
     }
 }

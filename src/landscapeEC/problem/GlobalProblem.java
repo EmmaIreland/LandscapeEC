@@ -8,6 +8,11 @@ public class GlobalProblem {
         globalProblem = problem;
     }
     
+    public static void unsetProblem() {
+    	globalProblem = null;
+    	evaluator = null;
+    }
+    
     public static Problem getProblem() {
         if (globalProblem == null) {
             throw new RuntimeException("There was no global problem set.");

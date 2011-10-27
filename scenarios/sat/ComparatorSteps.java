@@ -24,7 +24,8 @@ public class ComparatorSteps extends Steps {
     private Individual b;
 
     @Given("a SAT evaluator")
-    public void constructSATEvaluator() { //
+    public void constructSATEvaluator() {
+        // Do nothing - we construct this in getSatInstance
     }
     
     @When("I have this clauseList $clauseList")
@@ -48,14 +49,14 @@ public class ComparatorSteps extends Steps {
         int actualResult = comparator.compare(a, b);
         
         switch (expectedResult.charAt(0)) {
-            case '+': assertTrue(actualResult>0); break;
-            case '-': assertTrue(actualResult<0); break;
-            case '0': assertTrue(actualResult==0); break;
+            case '+': assertTrue("Actual result = " + actualResult + ", first fitness = " + a.getGlobalFitness() + " and second fitness = " + b.getGlobalFitness(), actualResult>0); break;
+            case '-': assertTrue("Actual result = " + actualResult + ", first fitness = " + a.getGlobalFitness() + " and second fitness = " + b.getGlobalFitness(), actualResult<0); break;
+            case '0': assertTrue("Actual result = " + actualResult + ", first fitness = " + a.getGlobalFitness() + " and second fitness = " + b.getGlobalFitness(), actualResult==0); break;
         } 
     }
 
     @AfterScenario
     public void clearGlobalSatInstance() {
-        GlobalProblem.setProblem(null);
+    	GlobalProblem.unsetProblem();
     }
 }
