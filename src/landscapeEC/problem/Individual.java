@@ -17,13 +17,21 @@ public class Individual implements Serializable {
         instantiate(parseBits(bitString), evaluateOnCreation);
     }
 
+    public Individual(int[] bits) {
+        instantiate(bits, true);
+    }
+    
+    public Individual(int[] bits, boolean evaluateOnCreation) {
+        instantiate(bits, evaluateOnCreation);
+        
+    }
+
     private void instantiate(int[] newBits, boolean evaluateOnCreation) {
         this.bits = newBits.clone();
         if(evaluateOnCreation){
             globalFitness = GlobalProblem.getEvaluator().evaluate(this);
         }
     }
-    
     
     private static int[] parseBits(String bitString) {
         int[] newBits = new int[bitString.length()];
@@ -35,15 +43,6 @@ public class Individual implements Serializable {
         return newBits;
     }
     
-    public Individual(int[] bits) {
-        instantiate(bits, true);
-    }
-    
-    public Individual(int[] bits, boolean evaluateOnCreation) {
-        instantiate(bits, evaluateOnCreation);
-        
-    }
-
     public int[] getBits() {
         return bits.clone();
     }
