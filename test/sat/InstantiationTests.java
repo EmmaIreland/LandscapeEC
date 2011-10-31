@@ -11,7 +11,7 @@ import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
-import landscapeEC.problem.sat.IndividualFactory;
+import landscapeEC.problem.IndividualFactory;
 import landscapeEC.problem.sat.SatInstance;
 
 import org.junit.Before;

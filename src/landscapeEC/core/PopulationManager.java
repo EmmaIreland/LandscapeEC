@@ -9,7 +9,7 @@ import landscapeEC.parameters.IntParameter;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
-import landscapeEC.problem.sat.IndividualFactory;
+import landscapeEC.problem.IndividualFactory;
 import landscapeEC.problem.sat.operators.CrossoverOperator;
 import landscapeEC.problem.sat.operators.MutationOperator;
 import landscapeEC.problem.sat.operators.SelectionOperator;

@@ -10,7 +10,7 @@ import java.util.Map;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
-import landscapeEC.problem.sat.IndividualFactory;
+import landscapeEC.problem.IndividualFactory;
 import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.problem.sat.operators.RandomSelection;
 import landscapeEC.util.FrequencyCounter;

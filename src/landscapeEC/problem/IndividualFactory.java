@@ -1,6 +1,5 @@
-package landscapeEC.problem.sat;
+package landscapeEC.problem;
 
-import landscapeEC.problem.Individual;
 import landscapeEC.util.SharedPRNG;
 
 public class IndividualFactory {

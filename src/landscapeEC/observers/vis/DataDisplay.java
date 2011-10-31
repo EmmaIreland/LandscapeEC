@@ -11,10 +11,10 @@ import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.IntParameter;
+import landscapeEC.problem.DiversityCalculator;
 import landscapeEC.problem.Evaluator;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
-import landscapeEC.problem.sat.DiversityCalculator;
 
 public class DataDisplay extends JFrame implements Observer {
     private static final long serialVersionUID = 4151957839382676250L;

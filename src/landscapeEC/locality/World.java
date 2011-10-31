@@ -10,11 +10,9 @@ import java.util.Map;
 
 import landscapeEC.locality.geography.Geography;
 import landscapeEC.parameters.StringParameter;
-import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.Problem;
-import landscapeEC.problem.sat.EmptyWorldException;
 
 public class World implements Iterable<Vector>, Serializable {
     private static final long serialVersionUID = 8032708223600669849L;

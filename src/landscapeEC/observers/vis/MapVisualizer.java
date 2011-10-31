@@ -11,6 +11,7 @@ import java.util.Collections;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
+import landscapeEC.core.SnapShot;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
@@ -23,7 +24,6 @@ import landscapeEC.problem.Evaluator;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
-import landscapeEC.problem.sat.SnapShot;
 
 public class MapVisualizer extends JFrame implements Observer {
     private final int xScale;

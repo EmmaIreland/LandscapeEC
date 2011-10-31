@@ -1,11 +1,8 @@
-package landscapeEC.problem.sat;
+package landscapeEC.problem;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import landscapeEC.problem.Evaluator;
-import landscapeEC.problem.GlobalProblem;
-import landscapeEC.problem.Individual;
 import landscapeEC.util.FrequencyCounter;
 
 public class DiversityCalculator {
