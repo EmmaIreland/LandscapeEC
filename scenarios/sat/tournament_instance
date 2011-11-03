@@ -6,6 +6,7 @@ individuals from a clause list
 
 Given a SAT evaluator
 When I have this clauseList
+p cnf 4 4
 1
 2
 3

@@ -7,6 +7,7 @@ the elite individuals from a population
 Given a population manager
 And a SAT evaluator
 When I have this clauseList
+p cnf 4 4
 1
 2
 3

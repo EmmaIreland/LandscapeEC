@@ -28,7 +28,7 @@ public class InstantiationTests {
         GlobalParameters.setParameters(new File("properties/test.properties"));
         carryingCapacity = IntParameter.CARRYING_CAPACITY.getValue();
         
-        SatInstance satInstance = new SatInstance();
+        SatInstance satInstance = new SatInstance(1.0);
         individualLength = 20;
         satInstance.setNumVariables(individualLength);
         GlobalProblem.setProblem(satInstance);

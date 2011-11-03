@@ -3,29 +3,21 @@ package landscapeEC.locality.geography;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.parameters.IntParameter;
-import landscapeEC.parameters.StringParameter;
 import landscapeEC.problem.GlobalProblem;
-import landscapeEC.problem.IndividualComparator;
-import landscapeEC.problem.sat.Clause;
+import landscapeEC.problem.TestCases;
 import landscapeEC.problem.sat.SatInstance;
-import landscapeEC.util.SharedPRNG;
 
 public class FractalGeography implements Geography {
 
     private SatInstance globalSatInstance;
     private World world;
-
-    
-    // !!!! THIS CLASS IS CURRENTLY BEING REFACTORED !!!!
-    
-    private final static double PLACEHOLDER = 1.0;
     
     // Currently only works with 2 dimensions
     // and only 3Sat Problems
 
     @Override
     public void generateGeography(World world) {
-        if (notUsingSatProblem()) {
+        if (!usingTestCaseProblem()) {
             throw new RuntimeException("Fractal Geography currently only supports 3SAT problems! You are not using a 3SAT problem.");
         }
         
@@ -43,15 +35,15 @@ public class FractalGeography implements Geography {
         Vector midRight = topRight.getMidPoint(bottomRight);
         Vector bottomMid = bottomLeft.getMidPoint(bottomRight);
 
-        world.setLocationProblem(topLeft, emptyInstance, 0.0);
-        world.setLocationProblem(topMid, generateMidpointGoal(globalSatInstance, emptyInstance), PLACEHOLDER);
-        world.setLocationProblem(topRight, emptyInstance, 0.0);
-        world.setLocationProblem(midLeft, generateMidpointGoal(globalSatInstance, emptyInstance), PLACEHOLDER);
-        world.setLocationProblem(midRight, generateMidpointGoal(globalSatInstance, emptyInstance), PLACEHOLDER);
-        world.setLocationProblem(bottomLeft, emptyInstance, 0.0);
-        world.setLocationProblem(bottomMid, generateMidpointGoal(globalSatInstance, emptyInstance), PLACEHOLDER);
-        world.setLocationProblem(bottomRight, emptyInstance, 0.0);
-        world.setLocationProblem(middle, globalSatInstance, PLACEHOLDER);
+        world.setLocationProblem(topLeft, emptyInstance);
+        world.setLocationProblem(topMid, generateMidpointGoal(globalSatInstance, emptyInstance));
+        world.setLocationProblem(topRight, emptyInstance);
+        world.setLocationProblem(midLeft, generateMidpointGoal(globalSatInstance, emptyInstance));
+        world.setLocationProblem(midRight, generateMidpointGoal(globalSatInstance, emptyInstance));
+        world.setLocationProblem(bottomLeft, emptyInstance);
+        world.setLocationProblem(bottomMid, generateMidpointGoal(globalSatInstance, emptyInstance));
+        world.setLocationProblem(bottomRight, emptyInstance);
+        world.setLocationProblem(middle, globalSatInstance);
 
         doFractalGeography(topLeft, topMid, middle, midLeft);
         doFractalGeography(topMid, topRight, midRight, middle);
@@ -76,7 +68,7 @@ public class FractalGeography implements Geography {
         Vector midRight = topRight.getMidPoint(bottomRight);
 
         /*
-         * System.out.println("TopLeft     " + topLeft);
+         * System.out.println("TopLeft     " + topLeft);p cnf 4 4
          * System.out.println("Top Right   " + topRight);
          * System.out.println("Middle      " + middle);
          * System.out.println("Bottom Left " + bottomLeft);
@@ -106,7 +98,7 @@ public class FractalGeography implements Geography {
     private void tryAddingComparator(SatInstance firstInstance, SatInstance secondInstance, Vector midpoint) {
         if (world.getLocation(midpoint).hasNoProblem()) {
             SatInstance midInstance = doClauseListCrossover(firstInstance, secondInstance);
-            world.setLocationProblem(midpoint, midInstance, PLACEHOLDER);
+            world.setLocationProblem(midpoint, midInstance);
         }
     }
 
@@ -116,33 +108,12 @@ public class FractalGeography implements Geography {
             SatInstance s = doClauseListCrossover(firstInstance, secondInstance);
             SatInstance t = doClauseListCrossover(thirdInstance, forthInstance);
             SatInstance midInstance = doClauseListCrossover(s, t);
-            world.setLocationProblem(midpoint, midInstance, PLACEHOLDER);
+            world.setLocationProblem(midpoint, midInstance);
         }
     }
 
     private SatInstance doClauseListCrossover(SatInstance firstInstance, SatInstance secondInstance, int noiseStrength) {
-        SatInstance newSatInstance = new SatInstance();
-        int NumClauses = globalSatInstance.getNumClauses();
-
-        for (Clause clause : globalSatInstance.getClauses()) {
-            // Decide whether or not this clause will be mutated according to
-            // Geography Noise Strength
-            // Then if a clauseList contains a clause and mutate=true, then we
-            // don't add it
-            // If a clauseList doesn't contain a clause and mutate=true then we
-            // add it
-            // Reverse for when mutate is false
-            boolean mutate = SharedPRNG.instance().nextDouble() < (noiseStrength / (double) NumClauses);
-            if (SharedPRNG.instance().nextBoolean()) {
-                if (firstInstance.contains(clause) != mutate) {
-                    newSatInstance.addClause(clause);
-                }
-            } else {
-                if (secondInstance.contains(clause) != mutate) {
-                    newSatInstance.addClause(clause);
-                }
-            }
-        }
+        SatInstance newSatInstance = (SatInstance) firstInstance.crossover(firstInstance, secondInstance, noiseStrength);
 
         return newSatInstance;
     }
@@ -152,7 +123,7 @@ public class FractalGeography implements Geography {
     }
 
 
-    private boolean notUsingSatProblem() {
-        return StringParameter.PROBLEM_TYPE.getValue() == "landscapeEC.problem.sat.SatInstance.java";
+    private boolean usingTestCaseProblem() {
+        return GlobalProblem.getProblem() instanceof TestCases;
     }
 }

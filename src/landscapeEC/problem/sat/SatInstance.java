@@ -5,23 +5,34 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import landscapeEC.problem.Evaluator;
+import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Problem;
+import landscapeEC.problem.TestCases;
 import landscapeEC.util.SharedPRNG;
 
-public class SatInstance implements Iterable<Clause>, Serializable, Problem {
+public class SatInstance implements Iterable<Clause>, Serializable, Problem, TestCases<Clause> {
     private static final long serialVersionUID = 3401366560852023162L;
     private int numVariables;
     private LinkedHashSet<Clause> clauseList = new LinkedHashSet<Clause>();
+    private final double difficulty;
 
-    public SatInstance() {
-    	//Do nothing!
+    public SatInstance(double difficulty) {
+    	this.difficulty = difficulty;
     }
     
-    public SatInstance(int numVars) {
+    public SatInstance(List<Clause> listOfClauses, double difficulty) {
+        this.difficulty = difficulty;
+        
+        clauseList.addAll(listOfClauses);
+    }
+    
+    public SatInstance(int numVars, double difficulty) {
     	numVariables = numVars;
+    	this.difficulty = difficulty;
     }
     
     @Override
@@ -37,22 +48,64 @@ public class SatInstance implements Iterable<Clause>, Serializable, Problem {
         this.numVariables = numVariables;
     }
     
-    public void addClause(Clause newClause){
-        clauseList.add(newClause);
+    @Override
+    public double getDifficulty() {
+        return difficulty;
     }
-
+    
     @Override
     public Problem getSubProblem(double difficulty) {
         int numClauses = (int) Math.ceil(clauseList.size() * difficulty);
+        double newDifficulty = this.difficulty * difficulty;
         
-        SatInstance subInstance = new SatInstance();
         ArrayList<Clause> clauses = new ArrayList<Clause>(clauseList); //This should preserve the order of the clauses
+        ArrayList<Clause> clausesToAdd = new ArrayList<Clause>();
         
         for (int i = 0; i < numClauses; i++) {
-            subInstance.addClause(clauses.get(i));
+            clausesToAdd.add(clauses.get(i));
         }
-
+        
+        SatInstance subInstance = new SatInstance(clausesToAdd, newDifficulty);
+        
         return subInstance;
+    }
+    
+    @Override
+    public TestCases<Clause> crossover(TestCases<Clause> firstParent, TestCases<Clause> secondParent, int noiseStrength) {
+        SatInstance globalSatInstance = (SatInstance) GlobalProblem.getProblem();
+        int NumClauses = globalSatInstance.getNumClauses();
+
+        SatInstance firstInstance = (SatInstance) firstParent;
+        SatInstance secondInstance = (SatInstance) secondParent;
+        
+        ArrayList<Clause> clauses = new ArrayList<Clause>();
+        
+        for (Clause clause : globalSatInstance.getClauses()) {
+            // Decide whether or not this clause will be mutated according to
+            // Geography Noise Strength
+            // Then if a clauseList contains a clause and mutate=true, then we
+            // don't add it
+            // If a clauseList doesn't contain a clause and mutate=true then we
+            // add it
+            // Reverse for when mutate is false
+            boolean mutate = SharedPRNG.instance().nextDouble() < (noiseStrength / (double) NumClauses);
+            if (SharedPRNG.instance().nextBoolean()) {
+                if (firstInstance.contains(clause) != mutate) {
+                    clauses.add(clause);
+                }
+            } else {
+                if (secondInstance.contains(clause) != mutate) {
+                    clauses.add(clause);
+                }
+            }
+        }
+        
+        SatInstance globalProblem = (SatInstance) GlobalProblem.getProblem();
+        double newDifficulty = clauses.size() / ((double) globalProblem.getNumClauses());
+        
+        SatInstance newSatInstance = new SatInstance(clauses, newDifficulty);
+
+        return newSatInstance;
     }
     
     @Override

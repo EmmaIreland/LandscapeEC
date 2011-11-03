@@ -26,7 +26,7 @@ public class RandomSelectionTest {
 
     @Test
     public void testRandomSelection() {    
-        SatInstance satInstance = new SatInstance();
+        SatInstance satInstance = new SatInstance(1.0);
         satInstance.setNumVariables(NUM_VARIABLES);
         GlobalProblem.setProblem(satInstance);
         

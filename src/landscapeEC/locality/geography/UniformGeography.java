@@ -11,7 +11,7 @@ public class UniformGeography implements Geography {
     public void generateGeography(World world) {
         Problem problem = GlobalProblem.getProblem().getSubProblem(0);
         for (Vector position : world) {
-            world.setLocationProblem(position, problem, 0);
+            world.setLocationProblem(position, problem);
         }
     }
 

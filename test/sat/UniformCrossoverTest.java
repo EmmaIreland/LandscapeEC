@@ -23,7 +23,7 @@ public class UniformCrossoverTest {
     
     @Test
     public void testUniformCrossover() {        
-        SatInstance satInstance = new SatInstance();
+        SatInstance satInstance = new SatInstance(1.0);
         satInstance.setNumVariables(NUM_BITS);
         GlobalProblem.setProblem(satInstance);
 

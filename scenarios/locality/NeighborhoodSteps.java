@@ -31,7 +31,7 @@ public class NeighborhoodSteps extends Steps {
     public void setupWorld(String toroidalFlag, String sizes) throws Exception {
     	File paramsFile = new File("properties/test.properties");
         GlobalParameters.setParameters(paramsFile);
-        GlobalProblem.setProblem(new SatInstance());
+        GlobalProblem.setProblem(new SatInstance(0.0));
     	
         String[] dimensionStrings = sizes.split(", *");
         Vector dimensions = new Vector();

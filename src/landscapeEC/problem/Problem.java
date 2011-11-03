@@ -7,4 +7,6 @@ public interface Problem {
     public Problem getSubProblem(double difficulty);
     
     public Evaluator getEvaluator();
+    
+    public double getDifficulty();
 }

@@ -24,7 +24,7 @@ public class LocationTest {
     public void positionTest() throws Exception {
         File paramsFile = new File("properties/test.properties");
         GlobalParameters.setParameters(paramsFile);
-        GlobalProblem.setProblem(new SatInstance());
+        GlobalProblem.setProblem(new SatInstance(0.0));
 
         Vector dimensions = new Vector(new Integer[] { SIZE, SIZE });
         World world = new World(dimensions, true);

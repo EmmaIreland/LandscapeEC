@@ -24,7 +24,7 @@ public class SatInstanceTest {
     
     @Test
     public void clauseEvaluationEasyTest() throws Exception {
-        String satInstanceString = "1 -3\n2 -3\n3 -4\n4 -1\n";
+        String satInstanceString = "p cnf 4 4\n1 -3\n2 -3\n3 -4\n4 -1\n";
         Clause[] expectedClauses = new Clause[]{
                 new Clause(0, new Literal[] {new Literal(0, false), new Literal(2, true)}),
                 new Clause(1, new Literal[] {new Literal(1, false), new Literal(2, true)}),
@@ -39,7 +39,7 @@ public class SatInstanceTest {
     
     @Test
     public void clauseEvaluationMediumTest() throws Exception {
-        String satInstanceString = "1 2 3\n-1 2 -3\n1 2 -3\n1 -2 3\n";
+        String satInstanceString = "p cnf 3 4\n1 2 3\n-1 2 -3\n1 2 -3\n1 -2 3\n";
         Clause[] expectedClauses = new Clause[]{
                 new Clause(0, new Literal[] {new Literal(0, false), new Literal(1, false), new Literal(2, false)}),
                 new Clause(1, new Literal[] {new Literal(0, true), new Literal(1, false), new Literal(2, true)}),

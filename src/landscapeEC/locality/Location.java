@@ -15,7 +15,6 @@ public class Location implements Serializable {
     private List<Individual> individuals;
     private List<Individual> pendingIndividuals;
     private Problem problem;
-    private double difficulty;
     
     public Location(Vector aPosition, Problem aProblem) {
         position = aPosition;
@@ -43,16 +42,9 @@ public class Location implements Serializable {
     public boolean hasNoProblem() {
 	return problem == null;
     }
-    
-    //This is deprecated because we want to move difficulty to be entirely within problem.
-    @Deprecated
-    public void setProblem(Problem aProblem, double difficulty) {
+
+    public void setProblem(Problem aProblem) {
         problem = aProblem;
-        this.difficulty = difficulty;
-    }
-    
-    public double getDifficulty(){
-        return difficulty;
     }
     
     public void setIndividuals(List<Individual> individuals) {

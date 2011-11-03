@@ -45,8 +45,8 @@ public class World implements Iterable<Vector>, Serializable {
         return instance;
     }
 
-    public void setLocationProblem(Vector position, Problem problem, double difficulty) {
-        getLocation(position).setProblem(problem, difficulty);
+    public void setLocationProblem(Vector position, Problem problem) {
+        getLocation(position).setProblem(problem);
     }
 
     public Location getLocation(Vector position) {

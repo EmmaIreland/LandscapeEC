@@ -7,6 +7,7 @@ a solution to a SAT problem
 Given a sat evaluator
 When I have a bitstring of <bitstring> 
 And I have this clauseList
+p cnf 3 4
 1 2 3
 -1 2 -3
 1 2 -3

@@ -17,7 +17,7 @@ public class ManhattanDistanceGeography implements Geography {
         double clausePercentage = 1.0 - Math.min(distance / (1.0 * middle.manhattanLength()), 1.0);
         
         final Problem subProblem = GlobalProblem.getProblem().getSubProblem(clausePercentage);
-        world.setLocationProblem(position, subProblem, clausePercentage);
+        world.setLocationProblem(position, subProblem);
     }
 
     @Override

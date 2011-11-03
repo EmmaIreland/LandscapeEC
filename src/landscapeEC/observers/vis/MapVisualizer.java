@@ -90,7 +90,7 @@ public class MapVisualizer extends JFrame implements Observer {
             for(int x=0; x<worldWidth; x++) {
                 Location loc = world.getLocation(new Vector(new Integer[] {x, y}));
                 
-                double difficultyScale = loc.getDifficulty();
+                double difficultyScale = loc.getProblem().getDifficulty();
                 int intensity = (int) ((1-difficultyScale)*255);
                 Color background = new Color(intensity, intensity, intensity);
                 GraphicsUtil.fillRect(g, x*xScale, y*yScale, xScale, yScale, background);
