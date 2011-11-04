@@ -39,7 +39,7 @@ public class World implements Iterable<Vector>, Serializable {
         String geographyName = StringParameter.GEOGRAPHY_TYPE.getValue();
 
         Class<Geography> geography = (Class<Geography>) Class
-        .forName(geographyName);
+                .forName(geographyName);
         Constructor<Geography> cons = geography.getConstructor();
         Geography instance = cons.newInstance();
         return instance;
@@ -114,16 +114,9 @@ public class World implements Iterable<Vector>, Serializable {
         return Collections.max(bestFromCells, comparator);
     }
 
-    public List<Individual> getSpeciesNeighborhood(Vector p) {
-        // declare a mess of stuff up top
+    public List<Vector> getSpeciesNeighborhood(Vector p) {
+
         List<Vector> currentNeighborhood = new ArrayList<Vector>();
-        List<Individual> individuals = new ArrayList<Individual>();
-        // elsewhere we will prevent this from being called on an empty
-        // position,
-        // but it's always nice to be careful.
-        if (this.getIndividualsAt(p).isEmpty()) {
-            return individuals;
-        }
 
         List<Vector> temp = new ArrayList<Vector>();
         ShellMaker shellMaker = new ShellMaker(this);
@@ -131,8 +124,6 @@ public class World implements Iterable<Vector>, Serializable {
         IndividualComparator comparator = IndividualComparator.getComparator();
         int[] speciesBits = findBestInCell(comparator, p).getBits();
 
-        // we can be moderately sure that the best species at "p" is the best
-        // species at "p"
         currentNeighborhood.add(p);
         for (int rad = 0; (rad <= dimensions.size() / 2) && match; rad++) {
             temp.addAll(shellMaker.makeShell(p, rad));
@@ -144,10 +135,10 @@ public class World implements Iterable<Vector>, Serializable {
                     break;
                 }
             }
+            if (match) {
+                currentNeighborhood.addAll(temp);
+            }
         }
-        for (Vector v : currentNeighborhood) {
-            individuals.addAll(getIndividualsAt(v));
-        }
-        return individuals;
+        return currentNeighborhood;
     }
 }
