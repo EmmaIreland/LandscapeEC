@@ -29,7 +29,6 @@ import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.Problem;
 import landscapeEC.problem.ProblemParser;
-import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.problem.sat.operators.CrossoverOperator;
 import landscapeEC.problem.sat.operators.MutationOperator;
 import landscapeEC.problem.sat.operators.SelectionOperator;
@@ -287,7 +286,7 @@ private void performDraconianReaper() {
 
       for(Vector position : world) {
          List<Individual> locationIndividuals = world.getIndividualsAt(position);
-
+         
          for(Individual individual : locationIndividuals) {
             Problem locationProblem = world.getLocation(position).getProblem();
             if(evaluator.solvesSubProblem(individual, locationProblem)) {

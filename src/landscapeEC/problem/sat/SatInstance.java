@@ -11,10 +11,10 @@ import java.util.Set;
 import landscapeEC.problem.Evaluator;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Problem;
-import landscapeEC.problem.TestCases;
+import landscapeEC.problem.SeparableProblem;
 import landscapeEC.util.SharedPRNG;
 
-public class SatInstance implements Iterable<Clause>, Serializable, Problem, TestCases<Clause> {
+public class SatInstance implements Iterable<Clause>, Serializable, Problem, SeparableProblem<Clause> {
     private static final long serialVersionUID = 3401366560852023162L;
     private int numVariables;
     private LinkedHashSet<Clause> clauseList = new LinkedHashSet<Clause>();
@@ -71,7 +71,7 @@ public class SatInstance implements Iterable<Clause>, Serializable, Problem, Tes
     }
     
     @Override
-    public TestCases<Clause> crossover(TestCases<Clause> firstParent, TestCases<Clause> secondParent, int noiseStrength) {
+    public SeparableProblem<Clause> crossover(SeparableProblem<Clause> firstParent, SeparableProblem<Clause> secondParent, int noiseStrength) {
         SatInstance globalSatInstance = (SatInstance) GlobalProblem.getProblem();
         int NumClauses = globalSatInstance.getNumClauses();
 

@@ -4,7 +4,7 @@ import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.problem.GlobalProblem;
-import landscapeEC.problem.TestCases;
+import landscapeEC.problem.SeparableProblem;
 import landscapeEC.problem.sat.SatInstance;
 
 public class FractalGeography implements Geography {
@@ -124,6 +124,6 @@ public class FractalGeography implements Geography {
 
 
     private boolean usingTestCaseProblem() {
-        return GlobalProblem.getProblem() instanceof TestCases;
+        return GlobalProblem.getProblem() instanceof SeparableProblem;
     }
 }
