@@ -1,7 +1,9 @@
 package landscapeEC.problem.sat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import landscapeEC.problem.Evaluator;
-import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.Problem;
 
@@ -25,32 +27,25 @@ public class SatEvaluator extends Evaluator {
         return (double) clausesSolved / satInstance.getNumClauses();
     }
 
+    @Override
     public boolean solvesSubProblem(Individual individual, Problem locationProblem) {
         double fitness = evaluate(locationProblem, individual);
         int numClauses = ((SatInstance) locationProblem).getNumClauses();
-        int correctClauses = (int) Math.round(fitness * numClauses);
-        boolean satisfiesAllClauses = numClauses == correctClauses;
-        return satisfiesAllClauses;
+        return 1 - fitness < 1/(2.0 * numClauses);
     }
     
-    // Not Generic, can't be used in GA run
-//    public static void printUnsolvedClauses(Individual individual) {
-//        SatInstance satInstance = GlobalSatInstance.getInstance();
-//        if (satInstance.getNumClauses() == 0) {
-//            return;
-//        }
-//
-//        System.out.print("Unsolved Clause IDs:");
-//
-//        int i = 0;
-//        for (Clause clause : satInstance) {
-//            if (!clause.satisfiedBy(individual)) {
-//                System.out.print(clause.getId() + " ");
-//            }
-//            i++;
-//        }
-//        System.out.print("\n");
-//    }
+    public List<Clause> getUnsolvedClauses(Individual individual, Problem locationProblem) {
+        SatInstance satInstance = (SatInstance) locationProblem;
+        List<Clause> unsolvedClauses = new ArrayList<Clause>();
+        
+        for (Clause clause : satInstance) {
+            if (!clause.satisfiedBy(individual)) {
+                unsolvedClauses.add(clause);
+            }
+        }
+        
+        return unsolvedClauses;
+    }
     
     
     @Override

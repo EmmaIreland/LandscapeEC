@@ -29,6 +29,8 @@ import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.Problem;
 import landscapeEC.problem.ProblemParser;
+import landscapeEC.problem.sat.Clause;
+import landscapeEC.problem.sat.SatEvaluator;
 import landscapeEC.problem.sat.operators.CrossoverOperator;
 import landscapeEC.problem.sat.operators.MutationOperator;
 import landscapeEC.problem.sat.operators.SelectionOperator;
@@ -282,18 +284,38 @@ public class GARun {
        }
    }
 
-private void performDraconianReaper() {
+   private void performDraconianReaper() {
+       
+       for(Vector position : world) {
+           Location location = world.getLocation(position);
+           List<Individual> locationIndividuals = world.getIndividualsAt(position);
 
-      for(Vector position : world) {
-         List<Individual> locationIndividuals = world.getIndividualsAt(position);
-         
-         for(Individual individual : locationIndividuals) {
-            Problem locationProblem = world.getLocation(position).getProblem();
-            if(evaluator.solvesSubProblem(individual, locationProblem)) {
-               world.getLocation(position).addToPendingIndividuals(individual);
-            }
-         }
-      }
+           for(Individual individual : locationIndividuals) {
+               Problem locationProblem = location.getProblem();
+               if (BooleanParameter.VIRAL_CLAUSES.getValue()) { //Perform viral clause procedure and reaping
+                   doViralClauses(location, individual, locationProblem);
+               } else { //else default reaper procedure
+                   if(evaluator.solvesSubProblem(individual, locationProblem)) {
+                       location.addToPendingIndividuals(individual);
+                   }
+               }
+           }
+       }
+   }
+
+   private void doViralClauses(Location location, Individual individual, Problem locationProblem) {
+       if (!(evaluator instanceof SatEvaluator)) {
+           throw new RuntimeException("Viral Clauses is currently only supported under 3SAT");
+       }
+       
+       SatEvaluator clauseEvaluator = (SatEvaluator) evaluator;
+       List<Clause> unsolvedClauses = clauseEvaluator.getUnsolvedClauses(individual, locationProblem);
+       
+       if (unsolvedClauses.size() > 0) {
+           location.updateViralClauses(unsolvedClauses, world);
+       } else {
+           location.addToPendingIndividuals(individual);
+       }
    }
 
    private void performMigration() {

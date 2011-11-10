@@ -3,10 +3,15 @@ package landscapeEC.locality;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import landscapeEC.parameters.IntParameter;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.Problem;
+import landscapeEC.problem.sat.Clause;
+import landscapeEC.problem.sat.SatInstance;
 
 
 public class Location implements Serializable {
@@ -15,6 +20,7 @@ public class Location implements Serializable {
     private List<Individual> individuals;
     private List<Individual> pendingIndividuals;
     private Problem problem;
+    private Map<Clause, Integer> viralClauses = new HashMap<Clause, Integer>();
     
     public Location(Vector aPosition, Problem aProblem) {
         position = aPosition;
@@ -79,6 +85,28 @@ public class Location implements Serializable {
     public void addFromPendingIndividuals() {
         individuals.addAll(pendingIndividuals);
         pendingIndividuals.clear();
+    }
+    
+    public void updateViralClauses(List<Clause> unsolvedClauses, World world) {
+        for (Clause clause : unsolvedClauses) {
+            int count = 0;
+            if (viralClauses.get(clause) == null) {
+                viralClauses.put(clause, 1);
+            } else {
+                count = viralClauses.get(clause) + 1;
+                viralClauses.put(clause, count);
+            }
+            
+            if(count == IntParameter.VIRAL_CLAUSE_THRESHOLD.getValue()) {
+                System.out.println("Viral Clause limit reached for " + position.toString());
+                
+                List<Vector> neighborhood = world.getNeighborhood(position, 1);
+                for (Vector pos : neighborhood) {
+                    SatInstance locationProblem = (SatInstance) world.getLocation(pos).getProblem();
+                    locationProblem.addViralClause(clause);
+                }
+            }
+        }
     }
 
 }

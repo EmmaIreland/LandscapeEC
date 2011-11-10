@@ -18,7 +18,7 @@ public class SatInstance implements Iterable<Clause>, Serializable, Problem, Sep
     private static final long serialVersionUID = 3401366560852023162L;
     private int numVariables;
     private LinkedHashSet<Clause> clauseList = new LinkedHashSet<Clause>();
-    private final double difficulty;
+    private double difficulty;
 
     public SatInstance(double difficulty) {
     	this.difficulty = difficulty;
@@ -51,6 +51,16 @@ public class SatInstance implements Iterable<Clause>, Serializable, Problem, Sep
     @Override
     public double getDifficulty() {
         return difficulty;
+    }
+    
+    public void addViralClause(Clause clause) {
+        if (!clauseList.contains(clause)) {
+            clauseList.add(clause);
+
+            SatInstance globalProblem = (SatInstance) GlobalProblem.getProblem();
+            double increment = (1 / (double) globalProblem.getNumClauses());
+            difficulty += increment;
+        }
     }
     
     @Override
