@@ -18,14 +18,10 @@ public class ShellMaker {
 	for (int lockedDimension = 0; lockedDimension < dimensions.size(); lockedDimension++) {
 	    int original = position.get(lockedDimension);
 	    currentPosition.set(lockedDimension, original - radius);
-	    result
-		    .addAll(leftSolve(currentPosition, radius, lockedDimension,
-			    0));
+	    result.addAll(leftSolve(currentPosition, radius, lockedDimension, 0));
 
 	    currentPosition.set(lockedDimension, original + radius);
-	    result
-		    .addAll(leftSolve(currentPosition, radius, lockedDimension,
-			    0));
+	    result.addAll(leftSolve(currentPosition, radius, lockedDimension, 0));
 
 	    currentPosition.set(lockedDimension, original);
 	}
@@ -92,7 +88,7 @@ public class ShellMaker {
 	List<Vector> seen = new ArrayList<Vector>();
 	for (int i = 0; input.size() > seen.size();) {
 	    if (seen.contains(input.get(i))) {
-	        System.out.println("Removing a point: "+input.get(i).toString());
+	        //System.out.println("Removing a point: "+input.get(i).toString());
 		input.remove(i);
 	    } else {
 		seen.add(input.get(i));

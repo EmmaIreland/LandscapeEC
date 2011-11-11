@@ -207,6 +207,10 @@ public class GARun {
       int i = 0;
       bestOverallFitness = 0.0;
       Individual bestIndividual = null;
+      //initialize observers before the run starts
+      for(Observer o : observers) {
+          o.generationData(i, world, successes);
+       }
       while(evaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO.getValue()) {
          processAllLocations();
 
@@ -370,8 +374,8 @@ public class GARun {
             List<Individual> crossoverPop = popManager.crossover(locationIndividuals,
                   selectionOperator, crossoverOperator);
 
-            List<Individual> mutatedPopulation = popManager.mutatePopulation(crossoverPop,
-                  mutationOperator);
+            List<Individual> mutatedPopulation = popManager.mutatePopulation(crossoverPop,mutationOperator,
+                  position);
 
             world.getLocation(position).addToPendingIndividuals(mutatedPopulation);
          } else if(BooleanParameter.PROMOTE_SMALL_POPULATIONS.getValue()) {

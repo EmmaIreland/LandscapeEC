@@ -3,6 +3,7 @@ package landscapeEC.locality;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -114,31 +115,4 @@ public class World implements Iterable<Vector>, Serializable {
         return Collections.max(bestFromCells, comparator);
     }
 
-    public List<Vector> getSpeciesNeighborhood(Vector p) {
-
-        List<Vector> currentNeighborhood = new ArrayList<Vector>();
-
-        List<Vector> temp = new ArrayList<Vector>();
-        ShellMaker shellMaker = new ShellMaker(this);
-        Boolean match = true;
-        IndividualComparator comparator = IndividualComparator.getComparator();
-        int[] speciesBits = findBestInCell(comparator, p).getBits();
-
-        currentNeighborhood.add(p);
-        for (int rad = 0; (rad <= dimensions.size() / 2) && match; rad++) {
-            temp.addAll(shellMaker.makeShell(p, rad));
-            for (Vector v : temp) {
-                if (findBestInCell(comparator, v).getBits().equals(speciesBits)) {
-                    // do nothing - everything is going according to plan!
-                } else {
-                    match = false;
-                    break;
-                }
-            }
-            if (match) {
-                currentNeighborhood.addAll(temp);
-            }
-        }
-        return currentNeighborhood;
-    }
 }
