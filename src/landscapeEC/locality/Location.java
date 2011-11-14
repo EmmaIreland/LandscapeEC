@@ -12,6 +12,7 @@ import landscapeEC.problem.Individual;
 import landscapeEC.problem.Problem;
 import landscapeEC.problem.sat.Clause;
 import landscapeEC.problem.sat.SatInstance;
+import landscapeEC.util.SharedPRNG;
 
 
 public class Location implements Serializable {
@@ -98,15 +99,27 @@ public class Location implements Serializable {
             }
             
             if(count == IntParameter.VIRAL_CLAUSE_THRESHOLD.getValue()) {
-                System.out.println("Viral Clause limit reached for " + position.toString());
-                
-                List<Vector> neighborhood = world.getNeighborhood(position, 1);
-                for (Vector pos : neighborhood) {
-                    SatInstance locationProblem = (SatInstance) world.getLocation(pos).getProblem();
-                    locationProblem.addViralClause(clause);
-                }
+                spreadViralClause(world, clause);
             }
         }
     }
+
+	private void spreadViralClause(World world, Clause clause) {
+		System.out.println("Viral Clause limit reached for " + position.toString());
+		
+		List<Vector> neighborhood = world.getNeighborhood(position, 1);
+		neighborhood.remove(position); //We don't want to spread to the same location
+		Collections.shuffle(neighborhood, SharedPRNG.instance());
+		
+		for (Vector pos : neighborhood) {
+		    SatInstance locationProblem = (SatInstance) world.getLocation(pos).getProblem();
+		    
+		    //Only add clause to a location that does not contain it
+		    if (!locationProblem.contains(clause)) {
+		    	locationProblem.addViralClause(clause);
+		    	break;
+		    }
+		}
+	}
 
 }
