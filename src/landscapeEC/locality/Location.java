@@ -87,39 +87,42 @@ public class Location implements Serializable {
         individuals.addAll(pendingIndividuals);
         pendingIndividuals.clear();
     }
-    
+
     public void updateViralClauses(List<Clause> unsolvedClauses, World world) {
         for (Clause clause : unsolvedClauses) {
             int count = 0;
             if (viralClauses.get(clause) == null) {
                 viralClauses.put(clause, 1);
+                count = 1;
             } else {
                 count = viralClauses.get(clause) + 1;
                 viralClauses.put(clause, count);
             }
-            
-            if(count == IntParameter.VIRAL_CLAUSE_THRESHOLD.getValue()) {
-                spreadViralClause(world, clause);
+
+            if(count % IntParameter.VIRAL_CLAUSE_THRESHOLD.getValue() == 0) {
+                if (count < IntParameter.VIRAL_CLAUSE_THRESHOLD.getValue() * 8) {
+                    spreadViralClause(world, clause);
+                }
             }
         }
     }
 
-	private void spreadViralClause(World world, Clause clause) {
-		System.out.println("Viral Clause limit reached for " + position.toString());
-		
-		List<Vector> neighborhood = world.getNeighborhood(position, 1);
-		neighborhood.remove(position); //We don't want to spread to the same location
-		Collections.shuffle(neighborhood, SharedPRNG.instance());
-		
-		for (Vector pos : neighborhood) {
-		    SatInstance locationProblem = (SatInstance) world.getLocation(pos).getProblem();
-		    
-		    //Only add clause to a location that does not contain it
-		    if (!locationProblem.contains(clause)) {
-		    	locationProblem.addViralClause(clause);
-		    	break;
-		    }
-		}
-	}
+    private void spreadViralClause(World world, Clause clause) {
+        //System.out.println("Viral Clause limit reached for " + position.toString());
+
+        List<Vector> neighborhood = world.getNeighborhood(position, 1);
+        neighborhood.remove(position); //We don't want to spread to the same location
+        Collections.shuffle(neighborhood, SharedPRNG.instance());
+
+        for (Vector pos : neighborhood) {
+            SatInstance locationProblem = (SatInstance) world.getLocation(pos).getProblem();
+
+            //Only add clause to a location that does not contain it
+            if (!locationProblem.contains(clause)) {
+                locationProblem.addViralClause(clause);
+                break;
+            }
+        }
+    }
 
 }
