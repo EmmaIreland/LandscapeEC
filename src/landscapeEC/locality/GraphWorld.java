@@ -11,7 +11,11 @@ import landscapeEC.problem.Problem;
 
 public class GraphWorld implements Iterable<Location>, Serializable, World<Integer> {
 
-	private LinkedHashMap<Integer, Location> Locations;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private LinkedHashMap<Integer, Location> locations;
 	
 	public GraphWorld(File file){
 		//check no locations have no neighbors
@@ -19,18 +23,23 @@ public class GraphWorld implements Iterable<Location>, Serializable, World<Integ
 	}
 	
 	public Location getLocation(Integer position){
-		return Locations.get(position);
+		return locations.get(position);
 	}
 	
 	public List<Integer> getNeighborhood(Integer position, int radius){
-		//TODO Fill in
+		//currently assume that we will only get a neighborhood of 1.
+		//TODO we need to address if we want locations to have their neighborhoods or not.
+		
+		/*if(radius != 1){
+			throw new UnsupportedOperationException("Neighborhood size of not 1 is not yet supported, bitch at Nick");
+		}
+		List<Location> locationList = locations.get(position).getNeighbors();*/
 		return null;
 	}
 	
 	@Override
 	public Iterator<Location> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return new GraphWorldIterator(this);
 	}
 	
 	private void parseData(File file){
@@ -39,26 +48,28 @@ public class GraphWorld implements Iterable<Location>, Serializable, World<Integ
 
 	@Override
 	public void setLocationProblem(Integer position, Problem problem) {
-		// TODO Auto-generated method stub
+		getLocation(position).setProblem(problem);
 		
 	}
 
 	@Override
 	public int getNumLocations() {
-		// TODO Auto-generated method stub
-		return 0;
+		return locations.size();
 	}
 
 	@Override
 	public List<Individual> getIndividualsAt(Integer p) {
-		// TODO Auto-generated method stub
-		return null;
+		return locations.get(p).getIndividuals();
 	}
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
+		locations = new LinkedHashMap<Integer, Location>();
 		
+	}
+
+	public boolean has(int i) {
+		return locations.containsValue(i);
 	}
 
 }

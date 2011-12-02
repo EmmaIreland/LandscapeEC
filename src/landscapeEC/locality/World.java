@@ -19,4 +19,5 @@ public interface World<T> extends Iterable<Location> {
 	public void clear();
 	
 	public Iterator<Location> iterator();
+	
 }
