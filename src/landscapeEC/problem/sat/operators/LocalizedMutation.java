@@ -9,7 +9,7 @@ import java.util.List;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.ShellMaker;
 import landscapeEC.locality.Vector;
-import landscapeEC.locality.World;
+import landscapeEC.locality.GridWorld;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.DoubleParameter;
 import landscapeEC.problem.Individual;
@@ -20,7 +20,7 @@ public final class LocalizedMutation implements MutationOperator, Observer {
     static Hashtable<Vector, Integer> speciesConcentrationMap = new Hashtable<Vector, Integer>();
     static Hashtable<Vector, int[]> speciesMap = new Hashtable<Vector, int[]>();
     static ShellMaker shellMaker;
-    World world;
+    GridWorld world;
     private int maxRad = 0;
 
     @Override
@@ -48,7 +48,7 @@ public final class LocalizedMutation implements MutationOperator, Observer {
     }
 
     @Override
-    public void generationData(int generationNumber, World newWorld, int successes) {
+    public void generationData(int generationNumber, GridWorld newWorld, int successes) {
         if(maxRad>1){
         System.out.println("MaxRad for generation "+generationNumber+":"+maxRad);
         }

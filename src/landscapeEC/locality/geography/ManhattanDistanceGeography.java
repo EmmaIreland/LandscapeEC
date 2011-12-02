@@ -2,13 +2,13 @@ package landscapeEC.locality.geography;
 
 import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
-import landscapeEC.locality.World;
+import landscapeEC.locality.GridWorld;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Problem;
 
 public class ManhattanDistanceGeography implements Geography {
 
-    private void assignSubProblem(World world, Vector position) {
+    private void assignSubProblem(GridWorld world, Vector position) {
         Vector origin = Vector.origin(world.getDimensions().size());
         Vector worldEdge = world.getDimensions().minusToAll(1);
         Vector middle = origin.getMidPoint(worldEdge);
@@ -22,7 +22,7 @@ public class ManhattanDistanceGeography implements Geography {
     }
 
     @Override
-    public void generateGeography(World world) {
+    public void generateGeography(GridWorld world) {
         for (Location location : world) {
             assignSubProblem(world, location.getPosition());
         }

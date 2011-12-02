@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShellMaker {
-    private World world;
+    private GridWorld world;
     private Vector dimensions;
 
-    public ShellMaker(World world) {
+    public ShellMaker(GridWorld world) {
 	this.world = world;
 	this.dimensions = world.getDimensions();
     }

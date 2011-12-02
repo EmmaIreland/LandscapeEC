@@ -13,7 +13,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import landscapeEC.locality.Vector;
-import landscapeEC.locality.World;
+import landscapeEC.locality.GridWorld;
 import landscapeEC.observers.Observer;
 import landscapeEC.problem.sat.SatInstance;
 
@@ -27,7 +27,7 @@ public class Console extends JFrame implements ActionListener, Observer {
     JScrollPane scrollPane;
 
     boolean newLine = false;
-    private World world;
+    private GridWorld world;
 
     public Console() {
         init();
@@ -130,7 +130,7 @@ public class Console extends JFrame implements ActionListener, Observer {
     }
 
     @Override
-    public void generationData(int generationNumber, World world, int successes) {
+    public void generationData(int generationNumber, GridWorld world, int successes) {
         this.world = world;
     }
 }

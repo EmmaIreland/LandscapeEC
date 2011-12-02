@@ -9,7 +9,7 @@ import java.util.List;
 
 import landscapeEC.locality.ShellMaker;
 import landscapeEC.locality.Vector;
-import landscapeEC.locality.World;
+import landscapeEC.locality.GridWorld;
 import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.sat.SatInstance;
@@ -24,7 +24,7 @@ import org.jbehave.scenario.steps.Steps;
 
 
 public class NeighborhoodSteps extends Steps {
-    private World world;
+    private GridWorld world;
     private List<Vector> neighborhood;
 
     @Given("a $toroid world of size [$size]")
@@ -39,7 +39,7 @@ public class NeighborhoodSteps extends Steps {
             dimensions.add(Integer.parseInt(dimensionStrings[i]));
         }
         boolean isToroidal = toroidalFlag.equals("toroidal");
-        world = new World(dimensions, isToroidal);
+        world = new GridWorld(dimensions, isToroidal);
     }
 
     @When("I compute the neighborhood of [$location] with radius $radius")

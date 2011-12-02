@@ -14,7 +14,7 @@ import landscapeEC.locality.EmptyWorldException;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.MigrationInWorldOfSizeOneException;
 import landscapeEC.locality.Vector;
-import landscapeEC.locality.World;
+import landscapeEC.locality.GridWorld;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.BooleanParameter;
 import landscapeEC.parameters.DoubleArrayParameter;
@@ -46,7 +46,7 @@ public class GARun {
 	private PopulationManager popManager;
 	private Evaluator evaluator;
 
-	private World world;
+	private GridWorld world;
 
 	private List<Observer> observers = new ArrayList<Observer>();
 	private int successes;
@@ -180,7 +180,7 @@ public class GARun {
 	private boolean runGenerations(int currentRun) throws Exception {
 		List<Individual> population = popManager.generatePopulation();
 
-		world = new World(new Vector(IntArrayParameter.WORLD_DIMENSIONS.getValue()),
+		world = new GridWorld(new Vector(IntArrayParameter.WORLD_DIMENSIONS.getValue()),
 				BooleanParameter.TOROIDAL.getValue());
 
 		world.clear();

@@ -7,7 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import landscapeEC.locality.World;
+import landscapeEC.locality.GridWorld;
 import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.Parameters;
 import landscapeEC.problem.GlobalProblem;
@@ -16,16 +16,16 @@ import landscapeEC.problem.Problem;
 public class SnapShot implements Serializable{
     private static final long serialVersionUID = -2078745941945517413L;
     private Parameters params;
-    private World world;
+    private GridWorld world;
     private Problem problem;
 
-    public SnapShot(World world) {
+    public SnapShot(GridWorld world) {
         params = GlobalParameters.getParameters();
         this.world = world;
         this.problem = GlobalProblem.getProblem();
     }
     
-    public static void saveSnapShot(String fileName, World world) throws IOException {
+    public static void saveSnapShot(String fileName, GridWorld world) throws IOException {
         FileOutputStream fileStream = new FileOutputStream(fileName + ".sav");
         ObjectOutputStream outputStream = new ObjectOutputStream(fileStream);
         outputStream.writeObject(new SnapShot(world));
@@ -42,7 +42,7 @@ public class SnapShot implements Serializable{
         return params;
     }
 
-    public World getWorld() {
+    public GridWorld getWorld() {
         return world;
     }
 

@@ -2,13 +2,13 @@ package landscapeEC.locality;
 
 import java.util.Iterator;
 
-public class LocationIterator implements Iterator<Location> {
+public class GridWorldIterator implements Iterator<Location> {
 
     private Vector start, end, current;
     private int numDimensions;
-    private World world;
+    private GridWorld world;
 
-    public LocationIterator(Vector uncheckedStart, Vector uncheckedEnd, World world) {
+    public GridWorldIterator(Vector uncheckedStart, Vector uncheckedEnd, GridWorld world) {
         for (int i = 0; i < uncheckedStart.size(); i++) {
             if (uncheckedStart.get(i) > uncheckedEnd.get(i)) {
                 throw new IllegalArgumentException("Bad range for Location Iterator");
@@ -28,11 +28,11 @@ public class LocationIterator implements Iterator<Location> {
         this.numDimensions = start.size();
     }
 
-    public LocationIterator(Vector position, int radius, World world) {
+    public GridWorldIterator(Vector position, int radius, GridWorld world) {
         this(position.minusToAll(radius), position.plusToAll(radius + 1), world);
     }
 
-    public LocationIterator(World world) {
+    public GridWorldIterator(GridWorld world) {
         this(Vector.origin(world.getDimensions().size()), new Vector(world.getDimensions()), world);
     }
 

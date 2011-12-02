@@ -88,7 +88,7 @@ public class Location implements Serializable {
         pendingIndividuals.clear();
     }
 
-    public void updateViralClauses(List<Clause> unsolvedClauses, World world) {
+    public void updateViralClauses(List<Clause> unsolvedClauses, GridWorld world) {
         for (Clause clause : unsolvedClauses) {
             int count = 0;
             if (viralClauses.get(clause) == null) {
@@ -107,7 +107,7 @@ public class Location implements Serializable {
         }
     }
 
-    private void spreadViralClause(World world, Clause clause) {
+    private void spreadViralClause(GridWorld world, Clause clause) {
         //System.out.println("Viral Clause limit reached for " + position.toString());
 
         List<Vector> neighborhood = world.getNeighborhood(position, 1);

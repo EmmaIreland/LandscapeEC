@@ -1,9 +1,9 @@
 package landscapeEC.locality.geography;
 
-import landscapeEC.locality.World;
+import landscapeEC.locality.GridWorld;
 
 public interface Geography {
 
-    void generateGeography(World world);
+    void generateGeography(GridWorld world);
 
 }

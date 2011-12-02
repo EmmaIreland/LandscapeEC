@@ -7,7 +7,7 @@ import java.io.File;
 
 import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
-import landscapeEC.locality.World;
+import landscapeEC.locality.GridWorld;
 import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.sat.SatInstance;
@@ -16,7 +16,7 @@ import org.junit.Test;
 
 
 
-public class LocationTest {
+public class GridWorldLocationTest {
 
     private static final int SIZE = 10;
 
@@ -27,7 +27,7 @@ public class LocationTest {
         GlobalProblem.setProblem(new SatInstance(0.0));
 
         Vector dimensions = new Vector(new Integer[] { SIZE, SIZE });
-        World world = new World(dimensions, true);
+        GridWorld world = new GridWorld(dimensions, true);
 
         for (int i=0; i<SIZE; ++i) {
             for (int j=0; j<SIZE; ++j) {

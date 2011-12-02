@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 
 import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
-import landscapeEC.locality.World;
+import landscapeEC.locality.GridWorld;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.problem.DiversityCalculator;
@@ -38,7 +38,7 @@ public class DataDisplay extends JFrame implements Observer {
     }
 
     @Override
-    public void generationData(int generationNumber, World world, int successes) {
+    public void generationData(int generationNumber, GridWorld world, int successes) {
 
         width = getWidth();
         height = getHeight();
@@ -72,7 +72,7 @@ public class DataDisplay extends JFrame implements Observer {
         repaint();
     }
     
-    private int getIndividualCount(World world) {
+    private int getIndividualCount(GridWorld world) {
         int count = 0;
         for(Location l : world) {
             count += l.getNumIndividuals();
@@ -80,7 +80,7 @@ public class DataDisplay extends JFrame implements Observer {
         return count;
     }
     
-    private int getInhabitedCellCount(World world) {
+    private int getInhabitedCellCount(GridWorld world) {
         int count = 0;
         for(Location l : world) {
             if(l.getNumIndividuals() > 0) count++;

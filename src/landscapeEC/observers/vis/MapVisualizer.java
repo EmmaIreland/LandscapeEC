@@ -14,7 +14,7 @@ import javax.swing.JFrame;
 import landscapeEC.core.SnapShot;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
-import landscapeEC.locality.World;
+import landscapeEC.locality.GridWorld;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntArrayParameter;
@@ -68,7 +68,7 @@ public class MapVisualizer extends JFrame implements Observer {
     }
     
     @Override
-    public void generationData(int generationNumber, World world, int successes) {
+    public void generationData(int generationNumber, GridWorld world, int successes) {
         Vector oneByOne = new Vector(new Integer[] {1, 1});
         if(world.getDimensions().equals(oneByOne)) {
             canvas = drawNonCellular(world);
@@ -79,7 +79,7 @@ public class MapVisualizer extends JFrame implements Observer {
         repaint();
     }
 
-    public BufferedImage drawCellular(World world) {
+    public BufferedImage drawCellular(GridWorld world) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics g = image.getGraphics();
         
@@ -109,7 +109,7 @@ public class MapVisualizer extends JFrame implements Observer {
         return image;
     }
     
-    private BufferedImage drawNonCellular(World world) {
+    private BufferedImage drawNonCellular(GridWorld world) {
 //        System.out.println("About to draw non-cellular world");
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = image.createGraphics();

@@ -1,7 +1,7 @@
 package landscapeEC.locality.geography;
 
 import landscapeEC.locality.Vector;
-import landscapeEC.locality.World;
+import landscapeEC.locality.GridWorld;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.SeparableProblem;
@@ -10,13 +10,13 @@ import landscapeEC.problem.sat.SatInstance;
 public class FractalGeography implements Geography {
 
     private SatInstance globalSatInstance;
-    private World world;
+    private GridWorld world;
     
     // Currently only works with 2 dimensions
     // and only 3Sat Problems
 
     @Override
-    public void generateGeography(World world) {
+    public void generateGeography(GridWorld world) {
         if (!usingTestCaseProblem()) {
             throw new RuntimeException("Fractal Geography currently only supports 3SAT problems! You are not using a 3SAT problem.");
         }

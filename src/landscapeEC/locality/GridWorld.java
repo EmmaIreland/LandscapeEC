@@ -3,7 +3,6 @@ package landscapeEC.locality;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -15,13 +14,13 @@ import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.Problem;
 
-public class World implements Iterable<Location>, Serializable {
+public class GridWorld implements Iterable<Location>, Serializable {
     private static final long serialVersionUID = 8032708223600669849L;
     private boolean toroidal = false;
     private Map<Vector, Location> worldMap;
     private Vector dimensions;
 
-    public World(Vector dimensions, boolean isToroidal) throws Exception {
+    public GridWorld(Vector dimensions, boolean isToroidal) throws Exception {
         toroidal = isToroidal;
         this.dimensions = new Vector(dimensions);
 
@@ -70,7 +69,7 @@ public class World implements Iterable<Location>, Serializable {
 
     public List<Vector> getNeighborhood(Vector position, int radius) {
         List<Vector> positions = new ArrayList<Vector>();
-        LocationIterator iter = new LocationIterator(position, radius, this);
+        GridWorldIterator iter = new GridWorldIterator(position, radius, this);
         while (iter.hasNext()) {
             positions.add(iter.next().getPosition());
         }
@@ -82,8 +81,8 @@ public class World implements Iterable<Location>, Serializable {
     }
 
     @Override
-    public LocationIterator iterator() {
-        return new LocationIterator(this);
+    public GridWorldIterator iterator() {
+        return new GridWorldIterator(this);
     }
 
     public List<Individual> getIndividualsAt(Vector p) {

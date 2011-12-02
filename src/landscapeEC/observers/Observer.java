@@ -1,7 +1,7 @@
 package landscapeEC.observers;
 
-import landscapeEC.locality.World;
+import landscapeEC.locality.GridWorld;
 
 public interface Observer {
-	public void generationData(int generationNumber, World world, int successes);
+	public void generationData(int generationNumber, GridWorld world, int successes);
 }
