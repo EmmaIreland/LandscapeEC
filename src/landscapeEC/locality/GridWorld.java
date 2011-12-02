@@ -14,7 +14,7 @@ import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.Problem;
 
-public class GridWorld implements Iterable<Location>, Serializable {
+public class GridWorld implements Iterable<Location>, Serializable, World<Vector> {
     private static final long serialVersionUID = 8032708223600669849L;
     private boolean toroidal = false;
     private Map<Vector, Location> worldMap;

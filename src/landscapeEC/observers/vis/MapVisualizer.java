@@ -15,6 +15,7 @@ import landscapeEC.core.SnapShot;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.GridWorld;
+import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntArrayParameter;
@@ -109,7 +110,7 @@ public class MapVisualizer extends JFrame implements Observer {
         return image;
     }
     
-    private BufferedImage drawNonCellular(GridWorld world) {
+    private BufferedImage drawNonCellular(World world) {
 //        System.out.println("About to draw non-cellular world");
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = image.createGraphics();

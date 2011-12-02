@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.GridWorld;
+import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.problem.DiversityCalculator;
@@ -72,6 +73,9 @@ public class DataDisplay extends JFrame implements Observer {
         repaint();
     }
     
+    //TODO Check this out Nic, the problem happens when you change
+    //private int getInhabitedCellCount(GridWorld world) { to
+    //private int getInhabitedCellCount(World world) {
     private int getIndividualCount(GridWorld world) {
         int count = 0;
         for(Location l : world) {
@@ -80,6 +84,9 @@ public class DataDisplay extends JFrame implements Observer {
         return count;
     }
     
+    //TODO Check this out Nic, the problem happens when you change
+    //private int getInhabitedCellCount(GridWorld world) { to
+    //private int getInhabitedCellCount(World world) {
     private int getInhabitedCellCount(GridWorld world) {
         int count = 0;
         for(Location l : world) {

@@ -14,8 +14,6 @@ import landscapeEC.problem.sat.SatInstance;
 
 import org.junit.Test;
 
-
-
 public class GridWorldLocationTest {
 
     private static final int SIZE = 10;
