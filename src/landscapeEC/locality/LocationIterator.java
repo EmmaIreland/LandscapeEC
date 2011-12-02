@@ -2,7 +2,7 @@ package landscapeEC.locality;
 
 import java.util.Iterator;
 
-public class LocationIterator implements Iterator<Vector> {
+public class LocationIterator implements Iterator<Location> {
 
     private Vector start, end, current;
     private int numDimensions;
@@ -45,7 +45,7 @@ public class LocationIterator implements Iterator<Vector> {
     }
 
     @Override
-    public Vector next() {
+    public Location next() {
         // We want to return the first position before we increment it, so
         // result will always be the previous iteration. This way we don't have
         // to initialize
@@ -61,7 +61,7 @@ public class LocationIterator implements Iterator<Vector> {
             }
         }
 
-        return result.mod(world.getDimensions());
+        return world.getLocation(result.mod(world.getDimensions()));
     }
 
     @Override

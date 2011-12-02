@@ -39,370 +39,376 @@ import landscapeEC.util.SharedPRNG;
 
 public class GARun {
 
-   private MutationOperator mutationOperator;
-   private SelectionOperator selectionOperator;
-   private CrossoverOperator crossoverOperator;
+	private MutationOperator mutationOperator;
+	private SelectionOperator selectionOperator;
+	private CrossoverOperator crossoverOperator;
 
-   private PopulationManager popManager;
-   private Evaluator evaluator;
+	private PopulationManager popManager;
+	private Evaluator evaluator;
 
-   private World world;
+	private World world;
 
-   private List<Observer> observers = new ArrayList<Observer>();
-   private int successes;
-   private String propertiesFilename;
-   private FileWriter writer;
-   private double bestOverallFitness;
+	private List<Observer> observers = new ArrayList<Observer>();
+	private int successes;
+	private String propertiesFilename;
+	private FileWriter writer;
+	private double bestOverallFitness;
 
-   private double[] intervalFitnesses;
-   private double[] intervalDiversities;
+	private double[] intervalFitnesses;
+	private double[] intervalDiversities;
 
-   public GARun(String propertiesFilename) {
-      this.propertiesFilename = propertiesFilename;
-   }
+	public GARun(String propertiesFilename) {
+		this.propertiesFilename = propertiesFilename;
+	}
 
-   public void run() throws Exception {
-      mutationOperator = ParameterClassLoader.loadClass(StringParameter.MUTATION_OPERATOR);
-      selectionOperator = ParameterClassLoader.loadClass(StringParameter.SELECTION_OPERATOR);
-      crossoverOperator = ParameterClassLoader.loadClass(StringParameter.CROSSOVER_OPERATOR);
-      
-      intervalFitnesses = new double[getReportingIntervals().length];
-      intervalDiversities = new double[getReportingIntervals().length];
+	public void run() throws Exception {
+		mutationOperator = ParameterClassLoader.loadClass(StringParameter.MUTATION_OPERATOR);
+		selectionOperator = ParameterClassLoader.loadClass(StringParameter.SELECTION_OPERATOR);
+		crossoverOperator = ParameterClassLoader.loadClass(StringParameter.CROSSOVER_OPERATOR);
 
-      ProblemParser problemParser = ParameterClassLoader.loadClass(StringParameter.PROBLEM_PARSER);
-      Problem problem = problemParser.parseProblem(new FileReader(new File(StringParameter.PROBLEM_FILE.getValue())));
-      
-      GlobalProblem.setProblem(problem);
-      GlobalProblem.setEvaluator((Evaluator) ParameterClassLoader.loadClass(StringParameter.PROBLEM_EVALUATOR));
-      evaluator = GlobalProblem.getEvaluator();
+		intervalFitnesses = new double[getReportingIntervals().length];
+		intervalDiversities = new double[getReportingIntervals().length];
 
-      popManager = new PopulationManager();
+		ProblemParser problemParser = ParameterClassLoader.loadClass(StringParameter.PROBLEM_PARSER);
+		Problem problem = problemParser.parseProblem(new FileReader(new File(StringParameter.PROBLEM_FILE.getValue())));
 
-      int numRuns = IntParameter.NUM_RUNS.getValue();
+		GlobalProblem.setProblem(problem);
+		GlobalProblem.setEvaluator((Evaluator) ParameterClassLoader.loadClass(StringParameter.PROBLEM_EVALUATOR));
+		evaluator = GlobalProblem.getEvaluator();
 
-      setupObservers();
+		popManager = new PopulationManager();
 
-      generateRFile(successes);
+		int numRuns = IntParameter.NUM_RUNS.getValue();
 
-      successes = 0;
-      for(int i = 0; i < numRuns; i++) {
-         System.out.println("\nRUN " + (i + 1) + "\n");
+		setupObservers();
 
-         Arrays.fill(intervalFitnesses, Double.NaN);
+		generateRFile(successes);
 
-         try {
-            if(runGenerations(i)) {
-               addRunToRFile(true, evaluator.getNumEvaluations(), 1.0);
-               successes++;
-            } else {
-               addRunToRFile(false, IntParameter.NUM_EVALS_TO_DO.getValue(), bestOverallFitness);
-            }
-         } catch(EmptyWorldException e) {
-            System.err.println("All individuals died!");
-         }
+		successes = 0;
+		for(int i = 0; i < numRuns; i++) {
+			System.out.println("\nRUN " + (i + 1) + "\n");
 
-         evaluator.resetEvaluationsCounter();
-         SharedPRNG.updateGenerator(); //Generate a new seed for each run
-      }
+			Arrays.fill(intervalFitnesses, Double.NaN);
 
-      System.out.println(successes + "/" + numRuns + " runs successful");
+			try {
+				if(runGenerations(i)) {
+					addRunToRFile(true, evaluator.getNumEvaluations(), 1.0);
+					successes++;
+				} else {
+					addRunToRFile(false, IntParameter.NUM_EVALS_TO_DO.getValue(), bestOverallFitness);
+				}
+			} catch(EmptyWorldException e) {
+				System.err.println("All individuals died!");
+			}
 
-      closeRFile();
-   }
+			evaluator.resetEvaluationsCounter();
+			SharedPRNG.updateGenerator(); //Generate a new seed for each run
+		}
 
-   private void addRunToRFile(boolean success, int completedEvaluations, double bestFitness)
-         throws IOException {
-      Set<String> propertyNames = GlobalParameters.getParameterNames();
-      for(String name : propertyNames) {
-         if(GlobalParameters.isSet(name)) {
-            writer.write(GlobalParameters.getStringValue(name).replaceAll(" ", "") + " ");
-         }
-      }
+		System.out.println(successes + "/" + numRuns + " runs successful");
 
-      for(int i = 0; i < intervalFitnesses.length; i++) {
-         double fitness = intervalFitnesses[i];
-         if(Double.isNaN(fitness)) {
-            fitness = 1.0;
-         }
-         writer.write(fitness + " ");
-      }
+		closeRFile();
+	}
 
-      for(int i = 0; i < intervalDiversities.length; i++) {
-         double diversity = intervalDiversities[i];
-         writer.write(diversity + " ");
-      }
+	private void addRunToRFile(boolean success, int completedEvaluations, double bestFitness)
+			throws IOException {
+		Set<String> propertyNames = GlobalParameters.getParameterNames();
+		for(String name : propertyNames) {
+			if(GlobalParameters.isSet(name)) {
+				writer.write(GlobalParameters.getStringValue(name).replaceAll(" ", "") + " ");
+			}
+		}
 
-      writer.write(success + " " + completedEvaluations + " " + bestFitness + "\n");
-   }
+		for(int i = 0; i < intervalFitnesses.length; i++) {
+			double fitness = intervalFitnesses[i];
+			if(Double.isNaN(fitness)) {
+				fitness = 1.0;
+			}
+			writer.write(fitness + " ");
+		}
 
-   private void generateRFile(int successes) throws IOException {
-      writer = new FileWriter(new File(propertiesFilename + ".R"));
+		for(int i = 0; i < intervalDiversities.length; i++) {
+			double diversity = intervalDiversities[i];
+			writer.write(diversity + " ");
+		}
 
-      Set<String> propertyNames = GlobalParameters.getParameterNames();
-      for(String name : propertyNames) {
-         if(GlobalParameters.isSet(name)) {
-            writer.write(name + " ");
-         }
-      }
-      for(int i = 0; i < getReportingIntervals().length; i++) {
-         writer.write("INTERVAL_" + getReportingIntervals()[i] + "_FITNESS ");
-      }
-      for(int i = 0; i < getReportingIntervals().length; i++) {
-         writer.write("INTERVAL_" + getReportingIntervals()[i] + "_DIVERSITY ");
-      }
-      writer.write("SUCCESS COMPLETED_EVALS BEST_FITNESS\n");
-   }
+		writer.write(success + " " + completedEvaluations + " " + bestFitness + "\n");
+	}
 
-   private double[] getReportingIntervals() {
-      return DoubleArrayParameter.REPORTING_INTERVALS.getValue();
-   }
+	private void generateRFile(int successes) throws IOException {
+		writer = new FileWriter(new File(propertiesFilename + ".R"));
 
-   private void closeRFile() throws IOException {
-      writer.flush();
-      writer.close();
-   }
+		Set<String> propertyNames = GlobalParameters.getParameterNames();
+		for(String name : propertyNames) {
+			if(GlobalParameters.isSet(name)) {
+				writer.write(name + " ");
+			}
+		}
+		for(int i = 0; i < getReportingIntervals().length; i++) {
+			writer.write("INTERVAL_" + getReportingIntervals()[i] + "_FITNESS ");
+		}
+		for(int i = 0; i < getReportingIntervals().length; i++) {
+			writer.write("INTERVAL_" + getReportingIntervals()[i] + "_DIVERSITY ");
+		}
+		writer.write("SUCCESS COMPLETED_EVALS BEST_FITNESS\n");
+	}
 
-   @SuppressWarnings("unchecked")
-   private void setupObservers() throws Exception {
-      if(!GlobalParameters.isSet(StringParameter.OBSERVERS.toString()))
-         return;
+	private double[] getReportingIntervals() {
+		return DoubleArrayParameter.REPORTING_INTERVALS.getValue();
+	}
 
-      String observerNames[] = StringParameter.OBSERVERS.getValue().split(",");
+	private void closeRFile() throws IOException {
+		writer.flush();
+		writer.close();
+	}
 
-      for(String observerName : observerNames) {
-         Class<Observer> obs = (Class<Observer>) Class.forName(observerName);
-         Constructor<Observer> cons = obs.getConstructor();
-         Observer instance = cons.newInstance();
-         observers.add(instance);
-      }
-   }
+	@SuppressWarnings("unchecked")
+	private void setupObservers() throws Exception {
+		if(!GlobalParameters.isSet(StringParameter.OBSERVERS.toString()))
+			return;
 
-   private boolean runGenerations(int currentRun) throws Exception {
-      List<Individual> population = popManager.generatePopulation();
+		String observerNames[] = StringParameter.OBSERVERS.getValue().split(",");
 
-      world = new World(new Vector(IntArrayParameter.WORLD_DIMENSIONS.getValue()),
-            BooleanParameter.TOROIDAL.getValue());
+		for(String observerName : observerNames) {
+			Class<Observer> obs = (Class<Observer>) Class.forName(observerName);
+			Constructor<Observer> cons = obs.getConstructor();
+			Observer instance = cons.newInstance();
+			observers.add(instance);
+		}
+	}
 
-      world.clear();
+	private boolean runGenerations(int currentRun) throws Exception {
+		List<Individual> population = popManager.generatePopulation();
 
-      SeedType seedType = SeedType.valueOf(StringParameter.STARTING_POPULATION.getValue());
+		world = new World(new Vector(IntArrayParameter.WORLD_DIMENSIONS.getValue()),
+				BooleanParameter.TOROIDAL.getValue());
 
-      switch(seedType) {
-      case ORIGIN:
-         world.getOrigin().setIndividuals(population);
-         break;
-      case EVERYWHERE:
-         fillLocations(world);
-         break;
-      case CORNERS:
-         Vector topLeft = Vector.origin(world.getDimensions().size());
+		world.clear();
+
+		SeedType seedType = SeedType.valueOf(StringParameter.STARTING_POPULATION.getValue());
+
+		switch(seedType) {
+		case ORIGIN:
+			world.getOrigin().setIndividuals(population);
+			break;
+		case EVERYWHERE:
+			fillLocations(world);
+			break;
+		case CORNERS:
+			/*Vector topLeft = Vector.origin(world.getDimensions().size());
          Vector bottomRight = world.getDimensions().minusToAll(1);
          Vector topRight = Vector.getCorner(bottomRight, topLeft);
          Vector bottomLeft = Vector.getCorner(topLeft, bottomRight);
          List<Vector> vectors = Arrays.asList(topLeft, bottomLeft, topRight, bottomRight);
-         fillLocations(vectors);
-         break;
-      }
+         fillLocations(vectors);*/
+			Location topLeft = world.getLocation(Vector.origin(world.getDimensions().size()));
+			Location bottomRight = world.getLocation(world.getDimensions().minusToAll(1));
+			Location topRight = world.getLocation(Vector.getCorner(bottomRight.getPosition(), topLeft.getPosition()));
+			Location bottomLeft = world.getLocation(Vector.getCorner(topLeft.getPosition(), bottomRight.getPosition()));
+			List<Location> locations = Arrays.asList(topLeft, bottomLeft, topRight, bottomRight);
+			fillLocations(locations);
+			break;
+		}
 
-      int i = 0;
-      bestOverallFitness = 0.0;
-      Individual bestIndividual = null;
-      //initialize observers before the run starts
-      for(Observer o : observers) {
-          o.generationData(i, world, successes);
-       }
-      while(evaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO.getValue()) {
-         processAllLocations();
+		int i = 0;
+		bestOverallFitness = 0.0;
+		Individual bestIndividual = null;
+		//initialize observers before the run starts
+		for(Observer o : observers) {
+			o.generationData(i, world, successes);
+		}
+		while(evaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO.getValue()) {
+			processAllLocations();
 
-         for(Observer o : observers) {
-            o.generationData(i, world, successes);
-         }
+			for(Observer o : observers) {
+				o.generationData(i, world, successes);
+			}
 
-         bestIndividual = world.findBestIndividual();
-         // System.out.println("Generation " + (i + 1));
-         // System.out.println("   Best individual: " + bestIndividual);
-         bestOverallFitness = bestIndividual.getGlobalFitness();        
-         // System.out.println("   Best fitness: " + bestFitness);
+			bestIndividual = world.findBestIndividual();
+			// System.out.println("Generation " + (i + 1));
+			// System.out.println("   Best individual: " + bestIndividual);
+			bestOverallFitness = bestIndividual.getGlobalFitness();        
+			// System.out.println("   Best fitness: " + bestFitness);
 
-         double[] reportingIntervals = getReportingIntervals();
-         for(int j = 0; j < reportingIntervals.length; j++) {
-            if(evaluator.getNumEvaluations() > reportingIntervals[j]
-                  * IntParameter.NUM_EVALS_TO_DO.getValue()
-                  && Double.isNaN(intervalFitnesses[j])) {
-               intervalFitnesses[j] = bestOverallFitness;
-               intervalDiversities[j] = DiversityCalculator.calculateResultStringDiversity();
-               SnapShot.saveSnapShot(propertiesFilename + ".run" + currentRun + ".part" + j, world);
-            }
-         }
+			double[] reportingIntervals = getReportingIntervals();
+			for(int j = 0; j < reportingIntervals.length; j++) {
+				if(evaluator.getNumEvaluations() > reportingIntervals[j]
+						* IntParameter.NUM_EVALS_TO_DO.getValue()
+						&& Double.isNaN(intervalFitnesses[j])) {
+					intervalFitnesses[j] = bestOverallFitness;
+					intervalDiversities[j] = DiversityCalculator.calculateResultStringDiversity();
+					SnapShot.saveSnapShot(propertiesFilename + ".run" + currentRun + ".part" + j, world);
+				}
+			}
 
-         if(BooleanParameter.QUIT_ON_SUCCESS.getValue() && bestOverallFitness == 1.0) {
-            System.out.println("Best Fitness: " + bestOverallFitness);
-            //This will be removed during refactoring
-            System.out.println("SUCCESS");
-            return true;
-         }
+			if(BooleanParameter.QUIT_ON_SUCCESS.getValue() && bestOverallFitness == 1.0) {
+				System.out.println("Best Fitness: " + bestOverallFitness);
+				//This will be removed during refactoring
+				System.out.println("SUCCESS");
+				return true;
+			}
 
-         i++;
-      }
+			i++;
+		}
 
-      if (bestOverallFitness == 1.0) {
-          System.out.println("Best Fitness: " + bestOverallFitness);
-          //This will be removed during refactoring
-          System.out.println("SUCCESS");
-          return true;            
-      }
-      
-      System.out.println("Best Fitness: " + bestOverallFitness);
-      //This will be removed during refactoring
-      System.out.println("FAILURE");
-      return false;
-   }
+		if (bestOverallFitness == 1.0) {
+			System.out.println("Best Fitness: " + bestOverallFitness);
+			//This will be removed during refactoring
+			System.out.println("SUCCESS");
+			return true;            
+		}
 
-   private void fillLocations(Iterable<Vector> vectors) {
-      for(Vector v : vectors) {
-         Location l = world.getLocation(v);
-         l.setIndividuals(popManager.generatePopulation());
-      }
-   }
+		System.out.println("Best Fitness: " + bestOverallFitness);
+		//This will be removed during refactoring
+		System.out.println("FAILURE");
+		return false;
+	}
 
-   private void processAllLocations() {
-      updateDiversityCounts();
-      performMigration();
-      addFromPendingIndividuals();
+	private void fillLocations(Iterable<Location> locations) {
+		for(Location l : locations) {
+			//Location l = world.getLocation(v);
+			l.setIndividuals(popManager.generatePopulation());
+		}
+	}
 
-      performDraconianReaper();
-      setFromPendingIndividuals();
+	private void processAllLocations() {
+		updateDiversityCounts();
+		performMigration();
+		addFromPendingIndividuals();
 
-      performElitism();
-      performReproduction();
-      setFromPendingIndividuals();
-   }
+		performDraconianReaper();
+		setFromPendingIndividuals();
 
-   private void updateDiversityCounts() {
-       DiversityCalculator.reset();
-       for (Vector position : world) {
-           List<Individual> locationIndividuals = world.getIndividualsAt(position);
-           for (Individual individual : locationIndividuals) {
-               DiversityCalculator.addIndividual(individual);
-           }
-       }
-   }
+		performElitism();
+		performReproduction();
+		setFromPendingIndividuals();
+	}
 
-   private void performDraconianReaper() {
-       
-       for(Vector position : world) {
-           Location location = world.getLocation(position);
-           List<Individual> locationIndividuals = world.getIndividualsAt(position);
+	private void updateDiversityCounts() {
+		DiversityCalculator.reset();
+		for (Location location : world) {
+			List<Individual> locationIndividuals = world.getIndividualsAt(location.getPosition());
+			for (Individual individual : locationIndividuals) {
+				DiversityCalculator.addIndividual(individual);
+			}
+		}
+	}
 
-           for(Individual individual : locationIndividuals) {
-               Problem locationProblem = location.getProblem();
-               if (BooleanParameter.VIRAL_CLAUSES.getValue()) { //Perform viral clause procedure and reaping
-                   doViralClauses(location, individual, locationProblem);
-               } else { //else default reaper procedure
-                   if(evaluator.solvesSubProblem(individual, locationProblem)) {
-                       location.addToPendingIndividuals(individual);
-                   }
-               }
-           }
-       }
-   }
+	private void performDraconianReaper() {
 
-   private void doViralClauses(Location location, Individual individual, Problem locationProblem) {
-       if (!(evaluator instanceof SatEvaluator)) {
-           throw new RuntimeException("Viral Clauses is currently only supported under 3SAT");
-       }
-       
-       SatEvaluator clauseEvaluator = (SatEvaluator) evaluator;
-       List<Clause> unsolvedClauses = clauseEvaluator.getUnsolvedClauses(individual, locationProblem);
-       
-       if (unsolvedClauses.size() > 0) {
-           location.updateViralClauses(unsolvedClauses, world);
-       } else {
-           location.addToPendingIndividuals(individual);
-       }
-   }
+		for(Location location : world) {
+			//Location location = world.getLocation(position);
+			List<Individual> locationIndividuals = world.getIndividualsAt(location.getPosition());
 
-   private void performMigration() {
+			for(Individual individual : locationIndividuals) {
+				Problem locationProblem = location.getProblem();
+				if (BooleanParameter.VIRAL_CLAUSES.getValue()) { //Perform viral clause procedure and reaping
+					doViralClauses(location, individual, locationProblem);
+				} else { //else default reaper procedure
+					if(evaluator.solvesSubProblem(individual, locationProblem)) {
+						location.addToPendingIndividuals(individual);
+					}
+				}
+			}
+		}
+	}
 
-      double migrationProbability = DoubleParameter.MIGRATION_PROBABILITY.getValue();
-      int migrationDistance = IntParameter.MIGRATION_DISTANCE.getValue();
+	private void doViralClauses(Location location, Individual individual, Problem locationProblem) {
+		if (!(evaluator instanceof SatEvaluator)) {
+			throw new RuntimeException("Viral Clauses is currently only supported under 3SAT");
+		}
 
-      if(migrationProbability <= 0 || migrationDistance <= 0)
-         return;
+		SatEvaluator clauseEvaluator = (SatEvaluator) evaluator;
+		List<Clause> unsolvedClauses = clauseEvaluator.getUnsolvedClauses(individual, locationProblem);
 
-      for(Vector position : world) {
-         List<Individual> locationIndividuals = world.getIndividualsAt(position);
-         List<Individual> individualsToRemove = new ArrayList<Individual>();
+		if (unsolvedClauses.size() > 0) {
+			location.updateViralClauses(unsolvedClauses, world);
+		} else {
+			location.addToPendingIndividuals(individual);
+		}
+	}
 
-         for(Individual i : locationIndividuals) {
-            if(SharedPRNG.instance().nextDouble() < migrationProbability) {
-               individualsToRemove.add(i);
-               List<Vector> neighborhood = world.getNeighborhood(position, migrationDistance);
-               neighborhood.remove(position);
-               Vector newPosition;
-               try {
-                  newPosition = neighborhood
-                        .get(SharedPRNG.instance().nextInt(neighborhood.size()));
-               } catch(IndexOutOfBoundsException e) {
-                  throw new MigrationInWorldOfSizeOneException(e);
-               }
-               world.getLocation(newPosition).addToPendingIndividuals(i);
-            }
-         }
-         world.getLocation(position).removeAll(individualsToRemove);
-      }
-   }
+	private void performMigration() {
 
-   private void performElitism() {
-      for(Vector position : world) {
-         List<Individual> locationIndividuals = world.getIndividualsAt(position);
+		double migrationProbability = DoubleParameter.MIGRATION_PROBABILITY.getValue();
+		int migrationDistance = IntParameter.MIGRATION_DISTANCE.getValue();
 
-         if(!locationIndividuals.isEmpty()) {
-            List<Individual> elite = popManager.getElite(locationIndividuals,
-                  DoubleParameter.ELITE_PROPORTION.getValue());
+		if(migrationProbability <= 0 || migrationDistance <= 0)
+			return;
 
-            world.getLocation(position).addToPendingIndividuals(elite);
-         }
-      }
-   }
+		for(Location location : world) {
+			List<Individual> locationIndividuals = world.getIndividualsAt(location.getPosition());
+			List<Individual> individualsToRemove = new ArrayList<Individual>();
 
-   private void performReproduction() {
-      for(Vector position : world) {
-         List<Individual> locationIndividuals = world.getIndividualsAt(position);
+			for(Individual i : locationIndividuals) {
+				if(SharedPRNG.instance().nextDouble() < migrationProbability) {
+					individualsToRemove.add(i);
+					List<Vector> neighborhood = world.getNeighborhood(location.getPosition(), migrationDistance);
+					neighborhood.remove(location);
+					Vector newPosition;
+					try {
+						newPosition = neighborhood
+								.get(SharedPRNG.instance().nextInt(neighborhood.size()));
+					} catch(IndexOutOfBoundsException e) {
+						throw new MigrationInWorldOfSizeOneException(e);
+					}
+					world.getLocation(newPosition).addToPendingIndividuals(i);
+				}
+			}
+			world.getLocation(location.getPosition()).removeAll(individualsToRemove);
+		}
+	}
 
-         if(locationIndividuals.size() >= IntParameter.TOURNAMENT_SIZE.getValue()) {
-            List<Individual> crossoverPop = popManager.crossover(locationIndividuals,
-                  selectionOperator, crossoverOperator);
+	private void performElitism() {
+		for(Location location : world) {
+			List<Individual> locationIndividuals = world.getIndividualsAt(location.getPosition());
 
-            List<Individual> mutatedPopulation = popManager.mutatePopulation(crossoverPop,mutationOperator,
-                  position);
+			if(!locationIndividuals.isEmpty()) {
+				List<Individual> elite = popManager.getElite(locationIndividuals,
+						DoubleParameter.ELITE_PROPORTION.getValue());
 
-            world.getLocation(position).addToPendingIndividuals(mutatedPopulation);
-         } else if(BooleanParameter.PROMOTE_SMALL_POPULATIONS.getValue()) {
-            List<Individual> copiedPopulation = new ArrayList<Individual>();
-            for(Individual individual : locationIndividuals) {
-               copiedPopulation.add(individual);
-            }
+				world.getLocation(location.getPosition()).addToPendingIndividuals(elite);
+			}
+		}
+	}
 
-            List<Individual> mutatedPopulation = popManager.mutatePopulation(copiedPopulation,
-                  mutationOperator, position);
+	private void performReproduction() {
+		for(Location location : world) {
+			List<Individual> locationIndividuals = world.getIndividualsAt(location.getPosition());
 
-            world.getLocation(position).addToPendingIndividuals(mutatedPopulation);
-         }
-      }
-   }
+			if(locationIndividuals.size() >= IntParameter.TOURNAMENT_SIZE.getValue()) {
+				List<Individual> crossoverPop = popManager.crossover(locationIndividuals,
+						selectionOperator, crossoverOperator);
 
-   private void setFromPendingIndividuals() {
-      for(Vector position : world) {
-         world.getLocation(position).setFromPendingIndividuals();
-         // assert world.getLocation(position).getNumIndividuals() <=
-         // IntParameter.CARRYING_CAPACITY.getValue();
-      }
-   }
+				List<Individual> mutatedPopulation = popManager.mutatePopulation(crossoverPop,mutationOperator,
+						location);
 
-   private void addFromPendingIndividuals() {
-      for(Vector position : world) {
-         world.getLocation(position).addFromPendingIndividuals();
-      }
-   }
+				world.getLocation(location.getPosition()).addToPendingIndividuals(mutatedPopulation);
+			} else if(BooleanParameter.PROMOTE_SMALL_POPULATIONS.getValue()) {
+				List<Individual> copiedPopulation = new ArrayList<Individual>();
+				for(Individual individual : locationIndividuals) {
+					copiedPopulation.add(individual);
+				}
+
+				List<Individual> mutatedPopulation = popManager.mutatePopulation(copiedPopulation,
+						mutationOperator, location);
+
+				world.getLocation(location.getPosition()).addToPendingIndividuals(mutatedPopulation);
+			}
+		}
+	}
+
+	private void setFromPendingIndividuals() {
+		for(Location location : world) {
+			world.getLocation(location.getPosition()).setFromPendingIndividuals();
+			// assert world.getLocation(position).getNumIndividuals() <=
+					// IntParameter.CARRYING_CAPACITY.getValue();
+		}
+	}
+
+	private void addFromPendingIndividuals() {
+		for(Location location : world) {
+			world.getLocation(location.getPosition()).addFromPendingIndividuals();
+		}
+	}
 }

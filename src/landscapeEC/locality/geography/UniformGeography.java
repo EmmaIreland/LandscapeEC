@@ -1,5 +1,6 @@
 package landscapeEC.locality.geography;
 
+import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.problem.GlobalProblem;
@@ -10,8 +11,8 @@ public class UniformGeography implements Geography {
     @Override
     public void generateGeography(World world) {
         Problem problem = GlobalProblem.getProblem().getSubProblem(0);
-        for (Vector position : world) {
-            world.setLocationProblem(position, problem);
+        for (Location location : world) {
+            world.setLocationProblem(location.getPosition(), problem);
         }
     }
 

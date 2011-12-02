@@ -15,7 +15,7 @@ import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.Problem;
 
-public class World implements Iterable<Vector>, Serializable {
+public class World implements Iterable<Location>, Serializable {
     private static final long serialVersionUID = 8032708223600669849L;
     private boolean toroidal = false;
     private Map<Vector, Location> worldMap;
@@ -26,8 +26,8 @@ public class World implements Iterable<Vector>, Serializable {
         this.dimensions = new Vector(dimensions);
 
         worldMap = new HashMap<Vector, Location>();
-        for (Vector position : this) {
-            worldMap.put(position, new Location(position));
+        for (Location position : this) {
+            worldMap.put(position.getPosition(), new Location(position.getPosition()));
         }
 
         Geography geography = createGeography();
@@ -72,7 +72,7 @@ public class World implements Iterable<Vector>, Serializable {
         List<Vector> positions = new ArrayList<Vector>();
         LocationIterator iter = new LocationIterator(position, radius, this);
         while (iter.hasNext()) {
-            positions.add(iter.next());
+            positions.add(iter.next().getPosition());
         }
         return positions;
     }
@@ -91,8 +91,8 @@ public class World implements Iterable<Vector>, Serializable {
     }
 
     public void clear() {
-        for (Vector p : this) {
-            getLocation(p).setIndividuals(new ArrayList<Individual>());
+        for (Location l : this) {
+            getLocation(l.getPosition()).setIndividuals(new ArrayList<Individual>());
         }
     }
 
@@ -104,9 +104,9 @@ public class World implements Iterable<Vector>, Serializable {
     public Individual findBestIndividual() {
         IndividualComparator comparator = IndividualComparator.getComparator();
         List<Individual> bestFromCells = new ArrayList<Individual>();
-        for (Vector p : this) {
-            if (getLocation(p).getNumIndividuals() > 0) {
-                bestFromCells.add(findBestInCell(comparator, p));
+        for (Location l : this) {
+            if (getLocation(l.getPosition()).getNumIndividuals() > 0) {
+                bestFromCells.add(findBestInCell(comparator, l.getPosition()));
             }
         }
         if (bestFromCells.isEmpty()) {

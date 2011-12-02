@@ -1,5 +1,6 @@
 package landscapeEC.locality.geography;
 
+import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.problem.GlobalProblem;
@@ -22,8 +23,8 @@ public class ManhattanDistanceGeography implements Geography {
 
     @Override
     public void generateGeography(World world) {
-        for (Vector position : world) {
-            assignSubProblem(world, position);
+        for (Location location : world) {
+            assignSubProblem(world, location.getPosition());
         }
     }
 

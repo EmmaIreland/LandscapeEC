@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
+import landscapeEC.locality.Location;
 import landscapeEC.locality.ShellMaker;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
@@ -56,9 +57,9 @@ public final class LocalizedMutation implements MutationOperator, Observer {
         resetConcentrationMap();
         generateSpeciesMap();
         shellMaker = new ShellMaker(world);
-        for (Vector position : world) {
-            if (speciesMap.get(position)!=null) {
-                List<Vector> temp = getSpeciesNeighborhood(position);
+        for (Location location : world) {
+            if (speciesMap.get(location)!=null) {
+                List<Vector> temp = getSpeciesNeighborhood(location.getPosition());
                 for (Vector v : temp) {
                     Integer currentValue = speciesConcentrationMap.get(v);
                     speciesConcentrationMap.put(v, currentValue+1);
@@ -69,9 +70,9 @@ public final class LocalizedMutation implements MutationOperator, Observer {
     
 
     private void generateSpeciesMap() {
-        for(Vector v : world){
-            if(!world.getIndividualsAt(v).isEmpty())
-            speciesMap.put(v, findBestInCell(v));
+        for(Location l : world){
+            if(!world.getIndividualsAt(l.getPosition()).isEmpty())
+            speciesMap.put(l.getPosition(), findBestInCell(l.getPosition()));
         }
     }
 
@@ -112,8 +113,8 @@ public final class LocalizedMutation implements MutationOperator, Observer {
 
     public void resetConcentrationMap(){
         speciesConcentrationMap.clear();
-        for(Vector position : world){
-            speciesConcentrationMap.put(position, 0);
+        for(Location location : world){
+            speciesConcentrationMap.put(location.getPosition(), 0);
         }
     }
 }

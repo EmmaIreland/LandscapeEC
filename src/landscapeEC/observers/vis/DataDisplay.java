@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
+import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
@@ -73,16 +74,16 @@ public class DataDisplay extends JFrame implements Observer {
     
     private int getIndividualCount(World world) {
         int count = 0;
-        for(Vector p:world) {
-            count += world.getLocation(p).getNumIndividuals();
+        for(Location l : world) {
+            count += l.getNumIndividuals();
         }
         return count;
     }
     
     private int getInhabitedCellCount(World world) {
         int count = 0;
-        for(Vector p:world) {
-            if(world.getLocation(p).getNumIndividuals() > 0) count++;
+        for(Location l : world) {
+            if(l.getNumIndividuals() > 0) count++;
         }
         return count;
     }
