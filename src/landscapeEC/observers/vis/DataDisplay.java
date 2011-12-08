@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.Iterator;
 
 import javax.swing.JFrame;
 
@@ -73,10 +74,8 @@ public class DataDisplay extends JFrame implements Observer {
         repaint();
     }
     
-    //TODO Check this out Nic, the problem happens when you change
-    //private int getInhabitedCellCount(GridWorld world) { to
-    //private int getInhabitedCellCount(World world) {
-    private int getIndividualCount(GridWorld world) {
+    
+    private <T> int getIndividualCount(World<T> world) {
         int count = 0;
         for(Location l : world) {
             count += l.getNumIndividuals();
@@ -84,10 +83,8 @@ public class DataDisplay extends JFrame implements Observer {
         return count;
     }
     
-    //TODO Check this out Nic, the problem happens when you change
-    //private int getInhabitedCellCount(GridWorld world) { to
-    //private int getInhabitedCellCount(World world) {
-    private int getInhabitedCellCount(GridWorld world) {
+
+    private <T> int getInhabitedCellCount(World<T> world) {
         int count = 0;
         for(Location l : world) {
             if(l.getNumIndividuals() > 0) count++;

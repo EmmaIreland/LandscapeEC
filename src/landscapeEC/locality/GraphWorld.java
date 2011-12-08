@@ -9,7 +9,7 @@ import java.util.List;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.Problem;
 
-public class GraphWorld implements Iterable<Location>, Serializable, World<Integer> {
+public class GraphWorld implements Serializable, World<Integer> {
 
 	/**
 	 * 

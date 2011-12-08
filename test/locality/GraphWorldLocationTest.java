@@ -17,7 +17,6 @@ public class GraphWorldLocationTest {
 	public void graphWorldPositionTest(){
 		//expected neighborhoods
 		
-		//THERE HAS TO BE A BETTER WAY TO ADD STUFF TO LISTS BUT I'M TIRED
 		ArrayList location1 = new ArrayList();
 		int[] location1Stuff = {2,3,4};
 		location1.add(location1Stuff);

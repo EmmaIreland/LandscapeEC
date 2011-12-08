@@ -18,6 +18,8 @@ public interface World<T> extends Iterable<Location> {
 	
 	public void clear();
 	
-	public Iterator<Location> iterator();
+ 	public Iterator<Location> iterator();
+ 	
+ 	public Location getLocation(T p);
 	
 }

@@ -5,6 +5,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.Problem;
 
-public class GridWorld implements Iterable<Location>, Serializable, World<Vector> {
+public class GridWorld implements Serializable, World<Vector> {
     private static final long serialVersionUID = 8032708223600669849L;
     private boolean toroidal = false;
     private Map<Vector, Location> worldMap;
@@ -81,7 +82,7 @@ public class GridWorld implements Iterable<Location>, Serializable, World<Vector
     }
 
     @Override
-    public GridWorldIterator iterator() {
+    public Iterator<Location> iterator() {
         return new GridWorldIterator(this);
     }
 

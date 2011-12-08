@@ -15,6 +15,7 @@ import landscapeEC.locality.Location;
 import landscapeEC.locality.MigrationInWorldOfSizeOneException;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.GridWorld;
+import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.BooleanParameter;
 import landscapeEC.parameters.DoubleArrayParameter;
@@ -111,7 +112,7 @@ public class GARun {
 	}
 
 	private void addRunToRFile(boolean success, int completedEvaluations, double bestFitness)
-			throws IOException {
+	throws IOException {
 		Set<String> propertyNames = GlobalParameters.getParameterNames();
 		for(String name : propertyNames) {
 			if(GlobalParameters.isSet(name)) {
@@ -233,8 +234,8 @@ public class GARun {
 			double[] reportingIntervals = getReportingIntervals();
 			for(int j = 0; j < reportingIntervals.length; j++) {
 				if(evaluator.getNumEvaluations() > reportingIntervals[j]
-						* IntParameter.NUM_EVALS_TO_DO.getValue()
-						&& Double.isNaN(intervalFitnesses[j])) {
+				                                                      * IntParameter.NUM_EVALS_TO_DO.getValue()
+				                                                      && Double.isNaN(intervalFitnesses[j])) {
 					intervalFitnesses[j] = bestOverallFitness;
 					intervalDiversities[j] = DiversityCalculator.calculateResultStringDiversity();
 					SnapShot.saveSnapShot(propertiesFilename + ".run" + currentRun + ".part" + j, world);
@@ -348,7 +349,7 @@ public class GARun {
 					Vector newPosition;
 					try {
 						newPosition = neighborhood
-								.get(SharedPRNG.instance().nextInt(neighborhood.size()));
+						.get(SharedPRNG.instance().nextInt(neighborhood.size()));
 					} catch(IndexOutOfBoundsException e) {
 						throw new MigrationInWorldOfSizeOneException(e);
 					}
@@ -402,7 +403,7 @@ public class GARun {
 		for(Location location : world) {
 			world.getLocation(location.getPosition()).setFromPendingIndividuals();
 			// assert world.getLocation(position).getNumIndividuals() <=
-					// IntParameter.CARRYING_CAPACITY.getValue();
+			// IntParameter.CARRYING_CAPACITY.getValue();
 		}
 	}
 
