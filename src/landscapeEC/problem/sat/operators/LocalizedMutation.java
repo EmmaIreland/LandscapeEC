@@ -26,13 +26,7 @@ public final class LocalizedMutation implements MutationOperator, Observer {
     @Override
     public Individual mutate(Individual ind, Object... parameters) {
         int[] bits = ind.getBits();
-        //if(speciesConcentrationMap != null && speciesConcentrationMap.get(parameters[0])!=null){
-        double mutationRate = (DoubleParameter.AVERAGE_MUTATIONS.getValue()/bits.length)*speciesConcentrationMap.get(parameters[0]);
-       // }
-       // else {
-       //     mutationRate = DoubleParameter.AVERAGE_MUTATIONS.getValue()/bits.length;
-       // }
-        
+        double mutationRate = (DoubleParameter.AVERAGE_MUTATIONS.getValue()/bits.length)*speciesConcentrationMap.get(((Location)parameters[0]).getPosition());
         for (int i = 0; i < bits.length; i++) {
             if (SharedPRNG.instance().nextDouble() < mutationRate) {
                 bits[i] = flipBit(bits[i]);
@@ -114,7 +108,7 @@ public final class LocalizedMutation implements MutationOperator, Observer {
     public void resetConcentrationMap(){
         speciesConcentrationMap.clear();
         for(Location location : world){
-            speciesConcentrationMap.put(location.getPosition(), 0);
+            speciesConcentrationMap.put(location.getPosition(), 1);
         }
     }
 }

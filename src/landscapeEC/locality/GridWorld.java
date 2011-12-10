@@ -11,6 +11,7 @@ import java.util.Map;
 
 import landscapeEC.locality.geography.Geography;
 import landscapeEC.parameters.StringParameter;
+import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.Problem;
@@ -26,8 +27,15 @@ public class GridWorld implements Serializable, World<Vector> {
         this.dimensions = new Vector(dimensions);
 
         worldMap = new HashMap<Vector, Location>();
-        for (Location position : this) {
-            worldMap.put(position.getPosition(), new Location(position.getPosition()));
+        Integer[] array = new Integer[2];
+        for (int x=0; x<dimensions.get(0); x++) {
+            for(int y=0; y<dimensions.get(1); y++){
+                array[0]=x;
+                array[1]=y;
+                Vector vector = new Vector(array);
+                Location position = new Location(vector, GlobalProblem.getProblem());
+                worldMap.put(position.getPosition(), new Location(position.getPosition()));
+            }
         }
 
         Geography geography = createGeography();
