@@ -2,10 +2,14 @@ package locality;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import landscapeEC.locality.Location;
+import landscapeEC.locality.ShellMaker;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.GridWorld;
 import landscapeEC.parameters.GlobalParameters;
@@ -37,5 +41,30 @@ public class GridWorldLocationTest {
         }
 
         assertEquals(SIZE*SIZE, world.getNumLocations());
+    }
+    
+    @Test
+    public void shellTest() throws Exception {
+        File paramsFile = new File("properties/test.properties");
+        GlobalParameters.setParameters(paramsFile);
+        GlobalProblem.setProblem(new SatInstance(0.0));
+
+        Vector dimensions = new Vector(new Integer[] { SIZE, SIZE });
+        GridWorld world = new GridWorld(dimensions, true);
+        
+        Vector origin = new Vector(new Integer[] { 2,3 });
+        ShellMaker shellMaker = new ShellMaker(world);
+        List<Vector> shell = shellMaker.makeShell(origin, 1);
+        Vector check = new Vector(Vector.origin(2));
+        for (int x=1; x<3; x++){
+            for (int y=2; y<4; y++){
+                if(!(x==2&&y==3)){
+                    check.set(0,x);
+                    check.set(1,y);
+                    assertTrue(shell.contains(check));
+                }
+            }
+        }
+        
     }
 }
