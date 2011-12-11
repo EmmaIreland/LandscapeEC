@@ -27,34 +27,29 @@ public class GridWorld implements Serializable, World<Vector> {
         this.dimensions = new Vector(dimensions);
 
         worldMap = new HashMap<Vector, Location>();
-        if(dimensions.size()>1){
-            Integer[] array = new Integer[2];
-            //This needs a way to scale to an arbitrary number of dimensions, but I
-            //do not care to work the solution out right now, because it is finals
-            //week and I am very busy otherwise.
-            for (int x=0; x<dimensions.get(0); x++) {
-                for(int y=0; y<dimensions.get(1); y++){
-                    array[0]=x;
-                    array[1]=y;
-                    Vector vector = new Vector(array);
-                    Location position = new Location(vector, GlobalProblem.getProblem());
-                    worldMap.put(position.getPosition(), new Location(position.getPosition()));
-                }
-            }
-        }
-        else{
-            for (int x=0; x<dimensions.get(0); x++) {
-                Integer[] array = new Integer[1];
-                array[0]=x;
-                Vector vector = new Vector(array);
-                Location position = new Location(vector, GlobalProblem.getProblem());
-                worldMap.put(position.getPosition(), new Location(position.getPosition()));
-            }
-        }
+        Integer[] array = new Integer[dimensions.size()];
+        
+        //generateLocations is now how we scale gridWorlds to
+        //an arbitrary number of dimensions.
+        generateLocations(0, array);
 
         Geography geography = createGeography();
 
         geography.generateGeography(this);
+    }
+    
+    private void generateLocations(int current, Integer[] partial){
+        if(current<dimensions.size()){
+            for(int i=0; i<dimensions.get(current); i++){
+                partial[current]=i;
+                generateLocations(current+1, partial);
+            }
+        }
+        else{
+            Vector vector = new Vector(partial);
+            Location position = new Location(vector, GlobalProblem.getProblem());
+            worldMap.put(position.getPosition(), new Location(position.getPosition()));
+        }
     }
 
     @SuppressWarnings("unchecked")
