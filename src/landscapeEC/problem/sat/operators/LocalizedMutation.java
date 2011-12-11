@@ -52,7 +52,7 @@ public final class LocalizedMutation implements MutationOperator, Observer {
         generateSpeciesMap();
         shellMaker = new ShellMaker(world);
         for (Location location : world) {
-            if (speciesMap.get(location)!=null) {
+            if (speciesMap.get(location.getPosition())!=null) {
                 List<Vector> temp = getSpeciesNeighborhood(location.getPosition());
                 for (Vector v : temp) {
                     Integer currentValue = speciesConcentrationMap.get(v);
