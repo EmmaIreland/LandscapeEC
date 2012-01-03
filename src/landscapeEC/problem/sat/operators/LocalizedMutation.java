@@ -3,8 +3,11 @@ package landscapeEC.problem.sat.operators;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import landscapeEC.locality.Location;
 import landscapeEC.locality.ShellMaker;
@@ -18,7 +21,7 @@ import landscapeEC.util.SharedPRNG;
 
 public final class LocalizedMutation implements MutationOperator, Observer {
     static Hashtable<Vector, Integer> speciesConcentrationMap = new Hashtable<Vector, Integer>();
-    static Hashtable<Vector, int[]> speciesMap = new Hashtable<Vector, int[]>();
+    static ArrayList<Location> locationList = new ArrayList<Location>();
     static ShellMaker shellMaker;
     GridWorld world;
     private int maxRad = 0;
@@ -43,6 +46,44 @@ public final class LocalizedMutation implements MutationOperator, Observer {
 
     @Override
     public void generationData(int generationNumber, GridWorld newWorld, int successes) {
+        this.world = newWorld;
+        resetConcentrationMap();
+        generateLocationList();
+        generateConcentrationMap();
+    }
+    
+    
+    
+    private void generateLocationList(){
+        for(Location l : world){
+            if(!world.getIndividualsAt(l.getPosition()).isEmpty())
+            locationList.add(l);
+        }
+    }
+    
+    private void generateConcentrationMap(){
+        //This is where the serious legwork happens
+    }
+
+    private int[] findBestInCell(Vector position) {
+        if (world.getIndividualsAt(position).isEmpty()) {
+            return null;
+        }
+        IndividualComparator comparator = IndividualComparator.getComparator();
+        return Collections.max(world.getIndividualsAt(position), comparator).getBits();
+    }
+
+    public void resetConcentrationMap(){
+        speciesConcentrationMap.clear();
+        for(Location location : world){
+            speciesConcentrationMap.put(location.getPosition(), 1);
+        }
+    }
+    
+    
+//"Biggest-Box" code.  Replaced for world-crawl, which should be implemented above.
+    /*        @Override
+    public void generationData(int generationNumber, GridWorld newWorld, int successes) {
         if(maxRad>1){
         System.out.println("MaxRad for generation "+generationNumber+":"+maxRad);
         }
@@ -62,53 +103,37 @@ public final class LocalizedMutation implements MutationOperator, Observer {
         }
     }
     
-
-    private void generateSpeciesMap() {
-        for(Location l : world){
-            if(!world.getIndividualsAt(l.getPosition()).isEmpty())
-            speciesMap.put(l.getPosition(), findBestInCell(l.getPosition()));
-        }
+private void generateSpeciesMap() {
+    for(Location l : world){
+        if(!world.getIndividualsAt(l.getPosition()).isEmpty())
+        speciesMap.put(l.getPosition(), findBestInCell(l.getPosition()));
     }
+}
 
-    private List<Vector> getSpeciesNeighborhood(Vector position) {
-        List<Vector> neighborhood = new ArrayList<Vector>();
-        neighborhood.add(position);
-        int[] speciesBits = speciesMap.get(position);
-        boolean match = true;
-        List<Vector> candidateShell;
-        for(int rad=1; rad<Collections.max(world.getDimensions().coordinates) && match; rad++){
-            candidateShell = shellMaker.makeShell(position, rad);
-            for(Vector v : candidateShell){
-                
-                if(speciesMap.get(v) == null || Arrays.equals(speciesBits, speciesMap.get(v))){
-                    continue;
-                }
-                match = false;
-                break;
-            }
+private List<Vector> getSpeciesNeighborhood(Vector position) {
+    List<Vector> neighborhood = new ArrayList<Vector>();
+    neighborhood.add(position);
+    int[] speciesBits = speciesMap.get(position);
+    boolean match = true;
+    List<Vector> candidateShell;
+    for(int rad=1; rad<Collections.max(world.getDimensions().coordinates) && match; rad++){
+        candidateShell = shellMaker.makeShell(position, rad);
+        for(Vector v : candidateShell){
             
-            if(match){
-                neighborhood.addAll(candidateShell);
+            if(speciesMap.get(v) == null || Arrays.equals(speciesBits, speciesMap.get(v))){
+                continue;
             }
-            if(rad>maxRad){
-                maxRad = rad;
-            }
+            match = false;
+            break;
         }
-        return neighborhood;
-    }
-
-    private int[] findBestInCell(Vector position) {
-        if (world.getIndividualsAt(position).isEmpty()) {
-            return null;
+        
+        if(match){
+            neighborhood.addAll(candidateShell);
         }
-        IndividualComparator comparator = IndividualComparator.getComparator();
-        return Collections.max(world.getIndividualsAt(position), comparator).getBits();
-    }
-
-    public void resetConcentrationMap(){
-        speciesConcentrationMap.clear();
-        for(Location location : world){
-            speciesConcentrationMap.put(location.getPosition(), 1);
+        if(rad>maxRad){
+            maxRad = rad;
         }
     }
+    return neighborhood;
+}*/
 }
