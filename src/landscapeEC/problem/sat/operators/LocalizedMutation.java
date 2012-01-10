@@ -6,11 +6,13 @@ import landscapeEC.locality.GridWorld;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.DoubleParameter;
 import landscapeEC.problem.Individual;
+import landscapeEC.problem.sat.operators.localizedMutation.BiggestBoxConcentration;
 import landscapeEC.problem.sat.operators.localizedMutation.ConcentrationRanker;
+import landscapeEC.problem.sat.operators.localizedMutation.WorldCrawl;
 import landscapeEC.util.SharedPRNG;
 
 public final class LocalizedMutation implements MutationOperator, Observer {
-    ConcentrationRanker amplifier;
+    ConcentrationRanker amplifier = new WorldCrawl();
 
     @Override
     public Individual mutate(Individual ind, Object... parameters) {
