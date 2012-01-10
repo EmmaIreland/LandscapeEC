@@ -3,20 +3,34 @@ package landscapeEC.problem.sat.operators.localizedMutation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.List;
 
 import landscapeEC.locality.GridWorld;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
 import landscapeEC.problem.IndividualComparator;
+/*
+ * Future work:
+ * 
+ * Re-implement "waiting list", where everything touched by worldCrawl itself
+ * is added either to the current group, or a line to be selected next for a
+ * worldCrawl start-point.  Current solution not ideal, but not terrible.
+ * 
+ * TESTING
+ * 
+ * See how to get maxGroupSpecies and maxGroupSize out of here, perhaps even
+ * added to the visualizer-console.
+ * 
+ * Is there an efficient way to flip unprocessed around?  Constantly .getting
+ * (unprocessed.size()-1) seems inefficient.  And kinda gross.
+ * 
+ */
 
 public class WorldCrawl implements ConcentrationRanker{
     private GridWorld world;
     private int maxGroupSize = 0;
     private int[] maxGroupSpecies = null;
     static List<Vector> unprocessed = new ArrayList<Vector>();
-    private List<Vector> waitingList = new LinkedList<Vector>();
     private static Hashtable<Vector, Integer> speciesConcentrationMap = new Hashtable<Vector, Integer>();
     
     private Vector left;
@@ -42,6 +56,7 @@ public class WorldCrawl implements ConcentrationRanker{
 	directions.add(left);
 	directions.add(right);
     }
+    
     @Override
     public int getAmp(Vector vector) {
 	if(speciesConcentrationMap.containsKey(vector))
@@ -53,19 +68,19 @@ public class WorldCrawl implements ConcentrationRanker{
     @Override
     public void initialize(GridWorld newWorld, int generationNumber){
 	world = newWorld;
-        unprocessed.clear();
         Vector current;
-        for(Location l : world){
-            if(!l.getIndividuals().isEmpty()){
-        	unprocessed.add(l.getPosition());
-            }
-        }
-        
+	setupUnprocessed();
         List<Vector> currentGroup;
         while(!unprocessed.isEmpty()){
-            current = unprocessed.get(unprocessed.size()-1);
-            unprocessed.remove(unprocessed.size()-1);
-            currentGroup = worldCrawl(current);
+            //Having -1s in here is icky, yes.
+            //But due to the nature of ArrayList deletion,
+            //removing the first item of an ArrayList repeatedly
+            //involves shifting every subsequent item to the left
+            //so it would invoke a great deal of computational
+            //overhead.
+            //Better ideas welcome.
+            current = unprocessed.remove(unprocessed.size()-1);
+            currentGroup = startCrawl(current);
             if(currentGroup.size()>maxGroupSize){
                 maxGroupSize=currentGroup.size();
                 maxGroupSpecies=findBestInCell(currentGroup.get(0));
@@ -77,8 +92,24 @@ public class WorldCrawl implements ConcentrationRanker{
         }
         
     }
+    private void setupUnprocessed() {
+	unprocessed.clear();
+        Vector current;
+        for(Location l : world){
+            if(!l.getIndividuals().isEmpty()){
+        	unprocessed.add(l.getPosition());
+            }
+        }
+    }
     
-    private List<Vector> worldCrawl(Vector current){
+    //We start through startCrawl rather than going right to continueCrawl logic
+    //because we have some information about the _first_ block we select which
+    //we will not have about others - because we are selecting the last element
+    //in unprocessed with which to start the crawl, we know that it is the upper
+    //-rightmost (9,9) element which has not yet been crawled.
+    //So for this first 'crawl', we do not need to check the upward or rightward
+    //directions.  For subsequent elements, this is untrue.
+    private List<Vector> startCrawl(Vector current){
 	List<Vector> result = new ArrayList<Vector>();
 	result.add(current);
 	int[] species = findBestInCell(current);
