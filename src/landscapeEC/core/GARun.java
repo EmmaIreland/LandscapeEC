@@ -15,7 +15,6 @@ import landscapeEC.locality.Location;
 import landscapeEC.locality.MigrationInWorldOfSizeOneException;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.GridWorld;
-import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.BooleanParameter;
 import landscapeEC.parameters.DoubleArrayParameter;
@@ -315,18 +314,18 @@ public class GARun {
 	}
 
 	private void doViralClauses(Location location, Individual individual, Problem locationProblem) {
-		if (!(evaluator instanceof SatEvaluator)) {
-			throw new RuntimeException("Viral Clauses is currently only supported under 3SAT");
-		}
+	    if (!(evaluator instanceof SatEvaluator)) {
+	        throw new RuntimeException("Viral Clauses is currently only supported under 3SAT");
+	    }
 
-		SatEvaluator clauseEvaluator = (SatEvaluator) evaluator;
-		List<Clause> unsolvedClauses = clauseEvaluator.getUnsolvedClauses(individual, locationProblem);
+	    SatEvaluator clauseEvaluator = (SatEvaluator) evaluator;
+	    List<Clause> unsolvedClauses = clauseEvaluator.getUnsolvedClauses(individual, locationProblem);
 
-		if (unsolvedClauses.size() > 0) {
-			location.updateViralClauses(unsolvedClauses, world);
-		} else {
-			location.addToPendingIndividuals(individual);
-		}
+	    if (unsolvedClauses.size() > 0) {
+	        location.getViralClauseCounter().updateClauseCounts(unsolvedClauses, world);
+	    } else {
+	        location.addToPendingIndividuals(individual);
+	    }
 	}
 
 	private void performMigration() {

@@ -3,16 +3,10 @@ package landscapeEC.locality;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import landscapeEC.parameters.IntParameter;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.Problem;
-import landscapeEC.problem.sat.Clause;
-import landscapeEC.problem.sat.SatInstance;
-import landscapeEC.util.SharedPRNG;
 
 
 public class Location implements Serializable {
@@ -21,13 +15,14 @@ public class Location implements Serializable {
     private List<Individual> individuals;
     private List<Individual> pendingIndividuals;
     private Problem problem;
-    private Map<Clause, Integer> viralClauses = new HashMap<Clause, Integer>();
+    private ViralClauseCounter viralClauseCounter;
     
     public Location(Vector aPosition, Problem aProblem) {
         position = aPosition;
         individuals = new ArrayList<Individual>();
         pendingIndividuals = new ArrayList<Individual>();
         problem = aProblem;
+        viralClauseCounter = new ViralClauseCounter(this);
     }
 
     public Location(Vector position) {
@@ -87,42 +82,9 @@ public class Location implements Serializable {
         individuals.addAll(pendingIndividuals);
         pendingIndividuals.clear();
     }
-
-    public void updateViralClauses(List<Clause> unsolvedClauses, GridWorld world) {
-        for (Clause clause : unsolvedClauses) {
-            int count = 0;
-            if (viralClauses.get(clause) == null) {
-                viralClauses.put(clause, 1);
-                count = 1;
-            } else {
-                count = viralClauses.get(clause) + 1;
-                viralClauses.put(clause, count);
-            }
-
-            if(count % IntParameter.VIRAL_CLAUSE_THRESHOLD.getValue() == 0) {
-                if (count < IntParameter.VIRAL_CLAUSE_THRESHOLD.getValue() * 8) {
-                    spreadViralClause(world, clause);
-                }
-            }
-        }
-    }
-
-    private void spreadViralClause(GridWorld world, Clause clause) {
-        //System.out.println("Viral Clause limit reached for " + position.toString());
-
-        List<Vector> neighborhood = world.getNeighborhood(position, 1);
-        neighborhood.remove(position); //We don't want to spread to the same location
-        Collections.shuffle(neighborhood, SharedPRNG.instance());
-
-        for (Vector pos : neighborhood) {
-            SatInstance locationProblem = (SatInstance) world.getLocation(pos).getProblem();
-
-            //Only add clause to a location that does not contain it
-            if (!locationProblem.contains(clause)) {
-                locationProblem.addViralClause(clause);
-                break;
-            }
-        }
+    
+    public ViralClauseCounter getViralClauseCounter() {
+        return viralClauseCounter;
     }
 
 }
