@@ -6,7 +6,7 @@ import java.util.List;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.Problem;
 
-public interface World<T> extends Iterable<Location> {
+public interface World<T> extends Iterable<Location<T>> {
 
 	public void setLocationProblem(T position, Problem problem);
 	
@@ -18,8 +18,8 @@ public interface World<T> extends Iterable<Location> {
 	
 	public void clear();
 	
- 	public Iterator<Location> iterator();
+ 	public Iterator<Location<T>> iterator();
  	
- 	public Location getLocation(T p);
+ 	public Location<T> getLocation(T p);
 	
 }

@@ -34,7 +34,7 @@ public class BiggestBoxConcentration implements ConcentrationRanker {
         resetConcentrationMap();
         generateSpeciesMap();
         shellMaker = new ShellMaker(world);
-        for (Location location : world) {
+        for (Location<Vector> location : world) {
             if (speciesMap.get(location.getPosition())!=null) {
                 List<Vector> temp = getSpeciesNeighborhood(location.getPosition());
                 for (Vector v : temp) {
@@ -46,7 +46,7 @@ public class BiggestBoxConcentration implements ConcentrationRanker {
     }
     
     private void generateSpeciesMap() {
-        for(Location l : world){
+        for(Location<Vector> l : world){
             if(!world.getIndividualsAt(l.getPosition()).isEmpty())
             speciesMap.put(l.getPosition(), findBestInCell(l.getPosition()));
         }
@@ -89,7 +89,7 @@ public class BiggestBoxConcentration implements ConcentrationRanker {
 
     public void resetConcentrationMap(){
         speciesConcentrationMap.clear();
-        for(Location location : world){
+        for(Location<Vector> location : world){
             speciesConcentrationMap.put(location.getPosition(), 1);
         }
     }

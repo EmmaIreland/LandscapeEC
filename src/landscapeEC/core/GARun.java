@@ -201,11 +201,11 @@ public class GARun {
          Vector bottomLeft = Vector.getCorner(topLeft, bottomRight);
          List<Vector> vectors = Arrays.asList(topLeft, bottomLeft, topRight, bottomRight);
          fillLocations(vectors);*/
-			Location topLeft = world.getLocation(Vector.origin(world.getDimensions().size()));
-			Location bottomRight = world.getLocation(world.getDimensions().minusToAll(1));
-			Location topRight = world.getLocation(Vector.getCorner(bottomRight.getPosition(), topLeft.getPosition()));
-			Location bottomLeft = world.getLocation(Vector.getCorner(topLeft.getPosition(), bottomRight.getPosition()));
-			List<Location> locations = Arrays.asList(topLeft, bottomLeft, topRight, bottomRight);
+			Location<Vector> topLeft = world.getLocation(Vector.origin(world.getDimensions().size()));
+			Location<Vector> bottomRight = world.getLocation(world.getDimensions().minusToAll(1));
+			Location<Vector> topRight = world.getLocation(Vector.getCorner(bottomRight.getPosition(), topLeft.getPosition()));
+			Location<Vector> bottomLeft = world.getLocation(Vector.getCorner(topLeft.getPosition(), bottomRight.getPosition()));
+			List<Location<Vector>> locations = Arrays.asList(topLeft, bottomLeft, topRight, bottomRight);
 			fillLocations(locations);
 			break;
 		}
@@ -264,8 +264,8 @@ public class GARun {
 		return false;
 	}
 
-	private void fillLocations(Iterable<Location> locations) {
-		for(Location l : locations) {
+	private void fillLocations(Iterable<Location<Vector>> locations) {
+		for(Location<Vector> l : locations) {
 			//Location l = world.getLocation(v);
 			l.setIndividuals(popManager.generatePopulation());
 		}
@@ -286,7 +286,7 @@ public class GARun {
 
 	private void updateDiversityCounts() {
 		DiversityCalculator.reset();
-		for (Location location : world) {
+		for (Location<Vector> location : world) {
 			List<Individual> locationIndividuals = world.getIndividualsAt(location.getPosition());
 			for (Individual individual : locationIndividuals) {
 				DiversityCalculator.addIndividual(individual);
@@ -296,7 +296,7 @@ public class GARun {
 
 	private void performDraconianReaper() {
 
-		for(Location location : world) {
+		for(Location<Vector> location : world) {
 			//Location location = world.getLocation(position);
 			List<Individual> locationIndividuals = world.getIndividualsAt(location.getPosition());
 
@@ -336,7 +336,7 @@ public class GARun {
 		if(migrationProbability <= 0 || migrationDistance <= 0)
 			return;
 
-		for(Location location : world) {
+		for(Location<Vector> location : world) {
 			List<Individual> locationIndividuals = world.getIndividualsAt(location.getPosition());
 			List<Individual> individualsToRemove = new ArrayList<Individual>();
 
@@ -360,7 +360,7 @@ public class GARun {
 	}
 
 	private void performElitism() {
-		for(Location location : world) {
+		for(Location<Vector> location : world) {
 			List<Individual> locationIndividuals = world.getIndividualsAt(location.getPosition());
 
 			if(!locationIndividuals.isEmpty()) {
@@ -373,7 +373,7 @@ public class GARun {
 	}
 
 	private void performReproduction() {
-		for(Location location : world) {
+		for(Location<Vector> location : world) {
 			List<Individual> locationIndividuals = world.getIndividualsAt(location.getPosition());
 
 			if(locationIndividuals.size() >= IntParameter.TOURNAMENT_SIZE.getValue()) {
@@ -399,7 +399,7 @@ public class GARun {
 	}
 
 	private void setFromPendingIndividuals() {
-		for(Location location : world) {
+		for(Location<Vector> location : world) {
 			world.getLocation(location.getPosition()).setFromPendingIndividuals();
 			// assert world.getLocation(position).getNumIndividuals() <=
 			// IntParameter.CARRYING_CAPACITY.getValue();
@@ -407,7 +407,7 @@ public class GARun {
 	}
 
 	private void addFromPendingIndividuals() {
-		for(Location location : world) {
+		for(Location<Vector> location : world) {
 			world.getLocation(location.getPosition()).addFromPendingIndividuals();
 		}
 	}

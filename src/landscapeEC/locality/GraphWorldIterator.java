@@ -2,7 +2,7 @@ package landscapeEC.locality;
 
 import java.util.Iterator;
 
-public class GraphWorldIterator implements Iterator<Location> {
+public class GraphWorldIterator implements Iterator<Location<Integer>> {
 
 	private GraphWorld world;
 	private Integer current; 

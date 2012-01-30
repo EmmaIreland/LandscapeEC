@@ -38,7 +38,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 	}
 	
 	@Override
-	public Iterator<Location> iterator() {
+	public Iterator<Location<Integer>> iterator() {
 		return new GraphWorldIterator(this);
 	}
 	

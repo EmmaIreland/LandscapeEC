@@ -47,8 +47,8 @@ public class GridWorld implements Serializable, World<Vector> {
         }
         else{
             Vector vector = new Vector(partial);
-            Location position = new Location(vector, GlobalProblem.getProblem());
-            worldMap.put(position.getPosition(), new Location(position.getPosition()));
+            Location<Vector> position = new Location<Vector>(vector, GlobalProblem.getProblem());
+            worldMap.put(position.getPosition(), new Location<Vector>(position.getPosition()));
         }
     }
 
@@ -99,7 +99,7 @@ public class GridWorld implements Serializable, World<Vector> {
     }
 
     @Override
-    public Iterator<Location> iterator() {
+    public Iterator<Location<Vector>> iterator() {
         return new GridWorldIterator(this);
     }
 
@@ -108,7 +108,7 @@ public class GridWorld implements Serializable, World<Vector> {
     }
 
     public void clear() {
-        for (Location l : this) {
+        for (Location<Vector> l : this) {
             getLocation(l.getPosition()).setIndividuals(new ArrayList<Individual>());
         }
     }
@@ -121,7 +121,7 @@ public class GridWorld implements Serializable, World<Vector> {
     public Individual findBestIndividual() {
         IndividualComparator comparator = IndividualComparator.getComparator();
         List<Individual> bestFromCells = new ArrayList<Individual>();
-        for (Location l : this) {
+        for (Location<Vector> l : this) {
             if (getLocation(l.getPosition()).getNumIndividuals() > 0) {
                 bestFromCells.add(findBestInCell(comparator, l.getPosition()));
             }

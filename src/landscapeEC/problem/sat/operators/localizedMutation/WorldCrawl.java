@@ -95,7 +95,7 @@ public class WorldCrawl implements ConcentrationRanker{
     private void setupUnprocessed() {
 	unprocessed.clear();
         Vector current;
-        for(Location l : world){
+        for(Location<Vector> l : world){
             if(!l.getIndividuals().isEmpty()){
         	unprocessed.add(l.getPosition());
             }

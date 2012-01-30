@@ -23,7 +23,7 @@ public class ManhattanDistanceGeography implements Geography {
 
     @Override
     public void generateGeography(GridWorld world) {
-        for (Location location : world) {
+        for (Location<Vector> location : world) {
             assignSubProblem(world, location.getPosition());
         }
     }

@@ -3,6 +3,7 @@ package landscapeEC.problem.sat.operators;
 
 import landscapeEC.locality.Location;
 import landscapeEC.locality.GridWorld;
+import landscapeEC.locality.Vector;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.DoubleParameter;
 import landscapeEC.problem.Individual;
@@ -20,7 +21,7 @@ public final class LocalizedMutation implements MutationOperator, Observer {
         double mutationRate = (DoubleParameter.AVERAGE_MUTATIONS.getValue()/bits.length)
         /*this amplification factor is currently ridiculously high.
           remember to resolve that inside the classes you extract.*/
-        *amplifier.getAmp(((Location)parameters[0]).getPosition());
+        *amplifier.getAmp(((Location<Vector>)parameters[0]).getPosition());
         for (int i = 0; i < bits.length; i++) {
             if (SharedPRNG.instance().nextDouble() < mutationRate) {
                 bits[i] = flipBit(bits[i]);

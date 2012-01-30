@@ -9,15 +9,15 @@ import landscapeEC.problem.Individual;
 import landscapeEC.problem.Problem;
 
 
-public class Location implements Serializable {
+public class Location<T> implements Serializable {
     private static final long serialVersionUID = 8006609685140336153L;
-    private final Vector position;
+    private final T position;
     private List<Individual> individuals;
     private List<Individual> pendingIndividuals;
     private Problem problem;
     private ViralClauseCounter viralClauseCounter;
     
-    public Location(Vector aPosition, Problem aProblem) {
+    public Location(T aPosition, Problem aProblem) {
         position = aPosition;
         individuals = new ArrayList<Individual>();
         pendingIndividuals = new ArrayList<Individual>();
@@ -25,11 +25,11 @@ public class Location implements Serializable {
         viralClauseCounter = new ViralClauseCounter(this);
     }
 
-    public Location(Vector position) {
+    public Location(T position) {
         this(position, null);
     }
 
-    public Vector getPosition() {
+    public T getPosition() {
         return position;
     }
     

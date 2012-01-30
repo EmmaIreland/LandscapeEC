@@ -2,7 +2,7 @@ package landscapeEC.locality;
 
 import java.util.Iterator;
 
-public class GridWorldIterator implements Iterator<Location> {
+public class GridWorldIterator implements Iterator<Location<Vector>> {
 
     private Vector start, end, current;
     private int numDimensions;
@@ -45,7 +45,7 @@ public class GridWorldIterator implements Iterator<Location> {
     }
 
     @Override
-    public Location next() {
+    public Location<Vector> next() {
         // We want to return the first position before we increment it, so
         // result will always be the previous iteration. This way we don't have
         // to initialize
