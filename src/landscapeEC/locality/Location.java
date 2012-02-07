@@ -28,7 +28,7 @@ public class Location<T> implements Serializable {
     public Location(T position) {
         this(position, null);
     }
-
+    
     public T getPosition() {
         return position;
     }

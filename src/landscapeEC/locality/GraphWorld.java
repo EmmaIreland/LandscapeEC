@@ -5,13 +5,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.SafeConstructor;
-
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.Problem;
 
@@ -21,7 +20,8 @@ public class GraphWorld implements Serializable, World<Integer> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private LinkedHashMap<Integer, Location> locations;
+	private LinkedHashMap<Integer, Location<Integer>> locations;
+	private LinkedHashMap<Integer, List<Integer>> neighborhoods;
 
 	public GraphWorld(File file) {
 
@@ -49,24 +49,29 @@ public class GraphWorld implements Serializable, World<Integer> {
 	private void processData(String data, int locNum) {
 		if(data.startsWith("[")) {
 			data = data.substring(1, data.length()-1);
-			
-			
+			String[] splitData = data.split(" ");
+			ArrayList<Integer> intSplitData = new ArrayList<Integer>();
+
+			for(int i = 0; i >= splitData.length; i++){
+				intSplitData.add(Integer.parseInt(splitData[i]));
+			}
+
+			locations.put(locNum, new Location<Integer>(locNum));
+			neighborhoods.put(locNum, intSplitData);
 		}
 	}
 
-	public Location getLocation(Integer position){
+	public Location<Integer> getLocation(Integer position){
 		return locations.get(position);
 	}
 
 	public List<Integer> getNeighborhood(Integer position, int radius){
-		//currently assume that we will only get a neighborhood of 1.
-		//TODO we need to address if we want locations to have their neighborhoods or not.
-
-		/*if(radius != 1){
-			throw new UnsupportedOperationException("Neighborhood size of not 1 is not yet supported, bitch at Nick");
+		//TODO currently assume that we will only get a neighborhood of 1.
+		
+		if(radius != 1){
+			throw new UnsupportedOperationException("Neighborhood size of not 1 is not yet supported");
 		}
-		List<Location> locationList = locations.get(position).getNeighbors();*/
-		return null;
+		return neighborhoods.get(position);
 	}
 
 	@Override
@@ -74,10 +79,6 @@ public class GraphWorld implements Serializable, World<Integer> {
 		return new GraphWorldIterator(this);
 	}
 
-	private void parseData(File file){
-		Yaml yaml = new Yaml();
-
-	}
 
 	@Override
 	public void setLocationProblem(Integer position, Problem problem) {
@@ -97,7 +98,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 
 	@Override
 	public void clear() {
-		locations = new LinkedHashMap<Integer, Location>();
+		locations = new LinkedHashMap<Integer, Location<Integer>>();
 
 	}
 
