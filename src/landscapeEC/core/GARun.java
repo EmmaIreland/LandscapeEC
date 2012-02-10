@@ -215,7 +215,7 @@ public class GARun {
 		Individual bestIndividual = null;
 		//initialize observers before the run starts
 		for(Observer o : observers) {
-			o.generationData(i, world, successes);
+			o.generationData(-1, world, successes);
 		}
 		while(evaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO.getValue()) {
 			processAllLocations();

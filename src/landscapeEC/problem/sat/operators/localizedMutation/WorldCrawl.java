@@ -28,6 +28,7 @@ import landscapeEC.problem.IndividualComparator;
  */
 
 public class WorldCrawl implements ConcentrationRanker{
+	private List<Vector> locationsPreviouslyFilled;
     private GridWorld world;
     private int maxGroupSize = 0;
     private int[] maxGroupSpecies = null;
@@ -39,8 +40,10 @@ public class WorldCrawl implements ConcentrationRanker{
     private Vector up;
     private Vector down;
     private ArrayList<Vector> directions = new ArrayList<Vector>();
+	private boolean mapExists = false;
     
     public WorldCrawl(){
+    	locationsPreviouslyFilled=new ArrayList<Vector>();
     	Integer[] set = new Integer[2];
     	set[0]=-1;
     	set[1]=0;
@@ -60,6 +63,8 @@ public class WorldCrawl implements ConcentrationRanker{
     
     @Override
     public int getAmp(Vector vector) {
+    	if(!mapExists)
+    		generateConcentrationMap();
     	if(speciesConcentrationMap.containsKey(vector))
     		return speciesConcentrationMap.get(vector);
     	System.out.println("getAmp called for "+vector+" - Found no entry in concentrationMap.");
@@ -68,11 +73,22 @@ public class WorldCrawl implements ConcentrationRanker{
     
     @Override
     public void initialize(GridWorld newWorld, int generationNumber){
+    	System.out.println("########GENERATION "+generationNumber+"########");
     	maxGroupSize = 0;
     	maxGroupSpecies = null;
     	world = newWorld;
-        Vector current;
-        setupUnprocessed();
+        mapExists=false;
+        generateConcentrationMap();
+        //This is what's causing the immediate null pointer exception.
+        //For funsies, comment out this call to generateConcentrationMap()
+        //and sub in the actual definition of the function.
+        
+        //Elena, and functional languages in general, would not be pleased.
+    }
+
+	private void generateConcentrationMap() {
+		Vector current;
+		setupUnprocessed();
         List<Vector> currentGroup;
         while(!unprocessed.isEmpty()){
             current = unprocessed.remove(unprocessed.size()-1);
@@ -84,13 +100,9 @@ public class WorldCrawl implements ConcentrationRanker{
             for(Vector v : currentGroup){
             	speciesConcentrationMap.put(v, currentGroup.size());
             }
-            
         }
-        if(generationNumber == 200){
-        	System.out.println("Generation 200!  Have a map.");
-        	System.out.println(speciesConcentrationMap);
-        }
-    }
+        mapExists=true;
+	}
     
     private void setupUnprocessed() {
 	unprocessed.clear();
@@ -106,6 +118,10 @@ public class WorldCrawl implements ConcentrationRanker{
 		result.add(current);
 		int[] species = findBestInCell(current);
 		Vector next;
+    	if(!locationsPreviouslyFilled.contains(current)){
+    		locationsPreviouslyFilled.add(current);
+    		System.out.println("Individuals have migrated to "+current+"!");
+    	}
 		for(Vector v : directions){
 	    	next = current.plus(v);
 	    	if(unprocessed.contains(next) && Arrays.equals(findBestInCell(next), species)){
