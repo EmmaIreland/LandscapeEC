@@ -133,7 +133,7 @@ public class MapVisualizer extends JFrame implements Observer {
     }
 
     private Color getForegroundColor(Location loc, double difficultyScale) {
-        Individual bestIndividual = Collections.max(loc.getIndividuals(), IndividualComparator.getComparator());
+        Individual bestIndividual = (Individual) Collections.max(loc.getIndividuals(), IndividualComparator.getComparator());
         double bestFitness = bestIndividual.getGlobalFitness();
         double scaledFitness = Math.pow(bestFitness, intensityScale);
         Color foreground = Color.black;
@@ -163,7 +163,7 @@ public class MapVisualizer extends JFrame implements Observer {
             	foreground = Color.getHSBColor((Math.abs(bits.hashCode())%255)/(float)255.0, (float) Math.pow(bestFitness, 30), (float)  Math.pow(bestFitness, 30));
             break;
             case BRIGHT_MUTATION:
-            	WorldCrawl wc = new WorldCrawl();
+            	WorldCrawl wc = WorldCrawl.getInstance();
             	String cs = evaluator.getResultString(bestIndividual);
                 Integer cn = cs.hashCode();
                 foreground = new Color((int) (scaledFitness*255), 0, (int) ((wc.getAmp((Vector) loc.getPosition())-1)*48)%255);

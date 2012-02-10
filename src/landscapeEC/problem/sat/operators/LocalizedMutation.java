@@ -13,7 +13,7 @@ import landscapeEC.problem.sat.operators.localizedMutation.WorldCrawl;
 import landscapeEC.util.SharedPRNG;
 
 public final class LocalizedMutation implements MutationOperator, Observer {
-    ConcentrationRanker amplifier = new WorldCrawl();
+    ConcentrationRanker amplifier = WorldCrawl.getInstance();
 
     @Override
     public Individual mutate(Individual ind, Object... parameters) {

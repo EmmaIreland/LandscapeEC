@@ -26,118 +26,115 @@ import landscapeEC.problem.IndividualComparator;
  * (unprocessed.size()-1) seems inefficient.  And kinda gross.
  * 
  */
-
-public class WorldCrawl implements ConcentrationRanker{
-	private List<Vector> locationsPreviouslyFilled;
-    private GridWorld world;
+public class WorldCrawl implements ConcentrationRanker {
+    private static WorldCrawl instance = null;
+    static private GridWorld world;
     private int maxGroupSize = 0;
     private int[] maxGroupSpecies = null;
     static List<Vector> unprocessed = new ArrayList<Vector>();
     private static Hashtable<Vector, Integer> speciesConcentrationMap = new Hashtable<Vector, Integer>();
-    
+
     private Vector left;
     private Vector right;
     private Vector up;
     private Vector down;
     private ArrayList<Vector> directions = new ArrayList<Vector>();
-	private boolean mapExists = false;
+    private boolean mapExists = false;
     
-    public WorldCrawl(){
-    	locationsPreviouslyFilled=new ArrayList<Vector>();
-    	Integer[] set = new Integer[2];
-    	set[0]=-1;
-    	set[1]=0;
-    	left = new Vector(set);
-    	set[0]=1;
-    	right = new Vector(set);
-    	set[0]=0;
-    	set[1]=-1;
-    	down=new Vector(set);
-    	set[1]=1;
-    	up=new Vector(set);
-    	directions.add(up);
-    	directions.add(down);
-    	directions.add(left);
-    	directions.add(right);
-    }
-    
-    @Override
-    public int getAmp(Vector vector) {
-    	if(!mapExists)
-    		generateConcentrationMap();
-    	if(speciesConcentrationMap.containsKey(vector))
-    		return speciesConcentrationMap.get(vector);
-    	System.out.println("getAmp called for "+vector+" - Found no entry in concentrationMap.");
-    	return 1;
-    }
-    
-    @Override
-    public void initialize(GridWorld newWorld, int generationNumber){
-    	System.out.println("########GENERATION "+generationNumber+"########");
-    	maxGroupSize = 0;
-    	maxGroupSpecies = null;
-    	world = newWorld;
-        mapExists=false;
-        generateConcentrationMap();
-        //This is what's causing the immediate null pointer exception.
-        //For funsies, comment out this call to generateConcentrationMap()
-        //and sub in the actual definition of the function.
-        
-        //Elena, and functional languages in general, would not be pleased.
+    protected WorldCrawl(){
+        Integer[] set = new Integer[2];
+        set[0] = -1;
+        set[1] = 0;
+        left = new Vector(set);
+        set[0] = 1;
+        right = new Vector(set);
+        set[0] = 0;
+        set[1] = -1;
+        down = new Vector(set);
+        set[1] = 1;
+        up = new Vector(set);
+        directions.add(up);
+        directions.add(down);
+        directions.add(left);
+        directions.add(right);
     }
 
-	private void generateConcentrationMap() {
-		Vector current;
-		setupUnprocessed();
+    public static WorldCrawl getInstance() {
+        if(instance == null) {
+           instance = new WorldCrawl();
+        }
+        return instance;
+     }
+
+    @Override
+    public int getAmp(Vector vector) {
+        if (!mapExists)
+            generateConcentrationMap();
+        if (speciesConcentrationMap.containsKey(vector))
+            return speciesConcentrationMap.get(vector);
+        System.out.println("getAmp called for " + vector
+                + " - Found no entry in concentrationMap.");
+        return 1;
+    }
+
+    @Override
+    public void initialize(GridWorld newWorld, int generationNumber) {
+        maxGroupSize = 0;
+        maxGroupSpecies = null;
+        world = newWorld;
+        mapExists = false;
+    }
+
+    private void generateConcentrationMap() {
+        Vector current;
+        setupUnprocessed();
         List<Vector> currentGroup;
-        while(!unprocessed.isEmpty()){
-            current = unprocessed.remove(unprocessed.size()-1);
+        while (!unprocessed.isEmpty()) {
+            current = unprocessed.remove(unprocessed.size() - 1);
             currentGroup = crawl(current);
-            if(currentGroup.size()>maxGroupSize){
-                maxGroupSize=currentGroup.size();
-                maxGroupSpecies=findBestInCell(current);
+            if (currentGroup.size() > maxGroupSize) {
+                maxGroupSize = currentGroup.size();
+                maxGroupSpecies = findBestInCell(current);
             }
-            for(Vector v : currentGroup){
-            	speciesConcentrationMap.put(v, currentGroup.size());
+            for (Vector v : currentGroup) {
+                speciesConcentrationMap.put(v, currentGroup.size());
             }
         }
-        mapExists=true;
-	}
-    
+        mapExists = true;
+    }
+
     private void setupUnprocessed() {
-	unprocessed.clear();
-        for(Location<Vector> l : world){
-            if(!l.getIndividuals().isEmpty()){
-        	unprocessed.add(l.getPosition());
+        unprocessed.clear();
+        for (Location<Vector> l : world) {
+            if (!l.getIndividuals().isEmpty()) {
+                unprocessed.add(l.getPosition());
             }
         }
     }
-    
-    private List<Vector> crawl(Vector current){
-    	List<Vector> result = new ArrayList<Vector>();
-		result.add(current);
-		int[] species = findBestInCell(current);
-		Vector next;
-    	if(!locationsPreviouslyFilled.contains(current)){
-    		locationsPreviouslyFilled.add(current);
-    		System.out.println("Individuals have migrated to "+current+"!");
-    	}
-		for(Vector v : directions){
-	    	next = current.plus(v);
-	    	if(unprocessed.contains(next) && Arrays.equals(findBestInCell(next), species)){
-	   			unprocessed.remove(next);
-	   			result.addAll(crawl(next));
-    		}
-		}
-		return result;
+
+    private List<Vector> crawl(Vector current) {
+        List<Vector> result = new ArrayList<Vector>();
+        result.add(current);
+        int[] species = findBestInCell(current);
+        Vector next;
+        for (Vector v : directions) {
+            next = current.plus(v);
+            if (unprocessed.contains(next)
+                    && Arrays.equals(findBestInCell(next), species)) {
+                unprocessed.remove(next);
+                result.addAll(crawl(next));
+            }
+        }
+        return result;
     }
-    
+
     private int[] findBestInCell(Vector position) {
         if (world.getIndividualsAt(position).isEmpty()) {
             return null;
         }
         IndividualComparator comparator = IndividualComparator.getComparator();
-        return Collections.max(world.getIndividualsAt(position), comparator).getBits();
+        return Collections.max(world.getIndividualsAt(position), comparator)
+                .getBits();
     }
 
 }
