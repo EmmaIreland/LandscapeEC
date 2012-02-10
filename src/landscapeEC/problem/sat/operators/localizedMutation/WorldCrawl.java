@@ -68,6 +68,8 @@ public class WorldCrawl implements ConcentrationRanker{
     
     @Override
     public void initialize(GridWorld newWorld, int generationNumber){
+    	maxGroupSize = 0;
+    	maxGroupSpecies = null;
     	world = newWorld;
         Vector current;
         setupUnprocessed();
@@ -88,11 +90,8 @@ public class WorldCrawl implements ConcentrationRanker{
         	System.out.println("Generation 200!  Have a map.");
         	System.out.println(speciesConcentrationMap);
         }
-        if(maxGroupSize > 1){
-        	System.out.println("Biggest group size: "+maxGroupSize);
-        }
-        
     }
+    
     private void setupUnprocessed() {
 	unprocessed.clear();
         for(Location<Vector> l : world){

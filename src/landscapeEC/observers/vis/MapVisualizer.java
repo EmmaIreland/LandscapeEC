@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -25,6 +26,8 @@ import landscapeEC.problem.Evaluator;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
+import landscapeEC.problem.sat.operators.localizedMutation.BiggestBoxConcentration;
+import landscapeEC.problem.sat.operators.localizedMutation.WorldCrawl;
 
 public class MapVisualizer extends JFrame implements Observer {
     private final int xScale;
@@ -146,6 +149,25 @@ public class MapVisualizer extends JFrame implements Observer {
                 Integer clausesNumber = clauseString.hashCode();
                 foreground = Color.getHSBColor((Math.abs(clausesNumber)%255)/(float)255.0, (float) Math.pow(bestFitness, 30), (float)  Math.pow(bestFitness, 30));
             break;
+            case MISSING_GENES:
+            	List<Individual> individuals = loc.getIndividuals();
+            	int[] bits = new int[individuals.get(0).getBits().length];
+            	for(int i = 0; i<individuals.size(); i++){
+            		int[] individual = individuals.get(i).getBits();
+            		for(int j=0; j<bits.length; j++){
+            			if(individual[j]==1){
+            				bits[j]=1;
+            			}
+            		}
+            	}
+            	foreground = Color.getHSBColor((Math.abs(bits.hashCode())%255)/(float)255.0, (float) Math.pow(bestFitness, 30), (float)  Math.pow(bestFitness, 30));
+            break;
+            case BRIGHT_MUTATION:
+            	WorldCrawl wc = new WorldCrawl();
+            	String cs = evaluator.getResultString(bestIndividual);
+                Integer cn = cs.hashCode();
+                foreground = new Color((int) (scaledFitness*255), 0, (int) ((wc.getAmp((Vector) loc.getPosition())-1)*48)%255);
+                break;
         }
         return foreground;
     }
