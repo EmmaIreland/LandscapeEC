@@ -12,16 +12,32 @@ import landscapeEC.locality.ShellMaker;
 import landscapeEC.locality.Vector;
 import landscapeEC.problem.IndividualComparator;
 
-public class BiggestBoxConcentration implements ConcentrationRanker {
+public class BiggestBox implements ConcentrationRanker {
     static Hashtable<Vector, Integer> speciesConcentrationMap = new Hashtable<Vector, Integer>();
     static Hashtable<Vector, int[]> speciesMap = new Hashtable<Vector, int[]>();
+    private static BiggestBox instance;
     static ShellMaker shellMaker;
     GridWorld world;
     private int maxRad = 0;
+    private boolean mapExists = false;
+    
+    protected BiggestBox(){
+        //do absolutely nothing
+    }
+
+    public static BiggestBox getInstance() {
+        if(instance == null) {
+           instance = new BiggestBox();
+        }
+        return instance;
+     }
 
     @Override
     public int getAmp(Vector vector) {
-	return 0;
+        if(!mapExists){
+            generateConcentrationMap();
+        }
+	return speciesConcentrationMap.get(vector);
     }
 
     @Override
@@ -32,6 +48,10 @@ public class BiggestBoxConcentration implements ConcentrationRanker {
         maxRad=0;
         this.world = newWorld;
         resetConcentrationMap();
+        mapExists = false;
+    }
+
+    private void generateConcentrationMap() {
         generateSpeciesMap();
         shellMaker = new ShellMaker(world);
         for (Location<Vector> location : world) {
@@ -92,6 +112,11 @@ public class BiggestBoxConcentration implements ConcentrationRanker {
         for(Location<Vector> location : world){
             speciesConcentrationMap.put(location.getPosition(), 1);
         }
+    }
+
+    @Override
+    public Hashtable<Vector, Integer> getConcentrationMap() {
+        return speciesConcentrationMap;
     }
 
 }

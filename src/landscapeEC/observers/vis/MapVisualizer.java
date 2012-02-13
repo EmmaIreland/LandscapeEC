@@ -26,7 +26,7 @@ import landscapeEC.problem.Evaluator;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
-import landscapeEC.problem.sat.operators.localizedMutation.BiggestBoxConcentration;
+import landscapeEC.problem.sat.operators.localizedMutation.BiggestBox;
 import landscapeEC.problem.sat.operators.localizedMutation.WorldCrawl;
 
 public class MapVisualizer extends JFrame implements Observer {

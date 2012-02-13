@@ -32,9 +32,9 @@ public class PopulationManager {
         return result;
     }
 
-	private int getEliteSize(int populationSize, double eliteProportion) {
-		return (int)Math.ceil(populationSize*eliteProportion);
-	}
+    private int getEliteSize(int populationSize, double eliteProportion) {
+        return (int)Math.ceil(populationSize*eliteProportion);
+    }
 
     public List<Individual> generatePopulation() {
         List<Individual> population = new ArrayList<Individual>();

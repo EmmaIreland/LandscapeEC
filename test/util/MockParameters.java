@@ -5,7 +5,6 @@ import landscapeEC.parameters.DoubleArrayParameter;
 import landscapeEC.parameters.DoubleParameter;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.parameters.Parameters;
-import landscapeEC.parameters.StringArrayParameter;
 import landscapeEC.parameters.StringParameter;
 
 public class MockParameters extends Parameters
@@ -31,11 +30,6 @@ public class MockParameters extends Parameters
 		for(StringParameter param : StringParameter.values())
 		{
 			this.put(param.name(), "value");
-		}
-		
-		for(StringArrayParameter param : StringArrayParameter.values())
-		{
-			this.put(param.name(), "value1,value2,value3");
 		}
 		
         for(DoubleArrayParameter param : DoubleArrayParameter.values())

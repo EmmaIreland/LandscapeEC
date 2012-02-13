@@ -30,9 +30,8 @@ public class WorldCrawl implements ConcentrationRanker {
     private static WorldCrawl instance = null;
     static private GridWorld world;
     private int maxGroupSize = 0;
-    private int[] maxGroupSpecies = null;
     static List<Vector> unprocessed = new ArrayList<Vector>();
-    private static Hashtable<Vector, Integer> speciesConcentrationMap = new Hashtable<Vector, Integer>();
+    static Hashtable<Vector, Integer> speciesConcentrationMap = new Hashtable<Vector, Integer>();
 
     private Vector left;
     private Vector right;
@@ -80,7 +79,6 @@ public class WorldCrawl implements ConcentrationRanker {
     @Override
     public void initialize(GridWorld newWorld, int generationNumber) {
         maxGroupSize = 0;
-        maxGroupSpecies = null;
         world = newWorld;
         mapExists = false;
     }
@@ -94,7 +92,6 @@ public class WorldCrawl implements ConcentrationRanker {
             currentGroup = crawl(current);
             if (currentGroup.size() > maxGroupSize) {
                 maxGroupSize = currentGroup.size();
-                maxGroupSpecies = findBestInCell(current);
             }
             for (Vector v : currentGroup) {
                 speciesConcentrationMap.put(v, currentGroup.size());
@@ -135,6 +132,11 @@ public class WorldCrawl implements ConcentrationRanker {
         IndividualComparator comparator = IndividualComparator.getComparator();
         return Collections.max(world.getIndividualsAt(position), comparator)
                 .getBits();
+    }
+
+    @Override
+    public Hashtable<Vector, Integer> getConcentrationMap() {
+        return speciesConcentrationMap;
     }
 
 }
