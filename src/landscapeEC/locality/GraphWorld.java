@@ -35,9 +35,10 @@ public class GraphWorld implements Serializable, World<Integer> {
 
 		int counter = 1;
 		for (Object data : yaml.loadAll(input)) {
+			System.out.println(data.toString() +" " +counter);
 			processData(data.toString(), counter);
-			System.out.println(data);
-			System.out.println("Location " + counter +" processed.");
+			System.out.println("\t\t\t" +data);
+			System.out.println("\t\t\t\tLocation " + counter +" processed.");
 			counter++;
 		}
 
@@ -46,7 +47,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 
 	}
 
-	private void processData(String data, int locNum) {
+	private void processData(String data, Integer locNum) {
 		if(data.startsWith("[")) {
 			data = data.substring(1, data.length()-1);
 			String[] splitData = data.split(" ");
@@ -55,8 +56,8 @@ public class GraphWorld implements Serializable, World<Integer> {
 			for(int i = 0; i >= splitData.length; i++){
 				intSplitData.add(Integer.parseInt(splitData[i]));
 			}
-
-			locations.put(locNum, new Location<Integer>(locNum));
+			Location newSpot = new Location<Integer>(locNum);
+			locations.put(locNum, newSpot);
 			neighborhoods.put(locNum, intSplitData);
 		}
 	}
