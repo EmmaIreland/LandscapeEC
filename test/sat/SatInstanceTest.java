@@ -6,7 +6,9 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import landscapeEC.observers.vis.MapVisualizer;
 import landscapeEC.problem.GlobalProblem;
@@ -50,6 +52,68 @@ public class SatInstanceTest {
         boolean expectedAnswers[] = new boolean[] {true, false, true, true};
 
         checkInstance(satInstanceString, expectedClauses, individualBitString, expectedAnswers);
+    }
+
+    @Test
+    public void SubInstanceTest() throws Exception {
+        //Create a list of clauses
+        List<Clause> clauseList = new ArrayList<Clause>();
+        String satInstanceString = "1 2 3\n-1 2 -3\n1 2 -3\n1 -2 3\n3 4 5\n-3 4 -5\n3 4 -5\n3 -4 5\n";
+        String[] clausesArray = satInstanceString.split("\n");
+        for(int i = 0; i < clausesArray.length; i++){
+            Clause newClause = new Clause(i);
+            String[] clause = clausesArray[i].split(" ");
+            for(int j=0;j<clause.length;j++){
+                int variable = Integer.parseInt(clause[j].trim());
+                newClause.addLiteral(new Literal(Math.abs(variable)-1, Math.signum(variable)==-1));
+            }
+            clauseList.add(newClause);
+        }
+        
+        //Make a satInstance and subInstance
+        SatInstance instance = new SatInstance(clauseList, 1.0);
+        SatInstance subInstance = (SatInstance) instance.getSubProblem(0.75);
+        
+        //Make ClauseSet with the first 75% of the clauses
+        clauseList.remove(7);
+        clauseList.remove(6);
+        Set<Clause> clauseSet = new HashSet<Clause>(clauseList);
+
+        //Assert that there are the same clauses and the same number of clauses
+        assertEquals(subInstance.getNumClauses(), clauseSet.size());
+        assertEquals(clauseSet, subInstance.getClauses());
+    }
+    
+    @Test
+    public void OffSetSubInstanceTest() throws Exception {
+        //Create a list of clauses
+        List<Clause> clauseList = new ArrayList<Clause>();
+        String satInstanceString = "1 2 3\n-1 2 -3\n1 2 -3\n1 -2 3\n3 4 5\n-3 4 -5\n3 4 -5\n3 -4 5\n";
+        String[] clausesArray = satInstanceString.split("\n");
+        for(int i = 0; i < clausesArray.length; i++){
+            Clause newClause = new Clause(i);
+            String[] clause = clausesArray[i].split(" ");
+            for(int j=0;j<clause.length;j++){
+                int variable = Integer.parseInt(clause[j].trim());
+                newClause.addLiteral(new Literal(Math.abs(variable)-1, Math.signum(variable)==-1));
+            }
+            clauseList.add(newClause);
+        }
+        
+        //Make a satInstance and subInstance
+        SatInstance instance = new SatInstance(clauseList, 1.0);
+        SatInstance subInstance = (SatInstance) instance.getSubProblem(0.5, 0.25);
+        
+        //Make ClauseSet with 50% of clauses, offset by the first 25%
+        clauseList.remove(7);
+        clauseList.remove(6);
+        clauseList.remove(1);
+        clauseList.remove(0);
+        Set<Clause> clauseSet = new HashSet<Clause>(clauseList);
+
+        //Assert that there are the same clauses and the same number of clauses
+        assertEquals(subInstance.getNumClauses(), clauseSet.size());
+        assertEquals(clauseSet, subInstance.getClauses());
     }
 
     private void checkInstance(String satInstanceString, Clause[] expectedClauses, String individualBitString, boolean[] expectedAnswers) throws IOException {

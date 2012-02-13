@@ -114,10 +114,14 @@ public class Vector implements Serializable {
         return newPosition;
     }
     
-    public Vector getMidPoint(Vector v) {
+    /**
+     * Returns the midpoint between one vector and another.
+     * Rounds downwards to the nearest integer coordinate.
+     */
+    public Vector getMidPoint(Vector vector) {
     	Vector newPosition = new Vector();
         for (int i = 0; i < coordinates.size(); i++) {
-        	int middle = (int) Math.floor((this.get(i) + v.get(i))/2.0);
+        	int middle = (int) Math.floor((this.get(i) + vector.get(i))/2.0);
             newPosition.add(middle);
         }
         return newPosition;
@@ -169,11 +173,16 @@ public class Vector implements Serializable {
         return distance;
     }
 
+    /**
+     * Combines the first vector's x-position and the second vector's y-position
+     * to make a new vector. To get the opposite corner, reverse the order of the
+     * arguments. For example: (1, 1) and (5, 5) makes (1, 5)
+     */
     public static Vector getCorner(Vector horizontalPos, Vector verticalPos) {
-    	Vector crossDiagonal = new Vector();
-    	crossDiagonal.add(horizontalPos.get(0));
-    	crossDiagonal.add(verticalPos.get(1));
-    	return crossDiagonal;
+    	Vector cornerVect = new Vector();
+    	cornerVect.add(horizontalPos.get(0));
+    	cornerVect.add(verticalPos.get(1));
+    	return cornerVect;
     }
     
     @Override

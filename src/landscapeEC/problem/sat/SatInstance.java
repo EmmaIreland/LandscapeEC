@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 import landscapeEC.problem.Evaluator;
@@ -67,14 +66,24 @@ public class SatInstance implements Iterable<Clause>, Serializable, Problem, Sep
     
     @Override
     public Problem getSubProblem(double difficulty) {
+        return getSubProblem(difficulty, 0.0);
+    }
+    
+    public Problem getSubProblem(double difficulty, double offset) {
+        //Offset defines the clause on which the subInstance starts
         int numClauses = (int) Math.ceil(clauseList.size() * difficulty);
         double newDifficulty = this.difficulty * difficulty;
         
         ArrayList<Clause> clauses = new ArrayList<Clause>(clauseList); //This should preserve the order of the clauses
         ArrayList<Clause> clausesToAdd = new ArrayList<Clause>();
         
+        int current = (int) Math.ceil(clauseList.size() * offset);
         for (int i = 0; i < numClauses; i++) {
-            clausesToAdd.add(clauses.get(i));
+            if(current >= clauses.size()) {
+                current = 0;
+            }
+            clausesToAdd.add(clauses.get(current));
+            current++;
         }
         
         SatInstance subInstance = new SatInstance(clausesToAdd, newDifficulty);
@@ -139,6 +148,20 @@ public class SatInstance implements Iterable<Clause>, Serializable, Problem, Sep
         
         clauseList.clear();
         clauseList.addAll(shuffledClauses);
+    }
+    
+    public SatInstance intersection(SatInstance satInstance) {
+        //Returns the intersection between the two "sets" of clauses represented 
+        //by this instance and the one provided
+        Set<Clause> resultSet = (Set<Clause>) clauseList.clone();
+        Set<?> secondSet = (Set<Clause>) satInstance.getClauses();
+        
+        resultSet.retainAll(secondSet);
+        SatInstance globalSatInstance = (SatInstance) GlobalProblem.getProblem();
+        double newDifficulty = resultSet.size()/(double)globalSatInstance.getNumClauses();
+        SatInstance result = new SatInstance(new ArrayList<Clause>(resultSet), newDifficulty);
+        
+        return result;
     }
     
     @Override
