@@ -61,8 +61,9 @@ public class BiggestBox implements ConcentrationRanker {
                      Integer currentValue = speciesConcentrationMap.get(v);
                      speciesConcentrationMap.put(v, currentValue+1);
                 }
-	    }
+            }
         }
+        mapExists=true;
     }
     
     private void generateSpeciesMap() {

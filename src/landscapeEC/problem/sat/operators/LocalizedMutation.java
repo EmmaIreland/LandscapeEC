@@ -20,7 +20,7 @@ public final class LocalizedMutation implements MutationOperator, Observer {
     //This is a _really janky_ way to handle switching between various implementations of locality.
     //It will be switched to a parameter-reader as soon as, well, I finish doing that.
     LocalityType rankerType = LocalityType.valueOf(StringParameter.LOCALITY_TYPE.getValue());
-    ConcentrationRanker amplifier;
+    static ConcentrationRanker amplifier;
     public LocalizedMutation(){
         switch (rankerType) {
         case BIGGEST_BOX:
@@ -59,7 +59,7 @@ public final class LocalizedMutation implements MutationOperator, Observer {
 	amplifier.initialize(newWorld, generationNumber);
     }
     
-    public ConcentrationRanker getAmplifier(){
+    public static ConcentrationRanker getAmplifier(){
         return amplifier;
     }
     

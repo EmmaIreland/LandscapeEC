@@ -26,7 +26,9 @@ import landscapeEC.problem.Evaluator;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
+import landscapeEC.problem.sat.operators.LocalizedMutation;
 import landscapeEC.problem.sat.operators.localizedMutation.BiggestBox;
+import landscapeEC.problem.sat.operators.localizedMutation.ConcentrationRanker;
 import landscapeEC.problem.sat.operators.localizedMutation.WorldCrawl;
 
 public class MapVisualizer extends JFrame implements Observer {
@@ -163,10 +165,9 @@ public class MapVisualizer extends JFrame implements Observer {
             	foreground = Color.getHSBColor((Math.abs(bits.hashCode())%255)/(float)255.0, (float) Math.pow(bestFitness, 30), (float)  Math.pow(bestFitness, 30));
             break;
             case BRIGHT_MUTATION:
-            	WorldCrawl wc = WorldCrawl.getInstance();
             	String cs = evaluator.getResultString(bestIndividual);
                 Integer cn = cs.hashCode();
-                foreground = new Color((int) (scaledFitness*255), 0, (int) ((wc.getAmp((Vector) loc.getPosition())-1)*48)%255);
+                foreground = new Color((int) (scaledFitness*255), 0, (int) ((LocalizedMutation.getAmplifier().getAmp((Vector) loc.getPosition())-1)*48)%255);
                 break;
         }
         return foreground;
