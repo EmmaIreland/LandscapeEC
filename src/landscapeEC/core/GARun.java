@@ -53,6 +53,7 @@ public class GARun {
     private String propertiesFilename;
     private FileWriter writer;
     private double bestOverallFitness;
+    private boolean worldType;
 
     private double[] intervalFitnesses;
     private double[] intervalDiversities;
