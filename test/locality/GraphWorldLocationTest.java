@@ -49,5 +49,8 @@ public class GraphWorldLocationTest {
 		
 		//change this to a iterator thing.
 		assertTrue(location1.containsAll(testWorld.getNeighborhood(1, 1)));
+		assertTrue(location2.containsAll(testWorld.getNeighborhood(2, 1)));
+		assertTrue(location3.containsAll(testWorld.getNeighborhood(3, 1)));
+		assertTrue(location4.containsAll(testWorld.getNeighborhood(4, 1)));
 	}
 }
