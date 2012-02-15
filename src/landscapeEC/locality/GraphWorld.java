@@ -27,6 +27,9 @@ public class GraphWorld implements Serializable, World<Integer> {
 
 		Yaml yaml = new Yaml();
 		InputStream input = null;
+		locations = new LinkedHashMap<Integer, Location<Integer>>();
+		neighborhoods = new LinkedHashMap<Integer, List<Integer>>();
+		
 		try {
 			input = new FileInputStream("graphWorldFiles/testGraphWorld");
 		} catch (FileNotFoundException e) {
@@ -35,10 +38,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 
 		int counter = 1;
 		for (Object data : yaml.loadAll(input)) {
-			System.out.println(data.toString() +" " +counter);
 			processData(data.toString(), counter);
-			System.out.println("\t\t\t" +data);
-			System.out.println("\t\t\t\tLocation " + counter +" processed.");
 			counter++;
 		}
 
@@ -57,7 +57,9 @@ public class GraphWorld implements Serializable, World<Integer> {
 				intSplitData.add(Integer.parseInt(splitData[i]));
 			}
 			Location newSpot = new Location<Integer>(locNum);
+			System.out.println("<<<<<<<<<"+locNum);
 			locations.put(locNum, newSpot);
+			System.out.println("Done with "+locNum);
 			neighborhoods.put(locNum, intSplitData);
 		}
 	}
