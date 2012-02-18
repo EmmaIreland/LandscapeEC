@@ -7,6 +7,7 @@ import java.io.IOException;
 import landscapeEC.parameters.DoubleParameter;
 import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntParameter;
+import landscapeEC.parameters.StringParameter;
 
 import org.apache.commons.io.FileUtils;
 import org.jbehave.scenario.annotations.Then;
@@ -40,6 +41,11 @@ public class ParametersSteps extends Steps {
     @Then("the mutation rate is $mutationRate")
     public void confirmMutationRate(double mutationRate) {
         assertEquals(mutationRate, DoubleParameter.AVERAGE_MUTATIONS.getValue());
+    }
+    
+    @Then("the world type is $worldType")
+    public void confirmWorldType(String worldType) {
+    	assertEquals(worldType, StringParameter.WORLD_TYPE.getValue());
     }
 
 }
