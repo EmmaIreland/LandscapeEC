@@ -29,7 +29,7 @@ public class GraphWorldIterator implements Iterator<Location<Integer>> {
 	}
 
 	@Override
-	public Location next() {
+	public Location<Integer> next() {
 		current++;
 		return world.getLocation(current - 1);
 	}

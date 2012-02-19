@@ -21,5 +21,7 @@ public interface World<T> extends Iterable<Location<T>> {
  	public Iterator<Location<T>> iterator();
  	
  	public Location<T> getLocation(T p);
-	
+
+	public Location<T> getOrigin();
+
 }

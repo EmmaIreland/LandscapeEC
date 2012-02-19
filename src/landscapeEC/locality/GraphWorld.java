@@ -46,6 +46,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 		System.out.println(list);
 
 	}
+	
 
 	private void processData(String data, Integer locNum) {
 		if(data.startsWith("[")) {
@@ -107,6 +108,12 @@ public class GraphWorld implements Serializable, World<Integer> {
 
 	public boolean has(int i) {
 		return locations.containsValue(i);
+	}
+
+
+	@Override
+	public Location<Integer> getOrigin() {
+		return locations.get(0);
 	}
 
 }
