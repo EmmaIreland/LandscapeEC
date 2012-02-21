@@ -29,7 +29,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 		InputStream input = null;
 		locations = new LinkedHashMap<Integer, Location<Integer>>();
 		neighborhoods = new LinkedHashMap<Integer, List<Integer>>();
-		
+
 		try {
 			input = new FileInputStream("graphWorldFiles/testGraphWorld");
 		} catch (FileNotFoundException e) {
@@ -46,7 +46,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 		System.out.println(list);
 
 	}
-	
+
 
 	private void processData(String data, Integer locNum) {
 		if(data.startsWith("[")) {
@@ -58,9 +58,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 				intSplitData.add(Integer.parseInt(splitData[i]));
 			}
 			Location newSpot = new Location<Integer>(locNum);
-			System.out.println("<<<<<<<<<"+locNum);
 			locations.put(locNum, newSpot);
-			System.out.println("Done with "+locNum);
 			neighborhoods.put(locNum, intSplitData);
 		}
 	}
@@ -71,7 +69,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 
 	public List<Integer> getNeighborhood(Integer position, int radius){
 		//TODO currently assume that we will only get a neighborhood of 1.
-		
+
 		if(radius != 1){
 			throw new UnsupportedOperationException("Neighborhood size of not 1 is not yet supported");
 		}

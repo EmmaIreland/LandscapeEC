@@ -72,10 +72,9 @@ public class GARun {
 				.loadClass(StringParameter.SELECTION_OPERATOR);
 		crossoverOperator = ParameterClassLoader
 				.loadClass(StringParameter.CROSSOVER_OPERATOR);
-		worldType = ParameterClassLoader
-				.loadClass(StringParameter.WORLD_TYPE);
-		file = ParameterClassLoader
-				.loadClass(StringParameter.WORLD_TYPE);
+		worldType = StringParameter.WORLD_TYPE.getValue();
+		
+		file = StringParameter.FILE.getValue();
 
 		intervalFitnesses = new double[getReportingIntervals().length];
 		intervalDiversities = new double[getReportingIntervals().length];
@@ -200,12 +199,11 @@ public class GARun {
 
 	private boolean runGenerations(int currentRun) throws Exception {
 		List<Individual> population = popManager.generatePopulation();
-
-		if(worldType == "GRIDWORLD") {
+		if(worldType.contentEquals("GRIDWORLD")) {
 			world = new GridWorld(new Vector(
 					IntArrayParameter.WORLD_DIMENSIONS.getValue()),
 					BooleanParameter.TOROIDAL.getValue());
-		}else if(worldType == "GRAPHWORLD") {
+		}else if(worldType.contentEquals("GRAPHWORLD")) {
 			File convFile = new File(file);
 			world = new GraphWorld(convFile);
 		}else{
