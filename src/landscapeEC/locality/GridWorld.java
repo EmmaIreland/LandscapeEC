@@ -19,14 +19,14 @@ import landscapeEC.problem.Problem;
 public class GridWorld implements Serializable, World<Vector> {
     private static final long serialVersionUID = 8032708223600669849L;
     private boolean toroidal = false;
-    private Map<Vector, Location> worldMap;
+    private Map<Vector, Location<Vector>> worldMap;
     private Vector dimensions;
 
     public GridWorld(Vector dimensions, boolean isToroidal) throws Exception {
         toroidal = isToroidal;
         this.dimensions = new Vector(dimensions);
 
-        worldMap = new HashMap<Vector, Location>();
+        worldMap = new HashMap<Vector, Location<Vector>>();
         Integer[] array = new Integer[dimensions.size()];
         
         //generateLocations is now how we scale gridWorlds to
