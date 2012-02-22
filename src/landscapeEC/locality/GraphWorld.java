@@ -31,7 +31,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 		neighborhoods = new LinkedHashMap<Integer, List<Integer>>();
 
 		try {
-			input = new FileInputStream("graphWorldFiles/testGraphWorld");
+			input = new FileInputStream(file);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -58,7 +58,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 			for(int i = 0; i >= splitData.length; i++){
 				intSplitData.add(Integer.parseInt(splitData[i]));
 			}
-			Location newSpot = new Location<Integer>(locNum);
+			Location<Integer> newSpot = new Location<Integer>(locNum);
 			locations.put(locNum, newSpot);
 			neighborhoods.put(locNum, intSplitData);
 		}
@@ -101,7 +101,9 @@ public class GraphWorld implements Serializable, World<Integer> {
 
 	@Override
 	public void clear() {
-		locations = new LinkedHashMap<Integer, Location<Integer>>();
+		for (Location<Integer> l : this) {
+			getLocation(l.getPosition()).setIndividuals(new ArrayList<Individual>());
+		}
 
 	}
 
