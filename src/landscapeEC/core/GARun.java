@@ -73,7 +73,7 @@ public class GARun {
 		crossoverOperator = ParameterClassLoader
 				.loadClass(StringParameter.CROSSOVER_OPERATOR);
 		worldType = StringParameter.WORLD_TYPE.getValue();
-		
+
 		file = StringParameter.FILE.getValue();
 
 		intervalFitnesses = new double[getReportingIntervals().length];
@@ -248,47 +248,55 @@ public class GARun {
 		bestOverallFitness = 0.0;
 		Individual bestIndividual = null;
 		// initialize observers before the run starts
-		for (Observer o : observers) {
-			o.generationData(-1, (GridWorld) world, successes);
+		if(!observers.isEmpty() && worldType.contentEquals("GRAPHWORLD")) {
+			throw new UnsupportedOperationException("No observers have been made for GraphWorld");
 		}
-		while (evaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO
-				.getValue()) {
-			processAllLocations();
-
+		
 			for (Observer o : observers) {
-				o.generationData(i, (GridWorld) world, successes);
+				o.generationData(-1, (GridWorld) world, successes);
 			}
+			while (evaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO
+					.getValue()) {
+				processAllLocations();
 
-			bestIndividual = ((GridWorld) world).findBestIndividual();
-			// System.out.println("Generation " + (i + 1));
-			// System.out.println("   Best individual: " + bestIndividual);
-			bestOverallFitness = bestIndividual.getGlobalFitness();
-			// System.out.println("   Best fitness: " + bestFitness);
-
-			double[] reportingIntervals = getReportingIntervals();
-			for (int j = 0; j < reportingIntervals.length; j++) {
-				if (evaluator.getNumEvaluations() > reportingIntervals[j]
-						* IntParameter.NUM_EVALS_TO_DO.getValue()
-						&& Double.isNaN(intervalFitnesses[j])) {
-					intervalFitnesses[j] = bestOverallFitness;
-					intervalDiversities[j] = DiversityCalculator
-							.calculateResultStringDiversity();
-					SnapShot.saveSnapShot(propertiesFilename + ".run"
-							+ currentRun + ".part" + j, (GridWorld) world);
+				for (Observer o : observers) {
+					o.generationData(i, (GridWorld) world, successes);
 				}
+
+				bestIndividual = world.findBestIndividual();
+				// System.out.println("Generation " + (i + 1));
+				// System.out.println("   Best individual: " + bestIndividual);
+				bestOverallFitness = bestIndividual.getGlobalFitness();
+				// System.out.println("   Best fitness: " + bestFitness);
+
+				double[] reportingIntervals = getReportingIntervals();
+				for (int j = 0; j < reportingIntervals.length; j++) {
+					if (evaluator.getNumEvaluations() > reportingIntervals[j]
+							* IntParameter.NUM_EVALS_TO_DO.getValue()
+							&& Double.isNaN(intervalFitnesses[j])) {
+						intervalFitnesses[j] = bestOverallFitness;
+						intervalDiversities[j] = DiversityCalculator
+								.calculateResultStringDiversity();
+						SnapShot.saveSnapShot(propertiesFilename + ".run"
+								+ currentRun + ".part" + j, (GridWorld) world);
+					}
+				}
+
+
+
+
+				if (BooleanParameter.QUIT_ON_SUCCESS.getValue()
+						&& bestOverallFitness == 1.0) {
+					System.out.println("Best Fitness: " + bestOverallFitness);
+					// This will be removed during refactoring
+					System.out.println("SUCCESS");
+					return true;
+				}
+
+				i++;
 			}
 
-			if (BooleanParameter.QUIT_ON_SUCCESS.getValue()
-					&& bestOverallFitness == 1.0) {
-				System.out.println("Best Fitness: " + bestOverallFitness);
-				// This will be removed during refactoring
-				System.out.println("SUCCESS");
-				return true;
-			}
-
-			i++;
-		}
-
+		
 		if (bestOverallFitness == 1.0) {
 			System.out.println("Best Fitness: " + bestOverallFitness);
 			// This will be removed during refactoring
@@ -325,7 +333,7 @@ public class GARun {
 	private void updateDiversityCounts() {
 		DiversityCalculator.reset();
 		//TODO The below if statements are probably not the way we want to do this, but is what I came up with
-		if(worldType == "GRIDWORLD"){
+		if(worldType.contentEquals("GRIDWORLD")){
 			for (Location<Vector> location : (GridWorld) world) {
 				List<Individual> locationIndividuals = world
 						.getIndividualsAt(location.getPosition());

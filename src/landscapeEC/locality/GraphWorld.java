@@ -6,12 +6,14 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.yaml.snakeyaml.Yaml;
 import landscapeEC.problem.Individual;
+import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.Problem;
 
 public class GraphWorld implements Serializable, World<Integer> {
@@ -116,5 +118,26 @@ public class GraphWorld implements Serializable, World<Integer> {
 	public Location<Integer> getOrigin() {
 		return locations.get(0);
 	}
+
+
+	@Override
+	public Individual findBestIndividual() {
+		IndividualComparator comparator = IndividualComparator.getComparator();
+        List<Individual> bestFromCells = new ArrayList<Individual>();
+        for (Location<Integer> l : this) {
+            if (getLocation(l.getPosition()).getNumIndividuals() > 0) {
+                bestFromCells.add(findBestInCell(comparator, l.getPosition()));
+            }
+        }
+        if (bestFromCells.isEmpty()) {
+            throw new EmptyWorldException();
+        }
+        return Collections.max(bestFromCells, comparator);
+	}
+	
+	private Individual findBestInCell(IndividualComparator comparator,
+            Integer position) {
+        return Collections.max(getIndividualsAt(position), comparator);
+    }
 
 }
