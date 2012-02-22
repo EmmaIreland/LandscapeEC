@@ -333,7 +333,7 @@ public class GARun {
 					DiversityCalculator.addIndividual(individual);
 				}
 			}
-		}else if(worldType == "GRAPHWORLD"){
+		}else if(worldType.contentEquals("GRAPHWORLD")){
 			for (Location<Integer> location : (GraphWorld) world) {
 				List<Individual> locationIndividuals = world
 						.getIndividualsAt(location.getPosition());
@@ -348,7 +348,7 @@ public class GARun {
 
 	private void performDraconianReaper() {
 
-		if(worldType == "GRIDWORLD"){
+		if(worldType.contentEquals("GRIDWORLD")){
 			for (Location<Vector> location : (GridWorld) world) {
 				// Location location = world.getLocation(position);
 				List<Individual> locationIndividuals = world
@@ -368,7 +368,7 @@ public class GARun {
 					}
 				}
 			}
-		}else if(worldType == "GRAPHWORLD"){
+		}else if(worldType.contentEquals("GRAPHWORLD")){
 			for (Location<Integer> location : (GraphWorld) world) {
 				// Location location = world.getLocation(position);
 				List<Individual> locationIndividuals = world
@@ -418,7 +418,7 @@ public class GARun {
 
 		if (migrationProbability <= 0 || migrationDistance <= 0)
 			return;
-		if(worldType == "GRIDWORLD"){
+		if(worldType.contentEquals("GRIDWORLD")){
 			for (Location<Vector> location : (GridWorld) world) {
 				List<Individual> locationIndividuals = world
 						.getIndividualsAt(location.getPosition());
@@ -443,7 +443,7 @@ public class GARun {
 				world.getLocation(location.getPosition()).removeAll(
 						individualsToRemove);
 			}
-		}else if(worldType == "GRAPHWORLD"){
+		}else if(worldType.contentEquals("GRAPHWORLD")){
 			for (Location<Integer> location : (GraphWorld) world) {
 				List<Individual> locationIndividuals = world
 						.getIndividualsAt(location.getPosition());
@@ -472,7 +472,7 @@ public class GARun {
 	}
 
 	private void performElitism() {
-		if(worldType == "GRIDWORLD"){
+		if(worldType.contentEquals("GRIDWORLD")){
 			for (Location<Vector> location : (GridWorld) world) {
 				List<Individual> locationIndividuals = world
 						.getIndividualsAt(location.getPosition());
@@ -486,7 +486,7 @@ public class GARun {
 					.addToPendingIndividuals(elite);
 				}
 			}
-		}else if(worldType == "GRAPHWORLD"){
+		}else if(worldType.contentEquals("GRAPHWORLD")){
 			for (Location<Integer> location : (GraphWorld) world) {
 				List<Individual> locationIndividuals = world
 						.getIndividualsAt(location.getPosition());
@@ -504,7 +504,7 @@ public class GARun {
 	}
 
 	private void performReproduction() {
-		if(worldType == "GRIDWORLD"){
+		if(worldType.contentEquals("GRIDWORLD")){
 			for (Location<Vector> location : (GridWorld) world) {
 				List<Individual> locationIndividuals = world
 						.getIndividualsAt(location.getPosition());
@@ -535,7 +535,7 @@ public class GARun {
 					.addToPendingIndividuals(mutatedPopulation);
 				}
 			}
-		}else if(worldType == "GRAPHWORLD"){
+		}else if(worldType.contentEquals("GRAPHWORLD")){
 			for (Location<Integer> location : (GraphWorld) world) {
 				List<Individual> locationIndividuals = world
 						.getIndividualsAt(location.getPosition());
@@ -570,14 +570,14 @@ public class GARun {
 	}
 
 	private void setFromPendingIndividuals() {
-		if(worldType == "GRIDWORLD"){
+		if(worldType.contentEquals("GRIDWORLD")){
 			for (Location<Vector> location : (GridWorld) world) {
 				world.getLocation(location.getPosition())
 				.setFromPendingIndividuals();
 				// assert world.getLocation(position).getNumIndividuals() <=
 				// IntParameter.CARRYING_CAPACITY.getValue();
 			}
-		}else if(worldType == "GRAPHWORLD"){
+		}else if(worldType.contentEquals("GRAPHWORLD")){
 			for (Location<Integer> location : (GraphWorld) world) {
 				world.getLocation(location.getPosition())
 				.setFromPendingIndividuals();
@@ -586,12 +586,12 @@ public class GARun {
 	}
 
 	private void addFromPendingIndividuals() {
-		if(worldType == "GRIDWORLD"){
+		if(worldType.contentEquals("GRIDWORLD")){
 			for (Location<Vector> location : (GridWorld) world) {
 				world.getLocation(location.getPosition())
 				.addFromPendingIndividuals();
 			}
-		}else if(worldType == "GRAPHWORLD"){
+		}else if(worldType.contentEquals("GRAPHWORLD")){
 			for (Location<Integer> location : (GraphWorld) world) {
 				world.getLocation(location.getPosition())
 				.setFromPendingIndividuals();
