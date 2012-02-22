@@ -20,32 +20,38 @@ public class GraphWorldLocationTest {
 	public void graphWorldPositionTest(){
 		//expected neighborhoods
 		
+		ArrayList location0 = new ArrayList();
+		int[] location0Stuff = {2,3,4};
+		location0.add(location0Stuff);
+		
 		ArrayList location1 = new ArrayList();
-		int[] location1Stuff = {2,3,4};
+		int[] location1Stuff = {1,3};
 		location1.add(location1Stuff);
 		
 		ArrayList location2 = new ArrayList();
-		int[] location2Stuff = {1,3};
+		int[] location2Stuff = {1,2};
 		location2.add(location2Stuff);
 		
 		ArrayList location3 = new ArrayList();
-		int[] location3Stuff = {1,2};
+		int[] location3Stuff = {1,5,6};
 		location3.add(location3Stuff);
 		
 		ArrayList location4 = new ArrayList();
-		int[] location4Stuff = {1,5,6};
-		location4.add(location4Stuff);
+		location4.add(4);
 		
 		ArrayList location5 = new ArrayList();
 		location5.add(4);
 		
-		ArrayList location6 = new ArrayList();
-		location6.add(4);
-		
 		
 		File worldFile = new File("graphWorldFiles/testGraphWorld");
 		
-		GraphWorld testWorld = new GraphWorld(worldFile);
+		GraphWorld testWorld = null;
+		try {
+			testWorld = new GraphWorld(worldFile);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		//change this to a iterator thing.
 		assertTrue(location1.containsAll(testWorld.getNeighborhood(1, 1)));

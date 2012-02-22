@@ -23,7 +23,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 	private LinkedHashMap<Integer, Location<Integer>> locations;
 	private LinkedHashMap<Integer, List<Integer>> neighborhoods;
 
-	public GraphWorld(File file) {
+	public GraphWorld(File file) throws Exception {
 
 		Yaml yaml = new Yaml();
 		InputStream input = null;
@@ -36,15 +36,16 @@ public class GraphWorld implements Serializable, World<Integer> {
 			e.printStackTrace();
 		}
 
-		int counter = 1;
+		int counter = 0;
 		for (Object data : yaml.loadAll(input)) {
 			processData(data.toString(), counter);
 			counter++;
 		}
 
 		List<String> list = (List<String>) yaml.load(input);
-		System.out.println(list);
-
+		if(locations.get(0) == null) {
+			throw new Exception("A Graph World must have a 0th location"); 
+		}
 	}
 
 
