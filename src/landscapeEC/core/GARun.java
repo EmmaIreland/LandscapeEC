@@ -209,7 +209,6 @@ public class GARun {
 		}else{
 			throw new UnsupportedOperationException("World type of " + worldType + " is not supported");
 		}
-
 		world.clear();
 
 		SeedType seedType = SeedType
@@ -251,52 +250,52 @@ public class GARun {
 		if(!observers.isEmpty() && worldType.contentEquals("GRAPHWORLD")) {
 			throw new UnsupportedOperationException("No observers have been made for GraphWorld");
 		}
-		
+
+		for (Observer o : observers) {
+			o.generationData(-1, (GridWorld) world, successes);
+		}
+		while (evaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO
+				.getValue()) {
+			processAllLocations();
+
 			for (Observer o : observers) {
-				o.generationData(-1, (GridWorld) world, successes);
-			}
-			while (evaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO
-					.getValue()) {
-				processAllLocations();
-
-				for (Observer o : observers) {
-					o.generationData(i, (GridWorld) world, successes);
-				}
-
-				bestIndividual = world.findBestIndividual();
-				// System.out.println("Generation " + (i + 1));
-				// System.out.println("   Best individual: " + bestIndividual);
-				bestOverallFitness = bestIndividual.getGlobalFitness();
-				// System.out.println("   Best fitness: " + bestFitness);
-
-				double[] reportingIntervals = getReportingIntervals();
-				for (int j = 0; j < reportingIntervals.length; j++) {
-					if (evaluator.getNumEvaluations() > reportingIntervals[j]
-							* IntParameter.NUM_EVALS_TO_DO.getValue()
-							&& Double.isNaN(intervalFitnesses[j])) {
-						intervalFitnesses[j] = bestOverallFitness;
-						intervalDiversities[j] = DiversityCalculator
-								.calculateResultStringDiversity();
-						SnapShot.saveSnapShot(propertiesFilename + ".run"
-								+ currentRun + ".part" + j, (GridWorld) world);
-					}
-				}
-
-
-
-
-				if (BooleanParameter.QUIT_ON_SUCCESS.getValue()
-						&& bestOverallFitness == 1.0) {
-					System.out.println("Best Fitness: " + bestOverallFitness);
-					// This will be removed during refactoring
-					System.out.println("SUCCESS");
-					return true;
-				}
-
-				i++;
+				o.generationData(i, (GridWorld) world, successes);
 			}
 
-		
+			bestIndividual = world.findBestIndividual();
+			// System.out.println("Generation " + (i + 1));
+			// System.out.println("   Best individual: " + bestIndividual);
+			bestOverallFitness = bestIndividual.getGlobalFitness();
+			// System.out.println("   Best fitness: " + bestFitness);
+
+			double[] reportingIntervals = getReportingIntervals();
+			for (int j = 0; j < reportingIntervals.length; j++) {
+				if (evaluator.getNumEvaluations() > reportingIntervals[j]
+						* IntParameter.NUM_EVALS_TO_DO.getValue()
+						&& Double.isNaN(intervalFitnesses[j])) {
+					intervalFitnesses[j] = bestOverallFitness;
+					intervalDiversities[j] = DiversityCalculator
+							.calculateResultStringDiversity();
+					SnapShot.saveSnapShot(propertiesFilename + ".run"
+							+ currentRun + ".part" + j, (GridWorld) world);
+				}
+			}
+
+
+
+
+			if (BooleanParameter.QUIT_ON_SUCCESS.getValue()
+					&& bestOverallFitness == 1.0) {
+				System.out.println("Best Fitness: " + bestOverallFitness);
+				// This will be removed during refactoring
+				System.out.println("SUCCESS");
+				return true;
+			}
+
+			i++;
+		}
+
+
 		if (bestOverallFitness == 1.0) {
 			System.out.println("Best Fitness: " + bestOverallFitness);
 			// This will be removed during refactoring

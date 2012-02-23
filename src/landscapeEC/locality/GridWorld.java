@@ -67,11 +67,11 @@ public class GridWorld implements Serializable, World<Vector> {
         getLocation(position).setProblem(problem);
     }
 
-    public Location getLocation(Vector position) {
+    public Location<Vector> getLocation(Vector position) {
         return worldMap.get(position);
     }
 
-    public Location getOrigin() {
+    public Location<Vector> getOrigin() {
         Vector position = Vector.origin(dimensions.size());
 
         return worldMap.get(position);

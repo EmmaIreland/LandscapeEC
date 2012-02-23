@@ -12,6 +12,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.yaml.snakeyaml.Yaml;
+
+import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.Problem;
@@ -60,7 +62,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 			for(int i = 0; i >= splitData.length; i++){
 				intSplitData.add(Integer.parseInt(splitData[i]));
 			}
-			Location<Integer> newSpot = new Location<Integer>(locNum);
+			Location<Integer> newSpot = new Location<Integer>(locNum, GlobalProblem.getProblem());
 			locations.put(locNum, newSpot);
 			neighborhoods.put(locNum, intSplitData);
 		}
