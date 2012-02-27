@@ -31,6 +31,18 @@ public class DiversityCalculator {
         return seenResultStrings;
     }
     
+    private String getMostCommon() {
+        int maxNumber = 0;
+        String currentMaxString = "";
+        for(String resultString : resultStringCounter) {
+            if(resultStringCounter.getCount(resultString) > maxNumber) {
+                maxNumber = resultStringCounter.getCount(resultString);
+                currentMaxString = resultString;
+            }
+        }
+        return currentMaxString;
+    }
+    
     public static double resultStringPercentage(String clauseListString) {
         return (double) resultStringCounter.getCount(clauseListString) / (double) resultStringCounter.totalCount();
     }

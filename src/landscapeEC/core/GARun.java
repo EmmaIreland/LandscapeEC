@@ -356,25 +356,20 @@ public class GARun {
 	private void performDraconianReaper() {
 
 		if(worldType.contentEquals("GRIDWORLD")){
-			for (Location<Vector> location : (GridWorld) world) {
-				// Location location = world.getLocation(position);
-				List<Individual> locationIndividuals = world
-						.getIndividualsAt(location.getPosition());
+		    for (Location<Vector> location : (GridWorld) world) {
+		            // Location location = world.getLocation(position);
+		            List<Individual> locationIndividuals = world.getIndividualsAt(location.getPosition());
 
-				for (Individual individual : locationIndividuals) {
-					Problem locationProblem = location.getProblem();
-					if (BooleanParameter.VIRAL_CLAUSES.getValue()) { // Perform
-						// viral clause
-						// procedure
-						// and reaping
-						doViralClauses(location, individual, locationProblem);
-					} else { // else default reaper procedure
-						if (evaluator.solvesSubProblem(individual, locationProblem)) {
-							location.addToPendingIndividuals(individual);
-						}
-					}
-				}
-			}
+		            for (Individual individual : locationIndividuals) {
+		                Problem locationProblem = location.getProblem();
+		                if (BooleanParameter.VIRAL_CLAUSES.getValue()) {
+		                    //Perform viral clause procedure and reaping
+		                    doViralClauses(location, individual, locationProblem);
+		                } else { // else default reaper procedure
+		                    doReaperEffect(individual, location, evaluator.solvesSubProblem(individual, locationProblem));
+		                }
+		            }
+		        }
 		}else if(worldType.contentEquals("GRAPHWORLD")){
 			for (Location<Integer> location : (GraphWorld) world) {
 				// Location location = world.getLocation(position);
@@ -398,23 +393,33 @@ public class GARun {
 		}
 	}
 
-	private void doViralClauses(Location location, Individual individual,
-			Problem locationProblem) {
-		if (!(evaluator instanceof SatEvaluator)) {
-			throw new RuntimeException(
-					"Viral Clauses is currently only supported under 3SAT");
-		}
+	private void doViralClauses(Location location, Individual individual, Problem locationProblem) {
+	    if (!(evaluator instanceof SatEvaluator)) {
+	        throw new RuntimeException("Viral Clauses is currently only supported under 3SAT");
+	    }
 
-		SatEvaluator clauseEvaluator = (SatEvaluator) evaluator;
-		List<Clause> unsolvedClauses = clauseEvaluator.getUnsolvedClauses(
-				individual, locationProblem);
+	    SatEvaluator clauseEvaluator = (SatEvaluator) evaluator;
+	    List<Clause> unsolvedClauses = clauseEvaluator.getUnsolvedClauses(individual, locationProblem);
 
-		if (unsolvedClauses.size() > 0) {
-			location.getViralClauseCounter().updateClauseCounts(
-					unsolvedClauses, world);
-		} else {
-			location.addToPendingIndividuals(individual);
-		}
+	    if (unsolvedClauses.size() > 0) {
+	        location.getViralClauseCounter().updateClauseCounts(unsolvedClauses, world);
+	    }
+
+	    //Do reaper effect, if unsolved clauses = 0 then it satisfies requirements
+	    doReaperEffect(individual, location, (unsolvedClauses.size() > 0));
+	}
+
+	private void doReaperEffect(Individual individual, Location location, boolean satisfiesRequirements) {
+	    if ("FITNESS".equals(StringParameter.REAPER_EFFECT.getValue())) {
+	        if (!satisfiesRequirements) {
+	            individual.updateLocalFitness(location.getProblem().getDifficulty());
+	        }
+	        location.addToPendingIndividuals(individual);
+	    } else {
+	        if (satisfiesRequirements) {
+	            location.addToPendingIndividuals(individual);
+	        }
+	    }
 	}
 
 	private void performMigration() {

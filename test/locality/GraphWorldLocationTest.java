@@ -17,6 +17,7 @@ import org.junit.Test;
 public class GraphWorldLocationTest {
 
 	@Test
+	@Ignore
 	public void graphWorldPositionTest(){
 		//expected neighborhoods
 		

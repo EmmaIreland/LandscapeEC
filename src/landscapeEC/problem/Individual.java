@@ -8,6 +8,7 @@ public class Individual implements Serializable {
     private static final long serialVersionUID = 8709627944120749083L;
     private int[] bits;
     private double globalFitness = -1.0;
+    private double localFitnessDisadvantage = 0;
 
     public Individual(String bitString) {
         this(parseBits(bitString));
@@ -24,6 +25,10 @@ public class Individual implements Serializable {
     public Individual(int[] bits, boolean evaluateOnCreation) {
         instantiate(bits, evaluateOnCreation);
         
+    }
+    
+    public void updateLocalFitness(double fitnessDisadvantage) {
+        localFitnessDisadvantage = fitnessDisadvantage;
     }
 
     private void instantiate(int[] newBits, boolean evaluateOnCreation) {
@@ -48,7 +53,7 @@ public class Individual implements Serializable {
     }
     
     public double getGlobalFitness() {
-        return globalFitness;
+        return Math.max(globalFitness - localFitnessDisadvantage, 0);
     }
     
     public int getBit(int index) {

@@ -32,18 +32,18 @@ public class FourPeakGeography implements Geography {
          * Below is the diagram how the world will be divded into squares. A, B, C and D
          * represent equal 25% chunks of the total clause list, with no clauses shared between
          * them. 0 represents no clauses, and the middle 1/2 is a random 50% of all clauses.
-         *     
+         * 
          *     0   1   2   3   4
          *     
-         *  0  0---0---0---0---0
+         *  0  0---A---AC--C---0
          *     |   |   |   |   |
-         *  1  0--ABC--BC-BCD--0
+         *  1  A--AC--ABC--BC--C
          *     |   |   |   |   |
-         *  2  0--AC--1/2--BD--0
+         *  2  AD-ACD-1/2-BCD-BC
          *     |   |   |   |   |
-         *  3  0--ACD--AD--ABD-0
+         *  3  D--AD--ABD--BD--B
          *     |   |   |   |   |
-         *  4  0---0---0---0---0
+         *  4  0---D---BD--B---0
          */
         
         //Get vector positions from the world using midpoints and corners (25 total)
@@ -74,10 +74,8 @@ public class FourPeakGeography implements Geography {
         vects[3][4] = Vector.getCorner(vects[3][3], vects[4][4]);
         vects[4][3] = Vector.getCorner(vects[4][4], vects[3][3]);
         
-        //Fill in all vectors on the edges with the empty clause list
-        int[][] edgeVectors = {{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0},
-                               {0, 1}, {0, 2}, {0, 3}, {4, 1}, {4, 2}, {4, 3},
-                               {0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}};
+        //Fill in corner vectors with the empty clause list
+        int[][] edgeVectors = {{0, 0}, {4, 0}, {0, 4}, {4, 4}};
         for(int[] position : edgeVectors) {
             world.setLocationProblem(vects[position[0]][position[1]], emptyInstance);
         }
@@ -91,17 +89,33 @@ public class FourPeakGeography implements Geography {
         SatInstance AC = ABC.intersection(ACD);
         SatInstance BD = ABD.intersection(BCD);
         SatInstance AD = ACD.intersection(ABD);
+        SatInstance A = (SatInstance) globalSatInstance.getSubProblem(0.25, 0.0);
+        SatInstance B = (SatInstance) globalSatInstance.getSubProblem(0.25, 0.25);
+        SatInstance C = (SatInstance) globalSatInstance.getSubProblem(0.25, 0.5);
+        SatInstance D = (SatInstance) globalSatInstance.getSubProblem(0.25, 0.75);
         SatInstance randomHalf = generateMidpointGoal(globalSatInstance, emptyInstance);
         
         //Set clause lists to the world locations
-        world.setLocationProblem(vects[1][1], ABC);
-        world.setLocationProblem(vects[3][1], BCD);
-        world.setLocationProblem(vects[1][3], ACD);
-        world.setLocationProblem(vects[3][3], ABD);
-        world.setLocationProblem(vects[2][1], BC);
-        world.setLocationProblem(vects[1][2], AC);
-        world.setLocationProblem(vects[3][2], BD);
-        world.setLocationProblem(vects[2][3], AD);
+        world.setLocationProblem(vects[2][1], ABC);
+        world.setLocationProblem(vects[3][2], BCD);
+        world.setLocationProblem(vects[1][2], ACD);
+        world.setLocationProblem(vects[2][3], ABD);
+        world.setLocationProblem(vects[2][0], AC);
+        world.setLocationProblem(vects[1][1], AC);
+        world.setLocationProblem(vects[3][1], BC);
+        world.setLocationProblem(vects[4][2], BC);
+        world.setLocationProblem(vects[3][3], BD);
+        world.setLocationProblem(vects[2][4], BD);
+        world.setLocationProblem(vects[0][2], AD);
+        world.setLocationProblem(vects[1][3], AD);
+        world.setLocationProblem(vects[1][0], A);
+        world.setLocationProblem(vects[0][1], A);
+        world.setLocationProblem(vects[3][0], C);
+        world.setLocationProblem(vects[4][1], C);
+        world.setLocationProblem(vects[4][3], B);
+        world.setLocationProblem(vects[3][4], B);
+        world.setLocationProblem(vects[0][3], D);
+        world.setLocationProblem(vects[1][4], D);
         world.setLocationProblem(vects[2][2], randomHalf);
 
         //Do recursive fractal geography on the 16 squares we generated
@@ -110,9 +124,6 @@ public class FourPeakGeography implements Geography {
                 doFractalGeography(vects[x][y], vects[x+1][y], vects[x+1][y+1], vects[x][y+1]);
             }
         }
-        
-        //doFractalGeography(vects[][], vects[][], vects[][], vects[][]);
-        //doFractalGeography(topLeft, topRight, bottomRight, bottomLeft);
     }
 
     private SatInstance generateMidpointGoal(SatInstance satInstance, SatInstance emptyInstance) {
