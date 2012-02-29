@@ -4,12 +4,16 @@ import static org.junit.Assert.*;
 
 import java.awt.List;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 
 import landscapeEC.locality.GraphWorld;
 import landscapeEC.locality.Location;
+import landscapeEC.parameters.GlobalParameters;
+import landscapeEC.problem.GlobalProblem;
+import landscapeEC.problem.sat.SatInstance;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -17,8 +21,7 @@ import org.junit.Test;
 public class GraphWorldLocationTest {
 
 	@Test
-	@Ignore
-	public void graphWorldPositionTest(){
+	public void graphWorldPositionTest() throws IOException{
 		//expected neighborhoods
 		
 		ArrayList location0 = new ArrayList();
@@ -45,12 +48,14 @@ public class GraphWorldLocationTest {
 		
 		
 		File worldFile = new File("graphWorldFiles/testGraphWorld");
+		File paramsFile = new File("properties/graphTest.properties");
+		GlobalParameters.setParameters(paramsFile);
+        GlobalProblem.setProblem(new SatInstance(0.0));
 		
 		GraphWorld testWorld = null;
 		try {
 			testWorld = new GraphWorld(worldFile);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
