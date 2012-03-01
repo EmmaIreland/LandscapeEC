@@ -126,14 +126,17 @@ public class GraphWorld implements Serializable, World<Integer> {
 	public Individual findBestIndividual() {
 		IndividualComparator comparator = IndividualComparator.getComparator();
         List<Individual> bestFromCells = new ArrayList<Individual>();
+       // System.out.println(findBestInCell(comparator, 0).toString());
         for (Location<Integer> l : this) {
             if (getLocation(l.getPosition()).getNumIndividuals() > 0) {
                 bestFromCells.add(findBestInCell(comparator, l.getPosition()));
+                //System.out.println(findBestInCell(comparator, l.getPosition()).toString());
             }
         }
         if (bestFromCells.isEmpty()) {
             throw new EmptyWorldException();
         }
+        //System.out.println(this.getLocation(0).getIndividuals().toString());
         return Collections.max(bestFromCells, comparator);
 	}
 	

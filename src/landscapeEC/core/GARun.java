@@ -248,7 +248,7 @@ public class GARun {
 		Individual bestIndividual = null;
 		// initialize observers before the run starts
 		if(!observers.isEmpty() && worldType.contentEquals("GRAPHWORLD")) {
-			throw new UnsupportedOperationException("No observers have been made for GraphWorld");
+			throw new UnsupportedOperationException("No observers have been implemented for GraphWorld");
 		}
 
 		for (Observer o : observers) {
@@ -261,13 +261,12 @@ public class GARun {
 			for (Observer o : observers) {
 				o.generationData(i, (GridWorld) world, successes);
 			}
-
 			bestIndividual = world.findBestIndividual();
+			System.out.println(world.getLocation(0).getIndividuals().toString());
 			// System.out.println("Generation " + (i + 1));
 			// System.out.println("   Best individual: " + bestIndividual);
 			bestOverallFitness = bestIndividual.getGlobalFitness();
 			// System.out.println("   Best fitness: " + bestFitness);
-
 			double[] reportingIntervals = getReportingIntervals();
 			for (int j = 0; j < reportingIntervals.length; j++) {
 				if (evaluator.getNumEvaluations() > reportingIntervals[j]

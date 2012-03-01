@@ -15,12 +15,9 @@ public class GraphWorldIterator implements Iterator<Location<Integer>> {
             current = uncheckedStart;
 	}
 	
-	/*public GraphLocationIterator(Vector position, int radius, GraphWorld world) {
-		 
-	 }*/
 	
 	public GraphWorldIterator(GraphWorld world) {
-		this(1, world.getNumLocations(), world);
+		this(0, world.getNumLocations(), world);
 	}
 	
 	@Override
@@ -31,7 +28,7 @@ public class GraphWorldIterator implements Iterator<Location<Integer>> {
 	@Override
 	public Location<Integer> next() {
 		current++;
-		return world.getLocation(current - 1);
+		return world.getLocation(current);
 	}
 
 	@Override
