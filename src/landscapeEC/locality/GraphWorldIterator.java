@@ -22,13 +22,13 @@ public class GraphWorldIterator implements Iterator<Location<Integer>> {
 	
 	@Override
 	public boolean hasNext() {
-		return world.has(current+1);
+		return world.has(current);
 	}
 
 	@Override
 	public Location<Integer> next() {
 		current++;
-		return world.getLocation(current);
+		return world.getLocation(current-1);
 	}
 
 	@Override

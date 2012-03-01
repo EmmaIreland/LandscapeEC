@@ -86,5 +86,9 @@ public class Location<T> implements Serializable {
     public ViralClauseCounter getViralClauseCounter() {
         return viralClauseCounter;
     }
+    
+    public String toString() {
+        return position.toString() + " (with " + individuals.size() + " individuals)";
+    }
 
 }

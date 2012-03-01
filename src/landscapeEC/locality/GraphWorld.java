@@ -37,7 +37,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 		try {
 			input = new FileInputStream(file);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		    throw new RuntimeException(e);
 		}
 
 		int counter = 0;
@@ -50,20 +50,26 @@ public class GraphWorld implements Serializable, World<Integer> {
 		if(locations.get(0) == null) {
 			throw new Exception("A Graph World must have a 0th location"); 
 		}
+		
+		System.out.println(locations);
+		System.out.println(neighborhoods);
 	}
 
 
 	private void processData(String data, Integer locNum) {
+	    System.out.println("Processing line: " + data);
 		if(data.startsWith("[")) {
 			data = data.substring(1, data.length()-1);
 			String[] splitData = data.split(" ");
 			ArrayList<Integer> intSplitData = new ArrayList<Integer>();
 
-			for(int i = 0; i >= splitData.length; i++){
+			for(int i = 0; i < splitData.length; i++){
 				intSplitData.add(Integer.parseInt(splitData[i]));
 			}
 			Location<Integer> newSpot = new Location<Integer>(locNum, GlobalProblem.getProblem());
 			locations.put(locNum, newSpot);
+			System.out.println("locNum = " + locNum);
+			System.out.println("intSplitData = " + intSplitData);
 			neighborhoods.put(locNum, intSplitData);
 		}
 	}
@@ -112,7 +118,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 	}
 
 	public boolean has(int i) {
-		return locations.containsValue(i);
+		return locations.containsKey(i);
 	}
 
 
@@ -126,11 +132,13 @@ public class GraphWorld implements Serializable, World<Integer> {
 	public Individual findBestIndividual() {
 		IndividualComparator comparator = IndividualComparator.getComparator();
         List<Individual> bestFromCells = new ArrayList<Individual>();
-       // System.out.println(findBestInCell(comparator, 0).toString());
+        System.out.println("Location 0: " + getLocation(0));
+//        System.out.println(findBestInCell(comparator, 0).toString());
         for (Location<Integer> l : this) {
+            System.out.println("Processing location " + l);
             if (getLocation(l.getPosition()).getNumIndividuals() > 0) {
                 bestFromCells.add(findBestInCell(comparator, l.getPosition()));
-                //System.out.println(findBestInCell(comparator, l.getPosition()).toString());
+                System.out.println(findBestInCell(comparator, l.getPosition()).toString());
             }
         }
         if (bestFromCells.isEmpty()) {
