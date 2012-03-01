@@ -19,7 +19,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 public class GraphWorldLocationTest {
-
+	
+	@Ignore
 	@Test
 	public void graphWorldPositionTest() throws IOException{
 		//expected neighborhoods
@@ -59,7 +60,6 @@ public class GraphWorldLocationTest {
 			e.printStackTrace();
 		}
 		
-		//change this to a iterator thing.
 		assertTrue(location1.containsAll(testWorld.getNeighborhood(1, 1)));
 		assertTrue(location2.containsAll(testWorld.getNeighborhood(2, 1)));
 		assertTrue(location3.containsAll(testWorld.getNeighborhood(3, 1)));
