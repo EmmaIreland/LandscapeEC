@@ -51,13 +51,13 @@ public class GraphWorld implements Serializable, World<Integer> {
 			throw new Exception("A Graph World must have a 0th location"); 
 		}
 		
-		System.out.println(locations);
-		System.out.println(neighborhoods);
+		//System.out.println(locations);
+		//System.out.println(neighborhoods);
 	}
 
 
 	private void processData(String data, Integer locNum) {
-	    System.out.println("Processing line: " + data);
+	    //System.out.println("Processing line: " + data);
 		if(data.startsWith("[")) {
 			data = data.substring(1, data.length()-1);
 			String[] splitData = data.split(" ");
@@ -68,8 +68,8 @@ public class GraphWorld implements Serializable, World<Integer> {
 			}
 			Location<Integer> newSpot = new Location<Integer>(locNum, GlobalProblem.getProblem());
 			locations.put(locNum, newSpot);
-			System.out.println("locNum = " + locNum);
-			System.out.println("intSplitData = " + intSplitData);
+			//System.out.println("locNum = " + locNum);
+			//System.out.println("intSplitData = " + intSplitData);
 			neighborhoods.put(locNum, intSplitData);
 		}
 	}
@@ -132,13 +132,14 @@ public class GraphWorld implements Serializable, World<Integer> {
 	public Individual findBestIndividual() {
 		IndividualComparator comparator = IndividualComparator.getComparator();
         List<Individual> bestFromCells = new ArrayList<Individual>();
-        System.out.println("Location 0: " + getLocation(0));
+       // System.out.println("Location 0: " + getLocation(0));
 //        System.out.println(findBestInCell(comparator, 0).toString());
+       // System.out.println("Processing location " + this.getLocation(0));
         for (Location<Integer> l : this) {
-            System.out.println("Processing location " + l);
+        //    System.out.println("Processing location " + l);
             if (getLocation(l.getPosition()).getNumIndividuals() > 0) {
                 bestFromCells.add(findBestInCell(comparator, l.getPosition()));
-                System.out.println(findBestInCell(comparator, l.getPosition()).toString());
+            //    System.out.println(findBestInCell(comparator, l.getPosition()).toString());
             }
         }
         if (bestFromCells.isEmpty()) {

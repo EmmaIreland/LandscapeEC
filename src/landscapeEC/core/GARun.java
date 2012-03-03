@@ -250,19 +250,16 @@ public class GARun {
 		if(!observers.isEmpty() && worldType.contentEquals("GRAPHWORLD")) {
 			throw new UnsupportedOperationException("No observers have been implemented for GraphWorld");
 		}
-
 		for (Observer o : observers) {
 			o.generationData(-1, (GridWorld) world, successes);
 		}
 		while (evaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO
 				.getValue()) {
 			processAllLocations();
-
 			for (Observer o : observers) {
 				o.generationData(i, (GridWorld) world, successes);
 			}
 			bestIndividual = world.findBestIndividual();
-			System.out.println(world.getLocation(0).getIndividuals().toString());
 			// System.out.println("Generation " + (i + 1));
 			// System.out.println("   Best individual: " + bestIndividual);
 			bestOverallFitness = bestIndividual.getGlobalFitness();
@@ -321,11 +318,15 @@ public class GARun {
 		addFromPendingIndividuals();
 
 		performDraconianReaper();
+		System.out.println(world.getOrigin().getNumIndividuals());
 		setFromPendingIndividuals();
-
+		System.out.println(world.getOrigin().getNumIndividuals());
 		performElitism();
+		System.out.println(world.getOrigin().getNumIndividuals());
 		performReproduction();
+		System.out.println(world.getOrigin().getNumIndividuals());
 		setFromPendingIndividuals();
+		System.out.println(world.getOrigin().getNumIndividuals());
 	}
 
 	private void updateDiversityCounts() {
@@ -384,7 +385,7 @@ public class GARun {
 						doViralClauses(location, individual, locationProblem);
 					} else { // else default reaper procedure
 						if (evaluator.solvesSubProblem(individual, locationProblem)) {
-							location.addToPendingIndividuals(individual);
+							//location.addToPendingIndividuals(individual);
 						}
 					}
 				}
@@ -463,10 +464,10 @@ public class GARun {
 				for (Individual i : locationIndividuals) {
 					if (SharedPRNG.instance().nextDouble() < migrationProbability) {
 						individualsToRemove.add(i);
-						List<Vector> neighborhood = world.getNeighborhood(
+						List<Integer> neighborhood = world.getNeighborhood(
 								location.getPosition(), migrationDistance);
 						neighborhood.remove(location);
-						Vector newPosition;
+						Integer newPosition;
 						try {
 							newPosition = neighborhood.get(SharedPRNG.instance()
 									.nextInt(neighborhood.size()));
@@ -583,15 +584,15 @@ public class GARun {
 	private void setFromPendingIndividuals() {
 		if(worldType.contentEquals("GRIDWORLD")){
 			for (Location<Vector> location : (GridWorld) world) {
-				world.getLocation(location.getPosition())
-				.setFromPendingIndividuals();
+				location.setFromPendingIndividuals();
+				//world.getLocation(location.getPosition())
+				//.setFromPendingIndividuals();
 				// assert world.getLocation(position).getNumIndividuals() <=
 				// IntParameter.CARRYING_CAPACITY.getValue();
 			}
 		}else if(worldType.contentEquals("GRAPHWORLD")){
 			for (Location<Integer> location : (GraphWorld) world) {
-				world.getLocation(location.getPosition())
-				.setFromPendingIndividuals();
+				location.setFromPendingIndividuals();
 			}
 		}
 	}
@@ -599,13 +600,11 @@ public class GARun {
 	private void addFromPendingIndividuals() {
 		if(worldType.contentEquals("GRIDWORLD")){
 			for (Location<Vector> location : (GridWorld) world) {
-				world.getLocation(location.getPosition())
-				.addFromPendingIndividuals();
+				location.addFromPendingIndividuals();
 			}
 		}else if(worldType.contentEquals("GRAPHWORLD")){
 			for (Location<Integer> location : (GraphWorld) world) {
-				world.getLocation(location.getPosition())
-				.setFromPendingIndividuals();
+				location.addFromPendingIndividuals();
 			}
 		}
 	}
