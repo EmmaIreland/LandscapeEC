@@ -593,7 +593,10 @@ public class GARun {
 			}
 		}else if(worldType.contentEquals("GRAPHWORLD")){
 			for (Location<Integer> location : (GraphWorld) world) {
+				//System.out.println("Origin " +world.getOrigin().getNumIndividuals());
 				location.setFromPendingIndividuals();
+				//the problem appears to be that the pending list is empty.
+				//System.out.println("Origin " +world.getOrigin().getNumIndividuals());
 			}
 		}
 	}
