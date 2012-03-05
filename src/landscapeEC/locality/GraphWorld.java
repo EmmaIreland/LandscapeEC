@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.yaml.snakeyaml.Yaml;
 
+import landscapeEC.parameters.StringParameter;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
@@ -27,7 +28,9 @@ public class GraphWorld implements Serializable, World<Integer> {
 	private LinkedHashMap<Integer, Location<Integer>> locations;
 	private LinkedHashMap<Integer, List<Integer>> neighborhoods;
 
-	public GraphWorld(File file) throws Exception {
+	public GraphWorld() throws Exception {
+		
+		File file = new File(StringParameter.FILE.getValue());
 
 		Yaml yaml = new Yaml();
 		InputStream input = null;

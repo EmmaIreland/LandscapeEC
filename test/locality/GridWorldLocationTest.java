@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import landscapeEC.locality.Location;
@@ -20,7 +19,7 @@ import org.junit.Test;
 
 public class GridWorldLocationTest {
 
-    private static final int SIZE = 10;
+    private static final int SIZE = 10; //this depends on what's in test.properties
 
     @Test
     public void positionTest() throws Exception {
@@ -28,8 +27,7 @@ public class GridWorldLocationTest {
         GlobalParameters.setParameters(paramsFile);
         GlobalProblem.setProblem(new SatInstance(0.0));
 
-        Vector dimensions = new Vector(new Integer[] { SIZE, SIZE });
-        GridWorld world = new GridWorld(dimensions, true);
+        GridWorld world = new GridWorld();
 
         for (int i=0; i<SIZE; ++i) {
             for (int j=0; j<SIZE; ++j) {
@@ -49,8 +47,7 @@ public class GridWorldLocationTest {
         GlobalParameters.setParameters(paramsFile);
         GlobalProblem.setProblem(new SatInstance(0.0));
 
-        Vector dimensions = new Vector(new Integer[] { SIZE, SIZE });
-        GridWorld world = new GridWorld(dimensions, true);
+        GridWorld world = new GridWorld();
         
         Vector origin = new Vector(new Integer[] { 2,3 });
         ShellMaker shellMaker = new ShellMaker(world);

@@ -200,7 +200,9 @@ public class MapVisualizer extends JFrame implements Observer {
 
         GlobalParameters.setParameters(snapShot.getParams());
         MapVisualizer vis = new MapVisualizer();
-        saveImageToFile(vis.drawCellular(snapShot.getWorld()), outputFile);
+        
+        //This doesn't work with graph world, but we never use it
+        //saveImageToFile(vis.drawCellular(snapShot.getWorld()), outputFile);
     }
     
     @Override

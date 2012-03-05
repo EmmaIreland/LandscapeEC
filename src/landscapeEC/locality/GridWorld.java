@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import landscapeEC.locality.geography.Geography;
+import landscapeEC.parameters.BooleanParameter;
+import landscapeEC.parameters.IntArrayParameter;
 import landscapeEC.parameters.StringParameter;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
@@ -22,9 +24,15 @@ public class GridWorld implements Serializable, World<Vector> {
     private Map<Vector, Location<Vector>> worldMap;
     private Vector dimensions;
 
-    public GridWorld(Vector dimensions, boolean isToroidal) throws Exception {
-        toroidal = isToroidal;
-        this.dimensions = new Vector(dimensions);
+    public GridWorld() throws Exception {
+    	this(new Vector(IntArrayParameter.WORLD_DIMENSIONS.getValue()), BooleanParameter.TOROIDAL.getValue());
+    }
+    
+    public GridWorld(Vector dimensions, boolean isTorodial) throws Exception{
+    	//Specifically used only for tests
+    	toroidal = isTorodial;
+        this.dimensions = dimensions;
+        
 
         worldMap = new HashMap<Vector, Location<Vector>>();
         Integer[] array = new Integer[dimensions.size()];

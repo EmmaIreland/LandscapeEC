@@ -49,14 +49,13 @@ public class GraphWorldLocationTest {
 		location5.add(4);
 		
 		
-		File worldFile = new File("graphWorldFiles/testGraphWorld");
 		File paramsFile = new File("properties/graphTest.properties");
 		GlobalParameters.setParameters(paramsFile);
         GlobalProblem.setProblem(new SatInstance(0.0));
 		
 		GraphWorld testWorld = null;
 		try {
-			testWorld = new GraphWorld(worldFile);
+			testWorld = new GraphWorld();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

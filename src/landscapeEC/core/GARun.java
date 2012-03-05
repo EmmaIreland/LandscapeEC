@@ -48,13 +48,11 @@ public class GARun {
 	private PopulationManager popManager;
 	private Evaluator evaluator;
 
-	private World world;
+	private World<?> world;
 
 	private List<Observer> observers = new ArrayList<Observer>();
 	private int successes;
 	private String propertiesFilename;
-	private String worldType;
-	private String file;
 	private FileWriter writer;
 	private double bestOverallFitness;
 
@@ -67,20 +65,17 @@ public class GARun {
 
 	public void run() throws Exception {
 		mutationOperator = ParameterClassLoader
-				.loadClass(StringParameter.MUTATION_OPERATOR);
+		.loadClass(StringParameter.MUTATION_OPERATOR);
 		selectionOperator = ParameterClassLoader
-				.loadClass(StringParameter.SELECTION_OPERATOR);
+		.loadClass(StringParameter.SELECTION_OPERATOR);
 		crossoverOperator = ParameterClassLoader
-				.loadClass(StringParameter.CROSSOVER_OPERATOR);
-		worldType = StringParameter.WORLD_TYPE.getValue();
-
-		file = StringParameter.FILE.getValue();
+		.loadClass(StringParameter.CROSSOVER_OPERATOR);
 
 		intervalFitnesses = new double[getReportingIntervals().length];
 		intervalDiversities = new double[getReportingIntervals().length];
 
 		ProblemParser problemParser = ParameterClassLoader
-				.loadClass(StringParameter.PROBLEM_PARSER);
+		.loadClass(StringParameter.PROBLEM_PARSER);
 		Problem problem = problemParser.parseProblem(new FileReader(new File(
 				StringParameter.PROBLEM_FILE.getValue())));
 
@@ -167,7 +162,7 @@ public class GARun {
 		}
 		for (int i = 0; i < getReportingIntervals().length; i++) {
 			writer.write("INTERVAL_" + getReportingIntervals()[i]
-					+ "_DIVERSITY ");
+			                                                   + "_DIVERSITY ");
 		}
 		writer.write("SUCCESS COMPLETED_EVALS BEST_FITNESS\n");
 	}
@@ -187,7 +182,7 @@ public class GARun {
 			return;
 
 		String observerNames[] = StringParameter.OBSERVERS.getValue()
-				.split(",");
+		.split(",");
 
 		for (String observerName : observerNames) {
 			Class<Observer> obs = (Class<Observer>) Class.forName(observerName);
@@ -199,59 +194,39 @@ public class GARun {
 
 	private boolean runGenerations(int currentRun) throws Exception {
 		List<Individual> population = popManager.generatePopulation();
-		if(worldType.contentEquals("GRIDWORLD")) {
-			world = new GridWorld(new Vector(
-					IntArrayParameter.WORLD_DIMENSIONS.getValue()),
-					BooleanParameter.TOROIDAL.getValue());
-		}else if(worldType.contentEquals("GRAPHWORLD")) {
-			File convFile = new File(file);
-			world = new GraphWorld(convFile);
-		}else{
-			throw new UnsupportedOperationException("World type of " + worldType + " is not supported");
-		}
+
+		world = ParameterClassLoader.loadClass(StringParameter.WORLD_TYPE);
 		world.clear();
 
 		SeedType seedType = SeedType
-				.valueOf(StringParameter.STARTING_POPULATION.getValue());
+		.valueOf(StringParameter.STARTING_POPULATION.getValue());
 
 		switch (seedType) {
 		case ORIGIN:
 			world.getOrigin().setIndividuals(population);
 			break;
 		case EVERYWHERE:
-			fillLocations(world);
+			fillAllLocations();
 			break;
 		case CORNERS:
-			/*
-			 * Vector topLeft = Vector.origin(world.getDimensions().size());
-			 * Vector bottomRight = world.getDimensions().minusToAll(1); Vector
-			 * topRight = Vector.getCorner(bottomRight, topLeft); Vector
-			 * bottomLeft = Vector.getCorner(topLeft, bottomRight); List<Vector>
-			 * vectors = Arrays.asList(topLeft, bottomLeft, topRight,
-			 * bottomRight); fillLocations(vectors);
-			 */
-			Location<Vector> topLeft = world.getLocation(Vector.origin(((GridWorld) world)
-					.getDimensions().size()));
-			Location<Vector> bottomRight = world.getLocation(((GridWorld) world)
-					.getDimensions().minusToAll(1));
-			Location<Vector> topRight = world.getLocation(Vector.getCorner(
-					bottomRight.getPosition(), topLeft.getPosition()));
-			Location<Vector> bottomLeft = world.getLocation(Vector.getCorner(
-					topLeft.getPosition(), bottomRight.getPosition()));
-			List<Location<Vector>> locations = Arrays.asList(topLeft,
-					bottomLeft, topRight, bottomRight);
-			fillLocations(locations);
+			GridWorld gridWorld = (GridWorld) world;
+			Location<Vector> topLeft = gridWorld.getLocation(Vector.origin((gridWorld).getDimensions().size()));
+			Location<Vector> bottomRight = gridWorld.getLocation(gridWorld.getDimensions().minusToAll(1));
+			Location<Vector> topRight = gridWorld.getLocation(Vector.getCorner(bottomRight.getPosition(), topLeft.getPosition()));
+			Location<Vector> bottomLeft = gridWorld.getLocation(Vector.getCorner(topLeft.getPosition(), bottomRight.getPosition()));
+			topLeft.setIndividuals(popManager.generatePopulation());
+			bottomRight.setIndividuals(popManager.generatePopulation());
+			topRight.setIndividuals(popManager.generatePopulation());
+			bottomLeft.setIndividuals(popManager.generatePopulation());
 			break;
 		}
 		int i = 0;
 		bestOverallFitness = 0.0;
 		Individual bestIndividual = null;
 		// initialize observers before the run starts
-		if(!observers.isEmpty() && worldType.contentEquals("GRAPHWORLD")) {
-			throw new UnsupportedOperationException("No observers have been implemented for GraphWorld");
-		}
+
 		for (Observer o : observers) {
-			o.generationData(-1, (GridWorld) world, successes);
+			o.generationData(-1,(GridWorld) world, successes);
 		}
 		while (evaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO
 				.getValue()) {
@@ -267,18 +242,15 @@ public class GARun {
 			double[] reportingIntervals = getReportingIntervals();
 			for (int j = 0; j < reportingIntervals.length; j++) {
 				if (evaluator.getNumEvaluations() > reportingIntervals[j]
-						* IntParameter.NUM_EVALS_TO_DO.getValue()
-						&& Double.isNaN(intervalFitnesses[j])) {
+				                                                       * IntParameter.NUM_EVALS_TO_DO.getValue()
+				                                                       && Double.isNaN(intervalFitnesses[j])) {
 					intervalFitnesses[j] = bestOverallFitness;
 					intervalDiversities[j] = DiversityCalculator
-							.calculateResultStringDiversity();
+					.calculateResultStringDiversity();
 					SnapShot.saveSnapShot(propertiesFilename + ".run"
-							+ currentRun + ".part" + j, (GridWorld) world);
+							+ currentRun + ".part" + j, world);
 				}
 			}
-
-
-
 
 			if (BooleanParameter.QUIT_ON_SUCCESS.getValue()
 					&& bestOverallFitness == 1.0) {
@@ -305,10 +277,9 @@ public class GARun {
 		return false;
 	}
 
-	private void fillLocations(Iterable<Location<Vector>> locations) {
-		for (Location<Vector> l : locations) {
-			// Location l = world.getLocation(v);
-			l.setIndividuals(popManager.generatePopulation());
+	private void fillAllLocations() {
+		for (Location location : world) {
+			location.setIndividuals(popManager.generatePopulation());
 		}
 	}
 
@@ -318,35 +289,18 @@ public class GARun {
 		addFromPendingIndividuals();
 
 		performDraconianReaper();
-		System.out.println(world.getOrigin().getNumIndividuals());
 		setFromPendingIndividuals();
-		System.out.println(world.getOrigin().getNumIndividuals());
 		performElitism();
-		System.out.println(world.getOrigin().getNumIndividuals());
 		performReproduction();
-		System.out.println(world.getOrigin().getNumIndividuals());
 		setFromPendingIndividuals();
-		System.out.println(world.getOrigin().getNumIndividuals());
 	}
 
 	private void updateDiversityCounts() {
 		DiversityCalculator.reset();
-		//TODO The below if statements are probably not the way we want to do this, but is what I came up with
-		if(worldType.contentEquals("GRIDWORLD")){
-			for (Location<Vector> location : (GridWorld) world) {
-				List<Individual> locationIndividuals = world
-						.getIndividualsAt(location.getPosition());
-				for (Individual individual : locationIndividuals) {
-					DiversityCalculator.addIndividual(individual);
-				}
-			}
-		}else if(worldType.contentEquals("GRAPHWORLD")){
-			for (Location<Integer> location : (GraphWorld) world) {
-				List<Individual> locationIndividuals = world
-						.getIndividualsAt(location.getPosition());
-				for (Individual individual : locationIndividuals) {
-					DiversityCalculator.addIndividual(individual);
-				}
+		for (Location location : world) {
+			List<Individual> locationIndividuals = location.getIndividuals();
+			for (Individual individual : locationIndividuals) {
+				DiversityCalculator.addIndividual(individual);
 			}
 		}
 
@@ -355,92 +309,69 @@ public class GARun {
 
 	private void performDraconianReaper() {
 
-		if(worldType.contentEquals("GRIDWORLD")){
-		    for (Location<Vector> location : (GridWorld) world) {
-		            // Location location = world.getLocation(position);
-		            List<Individual> locationIndividuals = world.getIndividualsAt(location.getPosition());
+		for (Location location : world) {
+			// Location location = world.getLocation(position);
+			List<Individual> locationIndividuals = location.getIndividuals();
 
-		            for (Individual individual : locationIndividuals) {
-		                Problem locationProblem = location.getProblem();
-		                if (BooleanParameter.VIRAL_CLAUSES.getValue()) {
-		                    //Perform viral clause procedure and reaping
-		                    doViralClauses(location, individual, locationProblem);
-		                } else { // else default reaper procedure
-		                    doReaperEffect(individual, location, evaluator.solvesSubProblem(individual, locationProblem));
-		                }
-		            }
-		        }
-		}else if(worldType.contentEquals("GRAPHWORLD")){
-			for (Location<Integer> location : (GraphWorld) world) {
-				// Location location = world.getLocation(position);
-				List<Individual> locationIndividuals = world
-						.getIndividualsAt(location.getPosition());
-
-				for (Individual individual : locationIndividuals) {
-					Problem locationProblem = location.getProblem();
-					if (BooleanParameter.VIRAL_CLAUSES.getValue()) { // Perform
-						// viral clause
-						// procedure
-						// and reaping
-						doViralClauses(location, individual, locationProblem);
-					} else { // else default reaper procedure
-						if (evaluator.solvesSubProblem(individual, locationProblem)) {
-							//location.addToPendingIndividuals(individual);
-						}
-					}
+			for (Individual individual : locationIndividuals) {
+				Problem locationProblem = location.getProblem();
+				if (BooleanParameter.VIRAL_CLAUSES.getValue()) {
+					//Perform viral clause procedure and reaping
+					doViralClauses(location, individual, locationProblem);
+				} else { // else default reaper procedure
+					doReaperEffect(individual, location, evaluator.solvesSubProblem(individual, locationProblem));
 				}
 			}
 		}
 	}
 
+
 	private void doViralClauses(Location location, Individual individual, Problem locationProblem) {
-	    if (!(evaluator instanceof SatEvaluator)) {
-	        throw new RuntimeException("Viral Clauses is currently only supported under 3SAT");
-	    }
+		if (!(evaluator instanceof SatEvaluator)) {
+			throw new RuntimeException("Viral Clauses is currently only supported under 3SAT");
+		}
 
-	    SatEvaluator clauseEvaluator = (SatEvaluator) evaluator;
-	    List<Clause> unsolvedClauses = clauseEvaluator.getUnsolvedClauses(individual, locationProblem);
+		SatEvaluator clauseEvaluator = (SatEvaluator) evaluator;
+		List<Clause> unsolvedClauses = clauseEvaluator.getUnsolvedClauses(individual, locationProblem);
 
-	    if (unsolvedClauses.size() > 0) {
-	        location.getViralClauseCounter().updateClauseCounts(unsolvedClauses, world);
-	    }
+		if (unsolvedClauses.size() > 0) {
+			location.getViralClauseCounter().updateClauseCounts(unsolvedClauses, world);
+		}
 
-	    //Do reaper effect, if unsolved clauses = 0 then it satisfies requirements
-	    doReaperEffect(individual, location, (unsolvedClauses.size() > 0));
+		//Do reaper effect, if unsolved clauses = 0 then it satisfies requirements
+		doReaperEffect(individual, location, (unsolvedClauses.size() > 0));
 	}
 
 	private void doReaperEffect(Individual individual, Location location, boolean satisfiesRequirements) {
-	    if ("FITNESS".equals(StringParameter.REAPER_EFFECT.getValue())) {
-	        if (!satisfiesRequirements) {
-	            individual.updateLocalFitness(location.getProblem().getDifficulty());
-	        }
-	        location.addToPendingIndividuals(individual);
-	    } else {
-	        if (satisfiesRequirements) {
-	            location.addToPendingIndividuals(individual);
-	        }
-	    }
+		if ("FITNESS".equals(StringParameter.REAPER_EFFECT.getValue())) {
+			if (!satisfiesRequirements) {
+				individual.updateLocalFitness(location.getProblem().getDifficulty());
+			}
+			location.addToPendingIndividuals(individual);
+		} else {
+			if (satisfiesRequirements) {
+				location.addToPendingIndividuals(individual);
+			}
+		}
 	}
 
 	private void performMigration() {
-
-		double migrationProbability = DoubleParameter.MIGRATION_PROBABILITY
-				.getValue();
+		double migrationProbability = DoubleParameter.MIGRATION_PROBABILITY.getValue();
 		int migrationDistance = IntParameter.MIGRATION_DISTANCE.getValue();
 
 		if (migrationProbability <= 0 || migrationDistance <= 0)
 			return;
-		if(worldType.contentEquals("GRIDWORLD")){
-			for (Location<Vector> location : (GridWorld) world) {
-				List<Individual> locationIndividuals = world
-						.getIndividualsAt(location.getPosition());
+
+		if (StringParameter.WORLD_TYPE.getValue().contains("GridWorld")) {
+			GridWorld gridWorld = (GridWorld) world;
+			for (Location<?> location : gridWorld) {
+				List<Individual> locationIndividuals = location.getIndividuals();
 				List<Individual> individualsToRemove = new ArrayList<Individual>();
 
 				for (Individual i : locationIndividuals) {
 					if (SharedPRNG.instance().nextDouble() < migrationProbability) {
 						individualsToRemove.add(i);
-						List<Vector> neighborhood = world.getNeighborhood(
-								location.getPosition(), migrationDistance);
+						List<Vector> neighborhood = gridWorld.getNeighborhood((Vector) location.getPosition(), migrationDistance);
 						neighborhood.remove(location);
 						Vector newPosition;
 						try {
@@ -449,23 +380,22 @@ public class GARun {
 						} catch (IndexOutOfBoundsException e) {
 							throw new MigrationInWorldOfSizeOneException(e);
 						}
-						world.getLocation(newPosition).addToPendingIndividuals(i);
+						location.addToPendingIndividuals(i);
 					}
 				}
-				world.getLocation(location.getPosition()).removeAll(
-						individualsToRemove);
+				location.removeAll(individualsToRemove);
 			}
-		}else if(worldType.contentEquals("GRAPHWORLD")){
-			for (Location<Integer> location : (GraphWorld) world) {
-				List<Individual> locationIndividuals = world
-						.getIndividualsAt(location.getPosition());
+
+		} else {
+			GraphWorld graphWorld = (GraphWorld) world;
+			for (Location<?> location : graphWorld) {
+				List<Individual> locationIndividuals = location.getIndividuals();
 				List<Individual> individualsToRemove = new ArrayList<Individual>();
 
 				for (Individual i : locationIndividuals) {
 					if (SharedPRNG.instance().nextDouble() < migrationProbability) {
 						individualsToRemove.add(i);
-						List<Integer> neighborhood = world.getNeighborhood(
-								location.getPosition(), migrationDistance);
+						List<Integer> neighborhood = graphWorld.getNeighborhood((Integer) location.getPosition(), migrationDistance);
 						neighborhood.remove(location);
 						Integer newPosition;
 						try {
@@ -474,142 +404,75 @@ public class GARun {
 						} catch (IndexOutOfBoundsException e) {
 							throw new MigrationInWorldOfSizeOneException(e);
 						}
-						world.getLocation(newPosition).addToPendingIndividuals(i);
+						location.addToPendingIndividuals(i);
 					}
 				}
-				world.getLocation(location.getPosition()).removeAll(
-						individualsToRemove);
+				location.removeAll(individualsToRemove);
 			}
 		}
 	}
 
 	private void performElitism() {
-		if(worldType.contentEquals("GRIDWORLD")){
-			for (Location<Vector> location : (GridWorld) world) {
-				List<Individual> locationIndividuals = world
-						.getIndividualsAt(location.getPosition());
+		for (Location location : world) {
+			List<Individual> locationIndividuals = location.getIndividuals();
 
-				if (!locationIndividuals.isEmpty()) {
-					List<Individual> elite = popManager.getElite(
-							locationIndividuals,
-							DoubleParameter.ELITE_PROPORTION.getValue());
+			if (!locationIndividuals.isEmpty()) {
+				List<Individual> elite = popManager.getElite(
+						locationIndividuals,
+						DoubleParameter.ELITE_PROPORTION.getValue());
 
-					world.getLocation(location.getPosition())
-					.addToPendingIndividuals(elite);
-				}
-			}
-		}else if(worldType.contentEquals("GRAPHWORLD")){
-			for (Location<Integer> location : (GraphWorld) world) {
-				List<Individual> locationIndividuals = world
-						.getIndividualsAt(location.getPosition());
+				location.addToPendingIndividuals(elite);
 
-				if (!locationIndividuals.isEmpty()) {
-					List<Individual> elite = popManager.getElite(
-							locationIndividuals,
-							DoubleParameter.ELITE_PROPORTION.getValue());
-
-					world.getLocation(location.getPosition())
-					.addToPendingIndividuals(elite);
-				}
 			}
 		}
 	}
 
 	private void performReproduction() {
-		if(worldType.contentEquals("GRIDWORLD")){
-			for (Location<Vector> location : (GridWorld) world) {
-				List<Individual> locationIndividuals = world
-						.getIndividualsAt(location.getPosition());
 
-				if (locationIndividuals.size() >= IntParameter.TOURNAMENT_SIZE
-						.getValue()) {
-					List<Individual> crossoverPop = popManager.crossover(
-							locationIndividuals, selectionOperator,
-							crossoverOperator);
+		for (Location location : world) {
+			List<Individual> locationIndividuals = location.getIndividuals();
 
-					List<Individual> mutatedPopulation = popManager
-							.mutatePopulation(crossoverPop, mutationOperator,
-									location);
+			if (locationIndividuals.size() >= IntParameter.TOURNAMENT_SIZE
+					.getValue()) {
+				List<Individual> crossoverPop = popManager.crossover(
+						locationIndividuals, selectionOperator,
+						crossoverOperator);
 
-					world.getLocation(location.getPosition())
-					.addToPendingIndividuals(mutatedPopulation);
-				} else if (BooleanParameter.PROMOTE_SMALL_POPULATIONS.getValue()) {
-					List<Individual> copiedPopulation = new ArrayList<Individual>();
-					for (Individual individual : locationIndividuals) {
-						copiedPopulation.add(individual);
-					}
+				List<Individual> mutatedPopulation = popManager
+				.mutatePopulation(crossoverPop, mutationOperator,
+						location);
 
-					List<Individual> mutatedPopulation = popManager
-							.mutatePopulation(copiedPopulation, mutationOperator,
-									location);
-
-					world.getLocation(location.getPosition())
-					.addToPendingIndividuals(mutatedPopulation);
+				location.addToPendingIndividuals(mutatedPopulation);
+			} else if (BooleanParameter.PROMOTE_SMALL_POPULATIONS.getValue()) {
+				List<Individual> copiedPopulation = new ArrayList<Individual>();
+				for (Individual individual : locationIndividuals) {
+					copiedPopulation.add(individual);
 				}
-			}
-		}else if(worldType.contentEquals("GRAPHWORLD")){
-			for (Location<Integer> location : (GraphWorld) world) {
-				List<Individual> locationIndividuals = world
-						.getIndividualsAt(location.getPosition());
 
-				if (locationIndividuals.size() >= IntParameter.TOURNAMENT_SIZE
-						.getValue()) {
-					List<Individual> crossoverPop = popManager.crossover(
-							locationIndividuals, selectionOperator,
-							crossoverOperator);
+				List<Individual> mutatedPopulation = popManager
+				.mutatePopulation(copiedPopulation, mutationOperator,
+						location);
 
-					List<Individual> mutatedPopulation = popManager
-							.mutatePopulation(crossoverPop, mutationOperator,
-									location);
-
-					world.getLocation(location.getPosition())
-					.addToPendingIndividuals(mutatedPopulation);
-				} else if (BooleanParameter.PROMOTE_SMALL_POPULATIONS.getValue()) {
-					List<Individual> copiedPopulation = new ArrayList<Individual>();
-					for (Individual individual : locationIndividuals) {
-						copiedPopulation.add(individual);
-					}
-
-					List<Individual> mutatedPopulation = popManager
-							.mutatePopulation(copiedPopulation, mutationOperator,
-									location);
-
-					world.getLocation(location.getPosition())
-					.addToPendingIndividuals(mutatedPopulation);
-				}
+				location.addToPendingIndividuals(mutatedPopulation);
 			}
 		}
 	}
 
 	private void setFromPendingIndividuals() {
-		if(worldType.contentEquals("GRIDWORLD")){
-			for (Location<Vector> location : (GridWorld) world) {
-				location.setFromPendingIndividuals();
-				//TODO Below is the old code that broke this method. I don't think it should though, probably should be checked out.
-				//world.getLocation(location.getPosition())
-				//.setFromPendingIndividuals();
-				// assert world.getLocation(position).getNumIndividuals() <=
-				// IntParameter.CARRYING_CAPACITY.getValue();
-			}
-		}else if(worldType.contentEquals("GRAPHWORLD")){
-			for (Location<Integer> location : (GraphWorld) world) {
-				//System.out.println("Origin " +world.getOrigin().getNumIndividuals());
-				location.setFromPendingIndividuals();
-				//the problem appears to be that the pending list is empty.
-				//System.out.println("Origin " +world.getOrigin().getNumIndividuals());
-			}
+
+		for (Location location : world) {
+			//System.out.println("Origin " +world.getOrigin().getNumIndividuals());
+			location.setFromPendingIndividuals();
+			//the problem appears to be that the pending list is empty.
+			//System.out.println("Origin " +world.getOrigin().getNumIndividuals());
 		}
 	}
 
+
 	private void addFromPendingIndividuals() {
-		if(worldType.contentEquals("GRIDWORLD")){
-			for (Location<Vector> location : (GridWorld) world) {
-				location.addFromPendingIndividuals();
-			}
-		}else if(worldType.contentEquals("GRAPHWORLD")){
-			for (Location<Integer> location : (GraphWorld) world) {
-				location.addFromPendingIndividuals();
-			}
+
+		for (Location location : world) {
+			location.addFromPendingIndividuals();
 		}
 	}
 }
