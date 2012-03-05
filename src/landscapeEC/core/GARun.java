@@ -585,6 +585,7 @@ public class GARun {
 		if(worldType.contentEquals("GRIDWORLD")){
 			for (Location<Vector> location : (GridWorld) world) {
 				location.setFromPendingIndividuals();
+				//TODO Below is the old code that broke this method. I don't think it should though, probably should be checked out.
 				//world.getLocation(location.getPosition())
 				//.setFromPendingIndividuals();
 				// assert world.getLocation(position).getNumIndividuals() <=
