@@ -52,9 +52,12 @@ public class GARun {
 
 	private List<Observer> observers = new ArrayList<Observer>();
 	private int successes;
+	private int generationNumber;
 	private String propertiesFilename;
 	private FileWriter writer;
 	private double bestOverallFitness;
+	
+	private boolean runGenerations = true;
 
 	private double[] intervalFitnesses;
 	private double[] intervalDiversities;
@@ -220,47 +223,50 @@ public class GARun {
 			bottomLeft.setIndividuals(popManager.generatePopulation());
 			break;
 		}
-		int i = 0;
+		generationNumber = 0;
 		bestOverallFitness = 0.0;
 		Individual bestIndividual = null;
 		// initialize observers before the run starts
 
 		for (Observer o : observers) {
-			o.generationData(-1,(GridWorld) world, successes);
+		    o.generationData(this);
 		}
-		while (evaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO
-				.getValue()) {
-			processAllLocations();
-			for (Observer o : observers) {
-				o.generationData(i, (GridWorld) world, successes);
-			}
-			bestIndividual = world.findBestIndividual();
-			// System.out.println("Generation " + (i + 1));
-			// System.out.println("   Best individual: " + bestIndividual);
-			bestOverallFitness = bestIndividual.getGlobalFitness();
-			// System.out.println("   Best fitness: " + bestFitness);
-			double[] reportingIntervals = getReportingIntervals();
-			for (int j = 0; j < reportingIntervals.length; j++) {
-				if (evaluator.getNumEvaluations() > reportingIntervals[j]
-				                                                       * IntParameter.NUM_EVALS_TO_DO.getValue()
-				                                                       && Double.isNaN(intervalFitnesses[j])) {
-					intervalFitnesses[j] = bestOverallFitness;
-					intervalDiversities[j] = DiversityCalculator
-					.calculateResultStringDiversity();
-					SnapShot.saveSnapShot(propertiesFilename + ".run"
-							+ currentRun + ".part" + j, world);
-				}
-			}
+		while (evaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO.getValue()) {
+		    if(runGenerations) {
+		        processAllLocations();
+		        generationNumber++;
+		    }
 
-			if (BooleanParameter.QUIT_ON_SUCCESS.getValue()
-					&& bestOverallFitness == 1.0) {
-				System.out.println("Best Fitness: " + bestOverallFitness);
-				// This will be removed during refactoring
-				System.out.println("SUCCESS");
-				return true;
-			}
+		    for (Observer o : observers) {
+		        o.generationData(this);
+		    }
+		    bestIndividual = world.findBestIndividual();
+		    // System.out.println("Generation " + (i + 1));
+		    // System.out.println("   Best individual: " + bestIndividual);
+		    bestOverallFitness = bestIndividual.getGlobalFitness();
+		    // System.out.println("   Best fitness: " + bestFitness);
+		    double[] reportingIntervals = getReportingIntervals();
+		    for (int j = 0; j < reportingIntervals.length; j++) {
+		        if (evaluator.getNumEvaluations() > reportingIntervals[j]
+		                                                               * IntParameter.NUM_EVALS_TO_DO.getValue()
+		                                                               && Double.isNaN(intervalFitnesses[j])) {
+		            intervalFitnesses[j] = bestOverallFitness;
+		            intervalDiversities[j] = DiversityCalculator
+		            .calculateResultStringDiversity();
+		            SnapShot.saveSnapShot(propertiesFilename + ".run"
+		                    + currentRun + ".part" + j, world);
+		        }
+		    }
 
-			i++;
+		    if (BooleanParameter.QUIT_ON_SUCCESS.getValue()
+		            && bestOverallFitness == 1.0) {
+		        System.out.println("Best Fitness: " + bestOverallFitness);
+		        // This will be removed during refactoring
+		        System.out.println("SUCCESS");
+		        return true;
+		    }
+
+		    
 		}
 
 
@@ -356,60 +362,62 @@ public class GARun {
 	}
 
 	private void performMigration() {
-		double migrationProbability = DoubleParameter.MIGRATION_PROBABILITY.getValue();
-		int migrationDistance = IntParameter.MIGRATION_DISTANCE.getValue();
+	    double migrationProbability = DoubleParameter.MIGRATION_PROBABILITY.getValue();
+	    int migrationDistance = IntParameter.MIGRATION_DISTANCE.getValue();
 
-		if (migrationProbability <= 0 || migrationDistance <= 0)
-			return;
+	    if (migrationProbability <= 0 || migrationDistance <= 0)
+	        return;
+	    
+	    //TODO It may be possible to reduce the code duplication here, but we can't right now until we refactor
+	    //    the way world.getNeighborhood works (right now it needs to take a Vector or an Integer)
+	    //if (StringParameter.WORLD_TYPE.getValue().contains("GridWorld")) {
+	        //GridWorld gridWorld = (GridWorld) world;
+	        for (Location<?> location : world) {
+	            List<Individual> locationIndividuals = location.getIndividuals();
+	            List<Individual> individualsToRemove = new ArrayList<Individual>();
 
-		if (StringParameter.WORLD_TYPE.getValue().contains("GridWorld")) {
-			GridWorld gridWorld = (GridWorld) world;
-			for (Location<?> location : gridWorld) {
-				List<Individual> locationIndividuals = location.getIndividuals();
-				List<Individual> individualsToRemove = new ArrayList<Individual>();
-
-				for (Individual i : locationIndividuals) {
-					if (SharedPRNG.instance().nextDouble() < migrationProbability) {
-						individualsToRemove.add(i);
-						List<Vector> neighborhood = gridWorld.getNeighborhood((Vector) location.getPosition(), migrationDistance);
-						neighborhood.remove(location);
-						Vector newPosition;
-						try {
-							newPosition = neighborhood.get(SharedPRNG.instance()
-									.nextInt(neighborhood.size()));
-						} catch (IndexOutOfBoundsException e) {
-							throw new MigrationInWorldOfSizeOneException(e);
-						}
-						location.addToPendingIndividuals(i);
-					}
-				}
-				location.removeAll(individualsToRemove);
-			}
-
-		} else {
-			GraphWorld graphWorld = (GraphWorld) world;
-			for (Location<?> location : graphWorld) {
-				List<Individual> locationIndividuals = location.getIndividuals();
-				List<Individual> individualsToRemove = new ArrayList<Individual>();
-
-				for (Individual i : locationIndividuals) {
-					if (SharedPRNG.instance().nextDouble() < migrationProbability) {
-						individualsToRemove.add(i);
-						List<Integer> neighborhood = graphWorld.getNeighborhood((Integer) location.getPosition(), migrationDistance);
-						neighborhood.remove(location);
-						Integer newPosition;
-						try {
-							newPosition = neighborhood.get(SharedPRNG.instance()
-									.nextInt(neighborhood.size()));
-						} catch (IndexOutOfBoundsException e) {
-							throw new MigrationInWorldOfSizeOneException(e);
-						}
-						location.addToPendingIndividuals(i);
-					}
-				}
-				location.removeAll(individualsToRemove);
-			}
-		}
+	            for (Individual i : locationIndividuals) {
+	                if (SharedPRNG.instance().nextDouble() < migrationProbability) {
+	                    individualsToRemove.add(i);
+	                    List<?> neighborhood = world.getNeighborhood(location.getPosition(), migrationDistance);
+	                    neighborhood.remove(location);
+	                    Object newPosition;
+	                    try {
+	                        newPosition = neighborhood.get(SharedPRNG.instance().nextInt(neighborhood.size()));
+	                        Location<?> newLocation = world.getLocation(newPosition);
+	                        newLocation.addToPendingIndividuals(i);
+	                    } catch (IndexOutOfBoundsException e) {
+	                        throw new MigrationInWorldOfSizeOneException(e);
+	                    }
+	                }
+	            }
+	            location.removeAll(individualsToRemove);
+	        }
+//
+//	    } else {
+//	        GraphWorld graphWorld = (GraphWorld) world;
+//	        for (Location<?> location : graphWorld) {
+//	            List<Individual> locationIndividuals = location.getIndividuals();
+//	            List<Individual> individualsToRemove = new ArrayList<Individual>();
+//
+//	            for (Individual i : locationIndividuals) {
+//	                if (SharedPRNG.instance().nextDouble() < migrationProbability) {
+//	                    individualsToRemove.add(i);
+//	                    List<Integer> neighborhood = graphWorld.getNeighborhood((Integer) location.getPosition(), migrationDistance);
+//	                    neighborhood.remove(location);
+//	                    Integer newPosition;
+//	                    try {
+//	                        newPosition = neighborhood.get(SharedPRNG.instance().nextInt(neighborhood.size()));
+//	                        Location<Integer> newLocation = graphWorld.getLocation(newPosition);
+//	                        newLocation.addToPendingIndividuals(i);
+//	                    } catch (IndexOutOfBoundsException e) {
+//	                        throw new MigrationInWorldOfSizeOneException(e);
+//	                    }
+//	                }
+//	            }
+//	            location.removeAll(individualsToRemove);
+//	        }
+//	    }
 	}
 
 	private void performElitism() {
@@ -474,5 +482,21 @@ public class GARun {
 		for (Location location : world) {
 			location.addFromPendingIndividuals();
 		}
+	}
+	
+	public World<?> getWorld() {
+	    return world;
+	}
+	
+	public int getGenerationNumber() {
+	    return generationNumber;
+	}
+	
+	public int getNumSucesses() {
+	    return successes;
+	}
+	
+	public void allowGenerationRunning(boolean flag) {
+	    runGenerations = flag;
 	}
 }

@@ -12,6 +12,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import landscapeEC.core.GARun;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.GridWorld;
 import landscapeEC.observers.Observer;
@@ -68,6 +69,7 @@ public class Console extends JFrame implements ActionListener, Observer {
         
         repaint();
         
+        this.setLocation(this.getLocation().x - width, this.getLocation().y);
         
         resize(width+1, height+1);
     }
@@ -111,6 +113,7 @@ public class Console extends JFrame implements ActionListener, Observer {
                     coord[i] = Integer.parseInt(token[i+1]);
                 }
                 if(token[0].equals("getIndividualsAt")) {
+                    println("Individuals at " + new Vector(coord));
                     println(world.getLocation(new Vector(coord)).getIndividuals().toString());
                 } else if(token[0].equals("getClausesAt")) {
                     println(world.getLocation(new Vector(coord)).getProblem().toString());
@@ -130,7 +133,7 @@ public class Console extends JFrame implements ActionListener, Observer {
     }
 
     @Override
-    public void generationData(int generationNumber, GridWorld world, int successes) {
-        this.world = world;
+    public void generationData(GARun run) {
+        this.world = (GridWorld) run.getWorld();
     }
 }

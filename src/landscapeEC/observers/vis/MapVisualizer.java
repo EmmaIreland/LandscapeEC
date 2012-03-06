@@ -12,6 +12,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
+import landscapeEC.core.GARun;
 import landscapeEC.core.SnapShot;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
@@ -74,7 +75,8 @@ public class MapVisualizer extends JFrame implements Observer {
     }
     
     @Override
-    public void generationData(int generationNumber, GridWorld world, int successes) {
+    public void generationData(GARun run) {
+        GridWorld world = (GridWorld) run.getWorld();
         Vector oneByOne = new Vector(new Integer[] {1, 1});
         if(world.getDimensions().equals(oneByOne)) {
             canvas = drawNonCellular(world);

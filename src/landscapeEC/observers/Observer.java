@@ -1,7 +1,7 @@
 package landscapeEC.observers;
 
-import landscapeEC.locality.GridWorld;
+import landscapeEC.core.GARun;
 
 public interface Observer {
-	public void generationData(int generationNumber, GridWorld world, int successes);
+	public void generationData(GARun run);
 }

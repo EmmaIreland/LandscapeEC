@@ -77,17 +77,19 @@ public class GraphWorld implements Serializable, World<Integer> {
 		}
 	}
 
-	public Location<Integer> getLocation(Integer position){
-		return locations.get(position);
+	@Override
+	public Location<Integer> getLocation(Object position){
+	    return locations.get(position);
 	}
 
-	public List<Integer> getNeighborhood(Integer position, int radius){
-		//TODO currently assume that we will only get a neighborhood of 1.
-
-		if(radius != 1){
-			throw new UnsupportedOperationException("Neighborhood size of not 1 is not yet supported");
-		}
-		return neighborhoods.get(position);
+	public List<Integer> getNeighborhood(Object position, int radius){
+	    //TODO currently assume that we will only get a neighborhood of 1.
+	    Integer pos = (Integer) position;
+	    
+	    if(radius != 1){
+	        throw new UnsupportedOperationException("Neighborhood size of not 1 is not yet supported");
+	    }
+	    return neighborhoods.get(position);
 	}
 
 	@Override

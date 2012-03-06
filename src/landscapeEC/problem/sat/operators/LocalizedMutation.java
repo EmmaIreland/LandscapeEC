@@ -3,6 +3,7 @@ package landscapeEC.problem.sat.operators;
 
 import java.util.Hashtable;
 
+import landscapeEC.core.GARun;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.GridWorld;
 import landscapeEC.locality.Vector;
@@ -55,8 +56,8 @@ public final class LocalizedMutation implements MutationOperator, Observer {
     }
 
     @Override
-    public void generationData(int generationNumber, GridWorld newWorld, int successes) {
-	amplifier.initialize(newWorld, generationNumber);
+    public void generationData(GARun run) {
+	amplifier.initialize((GridWorld) run.getWorld(), run.getGenerationNumber());
     }
     
     public static ConcentrationRanker getAmplifier(){

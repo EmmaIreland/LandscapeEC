@@ -75,7 +75,8 @@ public class GridWorld implements Serializable, World<Vector> {
         getLocation(position).setProblem(problem);
     }
 
-    public Location<Vector> getLocation(Vector position) {
+    @Override
+    public Location<Vector> getLocation(Object position) {
         return worldMap.get(position);
     }
 
@@ -93,9 +94,10 @@ public class GridWorld implements Serializable, World<Vector> {
         return toroidal;
     }
 
-    public List<Vector> getNeighborhood(Vector position, int radius) {
+    public List<Vector> getNeighborhood(Object position, int radius) {
+        Vector pos = (Vector) position;
         List<Vector> positions = new ArrayList<Vector>();
-        GridWorldIterator iter = new GridWorldIterator(position, radius, this);
+        GridWorldIterator iter = new GridWorldIterator(pos, radius, this);
         while (iter.hasNext()) {
             positions.add(iter.next().getPosition());
         }

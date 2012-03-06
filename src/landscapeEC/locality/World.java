@@ -12,7 +12,7 @@ public interface World<T> extends Iterable<Location<T>> {
 	
 	public int getNumLocations();
 	
-	public List<T> getNeighborhood(T position, int radius);
+	public List<T> getNeighborhood(Object position, int radius);
 	
 	public List<Individual> getIndividualsAt(T p);
 	
@@ -20,7 +20,7 @@ public interface World<T> extends Iterable<Location<T>> {
 	
  	public Iterator<Location<T>> iterator();
  	
- 	public Location<T> getLocation(T p);
+ 	public Location<T> getLocation(Object p);
 
 	public Location<T> getOrigin();
 

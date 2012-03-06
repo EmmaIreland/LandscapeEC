@@ -4,12 +4,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.Iterator;
 
 import javax.swing.JFrame;
 
+import landscapeEC.core.GARun;
 import landscapeEC.locality.Location;
-import landscapeEC.locality.Vector;
 import landscapeEC.locality.GridWorld;
 import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
@@ -40,8 +39,11 @@ public class DataDisplay extends JFrame implements Observer {
     }
 
     @Override
-    public void generationData(int generationNumber, GridWorld world, int successes) {
-
+    public void generationData(GARun run) {
+        GridWorld world = (GridWorld) run.getWorld();
+        int successes = run.getNumSucesses();
+        int generationNumber = run.getGenerationNumber();
+        
         width = getWidth();
         height = getHeight();
         canvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
