@@ -28,6 +28,12 @@ public class GraphWorld implements Serializable, World<Integer> {
 	private LinkedHashMap<Integer, Location<Integer>> locations;
 	private LinkedHashMap<Integer, List<Integer>> neighborhoods;
 
+	//constructor for no file
+//	public GraphWorld() throws Exception {
+//		
+//	}
+	
+	
 	public GraphWorld() throws Exception {
 		
 		File file = new File(StringParameter.FILE.getValue());
@@ -54,8 +60,6 @@ public class GraphWorld implements Serializable, World<Integer> {
 			throw new Exception("A Graph World must have a 0th location"); 
 		}
 		
-		//System.out.println(locations);
-		//System.out.println(neighborhoods);
 	}
 
 

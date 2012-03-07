@@ -1,5 +1,6 @@
 package landscapeEC.graphWorldGenerator;
 
+import java.awt.List;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
@@ -18,17 +19,43 @@ public class ThreeDWorldGenerator {
 	private LinkedList<LinkedList<Integer>> listOfNeighborhoods;
 
 	public static void main(String[] args) throws Exception{
-		ThreeDWorldGenerator gen = new ThreeDWorldGenerator(4, 3, 2);
+		ThreeDWorldGenerator gen = new ThreeDWorldGenerator(9, 9, 9);
 		gen.generate3DWorld();
 	}
-
-	private ThreeDWorldGenerator(int width, int depth, int height) {
+ 
+	
+	public ThreeDWorldGenerator(int width, int depth, int height) {
 		this.width = width;
 		this.depth = depth;
 		this.height = height;
 		planeArea = width*depth;
 		worldArea = width*depth*height;
 	}
+	
+	public LinkedList<LinkedList<Integer>> make3DWorld () {
+		listOfNeighborhoods = new LinkedList<LinkedList<Integer>>();
+		for (int i = 0; i < worldArea; i++) {
+			listOfNeighborhoods.add(this.addLocations(i));
+		}
+		
+		return listOfNeighborhoods;
+	}
+	
+	public LinkedList<Integer> getCorners () {
+		
+		LinkedList<Integer> listOfCorners = new LinkedList<Integer>();
+		listOfCorners.add(0);
+		listOfCorners.add(width-1);
+		listOfCorners.add(planeArea-width);
+		listOfCorners.add(planeArea-1);
+		listOfCorners.add(worldArea-planeArea);
+		listOfCorners.add(worldArea-planeArea+width-1);
+		listOfCorners.add(worldArea-width);
+		listOfCorners.add(worldArea-1);
+		
+		return listOfCorners;
+	}
+	
 
 	private void generate3DWorld () {
 		listOfNeighborhoods = new LinkedList<LinkedList<Integer>>();
