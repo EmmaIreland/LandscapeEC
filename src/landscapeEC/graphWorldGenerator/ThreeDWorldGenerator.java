@@ -84,7 +84,7 @@ public class ThreeDWorldGenerator {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			String body = listOfNeighborhoods.get(i) + "\n\n";
+			String body = listOfNeighborhoods.get(i).toString().replace(",", "") + "\n\n";
 			try {
 				output.write(body);
 			} catch (IOException e) {
