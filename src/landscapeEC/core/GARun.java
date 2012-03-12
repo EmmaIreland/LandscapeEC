@@ -215,7 +215,6 @@ public class GARun {
 			for(Location l : world.getCorners()) {
 				l.setIndividuals(popManager.generatePopulation());
 			}
-			System.out.println(world.getCorners());
 			break;
 		}
 		generationNumber = 0;
@@ -236,10 +235,7 @@ public class GARun {
 		        o.generationData(this);
 		    }
 		    bestIndividual = world.findBestIndividual();
-		    // System.out.println("Generation " + (i + 1));
-		    // System.out.println("   Best individual: " + bestIndividual);
 		    bestOverallFitness = bestIndividual.getGlobalFitness();
-		    // System.out.println("   Best fitness: " + bestFitness);
 		    double[] reportingIntervals = getReportingIntervals();
 		    for (int j = 0; j < reportingIntervals.length; j++) {
 		        if (evaluator.getNumEvaluations() > reportingIntervals[j]
@@ -464,10 +460,7 @@ public class GARun {
 	private void setFromPendingIndividuals() {
 
 		for (Location location : world) {
-			//System.out.println("Origin " +world.getOrigin().getNumIndividuals());
 			location.setFromPendingIndividuals();
-			//the problem appears to be that the pending list is empty.
-			//System.out.println("Origin " +world.getOrigin().getNumIndividuals());
 		}
 	}
 

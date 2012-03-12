@@ -9,6 +9,6 @@
 	<classpathentry kind="lib" path="lib/junit-4.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/jbehave-core-2.5.1.jar"/>
-	<classpathentry kind="lib" path="snakeyaml-1.9.jar"/>
+	<classpathentry kind="lib" path="lib/snakeyaml-1.9.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

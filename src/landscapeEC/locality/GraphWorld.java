@@ -65,7 +65,6 @@ public class GraphWorld implements Serializable, World<Integer> {
 
 
 	private void processData(String data, Integer locNum) {
-	    //System.out.println("Processing line: " + data);
 		if(data.startsWith("[Corners")) {
 			corners = new ArrayList();
 			data = data.substring(9, data.length()-1);
@@ -88,8 +87,6 @@ public class GraphWorld implements Serializable, World<Integer> {
 			}
 			Location<Integer> newSpot = new Location<Integer>(locNum, GlobalProblem.getProblem().getSubProblem(0));
 			locations.put(locNum, newSpot);
-			//System.out.println("locNum = " + locNum);
-			//System.out.println("intSplitData = " + intSplitData);
 			neighborhoods.put(locNum, intSplitData);
 		}
 		
@@ -155,20 +152,14 @@ public class GraphWorld implements Serializable, World<Integer> {
 	public Individual findBestIndividual() {
 		IndividualComparator comparator = IndividualComparator.getComparator();
         List<Individual> bestFromCells = new ArrayList<Individual>();
-       // System.out.println("Location 0: " + getLocation(0));
-//        System.out.println(findBestInCell(comparator, 0).toString());
-       // System.out.println("Processing location " + this.getLocation(0));
         for (Location<Integer> l : this) {
-        //    System.out.println("Processing location " + l);
             if (getLocation(l.getPosition()).getNumIndividuals() > 0) {
                 bestFromCells.add(findBestInCell(comparator, l.getPosition()));
-            //    System.out.println(findBestInCell(comparator, l.getPosition()).toString());
             }
         }
         if (bestFromCells.isEmpty()) {
             throw new EmptyWorldException();
         }
-        //System.out.println(this.getLocation(0).getIndividuals().toString());
         return Collections.max(bestFromCells, comparator);
 	}
 	

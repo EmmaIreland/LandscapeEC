@@ -59,7 +59,6 @@ public class GraphWorldLocationTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("location0 "+ location0.get(0));
 		assertTrue(location0.containsAll(testWorld.getNeighborhood(0, 1)));
 		assertTrue(location1.containsAll(testWorld.getNeighborhood(1, 1)));
 		assertTrue(location2.containsAll(testWorld.getNeighborhood(2, 1)));
