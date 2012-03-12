@@ -55,7 +55,8 @@ public class GridWorld implements Serializable, World<Vector> {
         }
         else{
             Vector vector = new Vector(partial);
-            Location<Vector> position = new Location<Vector>(vector, GlobalProblem.getProblem());
+            //TODO This might break everything
+            Location<Vector> position = new Location<Vector>(vector, GlobalProblem.getProblem().getSubProblem(0));
             worldMap.put(position.getPosition(), new Location<Vector>(position.getPosition()));
         }
     }

@@ -19,7 +19,7 @@ public class ThreeDWorldGenerator {
 	private LinkedList<LinkedList<Integer>> listOfNeighborhoods;
 
 	public static void main(String[] args) throws Exception{
-		ThreeDWorldGenerator gen = new ThreeDWorldGenerator(3, 3, 3);
+		ThreeDWorldGenerator gen = new ThreeDWorldGenerator(8, 8, 9);
 		gen.generate3DWorld();
 	}
  
@@ -91,17 +91,6 @@ public class ThreeDWorldGenerator {
 				e.printStackTrace();
 			}
 		}
-		String header = "--- # Corners\n";
-		String body = this.getCorners().toString().replace(",", "") + "\n\n";
-		body = body.substring(1);
-		body = "[Corners " + body;
-		try {
-			output.write(header);
-			output.write(body);
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		
 		try {
 			output.flush();
 		} catch (IOException e) {

@@ -212,15 +212,6 @@ public class GARun {
 			fillAllLocations();
 			break;
 		case CORNERS:
-//			GridWorld gridWorld = (GridWorld) world;
-//			Location<Vector> topLeft = gridWorld.getLocation(Vector.origin((gridWorld).getDimensions().size()));
-//			Location<Vector> bottomRight = gridWorld.getLocation(gridWorld.getDimensions().minusToAll(1));
-//			Location<Vector> topRight = gridWorld.getLocation(Vector.getCorner(bottomRight.getPosition(), topLeft.getPosition()));
-//			Location<Vector> bottomLeft = gridWorld.getLocation(Vector.getCorner(topLeft.getPosition(), bottomRight.getPosition()));
-//			topLeft.setIndividuals(popManager.generatePopulation());
-//			bottomRight.setIndividuals(popManager.generatePopulation());
-//			topRight.setIndividuals(popManager.generatePopulation());
-//			bottomLeft.setIndividuals(popManager.generatePopulation());
 			for(Location l : world.getCorners()) {
 				l.setIndividuals(popManager.generatePopulation());
 			}

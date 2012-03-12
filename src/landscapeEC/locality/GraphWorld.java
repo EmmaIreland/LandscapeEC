@@ -86,7 +86,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 			for(int i = 0; i < splitData.length; i++){
 				intSplitData.add(Integer.parseInt(splitData[i]));
 			}
-			Location<Integer> newSpot = new Location<Integer>(locNum, GlobalProblem.getProblem());
+			Location<Integer> newSpot = new Location<Integer>(locNum, GlobalProblem.getProblem().getSubProblem(0));
 			locations.put(locNum, newSpot);
 			//System.out.println("locNum = " + locNum);
 			//System.out.println("intSplitData = " + intSplitData);
