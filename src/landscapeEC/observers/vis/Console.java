@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -16,6 +18,8 @@ import landscapeEC.core.GARun;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.GridWorld;
 import landscapeEC.observers.Observer;
+import landscapeEC.problem.IndividualComparator;
+import landscapeEC.problem.Individual;
 import landscapeEC.problem.sat.SatInstance;
 
 
@@ -103,29 +107,85 @@ public class Console extends JFrame implements ActionListener, Observer {
         
         parseCommand(command);
     }
-    
+
     public void parseCommand(String command) {
         String[] token = command.split(" +");
-        if(token[0].matches("^\\w+At.*")) {
-            if(token.length-1 == world.getDimensions().size()) {
-                Integer[] coord = new Integer[token.length-1];
-                for(int i=0; i<token.length-1; i++) {
+        String keyword = token[0].toLowerCase();
+        
+        if(keyword.equals("getindividuals")) {
+            
+            Integer[] coord = parseCoordinates(token);
+            if (coord[0] != -1) {
+                println(world.getLocation(new Vector(coord)).getIndividuals().toString());
+            }
+            
+        } else if(keyword.equals("getclauses")) {
+            
+            Integer[] coord = parseCoordinates(token);
+            if (coord[0] != -1) {
+                println(world.getLocation(new Vector(coord)).getProblem().toString());
+            }
+            
+        } else if(keyword.equals("getnumclauses")) {
+            
+            Integer[] coord = parseCoordinates(token);
+            if (coord[0] != -1) {
+                println(((SatInstance) world.getLocation(new Vector(coord)).getProblem()).getNumClauses()+"");
+            }
+            
+        } else if(keyword.equals("getbest")) {
+
+            Integer[] coord = parseCoordinates(token);
+            if (coord[0] != -1) {
+                IndividualComparator comparator = IndividualComparator.getComparator();
+                List<Individual> individuals = world.getLocation(new Vector(coord)).getIndividuals();
+                Individual best = Collections.max(individuals, comparator);
+                println("Bitstring: " + best.toString());
+                println("Fitness: " + best.getGlobalFitness());
+            }
+            
+        } else if(keyword.equals("getbestoverall")) {
+            Individual best = world.findBestIndividual();
+            println("Bitstring: " + best.toString());
+            println("Fitness: " + best.getGlobalFitness());
+            
+        } else if(keyword.equals("help")) {
+            
+            println("List of commands:\n" +
+                    "getindividuals <position> -- get all individuals at a location\n" +
+                    "getbest <position> -- get the best individual at a location\n" +
+                    "getbestoverall -- get the best individual in the world" +
+                    "getclauses <position> -- get the required clauses at a location\n" +
+                    "getnumclauses <position> -- get the number of required clauses at a location\n" +
+            "help -- print this command list\n\n" +
+            "NOTE: positions are space-separated. example: getbest 2 3\n");
+            
+        } else {
+            
+            println("Unkown command. Type \"help\" for a list of commands.");
+        }
+    }
+    
+    public Integer[] parseCoordinates(String[] token) {
+        Integer[] coord;
+        if(token.length-1 == world.getDimensions().size()) {
+            coord = new Integer[token.length-1];
+            for(int i=0; i<token.length-1; i++) {
+                try {
                     coord[i] = Integer.parseInt(token[i+1]);
+                } catch (NumberFormatException exception) {
+                    println("Error: position arguments must contain only integers");
+                    coord = new Integer[1];
+                    coord[0] = -1;
+                    break;
                 }
-                if(token[0].equals("getIndividualsAt")) {
-                    println("Individuals at " + new Vector(coord));
-                    println(world.getLocation(new Vector(coord)).getIndividuals().toString());
-                } else if(token[0].equals("getClausesAt")) {
-                    println(world.getLocation(new Vector(coord)).getProblem().toString());
-                } else if(token[0].equals("getNumClausesAt")) {
-                    println(((SatInstance) world.getLocation(new Vector(coord)).getProblem()).getNumClauses()+"");
-                }
-            } else {
-                println("incorrect # of args (must be equal to number of dimensions)");
             }
         } else {
-            println("Unknown command");
+            println("incorrect # of args (must be equal to number of dimensions)");
+            coord = new Integer[1];
+            coord[0] = -1;
         }
+        return coord;
     }
 
     public void actionPerformed(ActionEvent e) {
