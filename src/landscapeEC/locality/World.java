@@ -25,5 +25,7 @@ public interface World<T> extends Iterable<Location<T>> {
 	public Location<T> getOrigin();
 
 	public Individual findBestIndividual();
+	
+	public List<Location> getCorners();
 
 }

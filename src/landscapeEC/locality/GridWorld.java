@@ -142,4 +142,18 @@ public class GridWorld implements Serializable, World<Vector> {
         return Collections.max(bestFromCells, comparator);
     }
 
+	@Override
+	public List<Location> getCorners() {
+		ArrayList<Location> corners = new ArrayList();
+		Location<Vector> topLeft = this.getLocation(Vector.origin((this).getDimensions().size()));
+		Location<Vector> bottomRight = this.getLocation(this.getDimensions().minusToAll(1));
+		Location<Vector> topRight = this.getLocation(Vector.getCorner(bottomRight.getPosition(), topLeft.getPosition()));
+		Location<Vector> bottomLeft = this.getLocation(Vector.getCorner(topLeft.getPosition(), bottomRight.getPosition()));
+		corners.add(topLeft);
+		corners.add(bottomRight);
+		corners.add(topRight);
+		corners.add(bottomLeft);
+		return corners;
+	}
+
 }

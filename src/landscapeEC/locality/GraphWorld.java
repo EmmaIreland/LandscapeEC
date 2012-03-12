@@ -27,6 +27,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 	private static final long serialVersionUID = 1L;
 	private LinkedHashMap<Integer, Location<Integer>> locations;
 	private LinkedHashMap<Integer, List<Integer>> neighborhoods;
+	private ArrayList<Location> corners;
 
 	//constructor for no file
 //	public GraphWorld() throws Exception {
@@ -65,7 +66,19 @@ public class GraphWorld implements Serializable, World<Integer> {
 
 	private void processData(String data, Integer locNum) {
 	    //System.out.println("Processing line: " + data);
-		if(data.startsWith("[")) {
+		if(data.startsWith("[Corners")) {
+			corners = new ArrayList();
+			data = data.substring(9, data.length()-1);
+			String[] splitData = data.split(" ");
+			ArrayList<Integer> intSplitData = new ArrayList<Integer>();
+
+			for(int i = 0; i < splitData.length; i++){
+				intSplitData.add(Integer.parseInt(splitData[i]));
+			}
+			for (Integer i : intSplitData) {
+				corners.add(this.getLocation(i));
+			}
+		} else if(data.startsWith("[")) {
 			data = data.substring(1, data.length()-1);
 			String[] splitData = data.split(" ");
 			ArrayList<Integer> intSplitData = new ArrayList<Integer>();
@@ -79,6 +92,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 			//System.out.println("intSplitData = " + intSplitData);
 			neighborhoods.put(locNum, intSplitData);
 		}
+		
 	}
 
 	@Override
@@ -162,5 +176,11 @@ public class GraphWorld implements Serializable, World<Integer> {
             Integer position) {
         return Collections.max(getIndividualsAt(position), comparator);
     }
+
+
+	@Override
+	public ArrayList<Location> getCorners() {
+		return corners;
+	}
 
 }
