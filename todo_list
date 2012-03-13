@@ -2,11 +2,11 @@ Landscape EC Todo List
 -------------------------------------------------
 
 ------- TO DO -------
-- For clause propogation in environments:
+- For clause propagation in environments:
   - Write function that allows sat evaluator to return clauses that "kill" an individual from reaping
   - Keep track of the "score" of clauses in each location (hash map)
   - Write function that allows clauses to "spread" to neighbors (avoid duplicates)
-  - Perhaps wqe want to avoid the corners by default?
+  - Perhaps we want to avoid the corners by default?
 
 
 
