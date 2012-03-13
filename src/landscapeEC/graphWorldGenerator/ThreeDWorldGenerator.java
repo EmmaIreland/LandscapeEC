@@ -19,11 +19,13 @@ public class ThreeDWorldGenerator {
 	private LinkedList<LinkedList<Integer>> listOfNeighborhoods;
 
 	public static void main(String[] args) throws Exception{
-		ThreeDWorldGenerator gen = new ThreeDWorldGenerator(8, 8, 9);
+
+		ThreeDWorldGenerator gen = new ThreeDWorldGenerator(
+				Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 		gen.generate3DWorld();
 	}
- 
-	
+
+
 	public ThreeDWorldGenerator(int width, int depth, int height) {
 		this.width = width;
 		this.depth = depth;
@@ -31,18 +33,18 @@ public class ThreeDWorldGenerator {
 		planeArea = width*depth;
 		worldArea = width*depth*height;
 	}
-	
+
 	public LinkedList<LinkedList<Integer>> make3DWorld () {
 		listOfNeighborhoods = new LinkedList<LinkedList<Integer>>();
 		for (int i = 0; i < worldArea; i++) {
 			listOfNeighborhoods.add(this.addLocations(i));
 		}
-		
+
 		return listOfNeighborhoods;
 	}
-	
+
 	public LinkedList<Integer> getCorners () {
-		
+
 		LinkedList<Integer> listOfCorners = new LinkedList<Integer>();
 		listOfCorners.add(0);
 		listOfCorners.add(width-1);
@@ -52,10 +54,10 @@ public class ThreeDWorldGenerator {
 		listOfCorners.add(worldArea-planeArea+width-1);
 		listOfCorners.add(worldArea-width);
 		listOfCorners.add(worldArea-1);
-		
+
 		return listOfCorners;
 	}
-	
+
 
 	private void generate3DWorld () {
 		listOfNeighborhoods = new LinkedList<LinkedList<Integer>>();
@@ -77,6 +79,18 @@ public class ThreeDWorldGenerator {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+		String cornersHeader = "--- # Corners\n";
+		String cornersBody = this.getCorners().toString().replace(",", "");
+		cornersBody = "[Corners " + cornersBody.substring(1) + "\n\n";
+
+		try {
+			output.write(cornersHeader);
+			output.write(cornersBody);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
 		for (int i = 0; i < worldArea; i++) {
 			String header = "--- # " + i + "\n";
 			try {
@@ -105,21 +119,11 @@ public class ThreeDWorldGenerator {
 
 	private LinkedList<Integer> addLocations (int location) {
 		LinkedList<Integer> loc = new LinkedList<Integer>();
-// 		int x = location % worldSize;
-//		int y = (location/worldSize) % worldSize;
-//		int z = (location/worldSizeSq) % worldSize;
-//		
-//		for (int i = Math.max(x-1, 0); i <= Math.min(x+1, worldSize - 1); ++i){
-//			for (int j = Math.max(y-1, 0); j <= Math.min(y+1, worldSize - 1); ++j){
-//				for (int k = Math.max(z-1, 0); k <= Math.min(z+1, worldSize - 1); ++k){
-//					loc.add(i+worldSize*j+worldSizeSq*k);
-//				}
-//			}
-//		}
+
 		int x = location % width;
 		int y = (location / width) % depth;
 		int z = (location / planeArea) % height;
-		
+
 		for (int i = Math.max(x-1, 0); i <= Math.min(x+1, width - 1); i++){
 			for (int j = Math.max(y-1, 0); j <= Math.min(y+1, depth - 1); j++){
 				for (int k = Math.max(z-1, 0); k <= Math.min(z+1, height - 1); k++){
@@ -130,8 +134,6 @@ public class ThreeDWorldGenerator {
 		loc.removeFirstOccurrence(location);
 		return loc;
 
-		//		LinkedList<Integer> loc = this.addAllLocations(location);
-		//		return this.removeInvalidLocations(location, loc);
 	}
 
 
