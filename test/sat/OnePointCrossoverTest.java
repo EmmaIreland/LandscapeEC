@@ -22,7 +22,7 @@ public class OnePointCrossoverTest {
     private static final int NUM_TESTS = 100;
     
     @Test
-    public void testUniformCrossover() {        
+    public void testOnePointCrossover() {        
         SatInstance satInstance = new SatInstance(1.0);
         satInstance.setNumVariables(NUM_BITS);
         GlobalProblem.setProblem(satInstance);
@@ -37,9 +37,11 @@ public class OnePointCrossoverTest {
             OnePointCrossover crossoverOperator = new OnePointCrossover();
             Individual child = crossoverOperator.crossover(parents);
             
-            int i=child.getBit(0);
-            int checker = i;
-            while(child.getBit(i)==checker){
+            int i=0;
+            int checker = child.getBit(0);
+            System.out.println(child.toString());
+            while(child.getBit(i)==checker && i<NUM_BITS){
+                System.out.println(child.getBit(i));
             	i++;
             }
             assertTrue((checker == 1 && child.getBit(i) == 0) || (checker == 0) && child.getBit(i) == 1);
