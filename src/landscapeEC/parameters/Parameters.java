@@ -48,6 +48,9 @@ public class Parameters extends HashMap<String,String> {
         Properties properties = new Properties();
 
         String path_prefix = file.getParent();
+        if(path_prefix == null){
+            path_prefix = "";
+        }
         for (String s : includes) {
             File defaultProp = new File(path_prefix + File.separator + s);
             loadFile(defaultProp, properties);
