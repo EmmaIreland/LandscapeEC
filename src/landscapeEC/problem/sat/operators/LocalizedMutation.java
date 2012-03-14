@@ -37,10 +37,11 @@ public final class LocalizedMutation implements MutationOperator, Observer {
     @Override
     public Individual mutate(Individual ind, Object... parameters) {
         int[] bits = ind.getBits();
-        double mutationRate = (DoubleParameter.AVERAGE_MUTATIONS.getValue()/bits.length)
+        double mutationRate = Math.min((
+                DoubleParameter.AVERAGE_MUTATIONS.getValue()/bits.length)*amplifier.getAmp(((Location<Vector>)parameters[0]).getPosition()),
         /*this amplification factor is currently ridiculously high.
           remember to resolve that inside the classes you extract.*/
-        *amplifier.getAmp(((Location<Vector>)parameters[0]).getPosition());
+        0.5);
         for (int i = 0; i < bits.length; i++) {
             if (SharedPRNG.instance().nextDouble() < mutationRate) {
                 bits[i] = flipBit(bits[i]);
