@@ -39,8 +39,10 @@ public class WorldCrawl implements ConcentrationRanker {
     private Vector down;
     private ArrayList<Vector> directions = new ArrayList<Vector>();
     private boolean mapExists = false;
+    private int biggestGroupSeen;
     
     protected WorldCrawl(){
+        biggestGroupSeen = 0;
         Integer[] set = new Integer[2];
         set[0] = -1;
         set[1] = 0;
@@ -52,10 +54,10 @@ public class WorldCrawl implements ConcentrationRanker {
         down = new Vector(set);
         set[1] = 1;
         up = new Vector(set);
-        directions.add(up);
-        directions.add(down);
-        directions.add(left);
         directions.add(right);
+        directions.add(up);
+        directions.add(left);
+        directions.add(down);
     }
 
     public static WorldCrawl getInstance() {
@@ -88,10 +90,11 @@ public class WorldCrawl implements ConcentrationRanker {
         setupUnprocessed();
         List<Vector> currentGroup;
         while (!unprocessed.isEmpty()) {
-            current = unprocessed.remove(unprocessed.size() - 1);
+            current = unprocessed.get(unprocessed.size() - 1);
             currentGroup = crawl(current);
-            if (currentGroup.size() > maxGroupSize) {
-                maxGroupSize = currentGroup.size();
+            if(currentGroup.size() > biggestGroupSeen){
+                biggestGroupSeen = currentGroup.size();
+                System.out.println("Biggest group yet: "+biggestGroupSeen);
             }
             for (Vector v : currentGroup) {
                 speciesConcentrationMap.put(v, currentGroup.size());
@@ -110,21 +113,22 @@ public class WorldCrawl implements ConcentrationRanker {
     }
 
     private List<Vector> crawl(Vector current) {
+        unprocessed.remove(current);
         List<Vector> result = new ArrayList<Vector>();
         result.add(current);
         int[] species = findBestInCell(current);
-        Vector next;
         for (Vector v : directions) {
-            next = current.plus(v);
+            Vector next = current.plus(v);
             if (unprocessed.contains(next)
                     && Arrays.equals(findBestInCell(next), species)) {
-                unprocessed.remove(next);
+                //System.out.println("Processing " + next + " via " + v);
                 result.addAll(crawl(next));
             }
         }
         return result;
     }
-
+    
+    // Use the version of this that already exists!
     private int[] findBestInCell(Vector position) {
         if (world.getIndividualsAt(position).isEmpty()) {
             return null;
