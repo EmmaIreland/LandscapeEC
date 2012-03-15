@@ -24,28 +24,28 @@ public class GraphWorldLocationTest {
 	public void graphWorldPositionTest() throws IOException{
 		//expected neighborhoods
 		
-		ArrayList location0 = new ArrayList();
+		ArrayList<Integer> location0 = new ArrayList<Integer>();
 		location0.add(2);
 		location0.add(3);
 		location0.add(4);
 		
-		ArrayList location1 = new ArrayList();
+		ArrayList<Integer> location1 = new ArrayList<Integer>();
 		location1.add(1);
 		location1.add(3);
 		
-		ArrayList location2 = new ArrayList();
+		ArrayList<Integer> location2 = new ArrayList<Integer>();
 		location2.add(1);
 		location2.add(2);
 		
-		ArrayList location3 = new ArrayList();
+		ArrayList<Integer> location3 = new ArrayList<Integer>();
 		location3.add(1);
 		location3.add(5);
 		location3.add(6);
 		
-		ArrayList location4 = new ArrayList();
+		ArrayList<Integer> location4 = new ArrayList<Integer>();
 		location4.add(4);
 		
-		ArrayList location5 = new ArrayList();
+		ArrayList<Integer> location5 = new ArrayList<Integer>();
 		location5.add(4);
 		
 		
