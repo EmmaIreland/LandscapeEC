@@ -12,6 +12,7 @@ import landscapeEC.parameters.DoubleParameter;
 import landscapeEC.parameters.StringParameter;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.sat.operators.localizedMutation.BiggestBox;
+import landscapeEC.problem.sat.operators.localizedMutation.ClauseCrawl;
 import landscapeEC.problem.sat.operators.localizedMutation.ConcentrationRanker;
 import landscapeEC.problem.sat.operators.localizedMutation.LocalityType;
 import landscapeEC.problem.sat.operators.localizedMutation.WorldCrawl;
@@ -30,6 +31,9 @@ public final class LocalizedMutation implements MutationOperator, Observer {
         case WORLDCRAWL:
             amplifier = WorldCrawl.getInstance();
             break;
+        case CLAUSECRAWL:
+        	amplifier = ClauseCrawl.getInstance();
+        	break;
         }
     }
         
