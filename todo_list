@@ -14,6 +14,12 @@ Previous Todo List from 2010
 -------------------------------------------------
 ------- TO DO -------
 
+- Investigate other GA problems, preferably not combinatorial optimization
+
+- Consider having cells gradually get harder over time, this could be implemented as Uniform Geography slowly "blending" into Fractal Geography
+
+----- COMPLETED -----
+
 - Nic's idea for the Visualizer:
 It would be useful to visually see where we are solving certain clauses at which locations in the world using colors.  
 This way we would be able to see how populations that solve different clauses might converge. To do this, we could take the
@@ -22,13 +28,6 @@ don't), from there we could convert the bitstring into a hue value in order to s
 the visualizer, we would probably choose the most common, or perhaps the best, bitstring for each cell and display that color.  
 It would probably also take some tweaking to figure out the best way to compute a hue from the bitstring, but just converting it 
 to an integer and modding it to 256 might work.
-  - This seems to be _exactly_ how COLORED_CLAUSES works.
-
-- Investigate other GA problems, preferably not combinatorial optimization
-
-- Consider having cells gradually get harder over time, this could be implemented as Uniform Geography slowly "blending" into Fractal Geography
-
------ COMPLETED -----
 
 - Output information about: unsolved clauses, number of evaluations, possibly successes at fixed points (10M evals, 15M evals, etc.)
 

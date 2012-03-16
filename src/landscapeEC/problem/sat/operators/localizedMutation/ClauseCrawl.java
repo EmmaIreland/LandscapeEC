@@ -13,6 +13,7 @@ import landscapeEC.problem.Evaluator;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
+import landscapeEC.util.FrequencyCounter;
 /*
  * Future work:
  * 
@@ -30,34 +31,30 @@ import landscapeEC.problem.IndividualComparator;
  * 
  */
 public class ClauseCrawl implements ConcentrationRanker {
+    private int maxGroupSize;
+    private int maxSpeciesPop;
     private static ClauseCrawl instance = null;
     static private GridWorld world;
-    private int maxGroupSize = 0;
     static List<Vector> unprocessed = new ArrayList<Vector>();
     static Hashtable<Vector, Integer> speciesConcentrationMap = new Hashtable<Vector, Integer>();
-
-    private Vector left;
-    private Vector right;
-    private Vector up;
-    private Vector down;
     private ArrayList<Vector> directions = new ArrayList<Vector>();
     private boolean mapExists = false;
-    private int biggestGroupSeen;
-	private Hashtable<Vector, char[]> speciesMap = new Hashtable<Vector, char[]>();
+    private Hashtable<Vector, char[]> speciesMap = new Hashtable<Vector, char[]>();
+    
+    static FrequencyCounter<Integer> speciesCount = new FrequencyCounter<Integer>();
     
     protected ClauseCrawl(){
-        biggestGroupSeen = 0;
         Integer[] set = new Integer[2];
         set[0] = -1;
         set[1] = 0;
-        left = new Vector(set);
+        Vector left = new Vector(set);
         set[0] = 1;
-        right = new Vector(set);
+        Vector right = new Vector(set);
         set[0] = 0;
         set[1] = -1;
-        down = new Vector(set);
+        Vector down = new Vector(set);
         set[1] = 1;
-        up = new Vector(set);
+        Vector up = new Vector(set);
         directions.add(right);
         directions.add(up);
         directions.add(left);
@@ -84,15 +81,22 @@ public class ClauseCrawl implements ConcentrationRanker {
 
     @Override
     public void initialize(GridWorld newWorld, int generationNumber) {
-        maxGroupSize = 0;
+        if(generationNumber % 100 == 1){
+            System.out.println("Max group size a/o generation "+(generationNumber-1)+": "+maxGroupSize);
+            if((maxSpeciesPop-maxGroupSize) > 0)
+                System.out.println("The same species also controlled "+(maxSpeciesPop-maxGroupSize)+" other cells.");
+            maxGroupSize = 0;
+            maxSpeciesPop = 0;
+        }
         world = newWorld;
         mapExists = false;
+        speciesCount.reset();
     }
     
     private void generateSpeciesMap(){
     	Evaluator evaluator = GlobalProblem.getEvaluator();
     	for(Vector v : unprocessed){
-    		speciesMap.put(v, evaluator.getResultString(findBestInCell(v)).toCharArray());
+    	    speciesMap.put(v, evaluator.getResultString(findBestInCell(v)).toCharArray());
     	}
     }
 
@@ -104,15 +108,21 @@ public class ClauseCrawl implements ConcentrationRanker {
         while (!unprocessed.isEmpty()) {
             current = unprocessed.get(unprocessed.size() - 1);
             currentGroup = crawl(current);
-            if(currentGroup.size() > biggestGroupSeen){
-                biggestGroupSeen = currentGroup.size();
-                System.out.println("Biggest group yet: "+biggestGroupSeen);
-            }
+            doFreqCount(current, currentGroup.size());
             for (Vector v : currentGroup) {
                 speciesConcentrationMap.put(v, currentGroup.size());
             }
         }
         mapExists = true;
+    }
+    
+    private void doFreqCount(Vector v, int num){
+        char[] species = speciesMap.get(v);
+        speciesCount.addItem(Arrays.hashCode(species), num);
+        if(num > maxGroupSize){
+            maxGroupSize = num;
+            maxSpeciesPop = speciesCount.getCount(Arrays.hashCode(species));
+        }
     }
 
     private void setupUnprocessed() {

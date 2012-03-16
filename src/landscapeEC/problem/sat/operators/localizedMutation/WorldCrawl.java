@@ -10,6 +10,7 @@ import landscapeEC.locality.GridWorld;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
 import landscapeEC.problem.IndividualComparator;
+import landscapeEC.util.FrequencyCounter;
 /*
  * Future work:
  * 
@@ -35,7 +36,7 @@ public class WorldCrawl implements ConcentrationRanker {
     
     //Where The Information Lives
     static Hashtable<Vector, Integer> speciesConcentrationMap = new Hashtable<Vector, Integer>();
-    static Hashtable<int[], Integer> speciesCount = new Hashtable<int[], Integer>();
+    static FrequencyCounter<Integer> speciesCount = new FrequencyCounter<Integer>();
 
     //Mechanically necessary stuff
     static List<Vector> unprocessed = new ArrayList<Vector>();
@@ -80,8 +81,6 @@ public class WorldCrawl implements ConcentrationRanker {
             generateConcentrationMap();
         if (speciesConcentrationMap.containsKey(vector))
             return speciesConcentrationMap.get(vector);
-        System.out.println("getAmp called for " + vector
-                + " - Found no entry in concentrationMap.");
         return 1;
     }
 
@@ -89,6 +88,7 @@ public class WorldCrawl implements ConcentrationRanker {
     public void initialize(GridWorld newWorld, int generationNumber) {
         if(generationNumber % 100 == 1){
             System.out.println("Max group size seen at generation "+(generationNumber-1)+": "+maxGroupSize);
+            if((globalMaxSpeciesPop-maxGroupSize) > 0)
             System.out.println("There were "+(globalMaxSpeciesPop-maxGroupSize)+" other cells held by this species at the time.");
             maxGroupSize = 0;
             maxGroupSpecies = null;
@@ -96,7 +96,7 @@ public class WorldCrawl implements ConcentrationRanker {
         }
         world = newWorld;
         speciesConcentrationMap.clear();
-        speciesCount.clear();
+        speciesCount.reset();
         mapExists = false;
         
     }
@@ -113,20 +113,20 @@ public class WorldCrawl implements ConcentrationRanker {
                 speciesConcentrationMap.put(v, currentGroup.size());
             }
             int[] species = findBestInCell(current);
-            int old = 0;
-            if(speciesCount.contains(species)){
-                old = speciesCount.get(species);
-            }
-            old+=currentGroup.size();
-            speciesCount.put(species, old);
+            speciesCount.addItem(Arrays.hashCode(species), currentGroup.size());
             if(currentGroup.size() > maxGroupSize){
                 maxGroupSize = currentGroup.size();
                 maxGroupSpecies = species;
                 updated = true;
             }
         }
+        setupUnprocessed();
+        for(Vector v : unprocessed){
+            int x = (speciesCount.getCount(Arrays.hashCode(findBestInCell(v)))/2);
+            speciesConcentrationMap.put(v, Math.max(speciesConcentrationMap.get(v), x));
+        }
         if(updated){
-            globalMaxSpeciesPop = speciesCount.get(maxGroupSpecies);
+            globalMaxSpeciesPop = speciesCount.getCount(Arrays.hashCode(maxGroupSpecies));
         }
         mapExists = true;
     }
