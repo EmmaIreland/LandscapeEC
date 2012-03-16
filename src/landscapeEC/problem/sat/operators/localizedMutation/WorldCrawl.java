@@ -27,33 +27,40 @@ import landscapeEC.problem.IndividualComparator;
  * 
  */
 public class WorldCrawl implements ConcentrationRanker {
+    //Necessary for singletonizing
     private static WorldCrawl instance = null;
+    
+    //A reference to the GridWorld object
     static private GridWorld world;
-    private int maxGroupSize = 0;
-    static List<Vector> unprocessed = new ArrayList<Vector>();
+    
+    //Where The Information Lives
     static Hashtable<Vector, Integer> speciesConcentrationMap = new Hashtable<Vector, Integer>();
+    static Hashtable<int[], Integer> speciesCount = new Hashtable<int[], Integer>();
 
-    private Vector left;
-    private Vector right;
-    private Vector up;
-    private Vector down;
+    //Mechanically necessary stuff
+    static List<Vector> unprocessed = new ArrayList<Vector>();
     private ArrayList<Vector> directions = new ArrayList<Vector>();
     private boolean mapExists = false;
-    private int biggestGroupSeen;
+    
+    //Testing variables
+    private int maxGroupSize = 0;
+    private int globalMaxSpeciesPop = 0;
+    private int[] maxGroupSpecies;
     
     protected WorldCrawl(){
-        biggestGroupSeen = 0;
+        //Oh yes, this looks gross.
+        //Deal wid it.
         Integer[] set = new Integer[2];
         set[0] = -1;
         set[1] = 0;
-        left = new Vector(set);
+        Vector left = new Vector(set);
         set[0] = 1;
-        right = new Vector(set);
+        Vector right = new Vector(set);
         set[0] = 0;
         set[1] = -1;
-        down = new Vector(set);
+        Vector down = new Vector(set);
         set[1] = 1;
-        up = new Vector(set);
+        Vector up = new Vector(set);
         directions.add(right);
         directions.add(up);
         directions.add(left);
@@ -80,25 +87,46 @@ public class WorldCrawl implements ConcentrationRanker {
 
     @Override
     public void initialize(GridWorld newWorld, int generationNumber) {
-        maxGroupSize = 0;
+        if(generationNumber % 100 == 1){
+            System.out.println("Max group size seen at generation "+(generationNumber-1)+": "+maxGroupSize);
+            System.out.println("There were "+(globalMaxSpeciesPop-maxGroupSize)+" other cells held by this species at the time.");
+            maxGroupSize = 0;
+            maxGroupSpecies = null;
+            globalMaxSpeciesPop = 0;
+        }
         world = newWorld;
+        speciesConcentrationMap.clear();
+        speciesCount.clear();
         mapExists = false;
+        
     }
 
     private void generateConcentrationMap() {
+        boolean updated = false;
         Vector current;
         setupUnprocessed();
         List<Vector> currentGroup;
         while (!unprocessed.isEmpty()) {
             current = unprocessed.get(unprocessed.size() - 1);
             currentGroup = crawl(current);
-            if(currentGroup.size() > biggestGroupSeen){
-                biggestGroupSeen = currentGroup.size();
-                System.out.println("Biggest group yet: "+biggestGroupSeen);
-            }
             for (Vector v : currentGroup) {
                 speciesConcentrationMap.put(v, currentGroup.size());
             }
+            int[] species = findBestInCell(current);
+            int old = 0;
+            if(speciesCount.contains(species)){
+                old = speciesCount.get(species);
+            }
+            old+=currentGroup.size();
+            speciesCount.put(species, old);
+            if(currentGroup.size() > maxGroupSize){
+                maxGroupSize = currentGroup.size();
+                maxGroupSpecies = species;
+                updated = true;
+            }
+        }
+        if(updated){
+            globalMaxSpeciesPop = speciesCount.get(maxGroupSpecies);
         }
         mapExists = true;
     }

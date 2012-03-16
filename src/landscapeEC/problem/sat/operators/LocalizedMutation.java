@@ -23,7 +23,13 @@ public final class LocalizedMutation implements MutationOperator, Observer {
     //It will be switched to a parameter-reader as soon as, well, I finish doing that.
     LocalityType rankerType = LocalityType.valueOf(StringParameter.LOCALITY_TYPE.getValue());
     static ConcentrationRanker amplifier;
+    private static LocalizedMutation instance;
+    
     public LocalizedMutation(){
+        getInstance();
+    }
+    
+    protected LocalizedMutation(int i){
         switch (rankerType) {
         case BIGGEST_BOX:
             amplifier = BiggestBox.getInstance();
@@ -36,13 +42,20 @@ public final class LocalizedMutation implements MutationOperator, Observer {
         	break;
         }
     }
-        
+    
+    public LocalizedMutation getInstance(){
+        if(instance == null){
+            instance = new LocalizedMutation(0);
+        }
+        return instance;
+    }
 
+    
     @Override
     public Individual mutate(Individual ind, Object... parameters) {
         int[] bits = ind.getBits();
         double mutationRate = Math.min((
-                DoubleParameter.AVERAGE_MUTATIONS.getValue()/bits.length)*amplifier.getAmp(((Location<Vector>)parameters[0]).getPosition()),
+        DoubleParameter.AVERAGE_MUTATIONS.getValue()/bits.length)*amplifier.getAmp(((Location<Vector>)parameters[0]).getPosition()),
         /*this amplification factor is currently ridiculously high.
           remember to resolve that inside the classes you extract.*/
         0.5);
@@ -62,7 +75,7 @@ public final class LocalizedMutation implements MutationOperator, Observer {
 
     @Override
     public void generationData(GARun run) {
-	amplifier.initialize((GridWorld) run.getWorld(), run.getGenerationNumber());
+        amplifier.initialize((GridWorld) run.getWorld(), run.getGenerationNumber());
     }
     
     public static ConcentrationRanker getAmplifier(){
