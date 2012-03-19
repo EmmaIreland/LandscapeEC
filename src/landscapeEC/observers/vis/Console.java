@@ -154,7 +154,7 @@ public class Console extends JFrame implements ActionListener, Observer {
             println("List of commands:\n" +
                     "getindividuals <position> -- get all individuals at a location\n" +
                     "getbest <position> -- get the best individual at a location\n" +
-                    "getbestoverall -- get the best individual in the world" +
+                    "getbestoverall -- get the best individual in the world\n" +
                     "getclauses <position> -- get the required clauses at a location\n" +
                     "getnumclauses <position> -- get the number of required clauses at a location\n" +
             "help -- print this command list\n\n" +

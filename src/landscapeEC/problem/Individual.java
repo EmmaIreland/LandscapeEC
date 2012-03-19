@@ -61,6 +61,15 @@ public class Individual implements Serializable {
     }
     
     @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+    
+    public boolean equals(Individual individual) {
+        return this.hashCode() == individual.hashCode();
+    }
+    
+    @Override
     public String toString() {
         String str = "";
         for(int i:bits) {

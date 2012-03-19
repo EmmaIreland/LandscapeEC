@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -16,6 +17,7 @@ import landscapeEC.locality.Location;
 import landscapeEC.locality.MigrationInWorldOfSizeOneException;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.GridWorld;
+import landscapeEC.locality.ViralClauseCounter;
 import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.BooleanParameter;
@@ -29,6 +31,7 @@ import landscapeEC.problem.DiversityCalculator;
 import landscapeEC.problem.Evaluator;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
+import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.Problem;
 import landscapeEC.problem.ProblemParser;
 import landscapeEC.problem.sat.Clause;
@@ -49,6 +52,8 @@ public class GARun {
 	private Evaluator evaluator;
 
 	private World<?> world;
+	
+	private ViralClauseCounter viralClauseCounter;
 
 	private List<Observer> observers = new ArrayList<Observer>();
 	private int successes;
@@ -200,6 +205,8 @@ public class GARun {
 
 		world = ParameterClassLoader.loadClass(StringParameter.WORLD_TYPE);
 		world.clear();
+		
+		viralClauseCounter = new ViralClauseCounter();
 
 		SeedType seedType = SeedType
 		.valueOf(StringParameter.STARTING_POPULATION.getValue());
@@ -282,6 +289,10 @@ public class GARun {
 
 	private void processAllLocations() {
 		updateDiversityCounts();
+		if (BooleanParameter.VIRAL_CLAUSES.getValue()) {
+		    viralClauseCounter.updateViralClauses(world);
+		}
+		
 		performMigration();
 		addFromPendingIndividuals();
 
@@ -296,6 +307,10 @@ public class GARun {
 		DiversityCalculator.reset();
 		for (Location location : world) {
 			List<Individual> locationIndividuals = location.getIndividuals();
+			if (locationIndividuals.size() > 0) {
+			    Individual bestIndividual = (Individual) Collections.max(location.getIndividuals(), IndividualComparator.getComparator());
+			    DiversityCalculator.addBestIndividual(bestIndividual);
+			}
 			for (Individual individual : locationIndividuals) {
 				DiversityCalculator.addIndividual(individual);
 			}
@@ -306,37 +321,15 @@ public class GARun {
 
 	private void performDraconianReaper() {
 
-		for (Location location : world) {
-			// Location location = world.getLocation(position);
-			List<Individual> locationIndividuals = location.getIndividuals();
+	    for (Location location : world) {
+	        // Location location = world.getLocation(position);
+	        List<Individual> locationIndividuals = location.getIndividuals();
 
-			for (Individual individual : locationIndividuals) {
-				Problem locationProblem = location.getProblem();
-				if (BooleanParameter.VIRAL_CLAUSES.getValue()) {
-					//Perform viral clause procedure and reaping
-					doViralClauses(location, individual, locationProblem);
-				} else { // else default reaper procedure
-					doReaperEffect(individual, location, evaluator.solvesSubProblem(individual, locationProblem));
-				}
-			}
-		}
-	}
-
-
-	private void doViralClauses(Location location, Individual individual, Problem locationProblem) {
-		if (!(evaluator instanceof SatEvaluator)) {
-			throw new RuntimeException("Viral Clauses is currently only supported under 3SAT");
-		}
-
-		SatEvaluator clauseEvaluator = (SatEvaluator) evaluator;
-		List<Clause> unsolvedClauses = clauseEvaluator.getUnsolvedClauses(individual, locationProblem);
-
-		if (unsolvedClauses.size() > 0) {
-			location.getViralClauseCounter().updateClauseCounts(unsolvedClauses, world);
-		}
-
-		//Do reaper effect, if unsolved clauses = 0 then it satisfies requirements
-		doReaperEffect(individual, location, (unsolvedClauses.size() > 0));
+	        for (Individual individual : locationIndividuals) {
+	            Problem locationProblem = location.getProblem();
+	            doReaperEffect(individual, location, evaluator.solvesSubProblem(individual, locationProblem));
+	        }
+	    }
 	}
 
 	private void doReaperEffect(Individual individual, Location location, boolean satisfiesRequirements) {

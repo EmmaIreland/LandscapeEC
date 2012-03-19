@@ -7,19 +7,21 @@ import landscapeEC.util.FrequencyCounter;
 
 public class DiversityCalculator {
 
-    private static FrequencyCounter<String> individualCounts = new FrequencyCounter<String>();
+    private static FrequencyCounter<Individual> individualCounts = new FrequencyCounter<Individual>();
     private static FrequencyCounter<String> resultStringCounter = new FrequencyCounter<String>();
     private static Set<String> seenResultStrings = new LinkedHashSet<String>();
+    private static Set<Individual> bestIndividuals = new LinkedHashSet<Individual>();
     private static Evaluator evaluator = GlobalProblem.getEvaluator();
     
     public static void reset() {
         individualCounts.reset();
         resultStringCounter.reset();
         seenResultStrings.clear();
+        bestIndividuals.clear();
     }
 
     public static void addIndividual(Individual individual) {
-        individualCounts.addItem(individual.toString());
+        individualCounts.addItem(individual);
         String resultString = evaluator.getResultString(individual);
         resultStringCounter.addItem(resultString);
         
@@ -31,16 +33,24 @@ public class DiversityCalculator {
         return seenResultStrings;
     }
     
-    private String getMostCommon() {
+    public static void addBestIndividual(Individual individual) {
+        bestIndividuals.add(individual);
+    }
+    
+    public static Set<Individual> getBestIndividuals() {
+        return bestIndividuals;
+    }
+    
+    public static Individual getMostCommonIndividual() {
         int maxNumber = 0;
-        String currentMaxString = "";
-        for(String resultString : resultStringCounter) {
-            if(resultStringCounter.getCount(resultString) > maxNumber) {
-                maxNumber = resultStringCounter.getCount(resultString);
-                currentMaxString = resultString;
+        Individual currentMaxIndividual = new Individual("0", false); //default individual
+        for(Individual individual : individualCounts) {
+            if(individualCounts.getCount(individual) > maxNumber) {
+                maxNumber = individualCounts.getCount(individual);
+                currentMaxIndividual = individual;
             }
         }
-        return currentMaxString;
+        return currentMaxIndividual;
     }
     
     public static double resultStringPercentage(String clauseListString) {

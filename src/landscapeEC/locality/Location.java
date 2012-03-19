@@ -15,14 +15,12 @@ public class Location<T> implements Serializable {
     private List<Individual> individuals;
     private List<Individual> pendingIndividuals;
     private Problem problem;
-    private ViralClauseCounter viralClauseCounter;
     
     public Location(T aPosition, Problem aProblem) {
         position = aPosition;
         individuals = new ArrayList<Individual>();
         pendingIndividuals = new ArrayList<Individual>();
         problem = aProblem;
-        viralClauseCounter = new ViralClauseCounter(this);
     }
 
     public Location(T position) {
@@ -81,10 +79,6 @@ public class Location<T> implements Serializable {
     public void addFromPendingIndividuals() {
         individuals.addAll(pendingIndividuals);
         pendingIndividuals.clear();
-    }
-    
-    public ViralClauseCounter getViralClauseCounter() {
-        return viralClauseCounter;
     }
     
     public String toString() {

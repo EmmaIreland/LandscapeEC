@@ -1,59 +1,136 @@
 package landscapeEC.locality;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import landscapeEC.parameters.IntParameter;
+import landscapeEC.problem.DiversityCalculator;
+import landscapeEC.problem.Evaluator;
+import landscapeEC.problem.GlobalProblem;
+import landscapeEC.problem.Individual;
 import landscapeEC.problem.sat.Clause;
+import landscapeEC.problem.sat.SatEvaluator;
 import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.util.SharedPRNG;
 
 public class ViralClauseCounter implements Serializable {
     private static final long serialVersionUID = -5156231581336681271L;
-    private Map<Clause, Double> clauseCounts = new HashMap<Clause, Double>();
-    private final Location location;
+    private Set<Clause> viralClauses = new HashSet<Clause>(); 
+    private int numGenerationsForCurrentOptimum = 0;
+    private String currentLocalOptimumResultString = ""; 
+    private Clause currentUnsolvedClause;
     
-    public ViralClauseCounter(Location location) {
-        this.location = location;
+    public void updateViralClauses(World<?> world) {
+        Evaluator evaluator = GlobalProblem.getEvaluator();
+        if (!(evaluator instanceof SatEvaluator)) {
+          throw new RuntimeException("Viral Clauses is currently only supported under 3SAT");
+        }
+        
+        SatEvaluator satEvaluator = (SatEvaluator) evaluator;
+        
+        doViralClauseSpread(world);
+        doLocalOptimumCheck(world, satEvaluator);
     }
     
-    public void updateClauseCounts(List<Clause> unsolvedClauses, World world) {
-        double increment = 1/(double)unsolvedClauses.size();
-        
-        for (Clause clause : unsolvedClauses) {
-            double count = 0;
-            if (clauseCounts.get(clause) == null) {
-                clauseCounts.put(clause, increment);
-                count = increment;
-            } else {
-                count = clauseCounts.get(clause) + increment;
-                clauseCounts.put(clause, count);
+    private void doLocalOptimumCheck(World<?> world, SatEvaluator evaluator) {
+        //Find best individual with highest number of instances in population
+        Set<Individual> bestIndividuals = DiversityCalculator.getBestIndividuals();
+        Individual bestCommon = (Individual) bestIndividuals.toArray()[0];
+        double bestPercentage = 0.0;
+        for(Individual individual : bestIndividuals) {
+            String resultString = evaluator.getResultString(individual);
+            double individualPercentage = DiversityCalculator.resultStringPercentage(resultString);
+            if(individualPercentage > bestPercentage) {
+                bestCommon = individual;
+                bestPercentage = individualPercentage;
             }
+        }
+        
+        SatInstance globalProblem = (SatInstance) GlobalProblem.getProblem();
+        
+        String commonResultString = evaluator.getResultString(bestCommon);
+        if(commonResultString.equals(currentLocalOptimumResultString)) {
+            //it is the same as last generation's local optimum
+            numGenerationsForCurrentOptimum++;
+        } else {
+            //a new local optimum
+            numGenerationsForCurrentOptimum = 0;
+            currentLocalOptimumResultString = commonResultString;
 
-            if(count > IntParameter.VIRAL_CLAUSE_THRESHOLD.getValue()) {
-                spreadViralClause(world, clause);
-                count -= IntParameter.VIRAL_CLAUSE_THRESHOLD.getValue();
-                clauseCounts.put(clause, count);
+            List<Clause> unsolved = evaluator.getUnsolvedClauses(bestCommon, globalProblem);
+            currentUnsolvedClause = unsolved.get(0);
+        }
+
+        //check if current local optimum has passed the threshold
+        if(numGenerationsForCurrentOptimum > IntParameter.VIRAL_CLAUSE_THRESHOLD.getValue()) {
+            //Create new viral clause for local optimum and start spreading it
+            if (!viralClauses.contains(currentUnsolvedClause)) {
+                addNewViralClause(world, currentUnsolvedClause);
+            }
+        }
+        
+        System.out.println("Local optimum generation count: " + numGenerationsForCurrentOptimum);
+    }
+    
+    private void addNewViralClause(World<?> world, Clause clause) {
+        //Get a random location and add the new viral clause to it
+        //TODO Make the location random instead of the origin
+        SatInstance randomLocationProblem = (SatInstance) world.getOrigin().getProblem();
+        randomLocationProblem.addViralClause(clause);
+        viralClauses.add(clause);
+        
+        System.out.println("Adding a new viral clause: " + clause.getId());
+    }
+
+    private void doViralClauseSpread(World<?> world) {
+        //If there are no viral clauses, do nothing
+        if (viralClauses.size() == 0) {
+            return;
+        }
+        
+        List<SatInstance> locationProblemsToUpdate  = new ArrayList<SatInstance>();
+
+        //Iterate over every location and spread viral clauses
+        for (Location<?> location : world) {
+            SatInstance locationInstance = (SatInstance) location.getProblem();
+
+            if(hasAllViralClauses(locationInstance)) {
+                //Spread viral clauses to location's neighborhood
+                List<?> neighborhood = world.getNeighborhood(location.getPosition(), 1);
+                neighborhood.remove(location.getPosition()); //We don't want to spread to the same location
+                Collections.shuffle(neighborhood, SharedPRNG.instance());
+
+                for (Object pos : neighborhood) {
+                    SatInstance locationProblem = (SatInstance) world.getLocation(pos).getProblem();
+
+                    //Only add clause to a location that does not contain it
+                    if (!hasAllViralClauses(locationProblem) && locationProblem.getNumClauses() > 0) {
+                        locationProblemsToUpdate.add(locationProblem);
+                        System.out.println("Spreading viral clause at: " + location.getPosition());
+                        break;
+                    }
+                }
+            }
+        }
+        
+        for(SatInstance problem : locationProblemsToUpdate) {
+            for (Clause clause : viralClauses) {
+                problem.addViralClause(clause);
             }
         }
     }
-
-    private void spreadViralClause(World world, Clause clause) {
-        List<Vector> neighborhood = world.getNeighborhood(location.getPosition(), 1);
-        neighborhood.remove(location.getPosition()); //We don't want to spread to the same location
-        Collections.shuffle(neighborhood, SharedPRNG.instance());
-        
-        for (Vector pos : neighborhood) {
-            SatInstance locationProblem = (SatInstance) world.getLocation(pos).getProblem();
-
-            //Only add clause to a location that does not contain it
+    
+    private boolean hasAllViralClauses(SatInstance locationProblem) {
+        for (Clause clause : viralClauses) {
             if (!locationProblem.contains(clause)) {
-                locationProblem.addViralClause(clause);
-                break;
+                return false;
             }
         }
+        
+        return true;
     }
 }
