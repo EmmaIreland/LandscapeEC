@@ -54,7 +54,7 @@ public class SatInstance implements Iterable<Clause>, Serializable, Problem, Sep
     }
     
     public void addViralClause(Clause clause) {
-        if (!clauseList.contains(clause) && clauseList.size() > 0) {
+        if (!clauseList.contains(clause)) {
             clauseList.add(clause); //add new clause
 
             //Update Difficulty

@@ -21,7 +21,7 @@ public class ViralClauseCounter implements Serializable {
     private static final long serialVersionUID = -5156231581336681271L;
     private Set<Clause> viralClauses = new HashSet<Clause>(); 
     private int numGenerationsForCurrentOptimum = 0;
-    private String currentLocalOptimumResultString = ""; 
+    private String currentLocalOptimumResultString = "";
     private Clause currentUnsolvedClause;
     
     public void updateViralClauses(World<?> world) {
@@ -73,15 +73,24 @@ public class ViralClauseCounter implements Serializable {
             }
         }
         
-        System.out.println("Local optimum generation count: " + numGenerationsForCurrentOptimum);
+        //System.out.println("Local optimum generation count: " + numGenerationsForCurrentOptimum);
     }
     
     private void addNewViralClause(World<?> world, Clause clause) {
         //Get a random location and add the new viral clause to it
-        //TODO Make the location random instead of the origin
-        SatInstance randomLocationProblem = (SatInstance) world.getOrigin().getProblem();
-        randomLocationProblem.addViralClause(clause);
-        viralClauses.add(clause);
+        int locationNumber = SharedPRNG.instance().nextInt(world.getNumLocations() - 1);
+        int currentLocation = 0;
+        
+        //Iterate over locations until we get to the location
+        for (Location<?> location : world) {
+            SatInstance locationProblem = (SatInstance) location.getProblem();
+            if(currentLocation == locationNumber) {
+                locationProblem.addViralClause(clause);
+                viralClauses.add(clause);
+                break;
+            }
+            currentLocation++;
+        }
         
         System.out.println("Adding a new viral clause: " + clause.getId());
     }
@@ -108,9 +117,9 @@ public class ViralClauseCounter implements Serializable {
                     SatInstance locationProblem = (SatInstance) world.getLocation(pos).getProblem();
 
                     //Only add clause to a location that does not contain it
-                    if (!hasAllViralClauses(locationProblem) && locationProblem.getNumClauses() > 0) {
+                    if (!hasAllViralClauses(locationProblem)) {
                         locationProblemsToUpdate.add(locationProblem);
-                        System.out.println("Spreading viral clause at: " + location.getPosition());
+                        //System.out.println("Spreading viral clause at: " + location.getPosition());
                         break;
                     }
                 }
