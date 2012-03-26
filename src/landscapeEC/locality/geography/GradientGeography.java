@@ -3,10 +3,12 @@ package landscapeEC.locality.geography;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.GridWorld;
+import landscapeEC.parameters.DoubleParameter;
+import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Problem;
 
-public class ManhattanDistanceGeography implements Geography {
+public class GradientGeography implements Geography {
 
     private void assignSubProblem(GridWorld world, Vector position) {
         Vector origin = Vector.origin(world.getDimensions().size());
@@ -16,6 +18,11 @@ public class ManhattanDistanceGeography implements Geography {
         int distance = position.minus(middle).manhattanLength();
         
         double clausePercentage = 1.0 - Math.min(distance / (1.0 * middle.manhattanLength()), 1.0);
+        
+        if (GlobalParameters.isSet("PEAK_HEIGHT")) {
+            double clauseLimit = DoubleParameter.PEAK_HEIGHT.getValue();
+            clausePercentage = clausePercentage * clauseLimit; //Limit to half of the clauses
+        }
         
         final Problem subProblem = GlobalProblem.getProblem().getSubProblem(clausePercentage);
         world.setLocationProblem(position, subProblem);

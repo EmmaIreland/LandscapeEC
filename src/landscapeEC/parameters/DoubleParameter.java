@@ -4,7 +4,7 @@ package landscapeEC.parameters;
 public enum DoubleParameter
 {
 
-    AVERAGE_MUTATIONS, ELITE_PROPORTION, MIGRATION_PROBABILITY, REPRODUCTION_RATE;
+    AVERAGE_MUTATIONS, ELITE_PROPORTION, MIGRATION_PROBABILITY, REPRODUCTION_RATE, PEAK_HEIGHT;
     
     /**
      * Returns the (double) value of this parameter.
