@@ -55,17 +55,17 @@ public class SatEvaluator extends Evaluator {
             return "";
         }
         
-        String bitString = "";
+        StringBuilder sb = new StringBuilder();
 
         for (Clause clause : satInstance) {
             if (clause.satisfiedBy(individual)) {
-                bitString += "1";
+                sb.append('1');
             } else  {
-                bitString += "0";
+                sb.append('0');
             }
         }
         
-        return bitString;
+        return sb.toString();
     }
 
 }
