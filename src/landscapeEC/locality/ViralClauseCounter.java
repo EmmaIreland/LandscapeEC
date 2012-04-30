@@ -78,7 +78,7 @@ public class ViralClauseCounter implements Serializable {
     
     private void addNewViralClause(World<?> world, Clause clause) {
         //Get a random location and add the new viral clause to it
-        int locationNumber = SharedPRNG.instance().nextInt(world.getNumLocations() - 1);
+        int locationNumber = SharedPRNG.instance().nextInt(world.getNumLocations());
         int currentLocation = 0;
         
         //Iterate over locations until we get to the location
