@@ -53,7 +53,7 @@ public class SalamanderSelection implements SelectionOperator {
         else{
             actualTournaments++;
             return parents;
-        }
+        } 
     }
     
     private Individual noisyCopy(Individual original){
