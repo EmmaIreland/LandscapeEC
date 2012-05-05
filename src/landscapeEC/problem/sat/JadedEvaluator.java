@@ -18,7 +18,6 @@ import landscapeEC.util.FrequencyCounter;
 public class JadedEvaluator extends Evaluator implements Observer {
     private static FrequencyCounter<Integer> fc = new FrequencyCounter<Integer>();
     private static boolean hasSeenWorld = false;
-    private static boolean getJaded = false;
     private static int maxGlobalPop = 1;
     //private static int maxDamping = -1;
     //private static double dampedFitness = 0.0;
@@ -32,9 +31,6 @@ public class JadedEvaluator extends Evaluator implements Observer {
                 i++;
             }
             maxGlobalPop = i*IntParameter.CARRYING_CAPACITY.getValue();
-        }
-        if(generationNumber == 100){
-            getJaded = true;
         }
         /*if(generationNumber>100 && generationNumber%25==0){
             System.out.println("Max damping: "+maxDamping+" Damped fitness: "+dampedFitness);
@@ -66,11 +62,9 @@ public class JadedEvaluator extends Evaluator implements Observer {
             }
             i++;
         }
-        if(getJaded){
-            identity = Arrays.hashCode(array);
-            fc.addItem(identity);
-            count = fc.getCount(identity);
-        }
+        identity = Arrays.hashCode(array);
+        fc.addItem(identity);
+        count = fc.getCount(identity);
         if(clausesSolved == satInstance.getNumClauses())
             return 1.0;
         double result = (double) ((double)clausesSolved /(double) satInstance.getNumClauses())-((double)count/(double)maxGlobalPop);
