@@ -154,6 +154,7 @@ public class GARun {
 
 		writer.write(success + " " + completedEvaluations + " " + bestFitness
 				+ "\n");
+		writer.flush();
 	}
 
 	private void generateRFile(int successes) throws IOException {
