@@ -3,7 +3,7 @@ package landscapeEC.parameters;
 
 public enum BooleanParameter
 {
-    TOROIDAL, PROMOTE_SMALL_POPULATIONS, QUIT_ON_SUCCESS,VIRAL_CLAUSES;
+    TOROIDAL, PROMOTE_SMALL_POPULATIONS, QUIT_ON_SUCCESS,VIRAL_CLAUSES, USE_THREADS;
 
     /**
      * Return the (boolean) value of this parameter.

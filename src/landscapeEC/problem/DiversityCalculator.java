@@ -1,5 +1,6 @@
 package landscapeEC.problem;
 
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -29,11 +30,22 @@ public class DiversityCalculator {
         seenResultStrings.add(resultString);
     }
     
+    public static void addCounter(FrequencyCounter<Individual> counter){
+    	individualCounts.addCounter(counter);
+    }
+    
+    public static void addIndividuals(Individual individual, int count){
+        individualCounts.addItem(individual, count);
+        String resultString = evaluator.getResultString(individual);
+        resultStringCounter.addItem(resultString, count);
+        seenResultStrings.add(resultString);
+    }
+    
     public static Set<String> resultStrings() {
         return seenResultStrings;
     }
     
-    public static void addBestIndividual(Individual individual) {
+    public synchronized static void addBestIndividual(Individual individual) {
         bestIndividuals.add(individual);
     }
     

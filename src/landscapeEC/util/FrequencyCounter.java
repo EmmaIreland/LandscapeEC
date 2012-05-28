@@ -39,6 +39,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeMap;
 
+import landscapeEC.problem.Individual;
+
 /**
  * A simple class for keeping track of frequency counts on some collection of
  * <CODE>Objects</CODE>.
@@ -149,5 +151,13 @@ public class FrequencyCounter<T> implements Iterable<T> {
     public void reset() {
         _map.clear();
     }
+
+	public void addCounter(FrequencyCounter join) {
+		Iterator iter = join.keys();
+		while(iter.hasNext()){
+			T next = (T)iter.next();
+			this.addItem(next, join.getCount(next));
+		}
+	}
 
 }
