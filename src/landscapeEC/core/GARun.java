@@ -304,7 +304,7 @@ public class GARun {
 			System.out.println("Evals/sec: "+(GlobalProblem.getEvaluator().getNumEvaluations()/((System.currentTimeMillis()-startTime)/1000)));
 		}
 		
-		if(!BooleanParameter.SKIP_DIVERSITY.getValue())
+		if(BooleanParameter.VIRAL_CLAUSES.getValue() || !BooleanParameter.SKIP_DIVERSITY.getValue())
 			updateDiversityCounts();
 		if (BooleanParameter.VIRAL_CLAUSES.getValue()) {
 		    viralClauseCounter.updateViralClauses(world);

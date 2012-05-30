@@ -332,7 +332,7 @@ public class ThreadedGARun extends GARun{
 		}
 		
 
-		if(!BooleanParameter.SKIP_DIVERSITY.getValue())
+		if(BooleanParameter.VIRAL_CLAUSES.getValue() || !BooleanParameter.SKIP_DIVERSITY.getValue())
 			updateDiversityCounts();
 		
 		if (BooleanParameter.VIRAL_CLAUSES.getValue()) {
