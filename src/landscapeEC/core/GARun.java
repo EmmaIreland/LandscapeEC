@@ -301,9 +301,11 @@ public class GARun {
 	private void processAllLocations() {
 		if(GlobalProblem.getEvaluator().getNumEvaluations()>1000000 && haventSaid){
 			haventSaid=false;
-			longs.add((System.currentTimeMillis()-startTime));
+			System.out.println("Evals/sec: "+(GlobalProblem.getEvaluator().getNumEvaluations()/((System.currentTimeMillis()-startTime)/1000)));
 		}
-		updateDiversityCounts();
+		
+		if(!BooleanParameter.SKIP_DIVERSITY.getValue())
+			updateDiversityCounts();
 		if (BooleanParameter.VIRAL_CLAUSES.getValue()) {
 		    viralClauseCounter.updateViralClauses(world);
 		}

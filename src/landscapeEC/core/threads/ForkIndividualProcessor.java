@@ -29,15 +29,17 @@ public class ForkIndividualProcessor extends RecursiveTask {
 	private List<Individual> pendingIndividuals;
 	private Problem locationProblem;
 	private int numIndividuals;
+	private static int IND_THRESHOLD;
 	
-	public ForkIndividualProcessor(List<Individual> individuals, Location location){
+	public ForkIndividualProcessor(List<Individual> individuals, Location location, int IND_THRESHOLD){
 		this.individuals = individuals;
 		this.location = location;
+		this.IND_THRESHOLD=IND_THRESHOLD;
 	}
 
 	@Override
 	protected List<Individual> compute() {
-		if(individuals.size()>IntParameter.SPLIT_THRESHOLD.getValue()){
+		if(individuals.size()>IND_THRESHOLD){
 			int mid = individuals.size()/2;
 			int i = 0;
 			List<Individual> aList = new ArrayList<Individual>();
@@ -45,14 +47,14 @@ public class ForkIndividualProcessor extends RecursiveTask {
 				aList.add(individuals.get(i));
 				i++;
 			}
-			ForkIndividualProcessor a = new ForkIndividualProcessor(aList, location);
+			ForkIndividualProcessor a = new ForkIndividualProcessor(aList, location, IND_THRESHOLD);
 			a.fork();
 			List<Individual> bList = new ArrayList<Individual>();
 			while(i<individuals.size()){
 				bList.add(individuals.get(i));
 				i++;
 			}
-			ForkIndividualProcessor b = new ForkIndividualProcessor(bList, location);
+			ForkIndividualProcessor b = new ForkIndividualProcessor(bList, location, IND_THRESHOLD);
 			List<Individual> result = b.compute();
 			result.addAll((List<Individual>)a.join());
 			return result;

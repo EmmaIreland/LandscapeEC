@@ -16,10 +16,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import landscapeEC.core.threads.DiversityCounterUpdater;
 import landscapeEC.core.threads.ForkDiversityCounter;
 import landscapeEC.core.threads.ForkLocationProcessor;
-import landscapeEC.core.threads.ForkMigrator;
-import landscapeEC.core.threads.ForkedDiversityCounter;
 import landscapeEC.locality.EmptyWorldException;
 import landscapeEC.locality.GridWorld;
 import landscapeEC.locality.Location;
@@ -267,7 +266,7 @@ public class ThreadedGARun extends GARun{
 		
 		while (evaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO.getValue()) {
 		    if(runGenerations) {
-		        processAllLocations();
+		        processAllLocations(generationNumber);
 		        generationNumber++;
 		    }
 		    for (Observer o : observers) {
@@ -295,8 +294,6 @@ public class ThreadedGARun extends GARun{
 		        System.out.println("SUCCESS");
 		        return true;
 		    }
-
-		    
 		}
 
 		//************************************END OF MAIN LOOP***********************************
@@ -328,18 +325,19 @@ public class ThreadedGARun extends GARun{
 		}
 	}
 
-	private void processAllLocations() {
+	private void processAllLocations(int generationNumber) {
 		if(GlobalProblem.getEvaluator().getNumEvaluations()>1000000 && haventSaid){
 			haventSaid=false;
-			longs.add((System.currentTimeMillis()-startTime));
+			System.out.println("Evals/sec: "+(GlobalProblem.getEvaluator().getNumEvaluations()/((System.currentTimeMillis()-startTime)/1000)));
 		}
 		
+
+		if(!BooleanParameter.SKIP_DIVERSITY.getValue())
+			updateDiversityCounts();
 		
-		updateDiversityCounts();
 		if (BooleanParameter.VIRAL_CLAUSES.getValue()) {
 		    viralClauseCounter.updateViralClauses(world);
 		}
-		
 		performMigration();
 		addFromPendingIndividuals();
 		threadByLocations();
@@ -357,11 +355,6 @@ public class ThreadedGARun extends GARun{
 		ForkLocationProcessor flp = new ForkLocationProcessor(locations);
 		forkPool.invoke(flp);
 	}
-	
-	/*private void performMigration(){
-		ForkMigrator fm = new ForkMigrator(locations, world);
-		forkPool.invoke(fm);
-	}*/
 	
 	private void performMigration() {
 	    double migrationProbability = DoubleParameter.MIGRATION_PROBABILITY.getValue();
@@ -423,12 +416,11 @@ public class ThreadedGARun extends GARun{
 	}
 
 	private void updateDiversityCounts() {
-		//DiversityCalculator.reset();
-		//ForkDiversityCounter fdc = new ForkDiversityCounter(locations);
-		//DiversityCalculator.addCounter((FrequencyCounter<Individual>)forkPool.invoke(fdc));
 		DiversityCalculator.reset();
-		ForkedDiversityCounter fdc = new ForkedDiversityCounter(locations);
-		forkPool.execute(fdc);
+		ForkDiversityCounter fdc = new ForkDiversityCounter(locations);
+		FrequencyCounter<Individual> result = forkPool.invoke(fdc);
+		DiversityCounterUpdater dcu = new DiversityCounterUpdater(result);
+		forkPool.execute(dcu);
 	}
 	
 

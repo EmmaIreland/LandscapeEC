@@ -11,6 +11,7 @@ import landscapeEC.core.PopulationManager;
 import landscapeEC.locality.Location;
 import landscapeEC.parameters.BooleanParameter;
 import landscapeEC.parameters.DoubleParameter;
+import landscapeEC.parameters.IntArrayParameter;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.parameters.StringParameter;
 import landscapeEC.problem.Evaluator;
@@ -26,22 +27,25 @@ public class ForkLocationProcessor extends RecursiveAction {
 	Location[] locations;
 	private PopulationManager popManager;
 	private Evaluator evaluator;
-	private static final int THRESHOLD = IntParameter.SPLIT_THRESHOLD.getValue();
-	
+	private static int maxPop;
+	private static int IND_THRESHOLD;
+	private static final int LOC_THRESHOLD = Math.max(IntArrayParameter.WORLD_DIMENSIONS.getValue()[0]*IntArrayParameter.WORLD_DIMENSIONS.getValue()[1]/Runtime.getRuntime().availableProcessors(), 1);
 	public ForkLocationProcessor(Location[] locations){
+		maxPop = IntArrayParameter.WORLD_DIMENSIONS.getValue()[0]*IntArrayParameter.WORLD_DIMENSIONS.getValue()[1]*IntParameter.CARRYING_CAPACITY.getValue();
+		IND_THRESHOLD = maxPop/Runtime.getRuntime().availableProcessors();
 		this.locations = locations;
 	}
 	
 	@Override
 	protected void compute() {
-		if(locations.length > THRESHOLD){
+		if(locations.length > LOC_THRESHOLD){
 			int mid = locations.length/2;
 			ForkLocationProcessor a = new ForkLocationProcessor(Arrays.copyOfRange(locations, 0, mid));
 			a.fork();
 			ForkLocationProcessor b = new ForkLocationProcessor(Arrays.copyOfRange(locations, mid, locations.length));
 			b.compute();
 		} else {
-			if(IntParameter.CARRYING_CAPACITY.getValue()<IntParameter.SPLIT_THRESHOLD.getValue()){
+			if(IntParameter.CARRYING_CAPACITY.getValue()<IND_THRESHOLD){
 				doWork();
 			} else {
 				threadByIndividuals();
@@ -53,7 +57,7 @@ public class ForkLocationProcessor extends RecursiveAction {
 		for(Location location : locations){
 			if(location.getIndividuals().size()!=0){
 				List<Individual> individuals = location.getIndividuals();
-				ForkIndividualProcessor fip = new ForkIndividualProcessor(individuals, location);
+				ForkIndividualProcessor fip = new ForkIndividualProcessor(individuals, location, IND_THRESHOLD);
 				List<Individual> newIndividuals = fip.compute();
 				location.setIndividuals(newIndividuals);
 			}
