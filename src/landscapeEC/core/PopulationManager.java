@@ -70,6 +70,18 @@ public class PopulationManager {
         return newPopulation;
     }
     
+    public List<Individual> forkedCrossover(List<Individual> population, SelectionOperator selectionOperator, CrossoverOperator crossoverOperator, int numChildren) {
+        List<Individual> newPopulation = new ArrayList<Individual>();
+        
+        for(int i=0; i<numChildren; i++) {
+            List<Individual> parents = selectionOperator.selectParents(population, IndividualComparator.getComparator());
+            Individual individual = crossoverOperator.crossover(parents);
+            newPopulation.add(individual);
+        }
+                
+        return newPopulation;
+    }
+    
     public int getNumberOfNeededChildren(int populationSize) {
         int carryingCapacity = IntParameter.CARRYING_CAPACITY.getValue();
         int eliteSize = getEliteSize(populationSize, DoubleParameter.ELITE_PROPORTION.getValue());

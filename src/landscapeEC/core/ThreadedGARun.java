@@ -10,13 +10,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import landscapeEC.core.threads.ForkDiversityCounter;
 import landscapeEC.core.threads.ForkLocationProcessor;
 import landscapeEC.core.threads.ForkMigrator;
 import landscapeEC.core.threads.ForkedDiversityCounter;
 import landscapeEC.locality.EmptyWorldException;
+import landscapeEC.locality.GridWorld;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.MigrationInWorldOfSizeOneException;
 import landscapeEC.locality.ViralClauseCounter;
@@ -60,9 +65,14 @@ public class ThreadedGARun extends GARun{
 	private double[] intervalDiversities;
 	
 	private ForkJoinPool forkPool = new ForkJoinPool();
+	
+	private LinkedBlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>();
+	private ExecutorService threads = new ThreadPoolExecutor(2, 16, 15, TimeUnit.MILLISECONDS, workQueue);
 	@SuppressWarnings("rawtypes")
 	private Location[] locations;
 	
+	
+	//Testing stuff
 	private long startTime;
 	private boolean haventSaid=true;
 	private List<Long> longs = new ArrayList<Long>();
@@ -203,7 +213,13 @@ public class ThreadedGARun extends GARun{
 			observers.add(instance);
 		}
 	}
-
+/*
+ * *********************************************************************
+ * 
+ * 								START OF MAIN FUNCTION
+ * 
+ * *********************************************************************
+ */	
 	private boolean runGenerations(int currentRun) throws Exception {
 		List<Individual> population = popManager.generatePopulation();
 
@@ -246,12 +262,14 @@ public class ThreadedGARun extends GARun{
 		for (Observer o : observers) {
 		    o.generationData(this);
 		}
+		
+		//************************************START OF MAIN LOOP***********************************
+		
 		while (evaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO.getValue()) {
 		    if(runGenerations) {
 		        processAllLocations();
 		        generationNumber++;
 		    }
-
 		    for (Observer o : observers) {
 		        o.generationData(this);
 		    }
@@ -281,6 +299,7 @@ public class ThreadedGARun extends GARun{
 		    
 		}
 
+		//************************************END OF MAIN LOOP***********************************
 
 		if (bestOverallFitness == 1.0) {
 			System.out.println("Best Fitness: " + bestOverallFitness);
@@ -294,6 +313,14 @@ public class ThreadedGARun extends GARun{
 		System.out.println("FAILURE");
 		return false;
 	}
+	
+	/*
+	 * *********************************************************************
+	 * 
+	 * 								END OF MAIN FUNCTION
+	 * 
+	 * *********************************************************************
+	 */	
 
 	private void fillAllLocations() {
 		for (Location location : world) {
@@ -306,6 +333,8 @@ public class ThreadedGARun extends GARun{
 			haventSaid=false;
 			longs.add((System.currentTimeMillis()-startTime));
 		}
+		
+		
 		updateDiversityCounts();
 		if (BooleanParameter.VIRAL_CLAUSES.getValue()) {
 		    viralClauseCounter.updateViralClauses(world);

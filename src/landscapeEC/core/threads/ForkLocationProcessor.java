@@ -2,6 +2,7 @@ package landscapeEC.core.threads;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.RecursiveTask;
@@ -40,7 +41,22 @@ public class ForkLocationProcessor extends RecursiveAction {
 			ForkLocationProcessor b = new ForkLocationProcessor(Arrays.copyOfRange(locations, mid, locations.length));
 			b.compute();
 		} else {
-			doWork();
+			if(IntParameter.CARRYING_CAPACITY.getValue()<IntParameter.SPLIT_THRESHOLD.getValue()){
+				doWork();
+			} else {
+				threadByIndividuals();
+			}
+		}
+	}
+	
+	protected void threadByIndividuals(){
+		for(Location location : locations){
+			if(location.getIndividuals().size()!=0){
+				List<Individual> individuals = location.getIndividuals();
+				ForkIndividualProcessor fip = new ForkIndividualProcessor(individuals, location);
+				List<Individual> newIndividuals = fip.compute();
+				location.setIndividuals(newIndividuals);
+			}
 		}
 	}
 	
@@ -91,7 +107,6 @@ public class ForkLocationProcessor extends RecursiveAction {
 	private void performElitism() {
 		for (Location location : locations) {
 			List<Individual> locationIndividuals = location.getIndividuals();
-
 			if (!locationIndividuals.isEmpty()) {
 				List<Individual> elite = popManager.getElite(
 						locationIndividuals,
