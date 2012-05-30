@@ -7,20 +7,18 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 
 import landscapeEC.core.threads.ForkDiversityCounter;
 import landscapeEC.core.threads.ForkLocationProcessor;
 import landscapeEC.core.threads.ForkMigrator;
+import landscapeEC.core.threads.ForkedDiversityCounter;
 import landscapeEC.locality.EmptyWorldException;
-import landscapeEC.locality.GraphWorld;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.MigrationInWorldOfSizeOneException;
-import landscapeEC.locality.Vector;
-import landscapeEC.locality.GridWorld;
 import landscapeEC.locality.ViralClauseCounter;
 import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
@@ -28,30 +26,19 @@ import landscapeEC.parameters.BooleanParameter;
 import landscapeEC.parameters.DoubleArrayParameter;
 import landscapeEC.parameters.DoubleParameter;
 import landscapeEC.parameters.GlobalParameters;
-import landscapeEC.parameters.IntArrayParameter;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.parameters.StringParameter;
 import landscapeEC.problem.DiversityCalculator;
 import landscapeEC.problem.Evaluator;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
-import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.Problem;
 import landscapeEC.problem.ProblemParser;
-import landscapeEC.problem.sat.Clause;
-import landscapeEC.problem.sat.SatEvaluator;
-import landscapeEC.problem.sat.operators.CrossoverOperator;
-import landscapeEC.problem.sat.operators.MutationOperator;
-import landscapeEC.problem.sat.operators.SelectionOperator;
 import landscapeEC.util.FrequencyCounter;
 import landscapeEC.util.ParameterClassLoader;
 import landscapeEC.util.SharedPRNG;
 
 public class ThreadedGARun extends GARun{
-
-	private MutationOperator mutationOperator;
-	private SelectionOperator selectionOperator;
-	private CrossoverOperator crossoverOperator;
 
 	private PopulationManager popManager;
 	private Evaluator evaluator;
@@ -73,19 +60,20 @@ public class ThreadedGARun extends GARun{
 	private double[] intervalDiversities;
 	
 	private ForkJoinPool forkPool = new ForkJoinPool();
+	@SuppressWarnings("rawtypes")
 	private Location[] locations;
+	
+	private long startTime;
+	private boolean haventSaid=true;
+	private List<Long> longs = new ArrayList<Long>();
 
 	public ThreadedGARun(String propertiesFilename) {
 		super(propertiesFilename);
 	}
 
 	public void run() throws Exception {
-		mutationOperator = ParameterClassLoader
-		.loadClass(StringParameter.MUTATION_OPERATOR);
-		selectionOperator = ParameterClassLoader
-		.loadClass(StringParameter.SELECTION_OPERATOR);
-		crossoverOperator = ParameterClassLoader
-		.loadClass(StringParameter.CROSSOVER_OPERATOR);
+		
+		startTime=System.currentTimeMillis();
 
 		intervalFitnesses = new double[getReportingIntervals().length];
 		intervalDiversities = new double[getReportingIntervals().length];
@@ -115,6 +103,8 @@ public class ThreadedGARun extends GARun{
 			Arrays.fill(intervalFitnesses, Double.NaN);
 
 			try {
+				startTime=System.currentTimeMillis();
+				haventSaid=true;
 				if (runGenerations(i)) {
 					addRunToRFile(true, evaluator.getNumEvaluations(), 1.0);
 					successes++;
@@ -133,6 +123,11 @@ public class ThreadedGARun extends GARun{
 
 		System.out.println(successes + "/" + numRuns + " runs successful");
 
+		long result = 0;
+		for(long l : longs){
+			result+=l;
+		}
+		System.out.println("Average time to 1M evals: "+(result/longs.size()));
 		closeRFile();
 	}
 
@@ -307,6 +302,10 @@ public class ThreadedGARun extends GARun{
 	}
 
 	private void processAllLocations() {
+		if(GlobalProblem.getEvaluator().getNumEvaluations()>1000000 && haventSaid){
+			haventSaid=false;
+			longs.add((System.currentTimeMillis()-startTime));
+		}
 		updateDiversityCounts();
 		if (BooleanParameter.VIRAL_CLAUSES.getValue()) {
 		    viralClauseCounter.updateViralClauses(world);
@@ -314,9 +313,8 @@ public class ThreadedGARun extends GARun{
 		
 		performMigration();
 		addFromPendingIndividuals();
-		
 		threadByLocations();
-		while(!forkPool.isQuiescent()){
+		while(!(forkPool.getActiveThreadCount()==0)){
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
@@ -331,15 +329,77 @@ public class ThreadedGARun extends GARun{
 		forkPool.invoke(flp);
 	}
 	
-	private void performMigration(){
+	/*private void performMigration(){
 		ForkMigrator fm = new ForkMigrator(locations, world);
 		forkPool.invoke(fm);
+	}*/
+	
+	private void performMigration() {
+	    double migrationProbability = DoubleParameter.MIGRATION_PROBABILITY.getValue();
+	    int migrationDistance = IntParameter.MIGRATION_DISTANCE.getValue();
+
+	    if (migrationProbability <= 0 || migrationDistance <= 0)
+	        return;
+	    
+	    //TODO It may be possible to reduce the code duplication here, but we can't right now until we refactor
+	    //    the way world.getNeighborhood works (right now it needs to take a Vector or an Integer)
+	    //if (StringParameter.WORLD_TYPE.getValue().contains("GridWorld")) {
+	        //GridWorld gridWorld = (GridWorld) world;
+	        for (Location<?> location : world) {
+	            List<Individual> locationIndividuals = location.getIndividuals();
+	            List<Individual> individualsToRemove = new ArrayList<Individual>();
+
+	            for (Individual i : locationIndividuals) {
+	                if (SharedPRNG.instance().nextDouble() < migrationProbability) {
+	                    individualsToRemove.add(i);
+	                    List<?> neighborhood = world.getNeighborhood(location.getPosition(), migrationDistance);
+	                    neighborhood.remove(location);
+	                    Object newPosition;
+	                    try {
+	                        newPosition = neighborhood.get(SharedPRNG.instance().nextInt(neighborhood.size()));
+	                        Location<?> newLocation = world.getLocation(newPosition);
+	                        newLocation.addToPendingIndividuals(i);
+	                    } catch (IndexOutOfBoundsException e) {
+	                        throw new MigrationInWorldOfSizeOneException(e);
+	                    }
+	                }
+	            }
+	            location.removeAll(individualsToRemove);
+	        }
+//
+//	    } else {
+//	        GraphWorld graphWorld = (GraphWorld) world;
+//	        for (Location<?> location : graphWorld) {
+//	            List<Individual> locationIndividuals = location.getIndividuals();
+//	            List<Individual> individualsToRemove = new ArrayList<Individual>();
+//
+//	            for (Individual i : locationIndividuals) {
+//	                if (SharedPRNG.instance().nextDouble() < migrationProbability) {
+//	                    individualsToRemove.add(i);
+//	                    List<Integer> neighborhood = graphWorld.getNeighborhood((Integer) location.getPosition(), migrationDistance);
+//	                    neighborhood.remove(location);
+//	                    Integer newPosition;
+//	                    try {
+//	                        newPosition = neighborhood.get(SharedPRNG.instance().nextInt(neighborhood.size()));
+//	                        Location<Integer> newLocation = graphWorld.getLocation(newPosition);
+//	                        newLocation.addToPendingIndividuals(i);
+//	                    } catch (IndexOutOfBoundsException e) {
+//	                        throw new MigrationInWorldOfSizeOneException(e);
+//	                    }
+//	                }
+//	            }
+//	            location.removeAll(individualsToRemove);
+//	        }
+//	    }
 	}
 
 	private void updateDiversityCounts() {
+		//DiversityCalculator.reset();
+		//ForkDiversityCounter fdc = new ForkDiversityCounter(locations);
+		//DiversityCalculator.addCounter((FrequencyCounter<Individual>)forkPool.invoke(fdc));
 		DiversityCalculator.reset();
-		ForkDiversityCounter fdc = new ForkDiversityCounter(locations);
-		DiversityCalculator.addCounter((FrequencyCounter<Individual>)forkPool.invoke(fdc));
+		ForkedDiversityCounter fdc = new ForkedDiversityCounter(locations);
+		forkPool.execute(fdc);
 	}
 	
 
@@ -354,7 +414,9 @@ public class ThreadedGARun extends GARun{
 	private void addFromPendingIndividuals() {
 
 		for (Location location : world) {
-			location.addFromPendingIndividuals();
+			synchronized(location){
+				location.addFromPendingIndividuals();
+			}
 		}
 	}
 	

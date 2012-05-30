@@ -126,7 +126,12 @@ public class GridWorld implements Serializable, World<Vector> {
 
     private Individual findBestInCell(IndividualComparator comparator,
             Vector position) {
+    	try{
         return Collections.max(getIndividualsAt(position), comparator);
+    	} catch(NullPointerException e){
+    		System.out.println("NullPointerException at position "+position.toString());
+    		return null;
+    	}
     }
 
     public Individual findBestIndividual() {

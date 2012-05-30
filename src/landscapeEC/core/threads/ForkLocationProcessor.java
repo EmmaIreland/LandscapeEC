@@ -25,7 +25,7 @@ public class ForkLocationProcessor extends RecursiveAction {
 	Location[] locations;
 	private PopulationManager popManager;
 	private Evaluator evaluator;
-	private static final int THRESHOLD = 150;
+	private static final int THRESHOLD = IntParameter.SPLIT_THRESHOLD.getValue();
 	
 	public ForkLocationProcessor(Location[] locations){
 		this.locations = locations;
@@ -48,8 +48,18 @@ public class ForkLocationProcessor extends RecursiveAction {
 		popManager = new PopulationManager();
 		evaluator = GlobalProblem.getEvaluator();
 		performDraconianReaper();
+		setFromPendingIndividuals();
 		performElitism();
 		performReproduction();
+		setFromPendingIndividuals();
+	}
+	
+	private void setFromPendingIndividuals(){
+		for(Location location : locations){
+			synchronized(location){
+				location.setFromPendingIndividuals();
+			}
+		}
 	}
 	
 	private void performDraconianReaper() {
@@ -62,7 +72,6 @@ public class ForkLocationProcessor extends RecursiveAction {
 	            Problem locationProblem = location.getProblem();
 	            doReaperEffect(individual, location, evaluator.solvesSubProblem(individual, locationProblem));
 	        }
-			location.setFromPendingIndividuals();
 	    }
 	}
 
@@ -124,7 +133,6 @@ public class ForkLocationProcessor extends RecursiveAction {
 						location);
 
 				location.addToPendingIndividuals(mutatedPopulation);
-				location.setFromPendingIndividuals();
 			} else if (BooleanParameter.PROMOTE_SMALL_POPULATIONS.getValue()) {
 				List<Individual> copiedPopulation = new ArrayList<Individual>();
 				for (Individual individual : locationIndividuals) {
@@ -136,7 +144,6 @@ public class ForkLocationProcessor extends RecursiveAction {
 						location);
 
 				location.addToPendingIndividuals(mutatedPopulation);
-				location.setFromPendingIndividuals();
 			}
 		}
 	}

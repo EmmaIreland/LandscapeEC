@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.RecursiveTask;
 
 import landscapeEC.locality.Location;
+import landscapeEC.parameters.IntParameter;
 import landscapeEC.problem.DiversityCalculator;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
@@ -13,7 +14,7 @@ import landscapeEC.util.FrequencyCounter;
 
 public class ForkDiversityCounter extends RecursiveTask {
 	private Location[] locations;
-	private static final int THRESHOLD = 100;
+	private static final int THRESHOLD = IntParameter.SPLIT_THRESHOLD.getValue();
 	
 	public ForkDiversityCounter(Location[] locations){
 		this.locations = locations;

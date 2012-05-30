@@ -16,7 +16,7 @@ import landscapeEC.util.SharedPRNG;
 public class ForkMigrator extends RecursiveAction {
 	private Location[] locations;
 	private World world;
-	private static final int THRESHOLD = 150;
+	private static final int THRESHOLD = IntParameter.SPLIT_THRESHOLD.getValue();
 	
 	public ForkMigrator(Location[] locations, World world){
 		this.locations = locations;

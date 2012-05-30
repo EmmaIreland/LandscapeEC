@@ -66,6 +66,10 @@ public class GARun {
 
 	private double[] intervalFitnesses;
 	private double[] intervalDiversities;
+	
+	private long startTime;
+	private boolean haventSaid=true;
+	private List<Long> longs = new ArrayList<Long>();
 
 	public GARun(String propertiesFilename) {
 		this.propertiesFilename = propertiesFilename;
@@ -107,6 +111,8 @@ public class GARun {
 			Arrays.fill(intervalFitnesses, Double.NaN);
 
 			try {
+				startTime=System.currentTimeMillis();
+				haventSaid=true;
 				if (runGenerations(i)) {
 					addRunToRFile(true, evaluator.getNumEvaluations(), 1.0);
 					successes++;
@@ -124,7 +130,11 @@ public class GARun {
 		}
 
 		System.out.println(successes + "/" + numRuns + " runs successful");
-
+		long result = 0;
+		for(long l : longs){
+			result+=l;
+		}
+		System.out.println("Average time to 1M evals: "+(result/longs.size()));
 		closeRFile();
 	}
 
@@ -289,6 +299,10 @@ public class GARun {
 	}
 
 	private void processAllLocations() {
+		if(GlobalProblem.getEvaluator().getNumEvaluations()>1000000 && haventSaid){
+			haventSaid=false;
+			longs.add((System.currentTimeMillis()-startTime));
+		}
 		updateDiversityCounts();
 		if (BooleanParameter.VIRAL_CLAUSES.getValue()) {
 		    viralClauseCounter.updateViralClauses(world);

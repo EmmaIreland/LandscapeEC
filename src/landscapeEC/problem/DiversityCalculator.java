@@ -31,7 +31,10 @@ public class DiversityCalculator {
     }
     
     public static void addCounter(FrequencyCounter<Individual> counter){
-    	individualCounts.addCounter(counter);
+    	Iterator iter = counter.iterator();
+    	while(iter.hasNext()){
+    		addIndividual((Individual)iter.next());
+    	}
     }
     
     public static void addIndividuals(Individual individual, int count){
