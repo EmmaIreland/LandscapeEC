@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 public class CommunityWorldGenerator {
@@ -77,7 +76,12 @@ public class CommunityWorldGenerator {
 			gen.setSeed(seed);
 		}
 
+		ArrayList<ArrayList<Integer>> worldList = new ArrayList<ArrayList<Integer>>();
 
+		for (int i = 0; i < numOfNodes; i++) {
+			worldList.add(new ArrayList<Integer>());
+		}
+		
 		//put all the nodes in their communities
 		//HashMap<Integer, Integer> commMap = new HashMap<Integer, Integer>();
 		ArrayList<Node> nodeList = new ArrayList<Node>();
@@ -98,8 +102,10 @@ public class CommunityWorldGenerator {
 				Node toNode = nodeList.get(k);
 				if (curr.getCommunity().equals(toNode.getCommunity()) && !toNode.contains(curr.getName()) ) {
 					if (gen.nextDouble() < commProb) {
-						makeLink(i, k);
-						makeLink(k, i);
+						worldList.get(i).add(k);
+						worldList.get(k).add(i);
+						//makeLink(i, k);
+						//makeLink(k, i);
 						//System.out.println("Community link from " + i + " to " + k);
 					}
 					curr.add(toNode.getName());
@@ -117,12 +123,16 @@ public class CommunityWorldGenerator {
 					rand = gen.nextInt(numOfNodes);
 				}
 				//System.out.println("inter community link from " + i + " to " + rand);
-				makeLink(i, rand);
-				makeLink(rand, i);
+				worldList.get(i).add(rand);
+				worldList.get(rand).add(i);
+				//makeLink(i, rand);
+				//makeLink(rand, i);
 				curr.add(rand);
 				nodeList.get(rand).add(i);
 			}
 		}
+		
+		return worldList;
 
 	}
 	
