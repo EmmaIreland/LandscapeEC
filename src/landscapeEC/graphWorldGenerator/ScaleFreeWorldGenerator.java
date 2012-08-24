@@ -42,6 +42,7 @@ public class ScaleFreeWorldGenerator {
 
 		if (args.length == 3) {
 			seed = new Long(args[2]);
+			gen.setSeed(seed);
 		}
 
 		if (numOfNodes <= conn) {
