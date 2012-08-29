@@ -1,4 +1,8 @@
+
+
+/*
 package landscapeEC.core.threads;
+
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -79,7 +83,7 @@ public class ForkDiversityCounter extends RecursiveTask {
 				    This line does two things -
 				     It makes ViralClauses work
 				     It makes threading performance gobble on the fat one.
-				}*/
+				}*/ /*
 				result.addItem(i);
 			}
 		}
@@ -87,3 +91,4 @@ public class ForkDiversityCounter extends RecursiveTask {
 	}
 
 }
+*/

@@ -134,7 +134,7 @@ public class GARun {
 		for(long l : longs){
 			result+=l;
 		}
-		System.out.println("Average time to 1M evals: "+(result/longs.size()));
+//		System.out.println("Average time to 1M evals: "+(result/longs.size()));
 		closeRFile();
 	}
 
@@ -394,31 +394,7 @@ public class GARun {
 	            }
 	            location.removeAll(individualsToRemove);
 	        }
-//
-//	    } else {
-//	        GraphWorld graphWorld = (GraphWorld) world;
-//	        for (Location<?> location : graphWorld) {
-//	            List<Individual> locationIndividuals = location.getIndividuals();
-//	            List<Individual> individualsToRemove = new ArrayList<Individual>();
-//
-//	            for (Individual i : locationIndividuals) {
-//	                if (SharedPRNG.instance().nextDouble() < migrationProbability) {
-//	                    individualsToRemove.add(i);
-//	                    List<Integer> neighborhood = graphWorld.getNeighborhood((Integer) location.getPosition(), migrationDistance);
-//	                    neighborhood.remove(location);
-//	                    Integer newPosition;
-//	                    try {
-//	                        newPosition = neighborhood.get(SharedPRNG.instance().nextInt(neighborhood.size()));
-//	                        Location<Integer> newLocation = graphWorld.getLocation(newPosition);
-//	                        newLocation.addToPendingIndividuals(i);
-//	                    } catch (IndexOutOfBoundsException e) {
-//	                        throw new MigrationInWorldOfSizeOneException(e);
-//	                    }
-//	                }
-//	            }
-//	            location.removeAll(individualsToRemove);
-//	        }
-//	    }
+
 	}
 
 	private void performElitism() {

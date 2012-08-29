@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ForkJoinPool;
+//import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import landscapeEC.core.threads.DiversityCounterUpdater;
-import landscapeEC.core.threads.ForkDiversityCounter;
-import landscapeEC.core.threads.ForkLocationProcessor;
+//import landscapeEC.core.threads.DiversityCounterUpdater;
+//import landscapeEC.core.threads.ForkDiversityCounter;
+//import landscapeEC.core.threads.ForkLocationProcessor;
 import landscapeEC.locality.EmptyWorldException;
 import landscapeEC.locality.GridWorld;
 import landscapeEC.locality.Location;
@@ -63,7 +63,7 @@ public class ThreadedGARun extends GARun{
 	private double[] intervalFitnesses;
 	private double[] intervalDiversities;
 	
-	private ForkJoinPool forkPool = new ForkJoinPool();
+//	private ForkJoinPool forkPool = new ForkJoinPool();
 	
 	private LinkedBlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>();
 	private ExecutorService threads = new ThreadPoolExecutor(2, 16, 15, TimeUnit.MILLISECONDS, workQueue);
@@ -341,7 +341,7 @@ public class ThreadedGARun extends GARun{
 		performMigration();
 		addFromPendingIndividuals();
 		threadByLocations();
-		while(!(forkPool.getActiveThreadCount()==0)){
+//		while(!(forkPool.getActiveThreadCount()==0)){
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
@@ -349,11 +349,11 @@ public class ThreadedGARun extends GARun{
 				e.printStackTrace();
 			}
 		}
-	}
+//	}
 	
 	private void threadByLocations(){
-		ForkLocationProcessor flp = new ForkLocationProcessor(locations);
-		forkPool.invoke(flp);
+//		ForkLocationProcessor flp = new ForkLocationProcessor(locations);
+//		forkPool.invoke(flp);
 	}
 	
 	private void performMigration() {
@@ -417,10 +417,10 @@ public class ThreadedGARun extends GARun{
 
 	private void updateDiversityCounts() {
 		DiversityCalculator.reset();
-		ForkDiversityCounter fdc = new ForkDiversityCounter(locations);
-		FrequencyCounter<Individual> result = forkPool.invoke(fdc);
-		DiversityCounterUpdater dcu = new DiversityCounterUpdater(result);
-		forkPool.execute(dcu);
+//		ForkDiversityCounter fdc = new ForkDiversityCounter(locations);
+//		FrequencyCounter<Individual> result = forkPool.invoke(fdc);
+//		DiversityCounterUpdater dcu = new DiversityCounterUpdater(result);
+//		forkPool.execute(dcu);
 	}
 	
 

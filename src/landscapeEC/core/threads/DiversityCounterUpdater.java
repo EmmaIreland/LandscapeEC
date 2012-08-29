@@ -1,4 +1,4 @@
-package landscapeEC.core.threads;
+/*package landscapeEC.core.threads;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,4 +25,4 @@ public class DiversityCounterUpdater extends RecursiveAction{
 		}
 	}
 
-}
+} */
