@@ -1,0 +1,57 @@
+SEED: seeds a random number generator for a particular run <long>
+
+
+PROBLEM_EVALUATOR: the fitness calculator for a given problem <fully qualified class name>
+PROBLEM_TYPE: specifies the problem that we are solving <fully qualified class name>
+PROBLEM_PARSER: constructs an instance of problem type based on a specification file for 
+				a problem instance <fully qualified class name>
+PROBLEM_FILE: specifies the specification file that will be given to the problem parser <fully qualified class name>
+
+
+WORLD_TYPE: landscapeEC.locality.GridWorld or landscapeEC.locality.GraphWorld
+WORLD_DIMENSIONS: Only meaningful for GridWorld? The dimensions of the world as a list of ints
+FILE:
+TOROIDAL: for GridWorlds. Specifies whether or not the wraps around at the edges
+STARTING_POPULATION:
+
+
+QUIT_ON_SUCCESS:
+
+NUM_RUNS:
+NUM_EVALS_TO_DO:
+REPORTING_INTERVALS:
+
+
+AVERAGE_MUTATIONS:
+REPRODUCTION_RATE:
+ELITE_PROPORTION:
+CARRYING_CAPACITY:
+PROMOTE_SMALL_POPULATIONS:
+REAPER_EFFECT:
+TOURNAMENT_SIZE:
+MIGRATION_PROBABILITY:
+MIGRATION_DISTANCE:
+MUTATION_OPERATOR:
+SELECTION_OPERATOR:
+CROSSOVER_OPERATOR:
+
+
+OBSERVERS:
+VISUALIZER_Y_SCALE:
+VISUALIZER_X_SCALE:
+VISUALIZER_INTENSITY_SCALE:
+VISUALIZER_TYPE:
+
+
+GEOGRAPHY_TYPE:
+GEOGRAPHY_NOISE_STRENGTH:
+
+
+VIRAL_CLAUSE_THRESHOLD:
+VIRAL_CLAUSES:
+
+
+SKIP_DIVERSITY:
+
+
+LOCALITY_TYPE:
