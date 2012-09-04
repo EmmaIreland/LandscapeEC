@@ -9,49 +9,52 @@ PROBLEM_FILE: specifies the specification file that will be given to the problem
 
 
 WORLD_TYPE: landscapeEC.locality.GridWorld or landscapeEC.locality.GraphWorld
-WORLD_DIMENSIONS: Only meaningful for GridWorld? The dimensions of the world as a list of ints
+WORLD_DIMENSIONS: Only meaningful for GridWorld? The dimensions of the world as a list of ints <int, int>
 FILE:
-TOROIDAL: for GridWorlds. Specifies whether or not the wraps around at the edges
-STARTING_POPULATION:
+TOROIDAL: for GridWorlds. Specifies whether or not the wraps around at the edges <boolean>
+STARTING_POPULATION: Specifies what locations are initially populated <string[ORIGIN, CORNERS]>
 
 
-QUIT_ON_SUCCESS:
+QUIT_ON_SUCCESS: determines if a run will terminate upon success or only when its completed 
+					the specified number of evaluations <boolean>
 
-NUM_RUNS:
-NUM_EVALS_TO_DO:
-REPORTING_INTERVALS:
-
-
-AVERAGE_MUTATIONS:
-REPRODUCTION_RATE:
-ELITE_PROPORTION:
-CARRYING_CAPACITY:
-PROMOTE_SMALL_POPULATIONS:
-REAPER_EFFECT:
-TOURNAMENT_SIZE:
-MIGRATION_PROBABILITY:
-MIGRATION_DISTANCE:
-MUTATION_OPERATOR:
-SELECTION_OPERATOR:
-CROSSOVER_OPERATOR:
+NUM_RUNS: determines the number of times this configuration of parameters will be run <int>
+NUM_EVALS_TO_DO: sets the number of maximum evaluations a run will use before failing <int>
+REPORTING_INTERVALS: 
 
 
-OBSERVERS:
-VISUALIZER_Y_SCALE:
-VISUALIZER_X_SCALE:
-VISUALIZER_INTENSITY_SCALE:
-VISUALIZER_TYPE:
+AVERAGE_MUTATIONS: specifies the average number of bits that will be modified in a mutation operation <int>
+REPRODUCTION_RATE: sets the number of individuals that will be produced from a crossover operation <int>
+ELITE_PROPORTION: determines what proportion of the best performing individuals will survive for the next generation <double>
+CARRYING_CAPACITY: sets the maximum number of individuals in a location <int>
+PROMOTE_SMALL_POPULATIONS: determines whether or not we use a single individual as both parents if 
+					there's only one individual in a location <boolean>
+REAPER_EFFECT: determines what happens to an individual if it can't satisfy the problem in its 
+					location set by its locality <string[DRACONIAN, FITNESS]>
+TOURNAMENT_SIZE: sets the number of individuals that are compared when selecting a parent <int>
+MIGRATION_PROBABILITY: sets the chance of an individual to migrate <double>
+MIGRATION_DISTANCE: sets how many locations an individual can move through to migrate to a location <int> GRIDWORLD ONLY
+MUTATION_OPERATOR: specifies the mutation operation that we used <fully qualified class name>
+SELECTION_OPERATOR: specifies the selection operation that we used <fully qualified class name>
+CROSSOVER_OPERATOR: specifies the crossover operation that we used <fully qualified class name>
 
 
-GEOGRAPHY_TYPE:
-GEOGRAPHY_NOISE_STRENGTH:
+OBSERVERS: specifies what visualizer will be used <a list of fully qualified class names>
+VISUALIZER_X_SCALE: sets the size for the length of the x axis of the visualizer <int>
+VISUALIZER_Y_SCALE: sets the size for the length of the y axis of the visualizer <int>
+VISUALIZER_INTENSITY_SCALE: 
+VISUALIZER_TYPE: sets what attribute the visualizer will display <string BRIGHT_MUTATION, COLORED_CLAUSES, FITNESS>
 
 
-VIRAL_CLAUSE_THRESHOLD:
-VIRAL_CLAUSES:
+GEOGRAPHY_TYPE: sets the locality <fully qualified class name>  
+GEOGRAPHY_NOISE_STRENGTH: 
 
 
-SKIP_DIVERSITY:
+VIRAL_CLAUSE_THRESHOLD: 
+VIRAL_CLAUSES: turns viral clauses on or off <boolean>
 
 
-LOCALITY_TYPE:
+SKIP_DIVERSITY: 
+
+
+LOCALITY_TYPE: 
