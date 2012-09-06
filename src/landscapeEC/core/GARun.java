@@ -256,6 +256,7 @@ public class GARun {
 		    bestOverallFitness = bestIndividual.getGlobalFitness();
 		    double[] reportingIntervals = getReportingIntervals();
 		    for (int j = 0; j < reportingIntervals.length; j++) {
+		        // TODO create a method for this test. replace nan test with null test
 		        if (evaluator.getNumEvaluations() > reportingIntervals[j]
 		                                                               * IntParameter.NUM_EVALS_TO_DO.getValue()
 		                                                               && Double.isNaN(intervalFitnesses[j])) {

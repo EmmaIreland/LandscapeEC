@@ -20,7 +20,8 @@ QUIT_ON_SUCCESS: determines if a run will terminate upon success or only when it
 
 NUM_RUNS: determines the number of times this configuration of parameters will be run <int>
 NUM_EVALS_TO_DO: sets the number of maximum evaluations a run will use before failing <int>
-REPORTING_INTERVALS: 
+REPORTING_INTERVALS: a number between 0 and 1 that indicates what fraction of the evaluations 
+					should pass between snapshots. A value that is greater than 1 will turn off snapshots.
 
 
 AVERAGE_MUTATIONS: specifies the average number of bits that will be modified in a mutation operation <int>
@@ -42,19 +43,25 @@ CROSSOVER_OPERATOR: specifies the crossover operation that we used <fully qualif
 OBSERVERS: specifies what visualizer will be used <a list of fully qualified class names>
 VISUALIZER_X_SCALE: sets the size for the length of the x axis of the visualizer <int>
 VISUALIZER_Y_SCALE: sets the size for the length of the y axis of the visualizer <int>
-VISUALIZER_INTENSITY_SCALE: 
+VISUALIZER_INTENSITY_SCALE: this value is the exponent used to scale fitness values in map visualizer. 
+							Larger values increase detail in high fitness values at the expense of detail 
+							and low fitness values.
 VISUALIZER_TYPE: sets what attribute the visualizer will display <string BRIGHT_MUTATION, COLORED_CLAUSES, FITNESS>
 
 
-GEOGRAPHY_TYPE: sets the locality <fully qualified class name>  
-GEOGRAPHY_NOISE_STRENGTH: 
+GEOGRAPHY_TYPE: sets the geography <fully qualified class name>  
+GEOGRAPHY_NOISE_STRENGTH: specifies the amount of randomized used in fractal geography. integer between 0 
+							and the number of clauses. High values increase the amount of noise in the landscape.
 
 
-VIRAL_CLAUSE_THRESHOLD: 
+VIRAL_CLAUSE_THRESHOLD: When individuals with the same symantics have dominated the world for more than this number
+						 of generations then a unsolved clause will be added to the viral clause set.
 VIRAL_CLAUSES: turns viral clauses on or off <boolean>
 
 
-SKIP_DIVERSITY: 
+SKIP_DIVERSITY: if this is true, the diversity calculation is skipped. Some variants of the system depend on 
+				the diversity calculator being on but turning it off can speed up the system.
+				TODO: variants that need this should turn it on.
 
 
 LOCALITY_TYPE: 

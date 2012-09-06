@@ -109,6 +109,9 @@ public class SatInstance implements Iterable<Clause>, Serializable, Problem, Sep
             // If a clauseList doesn't contain a clause and mutate=true then we
             // add it
             // Reverse for when mutate is false
+            
+            // TODO There is a linkage between noiseStrength and NumClauses, and we should change this so that there isn't.
+            // Change noiseStrength to a float between 0 and 1
             boolean mutate = SharedPRNG.instance().nextDouble() < (noiseStrength / (double) NumClauses);
             if (SharedPRNG.instance().nextBoolean()) {
                 if (firstInstance.contains(clause) != mutate) {
