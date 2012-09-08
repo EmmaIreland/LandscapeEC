@@ -42,8 +42,11 @@ public class ScaleFreeWorldGenerator {
 
 		if (args.length == 3) {
 			seed = new Long(args[2]);
-			gen.setSeed(seed);
+		} else {
+			seed = gen.nextLong();
 		}
+		
+		gen.setSeed(seed);
 
 		if (numOfNodes <= conn) {
 			throw new IllegalArgumentException("The number of nodes must be higher than the number of connections each added node has.");
@@ -52,11 +55,7 @@ public class ScaleFreeWorldGenerator {
 			throw new IllegalArgumentException("The number of connections a new node makes must be higher than one.");
 		}
 		
-		if (seed == null) {
-			FileName = "ScaleFreeWorld-" + numOfNodes + "N-" + conn + "C";
-		} else {
 			FileName = "ScaleFreeWorld-" + numOfNodes + "N-" + conn + "C-" + seed;
-		}
 		
 		makeFile();
 		writeWorld(makeScaleFree());

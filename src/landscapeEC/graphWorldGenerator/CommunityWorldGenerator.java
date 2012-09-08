@@ -32,25 +32,24 @@ public class CommunityWorldGenerator {
 
 		if (args.length != 4 && args.length != 5) {
 			throw new IllegalArgumentException("Must be four or five inputs, <Number of Nodes>, <Number of Communities>, " +
-					"<Prob of Community Connection>, <Prob of Inter-Community Connection>, <optional seed>");
+			"<Prob of Community Connection>, <Prob of Inter-Community Connection>, <optional seed>");
 		}
 
 		numOfNodes = Integer.parseInt(args[0]);
 		commNum = Integer.parseInt(args[1]);
 		commProb = Double.parseDouble(args[2]);
 		interProb = Double.parseDouble(args[3]);
-		
-		
+
+
 		if (args.length == 5) {
 			seed = new Long(args[4]);
-		}
-
-		
-		if (seed == null) {
-			FileName = "CommunityWorld-" + numOfNodes + "N-" + commNum + "C-" + commProb + "CP-" +interProb + "IP";
 		} else {
-			FileName = "CommunityWorld-" + numOfNodes + "N-" + commNum + "C-" + commProb + "CP-" +interProb + "IP" + seed;
+			seed = gen.nextLong();
 		}
+		
+		gen.setSeed(seed);
+
+		FileName = "CommunityWorld-" + numOfNodes + "N-" + commNum + "C-" + commProb + "CP-" +interProb + "IP" + seed;
 
 		makeFile();
 		writeWorld(makeCommunity());
@@ -70,18 +69,13 @@ public class CommunityWorldGenerator {
 			throw new IllegalArgumentException("The fourth input must be between or equal to 0 to 1 for community graphs.");
 		}
 
-		//community-#N-#Com-#ComProb-#InterProb.owl
-
-		if (seed != null) {
-			gen.setSeed(seed);
-		}
 
 		ArrayList<ArrayList<Integer>> worldList = new ArrayList<ArrayList<Integer>>();
 
 		for (int i = 0; i < numOfNodes; i++) {
 			worldList.add(new ArrayList<Integer>());
 		}
-		
+
 		//put all the nodes in their communities
 		//HashMap<Integer, Integer> commMap = new HashMap<Integer, Integer>();
 		ArrayList<Node> nodeList = new ArrayList<Node>();
@@ -122,7 +116,6 @@ public class CommunityWorldGenerator {
 				while (curr.getName().equals(rand) || curr.contains(rand) || curr.getCommunity().equals(nodeList.get(rand).getCommunity())) {
 					rand = gen.nextInt(numOfNodes);
 				}
-				//System.out.println("inter community link from " + i + " to " + rand);
 				worldList.get(i).add(rand);
 				worldList.get(rand).add(i);
 				//makeLink(i, rand);
@@ -131,20 +124,20 @@ public class CommunityWorldGenerator {
 				nodeList.get(rand).add(i);
 			}
 		}
-		
+
 		return worldList;
 
 	}
-	
-	
-private static void writeWorld(ArrayList<ArrayList<Integer>> worldList) {
-		
+
+
+	private static void writeWorld(ArrayList<ArrayList<Integer>> worldList) {
+
 		for (int i = 0; i < worldList.size(); i++) {
 			String name = "--- # " + i + "\n";
 			String body = worldList.get(i).toString();
 			body = body.replaceAll(",", "");
 			body = body + "\n\n";
-			
+
 			try {
 				output.write(name);
 				output.write(body);
@@ -153,14 +146,14 @@ private static void writeWorld(ArrayList<ArrayList<Integer>> worldList) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		try {
 			output.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
+
+
 	}
 
 	private static void makeFile() {
