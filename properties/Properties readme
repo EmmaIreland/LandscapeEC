@@ -54,7 +54,7 @@ GEOGRAPHY_NOISE_STRENGTH: specifies the amount of randomized used in fractal geo
 							and the number of clauses. High values increase the amount of noise in the landscape.
 
 
-VIRAL_CLAUSE_THRESHOLD: When individuals with the same symantics have dominated the world for more than this number
+VIRAL_CLAUSE_THRESHOLD: When individuals with the same semantics have dominated the world for more than this number
 						 of generations then a unsolved clause will be added to the viral clause set.
 VIRAL_CLAUSES: turns viral clauses on or off <boolean>
 
@@ -64,4 +64,4 @@ SKIP_DIVERSITY: if this is true, the diversity calculation is skipped. Some vari
 				TODO: variants that need this should turn it on.
 
 
-LOCALITY_TYPE: 
+LOCALITY_TYPE: We're asking Casey about this.

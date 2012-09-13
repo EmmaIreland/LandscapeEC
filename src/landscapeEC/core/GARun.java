@@ -64,8 +64,8 @@ public class GARun {
 	
 	private boolean runGenerations = true;
 
-	private double[] intervalFitnesses;
-	private double[] intervalDiversities;
+	private Double[] intervalFitnesses;
+	private Double[] intervalDiversities;
 	
 	private long startTime;
 	private boolean haventSaid=true;
@@ -83,8 +83,8 @@ public class GARun {
 		crossoverOperator = ParameterClassLoader
 		.loadClass(StringParameter.CROSSOVER_OPERATOR);
 
-		intervalFitnesses = new double[getReportingIntervals().length];
-		intervalDiversities = new double[getReportingIntervals().length];
+		intervalFitnesses = new Double[getReportingIntervals().length];
+		intervalDiversities = new Double[getReportingIntervals().length];
 
 		ProblemParser problemParser = ParameterClassLoader
 		.loadClass(StringParameter.PROBLEM_PARSER);
@@ -108,7 +108,7 @@ public class GARun {
 		for (int i = 0; i < numRuns; i++) {
 			System.out.println("\nRUN " + (i + 1) + "\n");
 
-			Arrays.fill(intervalFitnesses, Double.NaN);
+			Arrays.fill(intervalFitnesses, (Double) null);
 
 			try {
 				startTime=System.currentTimeMillis();
@@ -150,15 +150,15 @@ public class GARun {
 		}
 
 		for (int i = 0; i < intervalFitnesses.length; i++) {
-			double fitness = intervalFitnesses[i];
-			if (Double.isNaN(fitness)) {
+			Double fitness = intervalFitnesses[i];
+			if (fitness == null) {
 				fitness = 1.0;
 			}
 			writer.write(fitness + " ");
 		}
 
 		for (int i = 0; i < intervalDiversities.length; i++) {
-			double diversity = intervalDiversities[i];
+			Double diversity = intervalDiversities[i];
 			writer.write(diversity + " ");
 		}
 
@@ -255,19 +255,9 @@ public class GARun {
 		    bestIndividual = world.findBestIndividual();
 		    bestOverallFitness = bestIndividual.getGlobalFitness();
 		    double[] reportingIntervals = getReportingIntervals();
-		    for (int j = 0; j < reportingIntervals.length; j++) {
-		        // TODO create a method for this test. replace nan test with null test
-		        if (evaluator.getNumEvaluations() > reportingIntervals[j]
-		                                                               * IntParameter.NUM_EVALS_TO_DO.getValue()
-		                                                               && Double.isNaN(intervalFitnesses[j])) {
-		            intervalFitnesses[j] = bestOverallFitness;
-		            intervalDiversities[j] = DiversityCalculator
-		            .calculateResultStringDiversity();
-		            SnapShot.saveSnapShot(propertiesFilename + ".run"
-		                    + currentRun + ".part" + j, world);
-		        }
-		    }
-
+		    
+		    checkForReportingInterval(currentRun);
+		    
 		    if (BooleanParameter.QUIT_ON_SUCCESS.getValue()
 		            && bestOverallFitness == 1.0) {
 		        System.out.println("Best Fitness: " + bestOverallFitness);
@@ -293,6 +283,25 @@ public class GARun {
 		return false;
 	}
 
+	private void checkForReportingInterval(int currentRun){
+	    double[] reportingIntervals = getReportingIntervals();
+            for (int j = 0; j < reportingIntervals.length; j++) {
+                if (evaluator.getNumEvaluations() > reportingIntervals[j]
+                                                                       * IntParameter.NUM_EVALS_TO_DO.getValue()
+                                                                       && intervalFitnesses[j] == null) {
+                    intervalFitnesses[j] = bestOverallFitness;
+                    intervalDiversities[j] = DiversityCalculator
+                    .calculateResultStringDiversity();
+                    try {
+                        SnapShot.saveSnapShot(propertiesFilename + ".run"
+                                + currentRun + ".part" + j, world);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+	}
+	
 	private void fillAllLocations() {
 		for (Location location : world) {
 			location.setIndividuals(popManager.generatePopulation());
