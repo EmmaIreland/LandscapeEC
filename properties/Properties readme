@@ -50,8 +50,8 @@ VISUALIZER_TYPE: sets what attribute the visualizer will display <string BRIGHT_
 
 
 GEOGRAPHY_TYPE: sets the geography <fully qualified class name>  
-GEOGRAPHY_NOISE_STRENGTH: specifies the amount of randomized used in fractal geography. integer between 0 
-							and the number of clauses. High values increase the amount of noise in the landscape.
+GEOGRAPHY_NOISE_STRENGTH: specifies the amount of randomized used in fractal geography. float between 0 
+							and 1. High values increase the amount of noise in the landscape.
 
 
 VIRAL_CLAUSE_THRESHOLD: When individuals with the same semantics have dominated the world for more than this number
