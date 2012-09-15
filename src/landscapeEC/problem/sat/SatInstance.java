@@ -92,7 +92,7 @@ public class SatInstance implements Iterable<Clause>, Serializable, Problem, Sep
     }
     
     @Override
-    public SeparableProblem<Clause> crossover(SeparableProblem<Clause> firstParent, SeparableProblem<Clause> secondParent, int noiseStrength) {
+    public SeparableProblem<Clause> crossover(SeparableProblem<Clause> firstParent, SeparableProblem<Clause> secondParent, float noiseStrength) {
         SatInstance globalSatInstance = (SatInstance) GlobalProblem.getProblem();
         int NumClauses = globalSatInstance.getNumClauses();
 
@@ -110,9 +110,10 @@ public class SatInstance implements Iterable<Clause>, Serializable, Problem, Sep
             // add it
             // Reverse for when mutate is false
             
-            // TODO There is a linkage between noiseStrength and NumClauses, and we should change this so that there isn't.
-            // Change noiseStrength to a float between 0 and 1
-            boolean mutate = SharedPRNG.instance().nextDouble() < (noiseStrength / (double) NumClauses);
+            if (noiseStrength > 1) {
+                throw new IllegalArgumentException ("Noise strength should be between 0 and 1, the parameter file had: " + noiseStrength);
+            }
+            boolean mutate = SharedPRNG.instance().nextFloat() < noiseStrength;
             if (SharedPRNG.instance().nextBoolean()) {
                 if (firstInstance.contains(clause) != mutate) {
                     clauses.add(clause);
