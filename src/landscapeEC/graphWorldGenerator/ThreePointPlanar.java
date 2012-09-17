@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -32,8 +33,10 @@ public class ThreePointPlanar {
 
 		makeFile();
 		writeWorld(makeThreePoint());
+		writeCorners(getCorners());
 
 	}
+
 
 	private static ArrayList<ArrayList<Integer>> makeThreePoint() {
 
@@ -92,6 +95,39 @@ public class ThreePointPlanar {
 		
 		return worldList;
 	}
+	
+	private static ArrayList<Integer> getCorners() {
+		
+		ArrayList<Integer> corners = new ArrayList<Integer>();
+		
+		corners.add(0);
+		corners.add(((L+1)*(L+1))-1);
+		corners.add(((L+1)*(L+1))+L);
+		
+		return corners;
+	}
+	
+	private static void writeCorners(ArrayList<Integer> corners) {
+		
+		String name = "--- # Corners\n";
+		String body = "[Corners";
+		
+		body = body + " " + corners.get(0);
+		body = body + " " + corners.get(1);
+		body = body + " " + corners.get(2);
+		
+		body = body + "]";
+
+		try {
+			output.write(name);
+			output.write(body);
+			output.flush();
+			output.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 
 	private static void writeWorld(ArrayList<ArrayList<Integer>> worldList) {
 
@@ -109,14 +145,6 @@ public class ThreePointPlanar {
 				e.printStackTrace();
 			}
 		}
-
-		try {
-			output.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-
 	}
 
 	private static void makeFile() {

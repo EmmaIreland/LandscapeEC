@@ -53,6 +53,7 @@ public class CommunityWorldGenerator {
 
 		makeFile();
 		writeWorld(makeCommunity());
+		writeCorners(getCorners());
 	}
 
 
@@ -146,16 +147,41 @@ public class CommunityWorldGenerator {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private static ArrayList<Integer> getCorners() {
+
+		ArrayList<Integer> corners = new ArrayList<Integer>();
+		
+		for (int i = 0; i <= commNum; i++) {
+			corners.add(i*((int) numOfNodes/commNum));
+		}
+		
+		return corners;
+	}
+	
+private static void writeCorners(ArrayList<Integer> corners) {
+		
+		String name = "--- # Corners\n";
+		String body = "[Corners";
+		
+		for (int i = 0; i < commNum; i++) {
+			body = body + " " + corners.get(i);
+		}
+		
+		body = body + "]";
 
 		try {
+			output.write(name);
+			output.write(body);
+			output.flush();
 			output.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-
+		
 	}
-
+	
 	private static void makeFile() {
 		File file = new File(DIR, FileName);
 		try {

@@ -22,6 +22,7 @@ public class ScaleFreeWorldGenerator {
 	static Integer numOfNodes;
 	static Integer conn;
 	static Long seed = null;
+	static int numOfCorners;
 
 	//Here are the global constants that determine the variable amounts.
 	//end variable amounts.
@@ -33,15 +34,17 @@ public class ScaleFreeWorldGenerator {
 
 	public static void main(String[] args) {
 		
-		if (args.length != 2 && args.length != 3) {
-			throw new IllegalArgumentException("Must be two or three inputs, <Number of Nodes>, <Number of connections per new node>, <optional seed>");
+		if (args.length != 3 && args.length != 4) {
+			throw new IllegalArgumentException("Must be three or four inputs, <Number of Nodes>, <Number of connections per new node>, <Number of Corners>, <optional seed>");
 		}
 
 		numOfNodes = Integer.parseInt(args[0]);
 		conn = Integer.parseInt(args[1]);
-
-		if (args.length == 3) {
-			seed = new Long(args[2]);
+		numOfCorners = Integer.parseInt(args[2]);
+	
+		
+		if (args.length == 4) {
+			seed = new Long(args[3]);
 		} else {
 			seed = gen.nextLong();
 		}
@@ -55,10 +58,11 @@ public class ScaleFreeWorldGenerator {
 			throw new IllegalArgumentException("The number of connections a new node makes must be higher than one.");
 		}
 		
-			FileName = "ScaleFreeWorld-" + numOfNodes + "N-" + conn + "C-" + seed;
+			FileName = "ScaleFreeWorld-" + numOfNodes + "N-" + conn + "C-" + numOfCorners + "Corners-" + seed;
 		
 		makeFile();
 		writeWorld(makeScaleFree());
+		writeCorners(getCorners());
 	}
 
 
@@ -80,17 +84,7 @@ public class ScaleFreeWorldGenerator {
 				e.printStackTrace();
 			}
 		}
-		
-		try {
-			output.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		
-	}
-
-
+	}	
 
 
 	private static ArrayList<ArrayList<Integer>> makeScaleFree() {
@@ -157,6 +151,39 @@ public class ScaleFreeWorldGenerator {
 		return worldList;
 
 	}
+	
+	private static ArrayList<Integer> getCorners() {
+
+		ArrayList<Integer> corners = new ArrayList<Integer>();
+		
+		for (int i = numOfCorners; i > 0; i--) {
+			corners.add(numOfNodes-i);
+		}
+		return corners;
+	}
+	
+private static void writeCorners(ArrayList<Integer> corners) {
+		
+		String name = "--- # Corners\n";
+		String body = "[Corners";
+
+		for (int i = 0; i < numOfCorners; i++) {
+			body = body + " " + corners.get(i);
+		}
+		
+		body = body + "]";
+
+		try {
+			output.write(name);
+			output.write(body);
+			output.flush();
+			output.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	
     private static void makeFile() {
         File file = new File(DIR, FileName);
