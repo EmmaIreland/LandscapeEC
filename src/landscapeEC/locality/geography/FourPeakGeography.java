@@ -3,7 +3,6 @@ package landscapeEC.locality.geography;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.GridWorld;
 import landscapeEC.parameters.DoubleParameter;
-import landscapeEC.parameters.FloatParameter;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.SeparableProblem;
@@ -189,14 +188,14 @@ public class FourPeakGeography implements Geography {
         }
     }
 
-    private SatInstance doClauseListCrossover(SatInstance firstInstance, SatInstance secondInstance, float noiseStrength) {
+    private SatInstance doClauseListCrossover(SatInstance firstInstance, SatInstance secondInstance, double noiseStrength) {
         SatInstance newSatInstance = (SatInstance) firstInstance.crossover(firstInstance, secondInstance, noiseStrength);
 
         return newSatInstance;
     }
 
     private SatInstance doClauseListCrossover(SatInstance satInstanceA, SatInstance satInstanceB) {
-        return doClauseListCrossover(satInstanceA, satInstanceB, FloatParameter.GEOGRAPHY_NOISE_STRENGTH.getValue());
+        return doClauseListCrossover(satInstanceA, satInstanceB, DoubleParameter.GEOGRAPHY_NOISE_STRENGTH.getValue());
     }
 
     private boolean usingTestCaseProblem() {

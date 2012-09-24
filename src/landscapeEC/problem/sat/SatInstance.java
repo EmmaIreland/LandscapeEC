@@ -92,7 +92,7 @@ public class SatInstance implements Iterable<Clause>, Serializable, Problem, Sep
     }
     
     @Override
-    public SeparableProblem<Clause> crossover(SeparableProblem<Clause> firstParent, SeparableProblem<Clause> secondParent, float noiseStrength) {
+    public SeparableProblem<Clause> crossover(SeparableProblem<Clause> firstParent, SeparableProblem<Clause> secondParent, double noiseStrength) {
         SatInstance globalSatInstance = (SatInstance) GlobalProblem.getProblem();
         int NumClauses = globalSatInstance.getNumClauses();
 

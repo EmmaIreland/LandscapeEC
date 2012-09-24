@@ -167,6 +167,7 @@ private static void writeCorners(ArrayList<Integer> corners) {
 		String name = "--- # Corners\n";
 		String body = "[Corners";
 
+		
 		for (int i = 0; i < numOfCorners; i++) {
 			body = body + " " + corners.get(i);
 		}
