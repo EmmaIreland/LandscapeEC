@@ -2,20 +2,15 @@ package locality;
 
 import static org.junit.Assert.*;
 
-import java.awt.List;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
 
 import landscapeEC.locality.GraphWorld;
-import landscapeEC.locality.Location;
 import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.sat.SatInstance;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class GraphWorldLocationTest {
