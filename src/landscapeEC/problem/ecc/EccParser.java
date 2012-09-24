@@ -9,23 +9,40 @@ import landscapeEC.problem.ProblemParser;
 
 public class EccParser implements ProblemParser {
 
+	private int intBitsPerWord;
+	private int intNumCodeWords;
     
-    //TODO Fix exampleProblems file hierarchy and where the parsers look for them.
     //TODO Make sure Ecc stuff works.
     @Override
     public Problem parseProblem(Reader reader) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(reader);
         
-        String numOfBitsPerWord = bufferedReader.readLine();
-        String numOfCodeWords = bufferedReader.readLine();
+        String string1 = bufferedReader.readLine();
+        String string2 = bufferedReader.readLine();
         bufferedReader.close();
-        numOfBitsPerWord = numOfBitsPerWord.substring(16).trim();
-        numOfCodeWords = numOfCodeWords.substring(14).trim();
-
-        int intBitsPerWord = Integer.parseInt(numOfBitsPerWord);
-        int intNumCodeWords = Integer.parseInt(numOfCodeWords);
+        
+        String[] stringArr1 = string1.split(":");
+        String[] stringArr2 = string2.split(":");
+        
+        if(stringArr1[0].trim().equals("numOfBitsPerWord")) {
+        	intBitsPerWord = Integer.parseInt(stringArr1[1]);
+        	intNumCodeWords = Integer.parseInt(stringArr2[1]);
+        	
+        }else{
+        	intBitsPerWord = Integer.parseInt(stringArr2[1]);
+        	intNumCodeWords = Integer.parseInt(stringArr1[1]);
+        }
         
         return new EccProblem(intBitsPerWord, intNumCodeWords);
     }
+    
+    public int getBitsPerWord() {
+    	return intBitsPerWord;
+    }
+    
+    public int getNumCodeWords() {
+    	return intNumCodeWords;
+    }
+                               
 
 }
