@@ -8,8 +8,6 @@ public class EccProblem implements Problem {
 
     private int bitStringSize;
     
-    // This problem is from page 214 of the Cellular Genetic Algorithms book.
-    private int numberOfBits;
     private int numOfCodeWords;
     private int numOfBitsPerWord;
 
@@ -18,7 +16,7 @@ public class EccProblem implements Problem {
     public EccProblem(int numOfBitsPerWord, int numOfCodeWords){
         this.numOfBitsPerWord = numOfBitsPerWord;
         this.numOfCodeWords = numOfCodeWords;
-        this.numberOfBits = numOfBitsPerWord*numOfCodeWords;
+        bitStringSize = numOfBitsPerWord*numOfCodeWords;
         eccEvaluator = new EccEvaluator();
     }
     
@@ -38,7 +36,7 @@ public class EccProblem implements Problem {
     @Override
     public Problem getSubProblem(double difficulty) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
+        return this;
     }
 
     @Override

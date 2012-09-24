@@ -59,7 +59,7 @@ public class EccEvaluator extends Evaluator {
     @Override
     public boolean solvesSubProblem(Individual individual, Problem locationProblem) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
+        return true;
     }
 
 }
