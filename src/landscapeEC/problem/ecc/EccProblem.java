@@ -12,11 +12,14 @@ public class EccProblem implements Problem {
     private int numberOfBits;
     private int numOfCodeWords;
     private int numOfBitsPerWord;
+
+    private EccEvaluator eccEvaluator;
     
     public EccProblem(int numOfBitsPerWord, int numOfCodeWords){
         this.numOfBitsPerWord = numOfBitsPerWord;
         this.numOfCodeWords = numOfCodeWords;
         this.numberOfBits = numOfBitsPerWord*numOfCodeWords;
+        eccEvaluator = new EccEvaluator();
     }
     
     @Override
@@ -40,7 +43,7 @@ public class EccProblem implements Problem {
 
     @Override
     public Evaluator getEvaluator() {
-        return new EccEvaluator();
+        return eccEvaluator;
     }
 
     @Override
