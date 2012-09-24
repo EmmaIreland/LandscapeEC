@@ -9,8 +9,8 @@ PROBLEM_FILE: specifies the specification file that will be given to the problem
 
 
 WORLD_TYPE: landscapeEC.locality.GridWorld or landscapeEC.locality.GraphWorld
-WORLD_DIMENSIONS: Only meaningful for GridWorld? The dimensions of the world as a list of ints <int, int>
-FILE:
+WORLD_DIMENSIONS: Only meaningful for GridWorld The dimensions of the world as a list of ints <int, int>
+GRAPHWORLD_FILE: Provides the path to the YAML file that describes the graphworld if that option is chosen. <fully qualified class name>
 TOROIDAL: for GridWorlds. Specifies whether or not the wraps around at the edges <boolean>
 STARTING_POPULATION: Specifies what locations are initially populated <string[ORIGIN, CORNERS]>
 

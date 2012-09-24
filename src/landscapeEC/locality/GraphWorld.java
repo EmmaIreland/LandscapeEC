@@ -29,15 +29,10 @@ public class GraphWorld implements Serializable, World<Integer> {
 	private LinkedHashMap<Integer, List<Integer>> neighborhoods;
 	private ArrayList<Location> corners;
 
-	//constructor for no file
-//	public GraphWorld() throws Exception {
-//		
-//	}
-	
 	
 	public GraphWorld() throws Exception {
 		
-		File file = new File(StringParameter.FILE.getValue());
+		File file = new File(StringParameter.GRAPHWORLD_FILE.getValue());
 
 		Yaml yaml = new Yaml();
 		InputStream input = null;
