@@ -29,7 +29,7 @@ public class ThreePointPlanar {
 		
 		numOfNodes = ((L+1) * (L+1)) + 2*L;
 
-		FileName = "ThreePointPlanar-" + L + "L-" + "N-" + numOfNodes;
+		FileName = "ThreePointPlanar-" + L + "L-" + numOfNodes + "N";
 
 		makeFile();
 		writeWorld(makeThreePoint());

@@ -6,7 +6,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 public class ScaleFreeWorldGenerator {
@@ -32,9 +34,34 @@ public class ScaleFreeWorldGenerator {
 	static Writer output = null; 
 	static Random gen = new Random();
 
+	
+	
 	public static void main(String[] args) {
+		ArrayList<Integer> worldSize = addToArrayList(Arrays.asList(100,225,576,729));
+		ArrayList<Integer> connList = addToArrayList(Arrays.asList(2,4,8));
+		ArrayList<Integer> cornerList = addToArrayList(Arrays.asList(4,8));
+
+		for (int i = 0; i < worldSize.size(); i++) {
+			for (int j = 0; j < connList.size(); j++) {
+				for (int k = 0; k < cornerList.size(); k++) {
+					makeFile(worldSize.get(i), connList.get(j), cornerList.get(k));
+				}
+			}
+		}
 		
-		if (args.length != 3 && args.length != 4) {
+	}
+	
+private static ArrayList addToArrayList(List list) {
+		
+		ArrayList returnList = new ArrayList(5);
+		for (int i = 0; i < list.size(); i++) {
+			returnList.add(list.get(i));
+		}
+		return returnList;
+	}
+		
+	public static void makeFile(int num, int con, int corners) {	
+		/*if (args.length != 3 && args.length != 4) {
 			throw new IllegalArgumentException("Must be three or four inputs, <Number of Nodes>, <Number of connections per new node>, <Number of Corners>, <optional seed>");
 		}
 
@@ -50,6 +77,11 @@ public class ScaleFreeWorldGenerator {
 		}
 		
 		gen.setSeed(seed);
+		*/
+		
+		numOfNodes = num;
+		conn = con;
+		numOfCorners = corners;
 
 		if (numOfNodes <= conn) {
 			throw new IllegalArgumentException("The number of nodes must be higher than the number of connections each added node has.");
