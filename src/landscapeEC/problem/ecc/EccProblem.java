@@ -47,7 +47,7 @@ public class EccProblem implements Problem {
     @Override
     public double getDifficulty() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
+        return 1;
     }
 
 }

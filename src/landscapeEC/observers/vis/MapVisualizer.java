@@ -14,11 +14,12 @@ import javax.swing.JFrame;
 
 import landscapeEC.core.GARun;
 import landscapeEC.core.SnapShot;
+import landscapeEC.locality.GridWorld;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
-import landscapeEC.locality.GridWorld;
 import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
+import landscapeEC.parameters.DoubleParameter;
 import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.IntArrayParameter;
 import landscapeEC.parameters.IntParameter;
@@ -28,14 +29,11 @@ import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.sat.operators.LocalizedMutation;
-import landscapeEC.problem.sat.operators.localizedMutation.BiggestBox;
-import landscapeEC.problem.sat.operators.localizedMutation.ConcentrationRanker;
-import landscapeEC.problem.sat.operators.localizedMutation.WorldCrawl;
 
 public class MapVisualizer extends JFrame implements Observer {
     private final int xScale;
     private final int yScale;
-    private final int intensityScale;
+    private final double intensityScale;
 
     private final int worldWidth, worldHeight;
     private final int width, height;
@@ -54,7 +52,7 @@ public class MapVisualizer extends JFrame implements Observer {
     	
         xScale = IntParameter.VISUALIZER_X_SCALE.getValue();
         yScale = IntParameter.VISUALIZER_Y_SCALE.getValue();
-        intensityScale = IntParameter.VISUALIZER_INTENSITY_SCALE.getValue();
+        intensityScale = DoubleParameter.VISUALIZER_INTENSITY_SCALE.getValue();
         
         width = (worldWidth*xScale);
         height = (worldHeight*yScale);
