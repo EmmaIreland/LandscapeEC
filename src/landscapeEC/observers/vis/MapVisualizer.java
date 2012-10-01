@@ -149,7 +149,7 @@ public class MapVisualizer extends JFrame implements Observer {
             case COLORED_CLAUSES:
                 String clauseString = evaluator.getResultString(bestIndividual);
                 Integer clausesNumber = clauseString.hashCode();
-                foreground = Color.getHSBColor((Math.abs(clausesNumber)%255)/(float)255.0, (float) Math.pow(bestFitness, 30), (float)  Math.pow(bestFitness, 30));
+                foreground = Color.getHSBColor((Math.abs(clausesNumber)%255)/(float)255.0, (float) scaledFitness, (float)  scaledFitness);
             break;
             case MISSING_GENES:
             	List<Individual> individuals = loc.getIndividuals();
@@ -162,7 +162,7 @@ public class MapVisualizer extends JFrame implements Observer {
             			}
             		}
             	}
-            	foreground = Color.getHSBColor((Math.abs(bits.hashCode())%255)/(float)255.0, (float) Math.pow(bestFitness, 30), (float)  Math.pow(bestFitness, 30));
+            	foreground = Color.getHSBColor((Math.abs(bits.hashCode())%255)/(float)255.0, (float) scaledFitness, (float)  scaledFitness);
             break;
             case BRIGHT_MUTATION:
             	String cs = evaluator.getResultString(bestIndividual);
