@@ -8,6 +8,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Random;
 
+import landscapeEC.util.SharedPRNG;
+
 public class CommunityWorldGenerator {
 
 	//This generates Ring, fully connected (complete), tree, and grid shaped ontologies
@@ -26,7 +28,6 @@ public class CommunityWorldGenerator {
 
 	final static File DIR = new File("graphWorldFiles");
 	static Writer output = null; 
-	static Random gen = new Random();
 
 	public static void main(String[] args) {
 
@@ -44,10 +45,29 @@ public class CommunityWorldGenerator {
 		if (args.length == 5) {
 			seed = new Long(args[4]);
 		} else {
-			seed = gen.nextLong();
+			seed = SharedPRNG.instance().nextLong();
+			//seed = gen.nextLong();
 		}
-		
-		gen.setSeed(seed);
+
+		FileName = "CommunityWorld-" + numOfNodes + "N-" + commNum + "C-" + commProb + "CP-" +interProb + "IP" + seed;
+
+		makeFile();
+		writeWorld(makeCommunity());
+		writeCorners(getCorners());
+	}
+
+	public CommunityWorldGenerator() {
+
+	}
+
+	public void generateWorld(int size, int comm, double commProb, double interProb) {
+
+		this.numOfNodes = size;
+		this.commNum = comm;
+		this.commProb = commProb;
+		this.interProb = interProb;
+
+		seed = SharedPRNG.instance().nextLong();
 
 		FileName = "CommunityWorld-" + numOfNodes + "N-" + commNum + "C-" + commProb + "CP-" +interProb + "IP" + seed;
 
@@ -96,7 +116,7 @@ public class CommunityWorldGenerator {
 			for (int k = (i+1); k < numOfNodes; k++) {
 				Node toNode = nodeList.get(k);
 				if (curr.getCommunity().equals(toNode.getCommunity()) && !toNode.contains(curr.getName()) ) {
-					if (gen.nextDouble() < commProb) {
+					if (SharedPRNG.instance().nextDouble() < commProb) {
 						worldList.get(i).add(k);
 						worldList.get(k).add(i);
 						//makeLink(i, k);
@@ -112,10 +132,10 @@ public class CommunityWorldGenerator {
 		//add inter community links
 		for (int i = 0; i < numOfNodes; i++) {
 			Node curr = nodeList.get(i);
-			if (gen.nextDouble() < interProb) {
-				int rand = gen.nextInt(numOfNodes);
+			if (SharedPRNG.instance().nextDouble() < interProb) {
+				int rand = SharedPRNG.instance().nextInt(numOfNodes);
 				while (curr.getName().equals(rand) || curr.contains(rand) || curr.getCommunity().equals(nodeList.get(rand).getCommunity())) {
-					rand = gen.nextInt(numOfNodes);
+					rand = SharedPRNG.instance().nextInt(numOfNodes);
 				}
 				worldList.get(i).add(rand);
 				worldList.get(rand).add(i);
@@ -152,23 +172,23 @@ public class CommunityWorldGenerator {
 	private static ArrayList<Integer> getCorners() {
 
 		ArrayList<Integer> corners = new ArrayList<Integer>();
-		
+
 		for (int i = 0; i <= commNum; i++) {
 			corners.add(i*((int) numOfNodes/commNum));
 		}
-		
+
 		return corners;
 	}
-	
-private static void writeCorners(ArrayList<Integer> corners) {
-		
+
+	private static void writeCorners(ArrayList<Integer> corners) {
+
 		String name = "--- # Corners\n";
 		String body = "[Corners";
-		
+
 		for (int i = 0; i < commNum; i++) {
 			body = body + " " + corners.get(i);
 		}
-		
+
 		body = body + "]";
 
 		try {
@@ -179,9 +199,9 @@ private static void writeCorners(ArrayList<Integer> corners) {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	private static void makeFile() {
 		File file = new File(DIR, FileName);
 		try {

@@ -36,6 +36,22 @@ public class ThreePointPlanar {
 		writeCorners(getCorners());
 
 	}
+	
+	public ThreePointPlanar() {
+		
+	}
+	
+	public void generateWorld(int num) {
+		L = num;
+		
+		numOfNodes = ((L+1) * (L+1)) + 2*L;
+
+		FileName = "ThreePointPlanar-" + L + "L-" + numOfNodes + "N";
+
+		makeFile();
+		writeWorld(makeThreePoint());
+		writeCorners(getCorners());
+	}
 
 
 	private static ArrayList<ArrayList<Integer>> makeThreePoint() {
