@@ -71,10 +71,10 @@ public class Individual implements Serializable {
     
     @Override
     public String toString() {
-        String str = "";
+        StringBuilder builder = new StringBuilder();
         for(int i:bits) {
-            str += i;
+            builder.append(i);
         }
-        return str;
+        return builder.toString();
     }
 }
