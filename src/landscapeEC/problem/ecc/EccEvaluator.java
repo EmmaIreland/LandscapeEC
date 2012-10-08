@@ -55,7 +55,26 @@ public class EccEvaluator extends Evaluator {
     
     @Override
     public String getResultString(Problem problem, Individual individual) {
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException();
+        List<Integer>listOfCounts = new ArrayList<Integer>();
+        
+        for(int i=0; i<numOfCodeWords; i++){
+            
+            int count = 0;
+            for(int j=0; j<numOfBitsPerWord; j++){
+                if(individual.getBit((i*numOfBitsPerWord)+j)==1){
+                    count++;
+                }
+            }
+            listOfCounts.add(count);
+            
+        }
+        Collections.sort(listOfCounts);
+        StringBuilder builder = new StringBuilder();
+        for(int i: listOfCounts){
+           builder.append(i); 
+        }
+        return builder.toString();
 
     }
 
