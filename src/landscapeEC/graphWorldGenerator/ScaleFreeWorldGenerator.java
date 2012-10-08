@@ -6,10 +6,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
+
+import landscapeEC.util.SharedPRNG;
 
 public class ScaleFreeWorldGenerator {
 
@@ -32,56 +32,23 @@ public class ScaleFreeWorldGenerator {
 	//final static File DIR = new File(new File(new File(new File(".."),"tests"),"regression-test"),"ontologies");
 	final static File DIR = new File("graphWorldFiles");
 	static Writer output = null; 
-	static Random gen = new Random();
 
-	
-	
 	public static void main(String[] args) {
-		ArrayList<Integer> worldSize = addToArrayList(Arrays.asList(100,225,576,729));
-		ArrayList<Integer> connList = addToArrayList(Arrays.asList(2,4,8));
-		ArrayList<Integer> cornerList = addToArrayList(Arrays.asList(4,8));
 
-		for (int i = 0; i < worldSize.size(); i++) {
-			for (int j = 0; j < connList.size(); j++) {
-				for (int k = 0; k < cornerList.size(); k++) {
-					makeFile(worldSize.get(i), connList.get(j), cornerList.get(k));
-				}
-			}
-		}
-		
-	}
-	
-private static ArrayList addToArrayList(List list) {
-		
-		ArrayList returnList = new ArrayList(5);
-		for (int i = 0; i < list.size(); i++) {
-			returnList.add(list.get(i));
-		}
-		return returnList;
-	}
-		
-	public static void makeFile(int num, int con, int corners) {	
-		/*if (args.length != 3 && args.length != 4) {
+		if (args.length != 3 && args.length != 4) {
 			throw new IllegalArgumentException("Must be three or four inputs, <Number of Nodes>, <Number of connections per new node>, <Number of Corners>, <optional seed>");
 		}
 
 		numOfNodes = Integer.parseInt(args[0]);
 		conn = Integer.parseInt(args[1]);
 		numOfCorners = Integer.parseInt(args[2]);
-	
-		
+
+
 		if (args.length == 4) {
 			seed = new Long(args[3]);
 		} else {
-			seed = gen.nextLong();
+			seed = SharedPRNG.instance().nextLong();
 		}
-		
-		gen.setSeed(seed);
-		*/
-		
-		numOfNodes = num;
-		conn = con;
-		numOfCorners = corners;
 
 		if (numOfNodes <= conn) {
 			throw new IllegalArgumentException("The number of nodes must be higher than the number of connections each added node has.");
@@ -89,9 +56,35 @@ private static ArrayList addToArrayList(List list) {
 		if (conn <= 1) {
 			throw new IllegalArgumentException("The number of connections a new node makes must be higher than one.");
 		}
-		
-			FileName = "ScaleFreeWorld-" + numOfNodes + "N-" + conn + "C-" + numOfCorners + "Corners-" + seed;
-		
+
+		FileName = "ScaleFreeWorld-" + numOfNodes + "N-" + conn + "C-" + numOfCorners + "Corners-" + seed;
+
+		makeFile();
+		writeWorld(makeScaleFree());
+		writeCorners(getCorners());
+	}
+
+	public ScaleFreeWorldGenerator() {
+
+	}
+
+	public void generateWorld(int size, int conn, int corners) {
+
+		this.numOfNodes = size;
+		this.conn = conn;
+		this.numOfCorners = corners;
+
+		seed = SharedPRNG.instance().nextLong();
+
+		if (numOfNodes <= conn) {
+			throw new IllegalArgumentException("The number of nodes must be higher than the number of connections each added node has.");
+		}
+		if (conn <= 1) {
+			throw new IllegalArgumentException("The number of connections a new node makes must be higher than one.");
+		}
+
+		FileName = "ScaleFreeWorld-" + numOfNodes + "N-" + conn + "C-" + numOfCorners + "Corners-" + seed;
+
 		makeFile();
 		writeWorld(makeScaleFree());
 		writeCorners(getCorners());
@@ -101,13 +94,13 @@ private static ArrayList addToArrayList(List list) {
 
 
 	private static void writeWorld(ArrayList<ArrayList<Integer>> worldList) {
-		
+
 		for (int i = 0; i < worldList.size(); i++) {
 			String name = "--- # " + i + "\n";
 			String body = worldList.get(i).toString();
 			body = body.replaceAll(",", "");
 			body = body + "\n\n";
-			
+
 			try {
 				output.write(name);
 				output.write(body);
@@ -159,7 +152,7 @@ private static ArrayList addToArrayList(List list) {
 				boolean bool = true;
 				Integer linkTo = null;
 				while(bool) {
-					linkTo = gen.nextInt(probMap.size());
+					linkTo = SharedPRNG.instance().nextInt(probMap.size());
 					if (!(probMap.get(linkTo) == i || nodeMap.get(i).contains(probMap.get(linkTo)))) {
 						bool = false;
 					}
@@ -179,31 +172,31 @@ private static ArrayList addToArrayList(List list) {
 				mapNum++;
 			}
 		}
-		
+
 		return worldList;
 
 	}
-	
+
 	private static ArrayList<Integer> getCorners() {
 
 		ArrayList<Integer> corners = new ArrayList<Integer>();
-		
+
 		for (int i = numOfCorners; i > 0; i--) {
 			corners.add(numOfNodes-i);
 		}
 		return corners;
 	}
-	
-private static void writeCorners(ArrayList<Integer> corners) {
-		
+
+	private static void writeCorners(ArrayList<Integer> corners) {
+
 		String name = "--- # Corners\n";
 		String body = "[Corners";
 
-		
+
 		for (int i = 0; i < numOfCorners; i++) {
 			body = body + " " + corners.get(i);
 		}
-		
+
 		body = body + "]";
 
 		try {
@@ -214,17 +207,17 @@ private static void writeCorners(ArrayList<Integer> corners) {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
-	
-    private static void makeFile() {
-        File file = new File(DIR, FileName);
-        try {
-            output = new BufferedWriter(new FileWriter(file));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
+
+	private static void makeFile() {
+		File file = new File(DIR, FileName);
+		try {
+			output = new BufferedWriter(new FileWriter(file));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 }
