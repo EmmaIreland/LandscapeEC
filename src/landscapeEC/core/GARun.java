@@ -12,8 +12,10 @@ import java.util.List;
 import java.util.Set;
 
 import landscapeEC.locality.EmptyWorldException;
+import landscapeEC.locality.GridWorld;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.MigrationInWorldOfSizeOneException;
+import landscapeEC.locality.Vector;
 import landscapeEC.locality.ViralClauseCounter;
 import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
@@ -286,15 +288,24 @@ public class GARun {
                     intervalFitnesses[j] = bestOverallFitness;
                     intervalDiversities[j] = DiversityCalculator
                     .calculateResultStringDiversity();
-                    try {
-                        SnapShot.saveSnapShot(propertiesFilename + ".run"
-                                + currentRun + ".part" + j, world);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    printIndividualsInLocation(0, 0);
+                    printIndividualsInLocation(0, 1);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
                 }
             }
 	}
+
+    private void printIndividualsInLocation(int x, int y) {
+        List<Integer> origin = new ArrayList<Integer>();
+        System.out.println("Individuals at x " + x+ "y "+y);
+        origin.add(x);
+        origin.add(y);
+        for (Individual i : ((GridWorld) world).getIndividualsAt(new Vector(origin))) {
+            System.out.println(i);
+        }
+    }
 	
 	private void fillAllLocations() {
 		for (Location location : world) {

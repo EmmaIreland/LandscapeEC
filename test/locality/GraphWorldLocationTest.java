@@ -16,7 +16,7 @@ import org.junit.Test;
 public class GraphWorldLocationTest {
 	
 	@Test
-	public void graphWorldPositionTest() throws IOException{
+	public void graphWorldPositionTest() throws Exception{
 		//expected neighborhoods
 		
 		ArrayList<Integer> location0 = new ArrayList<Integer>();
@@ -46,14 +46,11 @@ public class GraphWorldLocationTest {
 		
 		File paramsFile = new File("properties/graphTest.properties");
 		GlobalParameters.setParameters(paramsFile);
-        GlobalProblem.setProblem(new SatInstance(0.0));
+                GlobalProblem.setProblem(new SatInstance(0.0));
 		
 		GraphWorld testWorld = null;
-		try {
-			testWorld = new GraphWorld();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		testWorld = new GraphWorld();
+		
 		assertTrue(location0.containsAll(testWorld.getNeighborhood(0, 1)));
 		assertTrue(location1.containsAll(testWorld.getNeighborhood(1, 1)));
 		assertTrue(location2.containsAll(testWorld.getNeighborhood(2, 1)));

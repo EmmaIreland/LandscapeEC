@@ -1,12 +1,13 @@
 package landscapeEC.locality;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.Problem;
 
-public interface World<T> extends Iterable<Location<T>> {
+public interface World<T> extends Iterable<Location<T>>, Serializable{
 
 	public void setLocationProblem(T position, Problem problem);
 	
