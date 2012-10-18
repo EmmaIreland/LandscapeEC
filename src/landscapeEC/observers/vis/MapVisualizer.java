@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,6 +30,9 @@ import landscapeEC.problem.Evaluator;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
+import landscapeEC.problem.Problem;
+import landscapeEC.problem.ecc.EccEvaluator;
+import landscapeEC.problem.ecc.EccProblem;
 import landscapeEC.problem.sat.operators.LocalizedMutation;
 
 public class MapVisualizer extends JFrame implements Observer {
@@ -141,6 +146,7 @@ public class MapVisualizer extends JFrame implements Observer {
         Color foreground = Color.black;
         
         Evaluator evaluator = GlobalProblem.getEvaluator();
+        Problem problem = GlobalProblem.getProblem();
         
         switch (visType) {
             case FITNESS_ONLY:
@@ -169,8 +175,61 @@ public class MapVisualizer extends JFrame implements Observer {
                 Integer cn = cs.hashCode();
                 foreground = new Color((int) (scaledFitness*255), 0, (int) ((LocalizedMutation.getAmplifier().getAmp((Vector) loc.getPosition())-1)*48)%255);
                 break;
+            case ECC_VISUALIZER:
+                int numOfBitsPerWord = ((EccProblem) problem).getNumOfBitsPerWord();
+                int numOfCodeWords = ((EccProblem) problem).getNumOfCodeWords();
+                int[] individualString = bestIndividual.getBits();
+                ArrayList<int[]> listOfCodeWords = new ArrayList<int[]>();
+                int hamming=0;
+                
+                for(int i=0; i<numOfCodeWords; i++){
+                    listOfCodeWords.add(Arrays.copyOfRange(individualString, numOfBitsPerWord*i, numOfBitsPerWord*(i+1)));
+                }
+                for(int i=0; i<numOfCodeWords; i++){
+                    for(int j=0; j<numOfCodeWords; j++){
+                        if(i != j){
+                            hamming = ((EccEvaluator)evaluator).hammingDistance(listOfCodeWords.get(i), listOfCodeWords.get(j));
+                        }
+                    }
+                }
+                foreground = Color.getHSBColor((hamming*20)/(float)255.0, (float) scaledFitness, (float)  scaledFitness); // Color(0, hamming*20, 0);
+            break;
+            case ECC_TEST_VISUALIZER:
+                int bitsPerWord = ((EccProblem) problem).getNumOfBitsPerWord();
+                int codeWords = ((EccProblem) problem).getNumOfCodeWords();
+                List<Individual> listOfInd = new ArrayList<Individual>();
+                listOfInd.addAll(loc.getIndividuals());
+                int[] displayString = new int[bitsPerWord*codeWords];
+                for(int i=0; i<bitsPerWord*codeWords; i++){
+                    int count = 0;
+                    for(int j=0; j<listOfInd.size(); j++){
+                        if(listOfInd.get(j).getBit(i)==0){
+                            count++;
+                        } else {
+                            count--;
+                        }
+                    }
+                    if(count > 0){
+                        displayString[i] = 0;
+                    } else {
+                        displayString[i] = 1;
+                    }
+                }
+                int red = bitsToInt(displayString, 0, displayString.length / 3);
+                int green = bitsToInt(displayString, displayString.length / 3, 2 * displayString.length / 3);
+                int blue = bitsToInt(displayString, 2 * displayString.length / 3, displayString.length);
+                foreground = new Color(red%256, green%256, blue%256);
+            break;
         }
         return foreground;
+    }
+    
+    public static int bitsToInt(int[] bits, int start, int end) {
+        int result = 0;
+        for (int i=start; i<end; ++i) {
+            result = 2 * result + bits[i];
+        }
+        return Math.abs(result);
     }
     
     public static double onesPercent(String str) {

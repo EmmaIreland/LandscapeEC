@@ -43,7 +43,7 @@ public class EccEvaluator extends Evaluator {
         return 1/sumOfHamm;
     }    
 
-    private int hammingDistance(int[] codeWord1, int[] codeWord2){
+    public int hammingDistance(int[] codeWord1, int[] codeWord2){
         int count = 0;
         for(int i=0; i<numOfBitsPerWord; i++){
             if(codeWord1[i] != codeWord2[i]){
