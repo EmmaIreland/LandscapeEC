@@ -194,13 +194,11 @@ public class MapVisualizer extends JFrame implements Observer {
                 }
                 foreground = Color.getHSBColor((hamming*20)/(float)255.0, (float) scaledFitness, (float)  scaledFitness); // Color(0, hamming*20, 0);
             break;
-            case ECC_TEST_VISUALIZER:
-                int bitsPerWord = ((EccProblem) problem).getNumOfBitsPerWord();
-                int codeWords = ((EccProblem) problem).getNumOfCodeWords();
+            case AVERAGE_INDIVIDUAL:
                 List<Individual> listOfInd = new ArrayList<Individual>();
                 listOfInd.addAll(loc.getIndividuals());
-                int[] displayString = new int[bitsPerWord*codeWords];
-                for(int i=0; i<bitsPerWord*codeWords; i++){
+                int[] displayString = new int[loc.getProblem().getBitStringSize()];
+                for(int i=0; i<loc.getProblem().getBitStringSize(); i++){
                     int count = 0;
                     for(int j=0; j<listOfInd.size(); j++){
                         if(listOfInd.get(j).getBit(i)==0){
