@@ -48,6 +48,10 @@ VISUALIZER_INTENSITY_SCALE: this value is the exponent used to scale fitness val
 							and low fitness values.
 VISUALIZER_TYPE: sets what attribute the visualizer will display <string BRIGHT_MUTATION, COLORED_CLAUSES, FITNESS>
 
+NUM_OF_GRAPH_SNAPSHOTS: The integer is the number of screenshots of the graphworld that will be taken over all of the
+evaluations. 0 makes it do nothing. This will break if used on gridworlds. Also, fewer than requested screenshots may occur
+if the problem is solved before all the evaluations are used. It will always take a picture of the world at the end.
+
 
 GEOGRAPHY_TYPE: sets the geography <fully qualified class name>  
 GEOGRAPHY_NOISE_STRENGTH: specifies the amount of randomized used in fractal geography. float between 0 

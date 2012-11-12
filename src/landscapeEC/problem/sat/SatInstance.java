@@ -87,6 +87,7 @@ public class SatInstance implements Iterable<Clause>, Serializable, Problem, Sep
         }
         
         SatInstance subInstance = new SatInstance(clausesToAdd, newDifficulty);
+        subInstance.setNumVariables(numVariables);
         
         return subInstance;
     }

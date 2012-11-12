@@ -13,6 +13,7 @@ public interface World<T> extends Iterable<Location<T>>, Serializable{
 	
 	public int getNumLocations();
 	
+	//TODO This is making the return type List<Graphworld> which is bad?
 	public List<T> getNeighborhood(Object position, int radius);
 	
 	public List<Individual> getIndividualsAt(T p);

@@ -34,6 +34,7 @@ import landscapeEC.problem.Problem;
 import landscapeEC.problem.ecc.EccEvaluator;
 import landscapeEC.problem.ecc.EccProblem;
 import landscapeEC.problem.sat.operators.LocalizedMutation;
+import landscapeEC.util.VizHelper;
 
 public class MapVisualizer extends JFrame implements Observer {
     private final int xScale;
@@ -195,40 +196,20 @@ public class MapVisualizer extends JFrame implements Observer {
                 foreground = Color.getHSBColor((hamming*20)/(float)255.0, (float) scaledFitness, (float)  scaledFitness); // Color(0, hamming*20, 0);
             break;
             case AVERAGE_INDIVIDUAL:
-                List<Individual> listOfInd = new ArrayList<Individual>();
-                listOfInd.addAll(loc.getIndividuals());
-                int[] displayString = new int[loc.getProblem().getBitStringSize()];
-                for(int i=0; i<loc.getProblem().getBitStringSize(); i++){
-                    int count = 0;
-                    for(int j=0; j<listOfInd.size(); j++){
-                        if(listOfInd.get(j).getBit(i)==0){
-                            count++;
-                        } else {
-                            count--;
-                        }
-                    }
-                    if(count > 0){
-                        displayString[i] = 0;
-                    } else {
-                        displayString[i] = 1;
-                    }
-                }
-                int red = bitsToInt(displayString, 0, displayString.length / 3);
-                int green = bitsToInt(displayString, displayString.length / 3, 2 * displayString.length / 3);
-                int blue = bitsToInt(displayString, 2 * displayString.length / 3, displayString.length);
+                
+            	int[] displayString = loc.getAverageIndividual();
+            	
+            	VizHelper vizHelper = new VizHelper();
+                
+            	int red = vizHelper.bitsToInt(displayString, 0, displayString.length / 3);
+                int green = vizHelper.bitsToInt(displayString, displayString.length / 3, 2 * displayString.length / 3);
+                int blue = vizHelper.bitsToInt(displayString, 2 * displayString.length / 3, displayString.length);
                 foreground = new Color(red%256, green%256, blue%256);
             break;
         }
         return foreground;
     }
     
-    public static int bitsToInt(int[] bits, int start, int end) {
-        int result = 0;
-        for (int i=start; i<end; ++i) {
-            result = 2 * result + bits[i];
-        }
-        return Math.abs(result);
-    }
     
     public static double onesPercent(String str) {
         double count = 0;

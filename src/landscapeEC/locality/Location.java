@@ -35,6 +35,31 @@ public class Location<T> implements Serializable {
         return individuals.size();
     }
     
+    public int[] getAverageIndividual() {
+    	
+        List<Individual> listOfInd = new ArrayList<Individual>();
+        listOfInd.addAll(this.getIndividuals());
+        int[] displayString = new int[this.getProblem().getBitStringSize()];
+        for(int i=0; i<this.getProblem().getBitStringSize(); i++){
+            int count = 0;
+            for(int j=0; j<listOfInd.size(); j++){
+                if(listOfInd.get(j).getBit(i)==0){
+                    count++;
+                } else {
+                    count--;
+                }
+            }
+            if(count > 0){
+                displayString[i] = 0;
+            } else {
+                displayString[i] = 1;
+            }
+        }
+        
+        return displayString;
+    	
+    }
+    
     public Problem getProblem() {
         return problem;
     }

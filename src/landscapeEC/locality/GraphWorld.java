@@ -18,6 +18,7 @@ import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.Problem;
+import landscapeEC.util.YamlLoader;
 
 public class GraphWorld implements Serializable, World<Integer> {
 
@@ -32,7 +33,17 @@ public class GraphWorld implements Serializable, World<Integer> {
 	
 	public GraphWorld() throws Exception {
 		
-		File file = new File(StringParameter.GRAPHWORLD_FILE.getValue());
+		YamlLoader yamlLoader = new YamlLoader(StringParameter.GRAPHWORLD_FILE.getValue());
+		
+		locations = yamlLoader.getLocations();
+		neighborhoods = yamlLoader.getNeighborhoods();
+		corners = new ArrayList<Location>();
+		
+		for(Integer i: yamlLoader.getRawCorners()){
+			corners.add(this.getLocation(i));
+		}
+		
+		/*File file = new File(StringParameter.GRAPHWORLD_FILE.getValue());
 
 		Yaml yaml = new Yaml();
 		InputStream input = null;
@@ -54,12 +65,12 @@ public class GraphWorld implements Serializable, World<Integer> {
 		List<String> list = (List<String>) yaml.load(input);
 		if(locations.get(0) == null) {
 			throw new Exception("A Graph World must have a 0th location"); 
-		}
+		}*/
 		
 	}
 
 
-	private void processData(String data, Integer locNum) {
+	/*private void processData(String data, Integer locNum) {
 		if(data.startsWith("[Corners")) {
 			corners = new ArrayList();
 			data = data.substring(9, data.length()-1);
@@ -85,7 +96,7 @@ public class GraphWorld implements Serializable, World<Integer> {
 			neighborhoods.put(locNum, intSplitData);
 		}
 		
-	}
+	}*/
 
 	@Override
 	public Location<Integer> getLocation(Object position){

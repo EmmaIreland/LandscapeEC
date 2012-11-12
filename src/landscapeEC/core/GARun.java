@@ -11,7 +11,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import landscapeEC.graphVisualizer.GraphViz;
 import landscapeEC.locality.EmptyWorldException;
+import landscapeEC.locality.GraphWorld;
 import landscapeEC.locality.GridWorld;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.MigrationInWorldOfSizeOneException;
@@ -54,6 +56,7 @@ public class GARun {
 	private List<Observer> observers = new ArrayList<Observer>();
 	private int successes;
 	private int generationNumber;
+	private int numOfSnapshots;
 	private String propertiesFilename;
 	private FileWriter writer;
 	private double bestOverallFitness;
@@ -67,6 +70,8 @@ public class GARun {
 	private boolean haventSaid=true;
 	private List<Long> longs = new ArrayList<Long>();
 
+	private GraphViz viz;
+	
 	public GARun(String propertiesFilename) {
 		this.propertiesFilename = propertiesFilename;
 	}
@@ -95,6 +100,7 @@ public class GARun {
 		popManager = new PopulationManager();
 
 		int numRuns = IntParameter.NUM_RUNS.getValue();
+	    numOfSnapshots = IntParameter.NUM_OF_GRAPH_SNAPSHOTS.getValue();
 
 		setupObservers();
 
@@ -236,6 +242,8 @@ public class GARun {
 		Individual bestIndividual = null;
 		// initialize observers before the run starts
 
+		viz = new GraphViz(numOfSnapshots, IntParameter.NUM_EVALS_TO_DO.getValue(), (World<GraphWorld>) world);
+		
 		for (Observer o : observers) {
 		    o.generationData(this);
 		}
@@ -254,11 +262,16 @@ public class GARun {
 		    
 		    checkForReportingInterval(currentRun);
 		    
+		    if (numOfSnapshots != 0) {
+		    	viz.makeDotFile(evaluator.getNumEvaluations());
+		    }
+		    
 		    if (BooleanParameter.QUIT_ON_SUCCESS.getValue()
 		            && bestOverallFitness == 1.0) {
 		        System.out.println("Best Fitness: " + bestOverallFitness);
 		        // This will be removed during refactoring
 		        System.out.println("SUCCESS");
+		        viz.write(numOfSnapshots);
 		        return true;
 		    }
 
