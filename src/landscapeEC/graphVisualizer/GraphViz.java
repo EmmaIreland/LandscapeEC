@@ -5,15 +5,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Arrays;
 import java.util.List;
-
 
 import landscapeEC.locality.GraphWorld;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.World;
 import landscapeEC.util.VizHelper;
-import landscapeEC.util.YamlLoader;
 
 public class GraphViz {
 	//number of total snapshots
