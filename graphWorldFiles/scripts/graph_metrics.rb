@@ -19,7 +19,7 @@ y = YAML::load_documents( openFile ) { |graph|
 		end
 	end
 	
-	p paths
+	#p paths
 	
 	for k in 0...graph.length-1 do
 		for i in 0...graph.length-1 do
@@ -33,7 +33,56 @@ y = YAML::load_documents( openFile ) { |graph|
 		end
 	end
 	
+	puts "shortest path:"
 	p paths
 	
 	
+	
+  # paths array now has -1 in place of nil (because .max doesn't work with nil)
+	for i in 0...paths.length
+	  for j in 0...paths.length
+	    if (paths[i][j] == nil)
+	      paths[i][j] = -1
+      end
+	  end
+	end
+	
+	# finds the connected components (using breadth first search)
+  listOfAll = []
+  componentElements = []
+  
+  for i in 0...graph.length-1
+    if !listOfAll.include?(i)
+      componentElements.push(i)
+      queue = [i]
+      visited = {i => true}
+      
+      while(!queue.empty?)
+        node = queue.pop()
+        graph[node].each do |child|
+        
+          if visited[child] != true then
+            listOfAll.push(child)
+            componentElements.push(child)
+            queue.push(child)
+            visited[child] = true
+          end
+        
+        end
+      end
+
+      puts "\n" + "Component elements: "
+      p componentElements
+      
+      puts "Component size: " + componentElements.length.to_s()
+      
+      puts "   eccentricities:"
+      for i in 0...componentElements.length
+        shortPathArray = paths[componentElements[i]]
+        puts "      " + componentElements[i].to_s() + ": " + shortPathArray.max.to_s()
+      end
+      
+      componentElements.clear 
+    end
+  end
 }
