@@ -1,0 +1,5 @@
+package landscapeEC.observers.vis;
+
+public enum VisualizerType {
+    FITNESS_ONLY, COLORED_CLAUSES, MISSING_GENES, BRIGHT_MUTATION, ECC_VISUALIZER, AVERAGE_INDIVIDUAL
+}

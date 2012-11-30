@@ -1,0 +1,27 @@
+Scenario: Evaluate a Sat Solution
+
+As a machine learning researcher
+I want to be able to correctly determine
+the elite individuals from a population
+
+Given a population manager
+And a SAT evaluator
+When I have this clauseList
+p cnf 4 4
+1
+2
+3
+4
+And I have a population of
+1000
+0100
+0010
+1100
+0110
+1011
+0001
+1111
+And I have an elite proportion of 0.25
+Then the elite set should be
+1011
+1111

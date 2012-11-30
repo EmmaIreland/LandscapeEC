@@ -1,0 +1,52 @@
+Landscape EC Todo List
+-------------------------------------------------
+
+------- TO DO -------
+- For clause propagation in environments:
+  - Write function that allows sat evaluator to return clauses that "kill" an individual from reaping
+  - Keep track of the "score" of clauses in each location (hash map)
+  - Write function that allows clauses to "spread" to neighbors (avoid duplicates)
+  - Perhaps we want to avoid the corners by default?
+
+
+
+Previous Todo List from 2010
+-------------------------------------------------
+------- TO DO -------
+
+- Investigate other GA problems, preferably not combinatorial optimization
+
+- Consider having cells gradually get harder over time, this could be implemented as Uniform Geography slowly "blending" into Fractal Geography
+
+----- COMPLETED -----
+
+- Nic's idea for the Visualizer:
+It would be useful to visually see where we are solving certain clauses at which locations in the world using colors.  
+This way we would be able to see how populations that solve different clauses might converge. To do this, we could take the
+clauses an individual solves and convert it into a long string of bits (where 1 is when they solve the clause and 0 is when they 
+don't), from there we could convert the bitstring into a hue value in order to show which clauses an individual is solving.  In 
+the visualizer, we would probably choose the most common, or perhaps the best, bitstring for each cell and display that color.  
+It would probably also take some tweaking to figure out the best way to compute a hue from the bitstring, but just converting it 
+to an integer and modding it to 256 might work.
+
+- Output information about: unsolved clauses, number of evaluations, possibly successes at fixed points (10M evals, 15M evals, etc.)
+
+- Find more medium-difficulty problems (harder than the 50, easier than the 250)
+
+- Change ManhattanDistanceGeography to be a smooth gradient to the center of the world
+
+- It would be nice to be able to specify a way of building the geography (fractal, gradiant, etc.)
+in the parameters file, but this probably involves reflection and other craziness since you'd probably
+want to specify a class name for an implementation of an interface that generates sub-instances for
+a given location.
+
+- Reconfigure elitism to be able to use the clause list contained within each location, in order
+to get the "elite" of a location that has geography.
+
+- Set up Locations to be able to contain a list of clauses, in order for geography to work.
+
+- Figure out what we want to do about reproduction. We will probably need to change reproduction so that 
+two individuals in a cell will not instantly fill the cell to carrying capacity with their children.
+
+- We need to fix the clock to stop counting the number of generations and instead measure the time spent working on a 
+problem in another way. Perhaps by counting fitness evaluations, using a parameter set in the properties file. 
