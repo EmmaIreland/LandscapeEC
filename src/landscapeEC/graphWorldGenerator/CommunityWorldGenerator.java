@@ -12,8 +12,7 @@ import landscapeEC.util.SharedPRNG;
 
 public class CommunityWorldGenerator {
 
-	//This generates Ring, fully connected (complete), tree, and grid shaped ontologies
-	//See README in /amboro/tests/regression-testing/ for details on this program
+
 
 	static String FileName = null;
 	//These ints are used for multiple purposes depending on the graph type so they must be named generically.
@@ -24,6 +23,7 @@ public class CommunityWorldGenerator {
 	static Long seed;
 	static Double commProb;
 	static Double interProb;
+	static String worldType;
 
 
 	final static File DIR = new File("graphWorldFiles");
@@ -31,25 +31,30 @@ public class CommunityWorldGenerator {
 
 	public static void main(String[] args) {
 
-		if (args.length != 4 && args.length != 5) {
-			throw new IllegalArgumentException("Must be four or five inputs, <Number of Nodes>, <Number of Communities>, " +
-			"<Prob of Community Connection>, <Prob of Inter-Community Connection>, <optional seed>");
+		if (args.length != 5 && args.length != 6) {
+			throw new IllegalArgumentException("Must be five or six inputs, <Number of Nodes>, <Number of Communities>, " +
+			"<Prob of Community Connection>, <Prob of Inter-Community Connection>, <World Type>, <optional seed>");
 		}
 
 		numOfNodes = Integer.parseInt(args[0]);
 		commNum = Integer.parseInt(args[1]);
 		commProb = Double.parseDouble(args[2]);
 		interProb = Double.parseDouble(args[3]);
+		worldType = args[4];
+		
+		if((worldType.equals("Connected")) && (worldType.equals("Original"))) {
+			throw new IllegalArgumentException("Fifth input should be Connected, or Original");
+		}
 
 
-		if (args.length == 5) {
-			seed = new Long(args[4]);
+		if (args.length == 6) {
+			seed = new Long(args[5]);
 		} else {
 			seed = SharedPRNG.instance().nextLong();
 			//seed = gen.nextLong();
 		}
 
-		FileName = "CommunityWorld-" + numOfNodes + "N-" + commNum + "C-" + commProb + "CP-" +interProb + "IP" + seed;
+		FileName = "CommunityWorld-" + numOfNodes + "N-" + commNum + "C-" + commProb + "CP-" +interProb + "IP-" + worldType + "-" + seed;
 
 		makeFile();
 		writeWorld(makeCommunity());
@@ -69,7 +74,7 @@ public class CommunityWorldGenerator {
 
 		seed = SharedPRNG.instance().nextLong();
 
-		FileName = "CommunityWorld-" + numOfNodes + "N-" + commNum + "C-" + commProb + "CP-" +interProb + "IP" + seed;
+		FileName = "CommunityWorld-" + numOfNodes + "N-" + commNum + "C-" + commProb + "CP-" +interProb + "IP-" + worldType + "-" + seed;
 
 		makeFile();
 		writeWorld(makeCommunity());
@@ -145,9 +150,45 @@ public class CommunityWorldGenerator {
 				nodeList.get(rand).add(i);
 			}
 		}
-
+		
+		//Add connections between communities in a ring formation
+		if(worldType.equals("Connected")) {
+			for (int j = 0; j < worldList.size(); j++) {
+				if (j%commSelector == 0) {
+					//add connections to either side
+					if(j+commSelector >= worldList.size()){
+						worldList.get(j).add(0);
+					}else{
+					worldList.get(j).add(j+commSelector);
+					}
+					if(j-commSelector < 0) {
+						worldList.get(j).add(worldList.size()-1);
+					}else{
+					worldList.get(j).add(j-commSelector);
+					}
+				}
+			}
+		}
+		
 		return worldList;
-
+	}
+	
+	private static boolean communityDisconnected(int community, ArrayList<ArrayList<Integer>> worldList) {
+		boolean bool = true;
+		
+		int commSize = numOfNodes/commNum;
+		
+		for(int i = 0; i < commSize; i++) {
+			int currLoc = (commSize*community) + i;
+			
+			for (int loc : worldList.get(i)) {
+				if (loc < (commSize*community) || loc > (commSize*(community+1)-1)) {
+					bool = false;
+				}
+			}
+		}
+		
+		return bool;
 	}
 
 
