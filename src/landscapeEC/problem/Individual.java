@@ -2,13 +2,12 @@ package landscapeEC.problem;
 
 import java.io.Serializable;
 
-import landscapeEC.problem.sat.SatEvaluator;
-
 public class Individual implements Serializable {
     private static final long serialVersionUID = 8709627944120749083L;
     private int[] bits;
     private double globalFitness = -1.0;
     private double localFitnessDisadvantage = 0;
+    private String stringRepresentation;
 
     public Individual(String bitString) {
         this(parseBits(bitString));
@@ -71,10 +70,13 @@ public class Individual implements Serializable {
     
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        for(int i:bits) {
-            builder.append(i);
+        if (stringRepresentation == null) {
+            StringBuilder builder = new StringBuilder();
+            for(int i:bits) {
+                builder.append(i);
+            }
+            stringRepresentation = builder.toString();
         }
-        return builder.toString();
+        return stringRepresentation;
     }
 }

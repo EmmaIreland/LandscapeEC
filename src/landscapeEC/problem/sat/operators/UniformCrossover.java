@@ -1,12 +1,15 @@
 package landscapeEC.problem.sat.operators;
 
 import java.util.List;
+import java.util.Random;
 
 import landscapeEC.problem.Individual;
 import landscapeEC.util.SharedPRNG;
 
 
 public class UniformCrossover implements CrossoverOperator {
+
+    private Random prngInstance = SharedPRNG.instance();
 
     @Override
     public Individual crossover(List<Individual> parents) {
@@ -16,9 +19,8 @@ public class UniformCrossover implements CrossoverOperator {
         int[] parentB = parents.get(1).getBits();
         
         int[] child = new int[parentA.length];
-        
         for(int i=0; i<parentA.length; i++) {
-            if(SharedPRNG.instance().nextBoolean()) {
+            if(prngInstance.nextBoolean()) {
                 child[i] = parentA[i];
             } else {
                 child[i] = parentB[i];
