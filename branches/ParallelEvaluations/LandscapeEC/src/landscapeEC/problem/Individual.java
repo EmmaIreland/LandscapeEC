@@ -13,29 +13,17 @@ public class Individual implements Serializable {
     public Individual(String bitString) {
         this(parseBits(bitString));
     }
-    
-    public Individual(String bitString, boolean evaluateOnCreation) {
-        instantiate(parseBits(bitString), evaluateOnCreation);
-    }
 
     public Individual(int[] bits) {
-        instantiate(bits, false);
-    }
-    
-    public Individual(int[] bits, boolean evaluateOnCreation) {
-        instantiate(bits, evaluateOnCreation);
-        
+        instantiate(bits);
     }
     
     public void updateLocalFitness(double fitnessDisadvantage) {
         localFitnessDisadvantage = fitnessDisadvantage;
     }
 
-    private void instantiate(int[] newBits, boolean evaluateOnCreation) {
+    private void instantiate(int[] newBits) {
         this.bits = newBits.clone();
-        if(evaluateOnCreation){
-            globalFitness = GlobalProblem.getEvaluator().evaluate(this);
-        }
     }
     
     private static int[] parseBits(String bitString) {
@@ -57,6 +45,9 @@ public class Individual implements Serializable {
     }
     
     public double getGlobalFitness() {
+    	if (globalFitness < 0) {
+    		throw new RuntimeException("Individual has no evaluated fitness");
+    	}
         return Math.max(globalFitness - localFitnessDisadvantage, 0);
     }
     

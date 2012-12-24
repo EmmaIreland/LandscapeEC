@@ -30,6 +30,7 @@ import landscapeEC.problem.Evaluator;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
+import landscapeEC.problem.ParallelEvaluator;
 import landscapeEC.problem.Problem;
 import landscapeEC.problem.ecc.EccEvaluator;
 import landscapeEC.problem.ecc.EccProblem;
@@ -146,7 +147,7 @@ public class MapVisualizer extends JFrame implements Observer {
         double scaledFitness = Math.pow(bestFitness, intensityScale);
         Color foreground = Color.black;
         
-        Evaluator evaluator = GlobalProblem.getEvaluator();
+        Evaluator evaluator = GlobalProblem.getEvaluatorType();
         Problem problem = GlobalProblem.getProblem();
         
         switch (visType) {

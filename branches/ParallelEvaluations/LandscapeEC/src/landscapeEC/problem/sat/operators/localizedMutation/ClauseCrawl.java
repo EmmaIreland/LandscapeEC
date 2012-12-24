@@ -13,6 +13,7 @@ import landscapeEC.problem.Evaluator;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
+import landscapeEC.problem.ParallelEvaluator;
 import landscapeEC.util.FrequencyCounter;
 /*
  * Future work:
@@ -94,7 +95,7 @@ public class ClauseCrawl implements ConcentrationRanker {
     }
     
     private void generateSpeciesMap(){
-    	Evaluator evaluator = GlobalProblem.getEvaluator();
+    	ParallelEvaluator evaluator = GlobalProblem.getEvaluator();
     	for(Vector v : unprocessed){
     	    speciesMap.put(v, evaluator.getResultString(findBestInCell(v)).toCharArray());
     	}

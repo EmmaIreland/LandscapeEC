@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
+import landscapeEC.problem.ParallelEvaluator;
 import landscapeEC.problem.ecc.EccEvaluator;
 import landscapeEC.problem.ecc.EccProblem;
 
@@ -14,7 +15,8 @@ public class EvaluatorTest {
     @Test
     public void testIdenticalStrings(){
         EccEvaluator evaluator = new EccEvaluator();
-        GlobalProblem.setEvaluator(evaluator);
+        GlobalProblem.setEvaluatorType(evaluator);
+        GlobalProblem.setEvaluator(new ParallelEvaluator());
         EccProblem problem = new EccProblem(4, 2);
         GlobalProblem.setProblem(problem);
         Individual allZeros = new Individual("00000000");
@@ -24,7 +26,8 @@ public class EvaluatorTest {
     @Test
     public void testHammingDistance3(){
         EccEvaluator evaluator = new EccEvaluator();
-        GlobalProblem.setEvaluator(evaluator);
+        GlobalProblem.setEvaluatorType(evaluator);
+        GlobalProblem.setEvaluator(new ParallelEvaluator());
         EccProblem problem = new EccProblem(4,2);
         GlobalProblem.setProblem(problem);
         Individual individual = new Individual("00011111");
@@ -34,7 +37,8 @@ public class EvaluatorTest {
     @Test
     public void testHammingDistance2(){
         EccEvaluator evaluator = new EccEvaluator();
-        GlobalProblem.setEvaluator(evaluator);
+        GlobalProblem.setEvaluatorType(evaluator);
+        GlobalProblem.setEvaluator(new ParallelEvaluator());
         EccProblem problem = new EccProblem(4,2);
         GlobalProblem.setProblem(problem);
         Individual individual = new Individual("10100011");
@@ -44,7 +48,8 @@ public class EvaluatorTest {
     @Test
     public void testFourCodeWords(){
         EccEvaluator evaluator = new EccEvaluator();
-        GlobalProblem.setEvaluator(evaluator);
+        GlobalProblem.setEvaluatorType(evaluator);
+        GlobalProblem.setEvaluator(new ParallelEvaluator());
         EccProblem problem = new EccProblem(4,4);
         GlobalProblem.setProblem(problem);
         Individual individual = new Individual("0000111101010010");

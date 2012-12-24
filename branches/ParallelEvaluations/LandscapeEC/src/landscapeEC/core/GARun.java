@@ -94,9 +94,7 @@ public class GARun {
 				StringParameter.PROBLEM_FILE.getValue())));
 
 		GlobalProblem.setProblem(problem);
-		//GlobalProblem.setEvaluator((Evaluator) ParameterClassLoader.loadClass(StringParameter.PROBLEM_EVALUATOR));
-		//evaluator = GlobalProblem.getEvaluator();
-		// **** Automatically load ParallelEvaluator Instead
+		GlobalProblem.setEvaluatorType((Evaluator) ParameterClassLoader.loadClass(StringParameter.PROBLEM_EVALUATOR));
 		evaluator = new ParallelEvaluator();
 		GlobalProblem.setEvaluator(evaluator);
 
@@ -217,7 +215,7 @@ public class GARun {
 	}
 
 	private boolean runGenerations(int currentRun) throws Exception {
-		List<Individual> population = popManager.generatePopulation();
+		List<Individual> startingPopulation = new ArrayList<Individual>();
 
 		world = ParameterClassLoader.loadClass(StringParameter.WORLD_TYPE);
 		world.clear();
@@ -227,19 +225,29 @@ public class GARun {
 		SeedType seedType = SeedType
 		.valueOf(StringParameter.STARTING_POPULATION.getValue());
 
+		List<Individual> population;
+		
 		switch (seedType) {
 		case ORIGIN:
+			population = popManager.generatePopulation();
 			world.getOrigin().setIndividuals(population);
+			startingPopulation.addAll(population);
 			break;
 		case EVERYWHERE:
-			fillAllLocations();
+			startingPopulation.addAll(fillAllLocations());
 			break;
 		case CORNERS:
 			for(Location l : world.getCorners()) {
-				l.setIndividuals(popManager.generatePopulation());
+				population = popManager.generatePopulation();
+				l.setIndividuals(population);
+				startingPopulation.addAll(population);
 			}
 			break;
 		}
+		// Evaluate starting individuals
+		evaluator.addEvalJobs(startingPopulation);
+		evaluator.runPendingEvaluations();
+		
 		generationNumber = 0;
 		bestOverallFitness = 0.0;
 		Individual bestIndividual = null;
@@ -323,14 +331,19 @@ public class GARun {
         }
     }
 	
-	private void fillAllLocations() {
+	private List<Individual> fillAllLocations() {
+		List<Individual> startingPopulation = new ArrayList<Individual>();
+		List<Individual> population;
 		for (Location location : world) {
-			location.setIndividuals(popManager.generatePopulation());
+			population = popManager.generatePopulation();
+			location.setIndividuals(population);
+			startingPopulation.addAll(population);
 		}
+		return startingPopulation;
 	}
 
 	private void processAllLocations() {
-		if(GlobalProblem.getEvaluator().getNumEvaluations()>1000000 && haventSaid){
+		if(GlobalProblem.getEvaluator().getNumEvaluations()>1000000){
 			haventSaid=false;
 			System.out.println("Evals/sec: "+(GlobalProblem.getEvaluator().getNumEvaluations()/((System.currentTimeMillis()-startTime)/1000)));
 		}
@@ -372,16 +385,16 @@ public class GARun {
 	}
 
 	private void performDraconianReaper() {
-
+		Evaluator problemEval = GlobalProblem.getEvaluatorType();
+		
 	    for (Location location : world) {
 	        // Location location = world.getLocation(position);
 	        List<Individual> locationIndividuals = location.getIndividuals();
 
-	        for (Individual individual : locationIndividuals) {
-	            Problem locationProblem = location.getProblem();
-	            doReaperEffect(individual, location, evaluator.solvesSubProblem(individual, locationProblem));
-	        }
+	        evaluator.addLocalFitnessJobs(locationIndividuals, location);
 	    }
+	    
+	    evaluator.runPendingEvaluations();
 	}
 
 	private void doReaperEffect(Individual individual, Location location, boolean satisfiesRequirements) {
@@ -447,7 +460,7 @@ public class GARun {
 
 		for (Location location : world) {
 			List<Individual> locationIndividuals = location.getIndividuals();
-
+			
 			if (locationIndividuals.size() >= IntParameter.TOURNAMENT_SIZE
 					.getValue()) {
 				List<Individual> crossoverPop = popManager.crossover(
@@ -459,6 +472,8 @@ public class GARun {
 						location);
 
 				location.addToPendingIndividuals(mutatedPopulation);
+				
+				this.evaluator.addEvalJobs(mutatedPopulation);
 			} else if (BooleanParameter.PROMOTE_SMALL_POPULATIONS.getValue()) {
 				List<Individual> copiedPopulation = new ArrayList<Individual>();
 				for (Individual individual : locationIndividuals) {
@@ -470,6 +485,7 @@ public class GARun {
 						location);
 
 				location.addToPendingIndividuals(mutatedPopulation);
+				
 				this.evaluator.addEvalJobs(mutatedPopulation);
 			}
 		}

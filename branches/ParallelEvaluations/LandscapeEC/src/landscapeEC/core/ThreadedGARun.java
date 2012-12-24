@@ -36,6 +36,7 @@ import landscapeEC.problem.DiversityCalculator;
 import landscapeEC.problem.Evaluator;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
+import landscapeEC.problem.ParallelEvaluator;
 import landscapeEC.problem.Problem;
 import landscapeEC.problem.ProblemParser;
 import landscapeEC.util.FrequencyCounter;
@@ -45,7 +46,7 @@ import landscapeEC.util.SharedPRNG;
 public class ThreadedGARun extends GARun{
 
 	private PopulationManager popManager;
-	private Evaluator evaluator;
+	private ParallelEvaluator evaluator;
 
 	private World<?> world;
 	
@@ -93,9 +94,9 @@ public class ThreadedGARun extends GARun{
 				StringParameter.PROBLEM_FILE.getValue())));
 
 		GlobalProblem.setProblem(problem);
-		GlobalProblem.setEvaluator((Evaluator) ParameterClassLoader
+		GlobalProblem.setEvaluatorType((Evaluator) ParameterClassLoader
 				.loadClass(StringParameter.PROBLEM_EVALUATOR));
-		evaluator = GlobalProblem.getEvaluator();
+		evaluator = new ParallelEvaluator();
 
 		popManager = new PopulationManager();
 

@@ -7,6 +7,7 @@ import java.util.Map;
 import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
+import landscapeEC.problem.ParallelEvaluator;
 import landscapeEC.problem.sat.operators.PointMutation;
 import landscapeEC.util.FrequencyCounter;
 import landscapeEC.util.ProbabilityUtils;
@@ -28,7 +29,7 @@ public class PointMutationTest {
         mockParams.put("AVERAGE_MUTATIONS", ""+AVERAGE_MUTATIONS);
         GlobalParameters.setParameters(mockParams);
 
-        GlobalProblem.setEvaluator(new MockEvaluator());
+        GlobalProblem.setEvaluator(new ParallelEvaluator());
         
         FrequencyCounter<Integer> counter = new FrequencyCounter<Integer>();
         

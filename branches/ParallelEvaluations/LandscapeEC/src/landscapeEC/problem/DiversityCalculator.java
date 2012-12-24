@@ -12,7 +12,7 @@ public class DiversityCalculator {
     private static FrequencyCounter<String> resultStringCounter = new FrequencyCounter<String>();
     private static Set<String> seenResultStrings = new LinkedHashSet<String>();
     private static Set<Individual> bestIndividuals = new LinkedHashSet<Individual>();
-    private static Evaluator evaluator = GlobalProblem.getEvaluator();
+    private static ParallelEvaluator evaluator = GlobalProblem.getEvaluator();
     
     public static void reset() {
         individualCounts.reset();
@@ -59,7 +59,8 @@ public class DiversityCalculator {
     
     public static Individual getMostCommonIndividual() {
         int maxNumber = 0;
-        Individual currentMaxIndividual = new Individual("0", false); //default individual
+        Individual currentMaxIndividual = new Individual("0"); //default individual
+        currentMaxIndividual.setGlobalFitness(0);
         for(Individual individual : individualCounts) {
             if(individualCounts.getCount(individual) > maxNumber) {
                 maxNumber = individualCounts.getCount(individual);
@@ -78,6 +79,7 @@ public class DiversityCalculator {
     }
     
     public static double calculateBitStringDiversity() {
+    	System.out.println("BS diversity " + individualCounts.numKeys() + " : " + individualCounts.totalCount());
         return (double)individualCounts.numKeys()/(double)individualCounts.totalCount();
     }
 }

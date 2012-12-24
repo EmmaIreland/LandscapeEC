@@ -40,6 +40,9 @@ public class GraphViz {
 	}
 
 	public void write(int numEvals) {
+		if (numOfSnapshots < 1) { 
+			return; 
+		};
 		this.makeFile("SnapshotNum" + numEvals/(totalEvals/numOfSnapshots));
 
 		//write the header

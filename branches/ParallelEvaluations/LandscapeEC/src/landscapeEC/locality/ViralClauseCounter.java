@@ -25,7 +25,7 @@ public class ViralClauseCounter implements Serializable {
     private Clause currentUnsolvedClause;
     
     public void updateViralClauses(World<?> world) {
-        Evaluator evaluator = GlobalProblem.getEvaluator();
+        Evaluator evaluator = GlobalProblem.getEvaluatorType();
         if (!(evaluator instanceof SatEvaluator)) {
           throw new RuntimeException("Viral Clauses is currently only supported under 3SAT");
         }

@@ -2,7 +2,8 @@ package landscapeEC.problem;
 
 public class GlobalProblem {
     private static Problem globalProblem;
-    private static Evaluator evaluator;
+    private static ParallelEvaluator evaluator;
+    private static Evaluator evaluatorType;
     
     public static void setProblem(Problem problem) {
         globalProblem = problem;
@@ -20,16 +21,22 @@ public class GlobalProblem {
         return globalProblem;
     }
     
-    public static void setEvaluator(Evaluator anEvaluator) {
+    public static void setEvaluator(ParallelEvaluator anEvaluator) {
         evaluator = anEvaluator;
     }
     
-    public static Evaluator getEvaluator() {
-        if (evaluator == null && globalProblem == null) {
+    public static ParallelEvaluator getEvaluator() {
+        if (evaluator == null) {
             throw new RuntimeException("There was no global evaluator set.");
-        } else if (evaluator == null && globalProblem != null) {
-            evaluator = globalProblem.getEvaluator();
         }
         return evaluator;
+    }
+    
+    public static void setEvaluatorType(Evaluator anEvaluator) {
+    	evaluatorType = anEvaluator;
+    }
+    
+    public static Evaluator getEvaluatorType() {
+    	return evaluatorType;
     }
 }

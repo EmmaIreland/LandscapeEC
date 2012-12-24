@@ -46,7 +46,7 @@ public class EvaluationSteps extends Steps {
     
     @Then("the fitness should be <fitness>")
     public void confirmEvaluation(@Named("fitness") double expectedFitness) {
-        double actualFitness = evaluator.evaluate(satInstance, new Individual(bitString, false));
+        double actualFitness = evaluator.evaluate(satInstance, new Individual(bitString));
         
         assertEquals(expectedFitness, actualFitness);
     }

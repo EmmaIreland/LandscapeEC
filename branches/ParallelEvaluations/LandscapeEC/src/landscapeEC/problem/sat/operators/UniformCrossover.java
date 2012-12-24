@@ -25,7 +25,7 @@ public class UniformCrossover implements CrossoverOperator {
             }
         }
         
-        return new Individual(child, false);
+        return new Individual(child);
     }
 
 }

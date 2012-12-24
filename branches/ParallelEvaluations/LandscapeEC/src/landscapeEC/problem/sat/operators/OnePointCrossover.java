@@ -36,6 +36,6 @@ public class OnePointCrossover implements CrossoverOperator {
             	child[i] = parentA[i];
             }
         }
-        return new Individual(child, false);
+        return new Individual(child);
     }
 }

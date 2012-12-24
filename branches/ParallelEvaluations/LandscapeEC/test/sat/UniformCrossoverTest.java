@@ -31,8 +31,8 @@ public class UniformCrossoverTest {
         
         for(int m=0; m<NUM_TESTS; m++) {
             List<Individual> parents = new ArrayList<Individual>();
-            parents.add(new Individual(generateStringOfZeroes(NUM_BITS), false));
-            parents.add(new Individual(generateStringOfOnes(NUM_BITS), false));
+            parents.add(new Individual(generateStringOfZeroes(NUM_BITS)));
+            parents.add(new Individual(generateStringOfOnes(NUM_BITS)));
             
             UniformCrossover crossoverOperator = new UniformCrossover();
             Individual child = crossoverOperator.crossover(parents);

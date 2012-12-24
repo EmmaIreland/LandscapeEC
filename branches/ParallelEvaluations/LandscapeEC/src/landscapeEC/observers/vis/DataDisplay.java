@@ -17,6 +17,7 @@ import landscapeEC.problem.DiversityCalculator;
 import landscapeEC.problem.Evaluator;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
+import landscapeEC.problem.ParallelEvaluator;
 
 public class DataDisplay extends JFrame implements Observer {
     private static final long serialVersionUID = 4151957839382676250L;
@@ -56,7 +57,7 @@ public class DataDisplay extends JFrame implements Observer {
         
         Individual bestIndividual = world.findBestIndividual();
         
-        Evaluator evaluator = GlobalProblem.getEvaluator();
+        ParallelEvaluator evaluator = GlobalProblem.getEvaluator();
         
         GraphicsUtil.drawString(g, "RUN " + (evaluator.getNumResets()+1), 5, 20, font, Color.RED);
         GraphicsUtil.drawString(g, successes + "/" + evaluator.getNumResets() + " runs successful", 5, 35, font, Color.WHITE);
