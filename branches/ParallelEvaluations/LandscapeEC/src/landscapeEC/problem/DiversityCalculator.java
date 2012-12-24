@@ -79,7 +79,6 @@ public class DiversityCalculator {
     }
     
     public static double calculateBitStringDiversity() {
-    	System.out.println("BS diversity " + individualCounts.numKeys() + " : " + individualCounts.totalCount());
         return (double)individualCounts.numKeys()/(double)individualCounts.totalCount();
     }
 }
