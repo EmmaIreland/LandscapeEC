@@ -33,8 +33,8 @@ y = YAML::load_documents( openFile ) { |graph|
 		end
 	end
 	
-	puts "shortest path:"
-	p paths
+	#puts "shortest path:"
+	#p paths
 	
 	
 	
@@ -50,6 +50,9 @@ y = YAML::load_documents( openFile ) { |graph|
 	# finds the connected components (using breadth first search)
   listOfAll = []
   componentElements = []
+  
+  eccentricitiesArray = []
+  dataPoints = []
   
   for i in 0...graph.length-1
     if !listOfAll.include?(i)
@@ -83,13 +86,61 @@ y = YAML::load_documents( openFile ) { |graph|
         maximum = shortPathArray.max
         # print from node # to node # and eccentricity of those nodes
         puts "      " + componentElements[i].to_s() + "  " + shortPathArray.index(maximum).to_s() + ": " + shortPathArray.max.to_s()
+        eccentricitiesArray.push(shortPathArray.max)
         shortPathArray[shortPathArray.index(maximum)] = -1
         if !shortPathArray.include?(maximum)
           i = i + 1
         end
       end
       
-      componentElements.clear 
+      componentElements.clear
+      sorted = eccentricitiesArray.sort
+      
+      #radius
+      dataPoints.push(sorted.min)
+      
+      if sorted.length % 2 == 0 # length is even
+        #25% quartile
+        lenOfHalf = (sorted.length/2)
+        lowPosition1 = (lenOfHalf/2) - 1
+        lowPosition2 = (lenOfHalf/2)
+        lowQuart = (sorted[lowPosition1] + sorted[lowPosition2]) / 2.0
+        #median
+        medPosition1 = lenOfHalf - 1
+        medPosition2 = lenOfHalf
+        median = (sorted[medPosition1] + sorted[medPosition2]) / 2.0
+        #75% quartile
+        upPosition1 = lenOfHalf
+        upPosition2 = sorted.length - 1
+        upQuart = (sorted[upPosition1] + sorted[upPosition2]) / 2.0
+        
+        dataPoints.push(lowQuart)
+        dataPoints.push(median)
+        dataPoints.push(upQuart)
+      else # length is odd
+        #25% quartile
+        lenOfHalf = ((sorted.length + 1) / 2) - 1
+        lowPosition = (lenOfHalf + 1) / 2
+        lowQuart = sorted[lowPosition]
+        #median
+        medPosition = (sorted.length + 1) / 2
+        median = sorted[medPosition]
+        #75% quartile
+        upPosition = (lenOfHalf + 1)
+        upQuart = sorted[upPosition]
+        
+        dataPoints.push(lowQuart)
+        dataPoints.push(median)
+        dataPoints.push(upQuart)
+      end
+      
+      #diameter
+      dataPoints.push(sorted.max)
+      
+      puts "[radius, 25% quartile, median, 75% quartile, diameter]"
+      p dataPoints # prints out [radius, 25% quartile, median, 75% quartile, diameter]
+      eccentricitiesArray.clear
+      dataPoints.clear
     end
   end
 }
