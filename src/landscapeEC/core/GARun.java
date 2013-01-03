@@ -299,10 +299,10 @@ public class GARun {
                                                                        * IntParameter.NUM_EVALS_TO_DO.getValue()
                                                                        && intervalFitnesses[j] == null) {
                     intervalFitnesses[j] = bestOverallFitness;
-                    intervalDiversities[j] = DiversityCalculator
-                    .calculateResultStringDiversity();
-                    printIndividualsInLocation(0, 0);
-                    printIndividualsInLocation(0, 1);
+                   	intervalDiversities[j] 
+                   			= DiversityCalculator.calculateResultStringDiversity();
+//                    printIndividualsInLocation(0, 0);
+//                    printIndividualsInLocation(0, 1);
 //                    } catch (IOException e) {
 //                        e.printStackTrace();
 //                    }
