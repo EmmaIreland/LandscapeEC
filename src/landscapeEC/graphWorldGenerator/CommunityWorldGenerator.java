@@ -26,7 +26,8 @@ public class CommunityWorldGenerator {
 	static String worldType;
 
 
-	final static File DIR = new File("graphWorldFiles");
+	//final static File DIR = new File("graphWorldFiles");
+	final static File DIR = new File(new File("graphWorldFiles"), "NewRuns");
 	static Writer output = null; 
 
 	public static void main(String[] args) {
