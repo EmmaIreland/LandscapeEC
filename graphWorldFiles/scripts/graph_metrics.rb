@@ -74,18 +74,18 @@ y = YAML::load_documents( openFile ) { |graph|
         end
       end
 
-      puts "\n" + "Component elements: "
-      p componentElements
-      
+      #puts "\n" + "Component elements: "
+      #p componentElements
+      puts "\n"
       puts "Component size: " + componentElements.length.to_s()
       
-      puts "   eccentricities:"
+      #puts "   eccentricities:"
       i = 0
       while i < componentElements.length
         shortPathArray = paths[componentElements[i]]
         maximum = shortPathArray.max
         # print from node # to node # and eccentricity of those nodes
-        puts "      " + componentElements[i].to_s() + "  " + shortPathArray.index(maximum).to_s() + ": " + shortPathArray.max.to_s()
+        #puts "      " + componentElements[i].to_s() + "  " + shortPathArray.index(maximum).to_s() + ": " + shortPathArray.max.to_s()
         eccentricitiesArray.push(shortPathArray.max)
         shortPathArray[shortPathArray.index(maximum)] = -1
         if !shortPathArray.include?(maximum)
