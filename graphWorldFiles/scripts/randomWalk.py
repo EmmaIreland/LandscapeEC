@@ -36,7 +36,7 @@ def removeRowAndColumn(paths, index):
 
 def computeExpectedWalkTimeToNode(paths, node):
   sub_matrix = removeRowAndColumn(paths, node)
-  print(node)
+  #print(node)
   d = (identity(sub_matrix.shape[0], float) - sub_matrix).I
   row_sums = d.sum(axis=1)
   r = list(array(row_sums)[:, 0])
@@ -52,3 +52,10 @@ eccentricities = distance_matrix.max(axis=0)
 print(eccentricities)
 print(eccentricities.max())
 print(eccentricities.min())
+
+print("\n" "Random walk Closeness centrality")
+averageMean = distance_matrix.mean(axis=0)
+randomWalkCloseness = 1/averageMean
+print(randomWalkCloseness)
+print(randomWalkCloseness.max())
+print(randomWalkCloseness.min())
