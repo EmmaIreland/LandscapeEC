@@ -43,19 +43,25 @@ def computeExpectedWalkTimeToNode(paths, node):
   return r[0:node] + [0] + r[node:]
 
 paths = computeTransitionProbabilities(readGraphFile(yamlFile))
+numNodes = paths.shape[0]
 
 distance_matrix = matrix([ computeExpectedWalkTimeToNode(paths, i) 
 			for i in range(0, paths.shape[0]) ])
 
 eccentricities = distance_matrix.max(axis=0)
 
-print(eccentricities)
-print(eccentricities.max())
-print(eccentricities.min())
-
-print("\n" "Random walk Closeness centrality")
+#print(eccentricities)
+#print(eccentricities.max())
+#print(eccentricities.min())
+#
+#print("\n" "Random walk Closeness centrality")
 averageMean = distance_matrix.mean(axis=0)
 randomWalkCloseness = 1/averageMean
-print(randomWalkCloseness)
-print(randomWalkCloseness.max())
-print(randomWalkCloseness.min())
+#print(randomWalkCloseness)
+#print(randomWalkCloseness.max())
+#print(randomWalkCloseness.min())
+
+def print_row(nodeNum, ecc, rwc):
+    print(str(nodeNum) + "\t" + str(ecc) + "\t" + str(rwc))
+
+map(print_row, range(numNodes), list(array(eccentricities)[0]), list(array(randomWalkCloseness)[0]))
