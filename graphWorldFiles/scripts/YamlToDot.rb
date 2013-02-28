@@ -79,6 +79,45 @@ nodeFunctions["red"]=Proc.new do |i|
   "  #{i.to_s} [height=.1, width=0.1, fontsize=1, label=\"\", forcelabels=FALSE, style=filled, fixedsize=TRUE, fillcolor=\"red\"]\n"
 end
 
+rwcc_values = nil
+small = nil
+large = nil
+
+def read_RWCC_values()
+  puts "Reading"
+  rwcc_values = {}
+  File.readlines("simple_graph_rwcc.txt").each do |line|
+	parts = line.split("\t").map {|s| s.to_f}
+	rwcc_values[parts[0].to_i] = parts[1]
+  end
+  small = rwcc_values.values.min
+  large = rwcc_values.values.max
+  return [rwcc_values, small, large]
+end
+
+nodeFunctions["RWCC"]=Proc.new do |i|
+  puts "In node func"
+  rwcc_values, small, large = read_RWCC_values() unless rwcc_values
+  # p rwcc_values
+  ecc = rwcc_values[i]
+  puts small
+  puts large
+  puts ecc
+  chunk_size = (large-small)/colorMap.size
+  puts chunk_size
+  puts (ecc-small)
+  color_index = ((ecc-small)/chunk_size).to_i
+  if color_index == colorMap.size
+    color_index = colorMap.size-1
+  end
+  color = colorMap[color_index]
+  puts color_index
+  puts color
+  p "  #{i.to_s} [height=.1, width=0.1, fontsize=1, label=\"\", forcelabels=FALSE, style=filled, fixedsize=TRUE, fillcolor=\"#{color}\"]\n"
+  "  #{i.to_s} [height=.1, width=0.1, fontsize=1, label=\"\", forcelabels=FALSE, style=filled, fixedsize=TRUE, fillcolor=\"#{color}\"]\n"
+end
+
+
 #---------------------------hashmap of all the conn functions-----------------------------------------------
 connFunctions = {}
 connFunctions["black"]=Proc.new do |i, j|
@@ -108,6 +147,7 @@ end
   #this block of for loops writes the "normal" nodes and connections
   for i in 0..graph.length-2
     #this writes the node number and it's attributes
+    puts "About to process node #{i}"
     outFile.write( nodeFunc.call(i) )
     for j in 0..graph[i].length-1
       #this writes the connections, not writing to "lower" nodes to avoid double connections
