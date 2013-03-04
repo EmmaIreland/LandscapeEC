@@ -42,7 +42,11 @@ def computeExpectedWalkTimeToNode(paths, node):
   r = list(array(row_sums)[:, 0])
   return r[0:node] + [0] + r[node:]
 
-paths = computeTransitionProbabilities(readGraphFile(yamlFile))
+graph = readGraphFile(yamlFile)
+
+print((graph.transpose() == graph).all())
+
+paths = computeTransitionProbabilities(graph)
 numNodes = paths.shape[0]
 
 distance_matrix = matrix([ computeExpectedWalkTimeToNode(paths, i) 

@@ -3,10 +3,10 @@
 require 'yaml'
 require 'optparse'
 
-
 #this chunk deals with the options
 options = {}
 options[:dot] = false
+options[:color_data_file] = false
 opt_parser = OptionParser.new do |opt|
   opt.on("-d", "--Dot", "Run with the dot visualizer indicated in second ARG") do
     options[:dot] = true
@@ -23,7 +23,9 @@ options[:conn] = false
     options[:node] = true
     options[:conn] = true
   end
-
+  opt.on("-l", "--color_data FILE", "Provide node data to use for coloring") do |file|
+    options[:color_data_file] = file
+  end
 end
 opt_parser.parse!
 
@@ -66,7 +68,7 @@ startingLocationAttributes = " [shape=box]"
 #startingLocationAttributes = " [height=.1, width=0.1, fontsize=1, label=\"\", forcelabels=FALSE, style=filled, fixedsize=TRUE,  fillcolor=\"#000000\", shape=box]"
 
 #opens yaml file as a map of lists.
-listOfConns = YAML::load_documents( openFile ) { |graph|
+graph = YAML::load( openFile )
 
 
   #Functions go down here
@@ -83,10 +85,10 @@ rwcc_values = nil
 small = nil
 large = nil
 
-def read_RWCC_values()
+def read_RWCC_values(options)
   puts "Reading"
   rwcc_values = {}
-  File.readlines("simple_graph_rwcc.txt").each do |line|
+  File.readlines(options[:color_data_file]).each do |line|
 	parts = line.split("\t").map {|s| s.to_f}
 	rwcc_values[parts[0].to_i] = parts[1]
   end
@@ -95,28 +97,29 @@ def read_RWCC_values()
   return [rwcc_values, small, large]
 end
 
-nodeFunctions["RWCC"]=Proc.new do |i|
-  puts "In node func"
-  rwcc_values, small, large = read_RWCC_values() unless rwcc_values
-  # p rwcc_values
-  ecc = rwcc_values[i]
-  puts small
-  puts large
-  puts ecc
-  chunk_size = (large-small)/colorMap.size
-  puts chunk_size
-  puts (ecc-small)
-  color_index = ((ecc-small)/chunk_size).to_i
-  if color_index == colorMap.size
-    color_index = colorMap.size-1
+if options[:color_data_file]
+  nodeFunctions["RWCC"]=Proc.new do |i|
+    puts "In node func"
+    rwcc_values, small, large = read_RWCC_values(options) unless rwcc_values
+    # p rwcc_values
+    ecc = rwcc_values[i]
+    puts small
+    puts large
+    puts ecc
+    chunk_size = (large-small)/colorMap.size
+    puts chunk_size
+    puts (ecc-small)
+    color_index = ((ecc-small)/chunk_size).to_i
+    if color_index == colorMap.size
+      color_index = colorMap.size-1
+    end
+    color = colorMap[color_index]
+    puts color_index
+    puts color
+    p "  #{i.to_s} [height=.1, width=0.1, fontsize=1, label=\"\", forcelabels=FALSE, style=filled, fixedsize=TRUE, fillcolor=\"#{color}\"]\n"
+    "  #{i.to_s} [height=.1, width=0.1, fontsize=1, label=\"\", forcelabels=FALSE, style=filled, fixedsize=TRUE, fillcolor=\"#{color}\"]\n"
   end
-  color = colorMap[color_index]
-  puts color_index
-  puts color
-  p "  #{i.to_s} [height=.1, width=0.1, fontsize=1, label=\"\", forcelabels=FALSE, style=filled, fixedsize=TRUE, fillcolor=\"#{color}\"]\n"
-  "  #{i.to_s} [height=.1, width=0.1, fontsize=1, label=\"\", forcelabels=FALSE, style=filled, fixedsize=TRUE, fillcolor=\"#{color}\"]\n"
 end
-
 
 #---------------------------hashmap of all the conn functions-----------------------------------------------
 connFunctions = {}
@@ -133,6 +136,9 @@ nodeFunc = nodeFunctions["black"]
 connFunc = connFunctions["black"]
 
 if options[:node]
+  if ARGV[1] == "RWCC" and not options[:color_data_file]
+    raise "Can't specify RWCC coloring without providing a color data file"
+  end 
   nodeFunc = nodeFunctions[ARGV[1]]
 end
 if options[:conn]
@@ -165,8 +171,6 @@ end
   outFile.write( "}" )
   outFile.flush()    
   outFile.close()
- 
-}
 
 #run visualizer if called for
 if options[:dot]
