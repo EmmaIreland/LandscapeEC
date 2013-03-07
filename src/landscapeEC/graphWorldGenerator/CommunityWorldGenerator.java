@@ -163,7 +163,7 @@ public class CommunityWorldGenerator {
 					worldList.get(j).add(j+commSelector);
 					}
 					if(j-commSelector < 0) {
-						worldList.get(j).add(worldList.size()-1);
+						worldList.get(j).add(worldList.size()-commSelector);
 					}else{
 					worldList.get(j).add(j-commSelector);
 					}
