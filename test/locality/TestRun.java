@@ -18,7 +18,7 @@ import org.junit.Test;
 public class TestRun {
 
     //Tests for GARun
-    //Depends on testing.properties
+    //Depends on test.properties
     
     @Test
     public void migrationTest() throws Exception {
