@@ -58,10 +58,10 @@ public class TournamentSteps extends Steps {
     
     @When("I run $numTournaments tournaments of size $tournamentSize")
     public void runTournaments(int numTournaments, String tournamentSize) {
-        TournamentSelection tournament = new TournamentSelection();
         MockParameters mockParams = new MockParameters();
         mockParams.put("TOURNAMENT_SIZE", tournamentSize);
         GlobalParameters.setParameters(mockParams);
+        TournamentSelection tournament = new TournamentSelection();
         
         IndividualComparator comparator = IndividualComparator.getComparator();
         
