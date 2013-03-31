@@ -1,6 +1,5 @@
 package landscapeEC.locality;
 
-import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,46 +17,47 @@ import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.Problem;
 
-public class GridWorld implements Serializable, World<Vector> {
+public class GridWorld implements World<Vector> {
     private static final long serialVersionUID = 8032708223600669849L;
     private boolean toroidal = false;
     private Map<Vector, Location<Vector>> worldMap;
     private Vector dimensions;
 
     public GridWorld() throws Exception {
-    	this(new Vector(IntArrayParameter.WORLD_DIMENSIONS.getValue()), BooleanParameter.TOROIDAL.getValue());
+        this(new Vector(IntArrayParameter.WORLD_DIMENSIONS.getValue()),
+                BooleanParameter.TOROIDAL.getValue());
     }
-    
-    public GridWorld(Vector dimensions, boolean isTorodial) throws Exception{
-    	//Specifically used only for tests
-    	toroidal = isTorodial;
+
+    public GridWorld(Vector dimensions, boolean isTorodial) throws Exception {
+        // Specifically used only for tests
+        toroidal = isTorodial;
         this.dimensions = dimensions;
-        
 
         worldMap = new HashMap<Vector, Location<Vector>>();
         Integer[] array = new Integer[dimensions.size()];
-        
-        //generateLocations is now how we scale gridWorlds to
-        //an arbitrary number of dimensions.
+
+        // generateLocations is now how we scale gridWorlds to
+        // an arbitrary number of dimensions.
         generateLocations(0, array);
 
         Geography geography = createGeography();
 
         geography.generateGeography(this);
     }
-    
-    private void generateLocations(int current, Integer[] partial){
-        if(current<dimensions.size()){
-            for(int i=0; i<dimensions.get(current); i++){
-                partial[current]=i;
-                generateLocations(current+1, partial);
+
+    private void generateLocations(int current, Integer[] partial) {
+        if (current < dimensions.size()) {
+            for (int i = 0; i < dimensions.get(current); i++) {
+                partial[current] = i;
+                generateLocations(current + 1, partial);
             }
-        }
-        else{
+        } else {
             Vector vector = new Vector(partial);
-            //TODO This might break everything
-            Location<Vector> position = new Location<Vector>(vector, GlobalProblem.getProblem().getSubProblem(0));
-            worldMap.put(position.getPosition(), new Location<Vector>(position.getPosition()));
+            // TODO This might break everything
+            Location<Vector> position = new Location<Vector>(vector,
+                    GlobalProblem.getProblem().getSubProblem(0));
+            worldMap.put(position.getPosition(),
+                    new Location<Vector>(position.getPosition()));
         }
     }
 
@@ -72,6 +72,7 @@ public class GridWorld implements Serializable, World<Vector> {
         return instance;
     }
 
+    @Override
     public void setLocationProblem(Vector position, Problem problem) {
         getLocation(position).setProblem(problem);
     }
@@ -81,12 +82,14 @@ public class GridWorld implements Serializable, World<Vector> {
         return worldMap.get(position);
     }
 
+    @Override
     public Location<Vector> getOrigin() {
         Vector position = Vector.origin(dimensions.size());
 
         return worldMap.get(position);
     }
 
+    @Override
     public int getNumLocations() {
         return worldMap.size();
     }
@@ -95,6 +98,7 @@ public class GridWorld implements Serializable, World<Vector> {
         return toroidal;
     }
 
+    @Override
     public List<Vector> getNeighborhood(Object position, int radius) {
         Vector pos = (Vector) position;
         List<Vector> positions = new ArrayList<Vector>();
@@ -114,26 +118,31 @@ public class GridWorld implements Serializable, World<Vector> {
         return new GridWorldIterator(this);
     }
 
+    @Override
     public List<Individual> getIndividualsAt(Vector p) {
         return getLocation(p).getIndividuals();
     }
 
+    @Override
     public void clear() {
         for (Location<Vector> l : this) {
-            getLocation(l.getPosition()).setIndividuals(new ArrayList<Individual>());
+            getLocation(l.getPosition()).setIndividuals(
+                    new ArrayList<Individual>());
         }
     }
 
     private Individual findBestInCell(IndividualComparator comparator,
             Vector position) {
-    	try{
-        return Collections.max(getIndividualsAt(position), comparator);
-    	} catch(NullPointerException e){
-    		System.out.println("NullPointerException at position "+position.toString());
-    		return null;
-    	}
+        try {
+            return Collections.max(getIndividualsAt(position), comparator);
+        } catch (NullPointerException e) {
+            System.out.println("NullPointerException at position "
+                    + position.toString());
+            return null;
+        }
     }
 
+    @Override
     public Individual findBestIndividual() {
         IndividualComparator comparator = IndividualComparator.getComparator();
         List<Individual> bestFromCells = new ArrayList<Individual>();
@@ -148,18 +157,22 @@ public class GridWorld implements Serializable, World<Vector> {
         return Collections.max(bestFromCells, comparator);
     }
 
-	@Override
-	public List<Location> getCorners() {
-		ArrayList<Location> corners = new ArrayList();
-		Location<Vector> topLeft = this.getLocation(Vector.origin((this).getDimensions().size()));
-		Location<Vector> bottomRight = this.getLocation(this.getDimensions().minusToAll(1));
-		Location<Vector> topRight = this.getLocation(Vector.getCorner(bottomRight.getPosition(), topLeft.getPosition()));
-		Location<Vector> bottomLeft = this.getLocation(Vector.getCorner(topLeft.getPosition(), bottomRight.getPosition()));
-		corners.add(topLeft);
-		corners.add(bottomRight);
-		corners.add(topRight);
-		corners.add(bottomLeft);
-		return corners;
-	}
+    @Override
+    public List<Location<Vector>> getCorners() {
+        ArrayList<Location<Vector>> corners = new ArrayList<Location<Vector>>();
+        Location<Vector> topLeft = this.getLocation(Vector.origin((this)
+                .getDimensions().size()));
+        Location<Vector> bottomRight = this.getLocation(this.getDimensions()
+                .minusToAll(1));
+        Location<Vector> topRight = this.getLocation(Vector.getCorner(
+                bottomRight.getPosition(), topLeft.getPosition()));
+        Location<Vector> bottomLeft = this.getLocation(Vector.getCorner(
+                topLeft.getPosition(), bottomRight.getPosition()));
+        corners.add(topLeft);
+        corners.add(bottomRight);
+        corners.add(topRight);
+        corners.add(bottomLeft);
+        return corners;
+    }
 
 }
