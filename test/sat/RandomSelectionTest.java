@@ -7,10 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import landscapeEC.problem.Evaluator;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.IndividualFactory;
+import landscapeEC.problem.sat.SatEvaluator;
 import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.problem.sat.operators.RandomSelection;
 import landscapeEC.util.FrequencyCounter;
@@ -29,6 +31,8 @@ public class RandomSelectionTest {
         SatInstance satInstance = new SatInstance(1.0);
         satInstance.setNumVariables(NUM_VARIABLES);
         GlobalProblem.setProblem(satInstance);
+        Evaluator satEvaluator = new SatEvaluator();
+        GlobalProblem.setEvaluator(satEvaluator);
         
         List<Individual> population = new ArrayList<Individual>();
         
