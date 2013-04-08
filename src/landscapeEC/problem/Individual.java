@@ -1,6 +1,7 @@
 package landscapeEC.problem;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public class Individual implements Serializable {
     private static final long serialVersionUID = 8709627944120749083L;
@@ -8,6 +9,7 @@ public class Individual implements Serializable {
     private double globalFitness = -1.0;
     private double localFitnessDisadvantage = 0;
     private String stringRepresentation;
+    public final UUID uid = UUID.randomUUID();
 
     public Individual(String bitString) {
         this(parseBits(bitString));
