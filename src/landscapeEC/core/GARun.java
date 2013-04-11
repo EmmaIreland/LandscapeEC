@@ -11,6 +11,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.index.Index;
+import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.graphdb.index.IndexManager;
+import org.neo4j.kernel.InternalAbstractGraphDatabase;
+import org.neo4j.server.WrappingNeoServerBootstrapper;
+
 import landscapeEC.graphVisualizer.GraphViz;
 import landscapeEC.locality.EmptyWorldException;
 import landscapeEC.locality.GraphWorld;
@@ -20,6 +31,8 @@ import landscapeEC.locality.MigrationInWorldOfSizeOneException;
 import landscapeEC.locality.Vector;
 import landscapeEC.locality.ViralClauseCounter;
 import landscapeEC.locality.World;
+import landscapeEC.neo4j.GraphDB;
+import landscapeEC.neo4j.RelTypes;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.BooleanParameter;
 import landscapeEC.parameters.DoubleArrayParameter;
@@ -214,8 +227,6 @@ public class GARun {
 	}
 
 	private boolean runGenerations(int currentRun) throws Exception {
-		List<Individual> population = popManager.generatePopulation();
-
 		world = ParameterClassLoader.loadClass(StringParameter.WORLD_TYPE);
 		world.clear();
 		
@@ -226,7 +237,7 @@ public class GARun {
 
 		switch (seedType) {
 		case ORIGIN:
-			world.getOrigin().setIndividuals(population);
+			world.getOrigin().setIndividuals(popManager.generatePopulation());
 			break;
 		case EVERYWHERE:
 			fillAllLocations();
@@ -247,6 +258,10 @@ public class GARun {
 		for (Observer o : observers) {
 		    o.generationData(this);
 		}
+		
+		addLocationsToGraphDB();
+		//addIndividualsToGraphDB();
+		
 		while (evaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO.getValue()) {
 		    if(runGenerations) {
 		        processAllLocations();
@@ -290,6 +305,54 @@ public class GARun {
 		// This will be removed during refactoring
 		System.out.println("FAILURE");
 		return false;
+	}
+
+	private void addLocationsToGraphDB() {
+		final GraphDatabaseService graphDB = GraphDB.graphDB();
+		IndexManager index = graphDB.index();
+		Index<Node> locationNodes = index.forNodes("locations");
+		
+		for(Location location : world) {
+			Node locationNode;
+			
+			Transaction tx = graphDB.beginTx();
+			try
+			{
+				locationNode = graphDB.createNode();
+				locationNode.setProperty("locationID", location.getPosition());
+				locationNodes.add(locationNode, "locationID", locationNode.getProperty("locationID"));
+				 
+				tx.success();
+			}
+			finally
+			{
+			    tx.finish();
+			}
+			
+		}
+		System.out.println(locationNodes);
+		
+		for(Location fromLocation : world) {
+			for (Object toLocation : world.getNeighborhood(fromLocation.getPosition(), 1)) {
+				Transaction tx = graphDB.beginTx();
+				
+				Relationship rel;
+				try
+				{
+					IndexHits<Node> fromNode = locationNodes.get("locationID", fromLocation.getPosition());
+					IndexHits<Node> toNode = locationNodes.get("locationID", toLocation);
+					fromNode.next().createRelationshipTo(toNode.next(), RelTypes.CONNECTEDTO);
+										 
+					tx.success();
+				}
+				finally
+				{
+				    tx.finish();
+				}
+			}
+		}
+		
+		
 	}
 
 	private void checkForReportingInterval(int currentRun){
