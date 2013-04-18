@@ -260,14 +260,13 @@ public class GARun {
 		}
 		
 		addLocationsToGraphDB();
-		//addIndividualsToGraphDB();
+		addIndividualsToGraphDB();
 		
 		while (evaluator.getNumEvaluations() < IntParameter.NUM_EVALS_TO_DO.getValue()) {
 		    if(runGenerations) {
 		        processAllLocations();
 		        generationNumber++;
 		    }
-
 		    for (Observer o : observers) {
 		        o.generationData(this);
 		    }
@@ -305,6 +304,68 @@ public class GARun {
 		// This will be removed during refactoring
 		System.out.println("FAILURE");
 		return false;
+	}
+
+	private void addGenerationToDB(int generationNumber) {
+		final GraphDatabaseService graphDB = GraphDB.graphDB();
+		IndexManager index = graphDB.index();
+		Index<Node> individualNodes = index.forNodes("individuals");
+		Index<Node> locationNodes = index.forNodes("locations");
+		
+		for(Location<?> location : world) {
+			for (Individual individual : location.getIndividuals()) {
+				Transaction tx = graphDB.beginTx();
+				
+				Relationship rel;
+				Node individualNode;
+				try
+				{
+					individualNode = graphDB.createNode();
+					individualNode.setProperty("fitness", individual.getGlobalFitness());
+					individualNode.setProperty("id", individual.uid.toString());
+					Node locationNode = locationNodes.get("locationID", location.getPosition()).next();
+					rel = individualNode.createRelationshipTo(locationNode, RelTypes.LOCATEDIN);
+					rel.setProperty("generation", generationNumber);
+					
+					tx.success();
+				}
+				finally
+				{
+				    tx.finish();
+				}
+			}
+		}
+	}
+
+	private void addIndividualsToGraphDB() {
+		final GraphDatabaseService graphDB = GraphDB.graphDB();
+		IndexManager index = graphDB.index();
+		Index<Node> individualNodes = index.forNodes("individuals");
+		Index<Node> locationNodes = index.forNodes("locations");
+		
+		for(Location<?> location : world) {
+			for (Individual individual : location.getIndividuals()) {
+				Transaction tx = graphDB.beginTx();
+				
+				Relationship rel;
+				Node individualNode;
+				try
+				{
+					individualNode = graphDB.createNode();
+					individualNode.setProperty("fitness", individual.getGlobalFitness());
+					individualNode.setProperty("id", individual.uid.toString());
+					Node locationNode = locationNodes.get("locationID", location.getPosition()).next();
+					rel = individualNode.createRelationshipTo(locationNode, RelTypes.LOCATEDIN);
+					rel.setProperty("generation", 0);
+										 
+					tx.success();
+				}
+				finally
+				{
+				    tx.finish();
+				}
+			}
+		}
 	}
 
 	private void addLocationsToGraphDB() {
