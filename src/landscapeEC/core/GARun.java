@@ -259,6 +259,8 @@ public class GARun {
 		    o.generationData(this);
 		}
 		
+		
+
 		addLocationsToGraphDB();
 		addIndividualsToGraphDB();
 		
@@ -267,6 +269,8 @@ public class GARun {
 		        processAllLocations();
 		        generationNumber++;
 		    }
+		    
+
 		    for (Observer o : observers) {
 		        o.generationData(this);
 		    }
@@ -354,6 +358,7 @@ public class GARun {
 					individualNode = graphDB.createNode();
 					individualNode.setProperty("fitness", individual.getGlobalFitness());
 					individualNode.setProperty("id", individual.uid.toString());
+					individualNodes.add(individualNode, "id", individual.uid.toString());
 					Node locationNode = locationNodes.get("locationID", location.getPosition()).next();
 					rel = individualNode.createRelationshipTo(locationNode, RelTypes.LOCATEDIN);
 					rel.setProperty("generation", 0);
@@ -391,7 +396,6 @@ public class GARun {
 			}
 			
 		}
-		System.out.println(locationNodes);
 		
 		for(Location fromLocation : world) {
 			for (Object toLocation : world.getNeighborhood(fromLocation.getPosition(), 1)) {
@@ -569,11 +573,11 @@ public class GARun {
 					.getValue()) {
 				List<Individual> crossoverPop = popManager.crossover(
 						locationIndividuals, selectionOperator,
-						crossoverOperator);
+						crossoverOperator, generationNumber, location);
 
 				List<Individual> mutatedPopulation = popManager
 				.mutatePopulation(crossoverPop, mutationOperator,
-						location);
+						location, generationNumber);
 
 				location.addToPendingIndividuals(mutatedPopulation);
 			} else if (BooleanParameter.PROMOTE_SMALL_POPULATIONS.getValue()) {
@@ -584,7 +588,7 @@ public class GARun {
 
 				List<Individual> mutatedPopulation = popManager
 				.mutatePopulation(copiedPopulation, mutationOperator,
-						location);
+						location, generationNumber);
 
 				location.addToPendingIndividuals(mutatedPopulation);
 			}

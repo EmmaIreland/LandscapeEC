@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import landscapeEC.locality.Location;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.sat.SatInstance;
@@ -35,7 +36,7 @@ public class UniformCrossoverTest {
             parents.add(new Individual(generateStringOfOnes(NUM_BITS), false));
             
             UniformCrossover crossoverOperator = new UniformCrossover();
-            Individual child = crossoverOperator.crossover(parents);
+            Individual child = crossoverOperator.crossover(parents, -1, new Location(-1, GlobalProblem.getProblem()));
             
             for(int b=0; b<NUM_BITS; b++) {
                 counter.addItem(child.getBits()[b]);

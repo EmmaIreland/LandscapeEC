@@ -2,13 +2,14 @@ package landscapeEC.problem.sat.operators;
 
 import java.util.List;
 
+import landscapeEC.locality.Location;
 import landscapeEC.problem.Individual;
 import landscapeEC.util.SharedPRNG;
 
 public class OnePointCrossover implements CrossoverOperator {
 
     @Override
-    public Individual crossover(List<Individual> parents) {
+    public Individual crossover(List<Individual> parents, int genNum, Location location) {
         if(parents.size() != 2) throw new IllegalArgumentException("Wrong number of parents");
         
         int[] parentA = parents.get(0).getBits();

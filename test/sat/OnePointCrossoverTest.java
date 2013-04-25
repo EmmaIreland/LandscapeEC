@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import landscapeEC.locality.Location;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.sat.SatInstance;
@@ -35,7 +36,7 @@ public class OnePointCrossoverTest {
             parents.add(new Individual(generateStringOfOnes(NUM_BITS), false));
             
             OnePointCrossover crossoverOperator = new OnePointCrossover();
-            Individual child = crossoverOperator.crossover(parents);
+            Individual child = crossoverOperator.crossover(parents, -1, new Location(-1, GlobalProblem.getProblem()));
             
             int i=0;
             int checker = child.getBit(0);

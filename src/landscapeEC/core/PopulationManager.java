@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import landscapeEC.locality.Location;
 import landscapeEC.parameters.DoubleParameter;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.problem.GlobalProblem;
@@ -56,26 +57,28 @@ public class PopulationManager {
         
     }
 
-    public List<Individual> crossover(List<Individual> population, SelectionOperator selectionOperator, CrossoverOperator crossoverOperator) {
+    public List<Individual> crossover(List<Individual> population, SelectionOperator selectionOperator, 
+    		CrossoverOperator crossoverOperator, int genNum, Location location) {
         List<Individual> newPopulation = new ArrayList<Individual>();
         
         int numChildren = getNumberOfNeededChildren(population.size());
         
         for(int i=0; i<numChildren; i++) {
             List<Individual> parents = selectionOperator.selectParents(population, IndividualComparator.getComparator());
-            Individual individual = crossoverOperator.crossover(parents);
+            Individual individual = crossoverOperator.crossover(parents, genNum, location);
             newPopulation.add(individual);
         }
                 
         return newPopulation;
     }
     
-    public List<Individual> forkedCrossover(List<Individual> population, SelectionOperator selectionOperator, CrossoverOperator crossoverOperator, int numChildren) {
+    public List<Individual> forkedCrossover(List<Individual> population, SelectionOperator selectionOperator, 
+    		CrossoverOperator crossoverOperator, int numChildren, int genNum, Location location) {
         List<Individual> newPopulation = new ArrayList<Individual>();
         
         for(int i=0; i<numChildren; i++) {
             List<Individual> parents = selectionOperator.selectParents(population, IndividualComparator.getComparator());
-            Individual individual = crossoverOperator.crossover(parents);
+            Individual individual = crossoverOperator.crossover(parents, genNum, location);
             newPopulation.add(individual);
         }
                 
