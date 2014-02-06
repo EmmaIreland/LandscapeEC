@@ -9,27 +9,6 @@
 	<classpathentry kind="lib" path="lib/commons-io-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/jbehave-core-2.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/snakeyaml-1.9.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/commons-io-2.0.1.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/concurrentlinkedhashmap-lru-1.3.1.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/geronimo-jta_1.1_spec-1.1.1.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/jbehave-core-2.5.1.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/jcommon-1.0.16.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/jfreechart-1.0.13.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/junit-4.8.2.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/lucene-core-3.5.0.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/neo4j-cypher-1.8.2.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/neo4j-graph-algo-1.8.2.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/neo4j-graph-matching-1.8.2.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/neo4j-jmx-1.8.2.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/neo4j-kernel-1.8.2.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/neo4j-lucene-index-1.8.2.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/neo4j-shell-1.8.2.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/neo4j-udc-1.8.2.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/org.apache.servicemix.bundles.jline-0.9.94_1.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/scala-library-2.9.1-1.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/server-api-1.8.2.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/snakeyaml-1.9.jar"/>
-	<classpathentry kind="lib" path="/home/cornh044/workspace/LandscapeEC/lib/uncommons-maths-1.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/neo4JLib/antlr-2.7.7.jar"/>
 	<classpathentry kind="lib" path="lib/neo4JLib/asm-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/neo4JLib/asm-analysis-3.2.jar"/>
@@ -76,6 +55,7 @@
 	<classpathentry kind="lib" path="lib/neo4JLib/servlet-api-2.5-20081211.jar"/>
 	<classpathentry kind="lib" path="lib/neo4JLib/slf4j-api-1.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/neo4JLib/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j-kernel-1.8.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
