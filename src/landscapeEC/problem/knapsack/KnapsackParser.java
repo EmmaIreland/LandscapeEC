@@ -3,7 +3,6 @@ package landscapeEC.problem.knapsack;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Arrays;
 
 import landscapeEC.problem.Problem;
 import landscapeEC.problem.ProblemParser;

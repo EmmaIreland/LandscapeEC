@@ -3,18 +3,18 @@ package landscapeEC.problem.sat.operators;
 import java.util.List;
 import java.util.Random;
 
+import landscapeEC.locality.Location;
+import landscapeEC.neo4j.GraphDB;
+import landscapeEC.neo4j.RelTypes;
+import landscapeEC.problem.Individual;
+import landscapeEC.util.SharedPRNG;
+
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexManager;
-
-import landscapeEC.locality.Location;
-import landscapeEC.neo4j.GraphDB;
-import landscapeEC.neo4j.RelTypes;
-import landscapeEC.problem.Individual;
-import landscapeEC.util.SharedPRNG;
 
 
 public class UniformCrossover implements CrossoverOperator {

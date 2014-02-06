@@ -1,6 +1,5 @@
 package landscapeEC.problem.sat.operators;
 
-import landscapeEC.locality.Location;
 import landscapeEC.problem.Individual;
 
 public interface MutationOperator {

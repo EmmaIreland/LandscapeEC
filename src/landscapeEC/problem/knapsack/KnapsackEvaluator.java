@@ -1,7 +1,5 @@
 package landscapeEC.problem.knapsack;
 
-import java.util.Arrays;
-
 import landscapeEC.problem.Evaluator;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.Problem;

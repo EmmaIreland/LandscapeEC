@@ -7,7 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import landscapeEC.locality.GridWorld;
 import landscapeEC.locality.World;
 import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.parameters.Parameters;

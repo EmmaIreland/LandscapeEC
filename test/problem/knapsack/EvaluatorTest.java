@@ -1,6 +1,6 @@
 package problem.knapsack;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.knapsack.KnapsackEvaluator;

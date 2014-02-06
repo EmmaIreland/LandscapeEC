@@ -7,9 +7,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import landscapeEC.locality.GridWorld;
 import landscapeEC.locality.ShellMaker;
 import landscapeEC.locality.Vector;
-import landscapeEC.locality.GridWorld;
 import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.sat.SatInstance;
@@ -18,7 +18,6 @@ import org.jbehave.scenario.annotations.AfterScenario;
 import org.jbehave.scenario.annotations.Given;
 import org.jbehave.scenario.annotations.Then;
 import org.jbehave.scenario.annotations.When;
-import org.jbehave.scenario.steps.StepResult.Failed;
 import org.jbehave.scenario.steps.Steps;
 
 

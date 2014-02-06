@@ -7,11 +7,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import org.yaml.snakeyaml.Yaml;
 
 import landscapeEC.locality.Location;
-import landscapeEC.parameters.StringParameter;
 import landscapeEC.problem.GlobalProblem;
+
+import org.yaml.snakeyaml.Yaml;
  
 public class YamlLoader {
 

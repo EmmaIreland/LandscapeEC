@@ -2,7 +2,6 @@ package landscapeEC.problem.ecc;
 
 import landscapeEC.problem.Evaluator;
 import landscapeEC.problem.Problem;
-import landscapeEC.problem.onesmax.OnesMaxEvaluator;
 
 public class EccProblem implements Problem {
 

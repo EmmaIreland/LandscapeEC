@@ -11,17 +11,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.Transaction;
-import org.neo4j.graphdb.index.Index;
-import org.neo4j.graphdb.index.IndexHits;
-import org.neo4j.graphdb.index.IndexManager;
-import org.neo4j.kernel.InternalAbstractGraphDatabase;
-import org.neo4j.server.WrappingNeoServerBootstrapper;
-
 import landscapeEC.graphVisualizer.GraphViz;
 import landscapeEC.locality.EmptyWorldException;
 import landscapeEC.locality.GraphWorld;
@@ -52,6 +41,14 @@ import landscapeEC.problem.sat.operators.MutationOperator;
 import landscapeEC.problem.sat.operators.SelectionOperator;
 import landscapeEC.util.ParameterClassLoader;
 import landscapeEC.util.SharedPRNG;
+
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.index.Index;
+import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.graphdb.index.IndexManager;
 
 public class GARun {
 

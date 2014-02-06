@@ -1,13 +1,12 @@
 package problem.ecc;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
+import static org.junit.Assert.assertEquals;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.ecc.EccEvaluator;
 import landscapeEC.problem.ecc.EccProblem;
+
+import org.junit.Test;
 
 public class EvaluatorTest {
 

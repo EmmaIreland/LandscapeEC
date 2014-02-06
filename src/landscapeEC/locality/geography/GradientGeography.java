@@ -1,8 +1,8 @@
 package landscapeEC.locality.geography;
 
+import landscapeEC.locality.GridWorld;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.Vector;
-import landscapeEC.locality.GridWorld;
 import landscapeEC.parameters.DoubleParameter;
 import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.problem.GlobalProblem;

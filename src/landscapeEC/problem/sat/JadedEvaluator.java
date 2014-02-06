@@ -2,12 +2,10 @@ package landscapeEC.problem.sat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import landscapeEC.core.GARun;
 import landscapeEC.locality.Location;
-import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.IntParameter;
 import landscapeEC.problem.Evaluator;

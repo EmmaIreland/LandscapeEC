@@ -2,14 +2,12 @@ package landscapeEC.problem.sat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import landscapeEC.parameters.IntArrayParameter;
 import landscapeEC.parameters.IntParameter;
-import landscapeEC.problem.Evaluator;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.Problem;

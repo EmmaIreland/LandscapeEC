@@ -15,11 +15,11 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import landscapeEC.core.GARun;
-import landscapeEC.locality.Vector;
 import landscapeEC.locality.GridWorld;
+import landscapeEC.locality.Vector;
 import landscapeEC.observers.Observer;
-import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.Individual;
+import landscapeEC.problem.IndividualComparator;
 import landscapeEC.problem.sat.SatInstance;
 
 

@@ -13,7 +13,6 @@ import java.util.Set;
 import landscapeEC.observers.vis.MapVisualizer;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
-import landscapeEC.problem.Problem;
 import landscapeEC.problem.sat.Clause;
 import landscapeEC.problem.sat.Literal;
 import landscapeEC.problem.sat.SatEvaluator;

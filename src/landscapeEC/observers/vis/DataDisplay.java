@@ -8,8 +8,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 
 import landscapeEC.core.GARun;
-import landscapeEC.locality.Location;
 import landscapeEC.locality.GridWorld;
+import landscapeEC.locality.Location;
 import landscapeEC.locality.World;
 import landscapeEC.observers.Observer;
 import landscapeEC.parameters.IntParameter;

@@ -13,7 +13,6 @@ import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.IndividualComparator;
-import landscapeEC.problem.sat.SatEvaluator;
 import landscapeEC.problem.sat.SatInstance;
 import landscapeEC.problem.sat.SatParser;
 import landscapeEC.problem.sat.operators.TournamentSelection;

@@ -39,8 +39,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeMap;
 
-import landscapeEC.problem.Individual;
-
 /**
  * A simple class for keeping track of frequency counts on some collection of
  * <CODE>Objects</CODE>.

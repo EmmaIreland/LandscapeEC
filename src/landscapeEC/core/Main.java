@@ -2,7 +2,6 @@ package landscapeEC.core;
 
 import java.io.File;
 
-import landscapeEC.parameters.BooleanParameter;
 import landscapeEC.parameters.GlobalParameters;
 
 public class Main {

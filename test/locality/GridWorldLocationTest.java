@@ -7,10 +7,10 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.util.List;
 
+import landscapeEC.locality.GridWorld;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.ShellMaker;
 import landscapeEC.locality.Vector;
-import landscapeEC.locality.GridWorld;
 import landscapeEC.parameters.GlobalParameters;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.sat.SatInstance;

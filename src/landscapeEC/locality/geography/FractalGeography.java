@@ -1,9 +1,8 @@
 package landscapeEC.locality.geography;
 
-import landscapeEC.locality.Vector;
 import landscapeEC.locality.GridWorld;
+import landscapeEC.locality.Vector;
 import landscapeEC.parameters.DoubleParameter;
-import landscapeEC.parameters.IntParameter;
 import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.SeparableProblem;
 import landscapeEC.problem.sat.SatInstance;

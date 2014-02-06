@@ -3,9 +3,7 @@ package sat;
 import static junit.framework.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import landscapeEC.locality.Location;
 import landscapeEC.problem.GlobalProblem;
@@ -15,8 +13,6 @@ import landscapeEC.problem.sat.operators.OnePointCrossover;
 import landscapeEC.util.FrequencyCounter;
 
 import org.junit.Test;
-
-import util.ChiSquaredStatistics;
 
 public class OnePointCrossoverTest {
     private static final int NUM_BITS = 9;

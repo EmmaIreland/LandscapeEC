@@ -1,12 +1,11 @@
 package landscapeEC.graphWorldGenerator;
 
-import java.awt.List;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.LinkedList;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 
 
 public class ThreeDWorldGenerator {

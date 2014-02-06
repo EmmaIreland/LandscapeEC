@@ -9,18 +9,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-//import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-//import landscapeEC.core.threads.DiversityCounterUpdater;
-//import landscapeEC.core.threads.ForkDiversityCounter;
-//import landscapeEC.core.threads.ForkLocationProcessor;
 import landscapeEC.locality.EmptyWorldException;
-import landscapeEC.locality.GridWorld;
 import landscapeEC.locality.Location;
 import landscapeEC.locality.MigrationInWorldOfSizeOneException;
 import landscapeEC.locality.ViralClauseCounter;
@@ -38,9 +32,12 @@ import landscapeEC.problem.GlobalProblem;
 import landscapeEC.problem.Individual;
 import landscapeEC.problem.Problem;
 import landscapeEC.problem.ProblemParser;
-import landscapeEC.util.FrequencyCounter;
 import landscapeEC.util.ParameterClassLoader;
 import landscapeEC.util.SharedPRNG;
+//import java.util.concurrent.ForkJoinPool;
+//import landscapeEC.core.threads.DiversityCounterUpdater;
+//import landscapeEC.core.threads.ForkDiversityCounter;
+//import landscapeEC.core.threads.ForkLocationProcessor;
 
 public class ThreadedGARun extends GARun{
 
